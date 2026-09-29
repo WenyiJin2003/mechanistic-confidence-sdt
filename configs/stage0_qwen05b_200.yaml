@@ -1,6 +1,6 @@
 project:
   seed: 20260928
-  time_limit_minutes: 20
+  time_limit_minutes: 60
   cache_dir: cache
   results_dir: results
   hf_cache_dir: cache/huggingface
@@ -37,28 +37,22 @@ generation:
   top_p: 1.0
   top_k: 0
   max_new_tokens: 12
-  layers: [4, 12, 20, 24]
+  layers: [4, 8, 12, 16, 20, 24]
 
 probe:
-  test_fraction: 0.25
+  validation_fraction: 0.20
+  test_fraction: 0.20
   split_seed: 42
   shuffle_seed: 314159
+  shuffle_repetitions: 50
+  bootstrap_seed: 271828
+  bootstrap_samples: 2000
   c: 1.0
   max_iter: 2000
 
 runs:
-  preflight:
-    num_examples: 5
-    num_generations: 3
-    grouping: exact_match
-    train_probe: false
-  run_a:
-    num_examples: 12
-    num_generations: 3
-    grouping: exact_match
-    train_probe: true
-  run_b:
-    num_examples: 64
+  run_200:
+    num_examples: 200
     num_generations: 5
     grouping: nli
     train_probe: true

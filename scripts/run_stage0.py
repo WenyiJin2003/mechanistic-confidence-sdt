@@ -20,7 +20,11 @@ from stage0.pipeline import load_config, run  # noqa: E402
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", default="configs/stage0_qwen05b.yaml")
-    parser.add_argument("--run", required=True, choices=["preflight", "run_a", "run_b"])
+    parser.add_argument(
+        "--run",
+        required=True,
+        help="Run name declared under the selected configuration's `runs` mapping.",
+    )
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     config, path = load_config(args.config)

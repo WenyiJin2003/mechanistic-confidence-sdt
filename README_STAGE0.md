@@ -32,6 +32,16 @@ Run B is intentionally gated on Run A:
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_b
 ```
 
+### 200-example stability follow-up
+
+The pre-registered follow-up uses a separate configuration so the 64-example pilot remains reproducible:
+
+```bash
+.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b_200.yaml --run run_200
+```
+
+It adds layers 8 and 16, a fixed context-grouped train/validation/test split, validation-only layer selection, bootstrap intervals, 50 shuffled-label controls, SQuAD EM/F1 diagnostics, and a hidden-state-plus-answer-NLL comparison. Outputs are isolated under `results/run_200/` and `plots/run_200_probe_performance_by_layer.png`. The ignored local cache remains resumable per example and per NLI batch.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

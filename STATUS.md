@@ -25,6 +25,14 @@ The pipeline is validated, but the 64-example probe result is inconclusive and n
 
 Run a 200-example Qwen 0.5B stability experiment with layers 4, 8, 12, 16, 20, and 24 and a fixed train/validation/test split. Move to 1.5B only if the larger 0.5B run remains at chance or answer-quality review identifies model capacity as the main limitation.
 
+## In progress — 200-example stability run
+
+- Added the separate `configs/stage0_qwen05b_200.yaml` configuration.
+- Restored layers 4, 8, 12, 16, 20, and 24.
+- Added fixed context-grouped train/validation/test splits, validation-only layer selection, bootstrap intervals, 50 shuffled-label repetitions, correctness diagnostics, and a hidden-plus-NLL comparison.
+- Decoupled generation and hidden-state caches so the first 64 five-sample generations can be reused while six-layer hidden states are recomputed.
+- Next checkpoint: commit and push the implementation, then execute and cache `run_200`.
+
 ## Resume commands
 
 All completed phases replay from cache:

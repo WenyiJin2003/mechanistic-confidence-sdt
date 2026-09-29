@@ -27,7 +27,7 @@ import transformers
 import yaml
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, log_loss, roc_auc_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GroupShuffleSplit
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from tqdm.auto import tqdm
@@ -120,6 +120,31 @@ def normalize_answer(text: str) -> str:
     return " ".join(text.split())
 
 
+def squad_exact_match(prediction: str, references: list[str]) -> float:
+    normalized_prediction = normalize_answer(prediction)
+    return float(any(normalized_prediction == normalize_answer(reference) for reference in references))
+
+
+def squad_f1(prediction: str, references: list[str]) -> float:
+    prediction_tokens = normalize_answer(prediction).split()
+    best = 0.0
+    for reference in references:
+        reference_tokens = normalize_answer(reference).split()
+        if not prediction_tokens and not reference_tokens:
+            best = max(best, 1.0)
+            continue
+        if not prediction_tokens or not reference_tokens:
+            continue
+        common = Counter(prediction_tokens) & Counter(reference_tokens)
+        overlap = sum(common.values())
+        if overlap == 0:
+            continue
+        precision = overlap / len(prediction_tokens)
+        recall = overlap / len(reference_tokens)
+        best = max(best, 2 * precision * recall / (precision + recall))
+    return float(best)
+
+
 def runtime_versions() -> dict[str, Any]:
     return {
         "python": sys.version.split()[0],
@@ -149,17 +174,29 @@ def portable_config(config: dict[str, Any]) -> dict[str, Any]:
 
 
 def fixed_dataset(config: dict[str, Any], count: int) -> list[dict[str, Any]]:
-    cache_path = Path(config["project"]["cache_dir"]) / "dataset" / "squad_v2_fixed_subset.jsonl"
+    dataset_config = config["dataset"]
+    cache_identity = {
+        "id": dataset_config["id"],
+        "split": dataset_config["split"],
+        "answerable_only": dataset_config.get("answerable_only", True),
+        "selection_seed": int(dataset_config["selection_seed"]),
+        "revision": dataset_config.get("revision"),
+    }
+    cache_path = (
+        Path(config["project"]["cache_dir"])
+        / "dataset"
+        / f"fixed_subset_{stable_hash(cache_identity)[:16]}.jsonl"
+    )
     maximum = max(int(run["num_examples"]) for run in config["runs"].values())
     if cache_path.exists():
         cached = read_jsonl(cache_path)
         if len(cached) >= count:
             return cached[:count]
-    dataset_config = config["dataset"]
     dataset = datasets.load_dataset(
         dataset_config["id"],
         split=dataset_config["split"],
         cache_dir=config["project"]["hf_cache_dir"],
+        revision=dataset_config.get("revision"),
     )
     candidates = []
     for row in dataset:
@@ -193,6 +230,7 @@ class LocalGenerator:
             cache_dir=config["project"]["hf_cache_dir"],
             trust_remote_code=model_config.get("trust_remote_code", False),
         )
+        self.tokenizer.truncation_side = model_config.get("truncation_side", "left")
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
         self.model = AutoModelForCausalLM.from_pretrained(
@@ -244,6 +282,8 @@ class LocalGenerator:
         cached_hidden: np.ndarray | None = None,
     ) -> tuple[dict[str, Any], np.ndarray]:
         rendered = self.prompt(example, dataset_config)
+        full_token_ids = self.tokenizer(rendered, truncation=False)["input_ids"]
+        full_prompt_token_count = len(full_token_ids)
         inputs = self.tokenizer(
             rendered,
             return_tensors="pt",
@@ -252,6 +292,8 @@ class LocalGenerator:
         ).to(self.device)
         prompt_length = int(inputs["input_ids"].shape[1])
         final_token_id = int(inputs["input_ids"][0, -1].item())
+        prompt_was_truncated = full_prompt_token_count > prompt_length
+        prompt_suffix_preserved = final_token_id == int(full_token_ids[-1])
         if cached_hidden is None:
             with torch.inference_mode():
                 forward = self.model(**inputs, output_hidden_states=True, use_cache=False, return_dict=True)
@@ -297,6 +339,8 @@ class LocalGenerator:
                 {
                     "text": text,
                     "normalized_text": normalize_answer(text),
+                    "exact_match": squad_exact_match(text, example["answers"]),
+                    "f1": squad_f1(text, example["answers"]),
                     "token_ids": token_ids,
                     "token_logprobs": token_logprobs,
                     "sequence_logprob": float(np.sum(token_logprobs)) if token_logprobs else -1e9,
@@ -312,6 +356,9 @@ class LocalGenerator:
             "reference_answers": example["answers"],
             "prompt": rendered,
             "prompt_token_count": prompt_length,
+            "full_prompt_token_count": full_prompt_token_count,
+            "prompt_was_truncated": prompt_was_truncated,
+            "prompt_suffix_preserved": prompt_suffix_preserved,
             "final_prompt_token_index": prompt_length - 1,
             "final_prompt_token_id": final_token_id,
             "final_prompt_token_text": self.tokenizer.decode([final_token_id]),
@@ -320,12 +367,65 @@ class LocalGenerator:
         }
         return record, hidden
 
+    def hidden_only(
+        self,
+        example: dict[str, Any],
+        dataset_config: dict[str, Any],
+    ) -> tuple[np.ndarray, dict[str, Any]]:
+        rendered = self.prompt(example, dataset_config)
+        full_token_ids = self.tokenizer(rendered, truncation=False)["input_ids"]
+        full_prompt_token_count = len(full_token_ids)
+        inputs = self.tokenizer(
+            rendered,
+            return_tensors="pt",
+            truncation=True,
+            max_length=self.max_prompt_tokens,
+        ).to(self.device)
+        prompt_length = int(inputs["input_ids"].shape[1])
+        final_token_id = int(inputs["input_ids"][0, -1].item())
+        with torch.inference_mode():
+            forward = self.model(**inputs, output_hidden_states=True, use_cache=False, return_dict=True)
+        hidden = torch.stack(
+            [forward.hidden_states[layer][0, -1, :].detach().to("cpu", dtype=torch.float16) for layer in self.layers]
+        ).numpy()
+        del forward, inputs
+        metadata = {
+            "prompt": rendered,
+            "prompt_token_count": prompt_length,
+            "full_prompt_token_count": full_prompt_token_count,
+            "prompt_was_truncated": full_prompt_token_count > prompt_length,
+            "prompt_suffix_preserved": final_token_id == int(full_token_ids[-1]),
+            "final_prompt_token_index": prompt_length - 1,
+            "final_prompt_token_id": final_token_id,
+            "final_prompt_token_text": self.tokenizer.decode([final_token_id]),
+            "layers": self.layers,
+        }
+        return hidden, metadata
+
     def close(self) -> None:
         del self.model, self.tokenizer
         clear_device_cache()
 
 
 def _generation_key(config: dict[str, Any], example: dict[str, Any], run_config: dict[str, Any], index: int) -> str:
+    generation_config = {key: value for key, value in config["generation"].items() if key != "layers"}
+    payload = {
+        "model": config["models"]["generator"],
+        "dataset_prompt": config["dataset"],
+        "generation": generation_config,
+        "num_generations": run_config["num_generations"],
+        "example": example,
+        "seed": int(config["project"]["seed"]) + index,
+    }
+    return stable_hash(payload)
+
+
+def _legacy_generation_key(
+    config: dict[str, Any],
+    example: dict[str, Any],
+    run_config: dict[str, Any],
+    index: int,
+) -> str:
     payload = {
         "model": config["models"]["generator"],
         "dataset_prompt": config["dataset"],
@@ -358,6 +458,7 @@ def generate(config: dict[str, Any], run_name: str, examples: list[dict[str, Any
     hidden_rows = []
     started = time.monotonic()
     generation_cache_hits = 0
+    legacy_generation_cache_hits = 0
     hidden_cache_hits = 0
     try:
         for index, example in enumerate(tqdm(examples, desc=f"{run_name}: Qwen")):
@@ -365,39 +466,65 @@ def generate(config: dict[str, Any], run_name: str, examples: list[dict[str, Any
             hidden_key = _hidden_key(config, example)
             json_path = shared_dir / f"{key}.json"
             hidden_path = shared_dir / f"hidden-{hidden_key}.npz"
-            if not hidden_path.exists():
-                for previous_run in config["runs"].values():
-                    legacy_key = _generation_key(config, example, previous_run, index)
-                    legacy_path = shared_dir / f"{legacy_key}.npz"
-                    if legacy_path.exists():
-                        legacy_hidden = np.load(legacy_path)["hidden"]
-                        np.savez_compressed(
-                            hidden_path,
-                            hidden=legacy_hidden,
-                            layers=np.asarray(config["generation"]["layers"], dtype=np.int16),
-                        )
-                        break
-            if json_path.exists() and hidden_path.exists():
+            if not json_path.exists():
+                compatibility = config.get("cache_compatibility", {})
+                for layer_set in compatibility.get("legacy_generation_layer_sets", []):
+                    legacy_config = copy.deepcopy(config)
+                    legacy_config["generation"]["layers"] = [int(layer) for layer in layer_set]
+                    legacy_key = _legacy_generation_key(legacy_config, example, run_config, index)
+                    legacy_path = shared_dir / f"{legacy_key}.json"
+                    if not legacy_path.exists():
+                        continue
+                    with legacy_path.open("r", encoding="utf-8") as handle:
+                        legacy_record = json.load(handle)
+                    if int(legacy_record.get("prompt_token_count", generator.max_prompt_tokens)) >= generator.max_prompt_tokens:
+                        continue
+                    legacy_record["cache_key"] = key
+                    legacy_record["reused_from_legacy_cache"] = legacy_key
+                    atomic_json(json_path, legacy_record)
+                    legacy_generation_cache_hits += 1
+                    break
+
+            record = None
+            hidden = None
+            if json_path.exists():
                 with json_path.open("r", encoding="utf-8") as handle:
                     record = json.load(handle)
-                hidden = np.load(hidden_path)["hidden"]
                 generation_cache_hits += 1
+            if hidden_path.exists():
+                hidden = np.load(hidden_path)["hidden"]
                 hidden_cache_hits += 1
-            else:
-                cached_hidden = np.load(hidden_path)["hidden"] if hidden_path.exists() else None
-                if cached_hidden is not None:
-                    hidden_cache_hits += 1
-                record, hidden = generator.run_example(
+
+            if record is None:
+                record, generated_hidden = generator.run_example(
                     example,
                     config["dataset"],
                     config["generation"],
                     run_config,
                     int(config["project"]["seed"]) + index,
-                    cached_hidden=cached_hidden,
+                    cached_hidden=hidden,
                 )
-                record["cache_key"] = key
-                atomic_json(json_path, record)
-                np.savez_compressed(hidden_path, hidden=hidden, layers=np.asarray(record["layers"], dtype=np.int16))
+                if hidden is None:
+                    hidden = generated_hidden
+            elif hidden is None:
+                hidden, prompt_metadata = generator.hidden_only(example, config["dataset"])
+                record.update(prompt_metadata)
+
+            for generation in record["generations"]:
+                generation["exact_match"] = squad_exact_match(generation["text"], example["answers"])
+                generation["f1"] = squad_f1(generation["text"], example["answers"])
+            record["layers"] = [int(layer) for layer in config["generation"]["layers"]]
+            record.setdefault("full_prompt_token_count", record["prompt_token_count"])
+            record.setdefault("prompt_was_truncated", False)
+            record.setdefault("prompt_suffix_preserved", True)
+            record["cache_key"] = key
+            atomic_json(json_path, record)
+            if not hidden_path.exists():
+                np.savez_compressed(
+                    hidden_path,
+                    hidden=hidden,
+                    layers=np.asarray(record["layers"], dtype=np.int16),
+                )
             records.append(record)
             hidden_rows.append(hidden)
             elapsed_minutes = (time.monotonic() - started) / 60.0
@@ -409,6 +536,7 @@ def generate(config: dict[str, Any], run_name: str, examples: list[dict[str, Any
         runtime = {
             **generator.runtime,
             "generation_cache_hits": generation_cache_hits,
+            "legacy_generation_cache_hits": legacy_generation_cache_hits,
             "hidden_cache_hits": hidden_cache_hits,
             "elapsed_seconds": time.monotonic() - started,
         }
@@ -513,13 +641,21 @@ def semantic_rows_nli(config: dict[str, Any], records: list[dict[str, Any]]) -> 
     if needed:
         nli = LocalNLI(config)
         keys = list(needed)
-        predictions = nli.predict([needed[key] for key in keys])
+        checkpoint_size = max(nli.batch_size * 4, nli.batch_size)
+        runtime["new_judgments"] = len(keys)
+        for start in range(0, len(keys), checkpoint_size):
+            batch_keys = keys[start:start + checkpoint_size]
+            predictions = nli.predict([needed[key] for key in batch_keys])
+            for key, prediction in zip(batch_keys, predictions):
+                premise, hypothesis = needed[key]
+                cache[key] = {
+                    "premise": premise,
+                    "hypothesis": hypothesis,
+                    **prediction,
+                }
+            atomic_json(cache_path, cache)
         runtime["device"] = str(nli.device)
         runtime["dtype"] = str(nli.dtype).replace("torch.", "")
-        for key, prediction in zip(keys, predictions):
-            premise, hypothesis = needed[key]
-            cache[key] = {"premise": premise, "hypothesis": hypothesis, **prediction}
-        atomic_json(cache_path, cache)
         nli.close()
 
     used = {}
@@ -552,6 +688,8 @@ def _semantic_row(record: dict[str, Any], cluster_ids: list[int]) -> dict[str, A
     mean_logprobs = [generation["mean_token_logprob"] for generation in record["generations"]]
     sequence_logprobs = [generation["sequence_logprob"] for generation in record["generations"]]
     lengths = [generation["token_count"] for generation in record["generations"]]
+    exact_matches = [generation["exact_match"] for generation in record["generations"]]
+    f1_scores = [generation["f1"] for generation in record["generations"]]
     return {
         "id": record["id"],
         "semantic_ids": cluster_ids,
@@ -561,6 +699,10 @@ def _semantic_row(record: dict[str, Any], cluster_ids: list[int]) -> dict[str, A
         "answer_negative_log_likelihood": float(-np.mean(sequence_logprobs)),
         "mean_answer_length": float(np.mean(lengths)),
         "prompt_length": int(record["prompt_token_count"]),
+        "sample_mean_exact_match": float(np.mean(exact_matches)),
+        "sample_mean_f1": float(np.mean(f1_scores)),
+        "any_sample_exact_match": bool(np.max(exact_matches) > 0),
+        "all_samples_exact_match": bool(np.min(exact_matches) > 0),
     }
 
 
@@ -577,6 +719,7 @@ def best_train_threshold(values: np.ndarray) -> float:
 
 
 def safe_metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict[str, Any]:
+    probabilities = np.clip(np.asarray(probabilities, dtype=np.float64), 1e-7, 1 - 1e-7)
     predictions = (probabilities >= 0.5).astype(np.int64)
     return {
         "accuracy": float(accuracy_score(labels, predictions)),
@@ -585,83 +728,416 @@ def safe_metrics(labels: np.ndarray, probabilities: np.ndarray) -> dict[str, Any
     }
 
 
-def train_probe(config: dict[str, Any], hidden: np.ndarray, semantic_rows: list[dict[str, Any]]) -> dict[str, Any]:
-    entropy = np.asarray([row["cluster_assignment_entropy"] for row in semantic_rows], dtype=np.float64)
-    indices = np.arange(len(entropy))
-    train_indices, test_indices = train_test_split(
-        indices,
-        test_size=float(config["probe"]["test_fraction"]),
-        random_state=int(config["probe"]["split_seed"]),
-    )
-    threshold = best_train_threshold(entropy[train_indices])
-    labels = (entropy >= threshold).astype(np.int64)
-    if np.unique(labels[train_indices]).size < 2:
-        raise ValueError("Probe training split has one class")
-    layers = [int(value) for value in config["generation"]["layers"]]
-    layer_results = []
-    shuffled_results = []
-    shuffled_labels = np.random.default_rng(int(config["probe"]["shuffle_seed"])).permutation(labels[train_indices])
-    for position, layer in enumerate(layers):
-        features = hidden[:, position, :].astype(np.float32)
-        model = make_pipeline(
-            StandardScaler(),
-            LogisticRegression(
-                C=float(config["probe"]["c"]),
-                max_iter=int(config["probe"]["max_iter"]),
-                random_state=int(config["probe"]["split_seed"]),
-            ),
-        )
-        model.fit(features[train_indices], labels[train_indices])
-        probabilities = model.predict_proba(features[test_indices])[:, 1]
-        layer_results.append({"layer": layer, **safe_metrics(labels[test_indices], probabilities)})
-
-        shuffled = make_pipeline(
-            StandardScaler(),
-            LogisticRegression(
-                C=float(config["probe"]["c"]),
-                max_iter=int(config["probe"]["max_iter"]),
-                random_state=int(config["probe"]["split_seed"]),
-            ),
-        )
-        shuffled.fit(features[train_indices], shuffled_labels)
-        shuffled_probabilities = shuffled.predict_proba(features[test_indices])[:, 1]
-        shuffled_results.append({"layer": layer, **safe_metrics(labels[test_indices], shuffled_probabilities)})
-
-    train_mean = float(labels[train_indices].mean())
-    baselines = {"constant_train_mean": safe_metrics(labels[test_indices], np.full(len(test_indices), train_mean))}
-    for name in ("predictive_entropy", "answer_negative_log_likelihood", "mean_answer_length", "prompt_length"):
-        values = np.asarray([row[name] for row in semantic_rows], dtype=np.float64).reshape(-1, 1)
-        scalar = make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000, random_state=42))
-        scalar.fit(values[train_indices], labels[train_indices])
-        baselines[name] = safe_metrics(labels[test_indices], scalar.predict_proba(values[test_indices])[:, 1])
+def bootstrap_auroc(
+    labels: np.ndarray,
+    probabilities: np.ndarray,
+    samples: int,
+    seed: int,
+) -> dict[str, Any] | None:
+    if np.unique(labels).size < 2:
+        return None
+    rng = np.random.default_rng(seed)
+    values = []
+    for _ in range(samples):
+        sample = rng.integers(0, len(labels), size=len(labels))
+        if np.unique(labels[sample]).size < 2:
+            continue
+        values.append(float(roc_auc_score(labels[sample], probabilities[sample])))
+    if not values:
+        return None
     return {
-        "threshold_fit_on_training_only": threshold,
-        "train_indices": train_indices.tolist(),
-        "test_indices": test_indices.tolist(),
-        "label_distribution": {
-            "train": {str(key): int(value) for key, value in Counter(labels[train_indices].tolist()).items()},
-            "test": {str(key): int(value) for key, value in Counter(labels[test_indices].tolist()).items()},
-        },
-        "layers": layer_results,
-        "shuffled_label_layers": shuffled_results,
-        "baselines": baselines,
+        "lower_95": float(np.percentile(values, 2.5)),
+        "median": float(np.median(values)),
+        "upper_95": float(np.percentile(values, 97.5)),
+        "valid_resamples": len(values),
     }
 
 
-def plot_probe(config: dict[str, Any], probe: dict[str, Any]) -> Path:
-    output = root_dir() / "plots" / "probe_performance_by_layer.png"
+def fixed_group_split(
+    records: list[dict[str, Any]],
+    probe_config: dict[str, Any],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    indices = np.arange(len(records))
+    groups = np.asarray(
+        [stable_hash(" ".join(record["context"].lower().split())) for record in records]
+    )
+    validation_fraction = float(probe_config.get("validation_fraction", 0.0))
+    test_fraction = float(probe_config["test_fraction"])
+    holdout_fraction = validation_fraction + test_fraction
+    if not 0 < holdout_fraction < 1:
+        raise ValueError("validation_fraction + test_fraction must be between zero and one")
+    outer = GroupShuffleSplit(
+        n_splits=1,
+        test_size=holdout_fraction,
+        random_state=int(probe_config["split_seed"]),
+    )
+    train_indices, holdout_indices = next(outer.split(indices, groups=groups))
+    if validation_fraction == 0:
+        return train_indices, np.asarray([], dtype=np.int64), holdout_indices
+    relative_test_fraction = test_fraction / holdout_fraction
+    inner = GroupShuffleSplit(
+        n_splits=1,
+        test_size=relative_test_fraction,
+        random_state=int(probe_config["split_seed"]) + 1,
+    )
+    validation_local, test_local = next(
+        inner.split(holdout_indices, groups=groups[holdout_indices])
+    )
+    return (
+        train_indices,
+        holdout_indices[validation_local],
+        holdout_indices[test_local],
+    )
+
+
+def probe_model(config: dict[str, Any], random_state: int) -> Any:
+    return make_pipeline(
+        StandardScaler(),
+        LogisticRegression(
+            C=float(config["probe"]["c"]),
+            max_iter=int(config["probe"]["max_iter"]),
+            random_state=random_state,
+        ),
+    )
+
+
+def class_counts(labels: np.ndarray, indices: np.ndarray) -> dict[str, int]:
+    return {
+        str(key): int(value)
+        for key, value in Counter(labels[indices].tolist()).items()
+    }
+
+
+def train_probe(
+    config: dict[str, Any],
+    hidden: np.ndarray,
+    semantic_rows: list[dict[str, Any]],
+    records: list[dict[str, Any]],
+) -> dict[str, Any]:
+    probe_config = config["probe"]
+    entropy = np.asarray(
+        [row["cluster_assignment_entropy"] for row in semantic_rows],
+        dtype=np.float64,
+    )
+    train_indices, validation_indices, test_indices = fixed_group_split(records, probe_config)
+    threshold = best_train_threshold(entropy[train_indices])
+    labels = (entropy >= threshold).astype(np.int64)
+    for split_name, split_indices in (
+        ("training", train_indices),
+        ("validation", validation_indices),
+        ("test", test_indices),
+    ):
+        if len(split_indices) and np.unique(labels[split_indices]).size < 2:
+            raise ValueError(f"Probe {split_name} split has one class")
+
+    layers = [int(value) for value in config["generation"]["layers"]]
+    nll = np.asarray(
+        [row["answer_negative_log_likelihood"] for row in semantic_rows],
+        dtype=np.float32,
+    ).reshape(-1, 1)
+    correctness = np.asarray(
+        [row["any_sample_exact_match"] for row in semantic_rows],
+        dtype=np.int64,
+    )
+    bootstrap_samples = int(probe_config.get("bootstrap_samples", 1000))
+    bootstrap_seed = int(probe_config.get("bootstrap_seed", 271828))
+    layer_results = []
+    combined_results = []
+
+    for position, layer in enumerate(layers):
+        features = hidden[:, position, :].astype(np.float32)
+        model = probe_model(config, int(probe_config["split_seed"]))
+        model.fit(features[train_indices], labels[train_indices])
+        validation_probabilities = (
+            model.predict_proba(features[validation_indices])[:, 1]
+            if len(validation_indices)
+            else np.asarray([], dtype=np.float64)
+        )
+        test_probabilities = model.predict_proba(features[test_indices])[:, 1]
+        test_metrics = safe_metrics(labels[test_indices], test_probabilities)
+        test_metrics["auroc_bootstrap_95"] = bootstrap_auroc(
+            labels[test_indices],
+            test_probabilities,
+            bootstrap_samples,
+            bootstrap_seed + layer,
+        )
+        test_metrics["correctness_auroc_from_low_entropy_score"] = (
+            float(roc_auc_score(correctness[test_indices], 1 - test_probabilities))
+            if np.unique(correctness[test_indices]).size == 2
+            else None
+        )
+        layer_results.append(
+            {
+                "layer": layer,
+                "validation": (
+                    safe_metrics(labels[validation_indices], validation_probabilities)
+                    if len(validation_indices)
+                    else None
+                ),
+                "test": test_metrics,
+            }
+        )
+
+        combined_features = np.column_stack([features, nll])
+        combined = probe_model(config, int(probe_config["split_seed"]))
+        combined.fit(combined_features[train_indices], labels[train_indices])
+        combined_test_probabilities = combined.predict_proba(
+            combined_features[test_indices]
+        )[:, 1]
+        combined_results.append(
+            {
+                "layer": layer,
+                "validation": (
+                    safe_metrics(
+                        labels[validation_indices],
+                        combined.predict_proba(combined_features[validation_indices])[:, 1],
+                    )
+                    if len(validation_indices)
+                    else None
+                ),
+                "test": safe_metrics(labels[test_indices], combined_test_probabilities),
+            }
+        )
+
+    selection_split = "validation" if len(validation_indices) else "test"
+    selected = max(
+        layer_results,
+        key=lambda row: (
+            row[selection_split]["auroc"]
+            if row[selection_split]["auroc"] is not None
+            else -1.0
+        ),
+    )
+    selected_layer = int(selected["layer"])
+
+    train_mean = float(labels[train_indices].mean())
+    constant_validation = np.full(len(validation_indices), train_mean)
+    constant_test = np.full(len(test_indices), train_mean)
+    baselines: dict[str, Any] = {
+        "constant_train_mean": {
+            "validation": (
+                safe_metrics(labels[validation_indices], constant_validation)
+                if len(validation_indices)
+                else None
+            ),
+            "test": safe_metrics(labels[test_indices], constant_test),
+        }
+    }
+    baseline_test_probabilities: dict[str, np.ndarray] = {
+        "constant_train_mean": constant_test
+    }
+    for name in (
+        "predictive_entropy",
+        "answer_negative_log_likelihood",
+        "mean_answer_length",
+        "prompt_length",
+    ):
+        values = np.asarray(
+            [row[name] for row in semantic_rows],
+            dtype=np.float64,
+        ).reshape(-1, 1)
+        scalar = make_pipeline(
+            StandardScaler(),
+            LogisticRegression(max_iter=2000, random_state=int(probe_config["split_seed"])),
+        )
+        scalar.fit(values[train_indices], labels[train_indices])
+        validation_probabilities = (
+            scalar.predict_proba(values[validation_indices])[:, 1]
+            if len(validation_indices)
+            else np.asarray([], dtype=np.float64)
+        )
+        test_probabilities = scalar.predict_proba(values[test_indices])[:, 1]
+        baseline_test_probabilities[name] = test_probabilities
+        baselines[name] = {
+            "validation": (
+                safe_metrics(labels[validation_indices], validation_probabilities)
+                if len(validation_indices)
+                else None
+            ),
+            "test": safe_metrics(labels[test_indices], test_probabilities),
+        }
+        baselines[name]["test"]["auroc_bootstrap_95"] = bootstrap_auroc(
+            labels[test_indices],
+            test_probabilities,
+            bootstrap_samples,
+            bootstrap_seed + int(stable_hash(name)[:8], 16) % 10000,
+        )
+
+    shuffle_repetitions = int(probe_config.get("shuffle_repetitions", 20))
+    shuffle_rng = np.random.default_rng(int(probe_config["shuffle_seed"]))
+    shuffled_by_layer: dict[int, list[float]] = {layer: [] for layer in layers}
+    for repetition in range(shuffle_repetitions):
+        shuffled_labels = shuffle_rng.permutation(labels[train_indices])
+        for position, layer in enumerate(layers):
+            features = hidden[:, position, :].astype(np.float32)
+            shuffled = probe_model(config, int(probe_config["shuffle_seed"]) + repetition)
+            shuffled.fit(features[train_indices], shuffled_labels)
+            probabilities = shuffled.predict_proba(features[test_indices])[:, 1]
+            shuffled_by_layer[layer].append(
+                float(roc_auc_score(labels[test_indices], probabilities))
+            )
+    shuffled_results = []
+    for layer in layers:
+        values = np.asarray(shuffled_by_layer[layer], dtype=np.float64)
+        shuffled_results.append(
+            {
+                "layer": layer,
+                "repetitions": shuffle_repetitions,
+                "test_auroc_mean": float(values.mean()),
+                "test_auroc_std": float(values.std()),
+                "test_auroc_interval_95": [
+                    float(np.percentile(values, 2.5)),
+                    float(np.percentile(values, 97.5)),
+                ],
+                "test_auroc_values": values.tolist(),
+            }
+        )
+
+    sample_f1 = np.asarray(
+        [row["sample_mean_f1"] for row in semantic_rows],
+        dtype=np.float64,
+    )
+    entropy_f1_correlation = (
+        float(np.corrcoef(entropy[test_indices], sample_f1[test_indices])[0, 1])
+        if np.std(entropy[test_indices]) > 0 and np.std(sample_f1[test_indices]) > 0
+        else None
+    )
+    correctness_diagnostics = {
+        "test_any_sample_exact_match_rate": float(correctness[test_indices].mean()),
+        "test_mean_sample_f1": float(sample_f1[test_indices].mean()),
+        "test_entropy_vs_sample_f1_pearson": entropy_f1_correlation,
+        "test_semantic_entropy_auroc_for_all_samples_incorrect": (
+            float(roc_auc_score(1 - correctness[test_indices], entropy[test_indices]))
+            if np.unique(correctness[test_indices]).size == 2
+            else None
+        ),
+        "selected_probe_correctness_auroc": next(
+            row["test"]["correctness_auroc_from_low_entropy_score"]
+            for row in layer_results
+            if row["layer"] == selected_layer
+        ),
+        "answer_nll_correctness_auroc": (
+            float(
+                roc_auc_score(
+                    correctness[test_indices],
+                    1 - baseline_test_probabilities["answer_negative_log_likelihood"],
+                )
+            )
+            if np.unique(correctness[test_indices]).size == 2
+            else None
+        ),
+    }
+
+    return {
+        "threshold_fit_on_training_only": threshold,
+        "split_method": "fixed_group_split_by_normalized_context",
+        "selection_split": selection_split,
+        "selected_layer": selected_layer,
+        "train_indices": train_indices.tolist(),
+        "validation_indices": validation_indices.tolist(),
+        "test_indices": test_indices.tolist(),
+        "label_distribution": {
+            "train": class_counts(labels, train_indices),
+            "validation": class_counts(labels, validation_indices),
+            "test": class_counts(labels, test_indices),
+        },
+        "layers": layer_results,
+        "combined_hidden_plus_answer_nll": combined_results,
+        "shuffled_label_null": shuffled_results,
+        "baselines": baselines,
+        "correctness_diagnostics": correctness_diagnostics,
+    }
+
+
+def plot_probe(config: dict[str, Any], probe: dict[str, Any], run_name: str) -> Path:
+    output = root_dir() / "plots" / f"{run_name}_probe_performance_by_layer.png"
     output.parent.mkdir(parents=True, exist_ok=True)
     layers = [row["layer"] for row in probe["layers"]]
-    probe_auc = [row["auroc"] if row["auroc"] is not None else 0.5 for row in probe["layers"]]
-    shuffled_auc = [row["auroc"] if row["auroc"] is not None else 0.5 for row in probe["shuffled_label_layers"]]
-    figure, axis = plt.subplots(figsize=(7.2, 4.6))
-    axis.plot(layers, probe_auc, marker="o", linewidth=2, label="Linear probe")
-    axis.plot(layers, shuffled_auc, marker="o", linestyle="--", label="Shuffled labels")
-    for name, color in (("constant_train_mean", "gray"), ("predictive_entropy", "tab:green"), ("answer_negative_log_likelihood", "tab:orange")):
-        value = probe["baselines"][name]["auroc"]
+    probe_auc = [row["test"]["auroc"] for row in probe["layers"]]
+    combined_auc = [
+        row["test"]["auroc"]
+        for row in probe["combined_hidden_plus_answer_nll"]
+    ]
+    shuffled_auc = [
+        row["test_auroc_mean"]
+        for row in probe["shuffled_label_null"]
+    ]
+    shuffled_lower = [
+        row["test_auroc_interval_95"][0]
+        for row in probe["shuffled_label_null"]
+    ]
+    shuffled_upper = [
+        row["test_auroc_interval_95"][1]
+        for row in probe["shuffled_label_null"]
+    ]
+    lower_error = [
+        max(0.0, value - row["test"]["auroc_bootstrap_95"]["lower_95"])
+        for value, row in zip(probe_auc, probe["layers"])
+    ]
+    upper_error = [
+        max(0.0, row["test"]["auroc_bootstrap_95"]["upper_95"] - value)
+        for value, row in zip(probe_auc, probe["layers"])
+    ]
+
+    figure, axis = plt.subplots(figsize=(8.0, 5.0))
+    axis.errorbar(
+        layers,
+        probe_auc,
+        yerr=[lower_error, upper_error],
+        marker="o",
+        linewidth=2,
+        capsize=3,
+        label="Hidden-state probe (95% bootstrap CI)",
+    )
+    axis.plot(
+        layers,
+        combined_auc,
+        marker="s",
+        linestyle="-.",
+        label="Hidden state + answer NLL",
+    )
+    axis.plot(
+        layers,
+        shuffled_auc,
+        marker="o",
+        linestyle="--",
+        color="tab:red",
+        label="Shuffled-label mean",
+    )
+    axis.fill_between(
+        layers,
+        shuffled_lower,
+        shuffled_upper,
+        color="tab:red",
+        alpha=0.12,
+        label="Shuffled-label 95% interval",
+    )
+    for name, color in (
+        ("constant_train_mean", "gray"),
+        ("predictive_entropy", "tab:green"),
+        ("answer_negative_log_likelihood", "tab:orange"),
+    ):
+        value = probe["baselines"][name]["test"]["auroc"]
         if value is not None:
-            axis.axhline(value, linestyle=":", color=color, label=name.replace("_", " "))
-    axis.set(xlabel="Transformer block", ylabel="Held-out AUROC", title="Stage 0 probe performance by layer", ylim=(0, 1))
+            axis.axhline(
+                value,
+                linestyle=":",
+                color=color,
+                label=name.replace("_", " "),
+            )
+    axis.axvline(
+        probe["selected_layer"],
+        color="black",
+        alpha=0.18,
+        linewidth=1,
+        label="Validation-selected layer",
+    )
+    axis.set(
+        xlabel="Transformer block",
+        ylabel="Held-out test AUROC",
+        title=f"Stage 0 confidence-probe stability — {run_name}",
+        ylim=(0, 1),
+    )
     axis.set_xticks(layers)
     axis.grid(alpha=0.25)
     axis.legend(fontsize=8, ncol=2)
@@ -672,42 +1148,77 @@ def plot_probe(config: dict[str, Any], probe: dict[str, Any]) -> Path:
 
 
 def audit_split(records: list[dict[str, Any]], probe: dict[str, Any]) -> dict[str, Any]:
-    train_indices = probe["train_indices"]
-    test_indices = probe["test_indices"]
+    split_indices = {
+        "train": probe["train_indices"],
+        "validation": probe.get("validation_indices", []),
+        "test": probe["test_indices"],
+    }
 
     def normalized(value: str) -> str:
         return " ".join(value.lower().split())
 
-    train_ids = {records[index]["id"] for index in train_indices}
-    test_ids = {records[index]["id"] for index in test_indices}
-    train_contexts = {normalized(records[index]["context"]) for index in train_indices}
-    test_contexts = {normalized(records[index]["context"]) for index in test_indices}
-    train_questions = {normalized(records[index]["question"]) for index in train_indices}
-    test_questions = {normalized(records[index]["question"]) for index in test_indices}
-    near_duplicate_pairs = []
-    for train_index in train_indices:
-        left = set(normalize_answer(records[train_index]["question"]).split())
-        for test_index in test_indices:
-            right = set(normalize_answer(records[test_index]["question"]).split())
-            union = left | right
-            similarity = len(left & right) / len(union) if union else 1.0
-            if similarity >= 0.9:
-                near_duplicate_pairs.append(
-                    {"train_index": train_index, "test_index": test_index, "token_jaccard": similarity}
-                )
+    split_values = {}
+    for split_name, indices in split_indices.items():
+        split_values[split_name] = {
+            "ids": {records[index]["id"] for index in indices},
+            "contexts": {normalized(records[index]["context"]) for index in indices},
+            "questions": {normalized(records[index]["question"]) for index in indices},
+        }
+
+    pairwise = {}
+    split_pairs = (
+        ("train", "validation"),
+        ("train", "test"),
+        ("validation", "test"),
+    )
+    for left_name, right_name in split_pairs:
+        left_indices = split_indices[left_name]
+        right_indices = split_indices[right_name]
+        near_duplicates = []
+        for left_index in left_indices:
+            left_tokens = set(normalize_answer(records[left_index]["question"]).split())
+            for right_index in right_indices:
+                right_tokens = set(normalize_answer(records[right_index]["question"]).split())
+                union = left_tokens | right_tokens
+                similarity = len(left_tokens & right_tokens) / len(union) if union else 1.0
+                if similarity >= 0.9:
+                    near_duplicates.append(
+                        {
+                            "left_index": left_index,
+                            "right_index": right_index,
+                            "token_jaccard": similarity,
+                        }
+                    )
+        left_values = split_values[left_name]
+        right_values = split_values[right_name]
+        pairwise[f"{left_name}_vs_{right_name}"] = {
+            "id_overlap_count": len(left_values["ids"] & right_values["ids"]),
+            "exact_question_overlap_count": len(
+                left_values["questions"] & right_values["questions"]
+            ),
+            "exact_context_overlap_count": len(
+                left_values["contexts"] & right_values["contexts"]
+            ),
+            "near_duplicate_question_pairs_at_jaccard_0.9": near_duplicates,
+        }
+
     result = {
-        "id_overlap_count": len(train_ids & test_ids),
-        "exact_question_overlap_count": len(train_questions & test_questions),
-        "exact_context_overlap_count": len(train_contexts & test_contexts),
-        "near_duplicate_question_pairs_at_jaccard_0.9": near_duplicate_pairs,
+        "split_sizes": {
+            name: len(indices)
+            for name, indices in split_indices.items()
+        },
+        "unique_context_counts": {
+            name: len(split_values[name]["contexts"])
+            for name in split_indices
+        },
+        "pairwise": pairwise,
     }
     result["passed"] = all(
-        [
-            result["id_overlap_count"] == 0,
-            result["exact_question_overlap_count"] == 0,
-            result["exact_context_overlap_count"] == 0,
-            len(near_duplicate_pairs) == 0,
-        ]
+        audit["id_overlap_count"] == 0
+        and audit["exact_question_overlap_count"] == 0
+        and audit["exact_context_overlap_count"] == 0
+        and not audit["near_duplicate_question_pairs_at_jaccard_0.9"]
+        for audit in pairwise.values()
     )
     return result
 
@@ -733,12 +1244,15 @@ def checks_for_run(
         "answers_nonempty": nonempty_fraction >= 0.8,
         "answers_not_globally_identical": distinct_answers > 1,
         "final_prompt_token_verified": all(record["final_prompt_token_index"] == record["prompt_token_count"] - 1 for record in records),
+        "prompt_suffix_preserved": all(record["prompt_suffix_preserved"] for record in records),
         "hidden_shape_verified": hidden.shape[:2] == (expected, len(config["generation"]["layers"])),
         "hidden_finite": bool(np.isfinite(hidden).all()),
+        "correctness_metrics_finite": bool(np.isfinite([generation["f1"] for generation in generations]).all()),
         "semantic_entropy_finite": bool(np.isfinite(entropy).all()),
         "semantic_entropy_varies": bool(np.ptp(entropy) > 1e-8),
         "cluster_count_varies": bool(np.ptp(clusters) > 0),
         "probe_trained": probe is not None,
+        "split_leakage_audit_passed": probe is None or probe["split_audit"]["passed"],
     }
     required = [
         "model_and_examples_completed",
@@ -746,18 +1260,23 @@ def checks_for_run(
         "answers_nonempty",
         "answers_not_globally_identical",
         "final_prompt_token_verified",
+        "prompt_suffix_preserved",
         "hidden_shape_verified",
         "hidden_finite",
+        "correctness_metrics_finite",
         "semantic_entropy_finite",
     ]
     if run_name != "preflight":
-        required += ["semantic_entropy_varies", "cluster_count_varies", "probe_trained"]
+        required += ["semantic_entropy_varies", "cluster_count_varies", "probe_trained", "split_leakage_audit_passed"]
     return {
         "passed": all(individual[name] for name in required),
         "checks": individual,
         "diagnostics": {
             "nonempty_generation_fraction": nonempty_fraction,
             "distinct_normalized_answers": distinct_answers,
+            "truncated_prompt_count": sum(bool(record["prompt_was_truncated"]) for record in records),
+            "sample_exact_match_rate": float(np.mean([generation["exact_match"] for generation in generations])),
+            "sample_mean_f1": float(np.mean([generation["f1"] for generation in generations])),
             "semantic_entropy_mean": float(entropy.mean()),
             "semantic_entropy_std": float(entropy.std()),
             "semantic_entropy_values": sorted({float(value) for value in entropy}),
@@ -795,10 +1314,10 @@ def run(config: dict[str, Any], run_name: str) -> dict[str, Any]:
     probe_error = None
     if run_config.get("train_probe", False):
         try:
-            probe = train_probe(config, hidden, semantic_rows)
+            probe = train_probe(config, hidden, semantic_rows, records)
             probe["split_audit"] = audit_split(records, probe)
             atomic_json(results_dir / "probe_metrics.json", probe)
-            plot_probe(config, probe)
+            plot_probe(config, probe, run_name)
         except ValueError as error:
             probe_error = str(error)
             LOGGER.warning("Probe could not be trained: %s", error)
