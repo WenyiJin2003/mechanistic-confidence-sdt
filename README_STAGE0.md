@@ -80,6 +80,8 @@ The next measurement checks whether five sampled answers provide a stable enough
 
 The entropy cutoff remains frozen at `0.5867070452737222`, which was learned only from the original Run B training split. The predeclared pass criteria are at least 80% fixed-label agreement, Cohen's kappa of 0.60, and Spearman correlation of 0.70 for 5 versus 20 samples, plus at least 90% agreement for 10 versus 20. The ignored per-question cache makes additional generation resumable.
 
+This diagnostic is complete and passed all four point-estimate gates. Five versus 20 samples gave 84% label agreement, kappa 0.683, and Spearman 0.808; 10 versus 20 gave 90% agreement, kappa 0.790, and Spearman 0.934. Five samples still changed 8/50 labels, mostly from low to high entropy, and the 95% bootstrap lower bounds fell below the point-estimate gates. Ten generations per question are therefore the recommended minimum for the next fresh-data confirmation run.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

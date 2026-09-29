@@ -6,11 +6,13 @@ Last updated: 2026-09-29
 
 Stage 0 passed as a pipeline-validation experiment. Local generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end on Apple Silicon without CUDA, W&B, the OpenAI API, or another remote judge.
 
-The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger. This is encouraging pipeline evidence for continuing with 1.5B, not a paper-level replication or a mechanistic or causal result.
+The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger.
+
+A 50-question sampling-reliability diagnostic then increased each question from 5 to 20 generated answers. It passed all four predeclared point-estimate gates, but 8/50 five-sample labels changed and bootstrap intervals remained wide. This supports using 10 rather than 5 answers per question in the next confirmation run. Together these results are encouraging pipeline evidence for continuing with 1.5B, not a paper-level replication or a mechanistic or causal result.
 
 ## Exact configuration
 
-The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, and `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison.
+The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison, and `configs/stage0_qwen15b_label_stability.yaml` for sampling reliability.
 
 - Generator: `Qwen/Qwen2.5-0.5B-Instruct`, unquantized, float16, MPS
 - Dataset: fixed answerable subset of SQuAD v2 validation, selection seed 1729
@@ -239,11 +241,30 @@ The cross-fitted hidden probe trailed answer NLL by 0.342 AUROC, with context-bo
 
 Repeated test sets overlap heavily, so across-split percentiles are sensitivity ranges rather than confidence intervals. The five-fold analysis provides a cross-fitted context-bootstrap interval, but it does not cover all uncertainty from model refitting, threshold estimation, or new data and cannot replace fresh-data confirmation.
 
+## Semantic-entropy sampling reliability
+
+This predeclared diagnostic sampled 50 questions equally from five rank strata of the original five-answer entropy distribution. It reused the original 250 answers and generated 750 new answers locally, producing 20 answers per question. The fixed cutoff `0.5867070452737222` came from the original Run B training split and was not refitted. No probe was trained in this analysis.
+
+All answers and NLI decisions were cached. The run took 610.5 seconds on MPS and added 978 NLI judgments for the 10-answer prefix and 3,122 for the 20-answer prefix. Answers were non-degenerate: mean distinct normalized answers increased from 2.76 at five samples to 4.44 at ten and 7.46 at twenty; no question had only empty answers.
+
+| Comparison against 20 answers | Label agreement | Cohen's kappa | Spearman correlation | Mean absolute entropy difference | Label flips |
+|---|---:|---:|---:|---:|---:|
+| 5 answers | 0.840 | 0.683 | 0.808 | 0.400 | 8/50 |
+| 10 answers | 0.900 | 0.790 | 0.934 | 0.210 | 5/50 |
+
+The 5-vs-20 stratified-bootstrap 95% intervals were [0.74, 0.92] for agreement, [0.485, 0.841] for kappa, and [0.688, 0.898] for Spearman. The 10-vs-20 intervals were [0.82, 0.96], [0.595, 0.920], and [0.870, 0.964]. Thus all point-estimate gates passed, but the lower bounds for the five-answer comparison fell below the registered gates.
+
+The fixed high-entropy fraction increased from 0.48 at five answers to 0.62 at ten and 0.60 at twenty. Of the eight 5-vs-20 flips, seven were low-to-high and one high-to-low. This shows the practical weakness of five samples: rare alternative meanings can be missed, making some questions look more certain than they do with more sampling. It also means the raw entropy distribution depends on sampling budget, so comparisons must keep that budget fixed.
+
+The result supports semantic entropy as a workable target for the next experiment, but does not validate a model's confidence by itself. It only measures the repeatability of labels constructed from sampled outputs and a small local NLI model.
+
 ## Failure analysis and limitations
 
 - The 1.5B probe is more promising, but its selected-layer test interval still crosses chance and the test set contains only 41 questions.
 - The 100-split audit supports a weak signal but rejects a stable layer-14/19 localization claim; the best validation layer shifts and favors layer 28 in 49% of splits.
 - Continuous semantic-entropy prediction is weak, suggesting part of the binary AUROC result depends on how entropy is thresholded.
+- Five-answer labels are imperfect: 16% changed when expanded to 20 answers, and their bootstrap lower bounds did not clear the point-estimate gates.
+- The entropy cutoff was originally learned from a five-answer distribution. Holding it fixed prevents post hoc tuning but exposes a sampling-budget shift; the next run must use one fixed answer count throughout training and evaluation.
 - Output likelihood baselines remain substantially stronger, and hidden-state-plus-NLL models do not improve on NLL alone.
 - Qwen 0.5B often emits incomplete or incorrect answers within the 12-token limit. This validates the machinery but makes the semantic target noisier than it would be for a stronger QA model.
 - Qwen 1.5B greatly improves answer quality, but 38% of questions produce only one semantic cluster, changing the target distribution relative to 0.5B.
@@ -255,9 +276,9 @@ Repeated test sets overlap heavily, so across-split percentiles are sensitivity 
 
 ## Recommendation
 
-Continue measurement work with Qwen 1.5B rather than 0.5B. The split audit shows that a weak internal signal survives data re-partitioning, but its exact layer is not stable and it remains far below output-based uncertainty.
+Continue measurement work with Qwen 1.5B rather than 0.5B. The split audit shows that a weak internal signal survives data re-partitioning, but its exact layer is not stable and it remains far below output-based uncertainty. The label diagnostic passed, while also showing that five answers are noisier than desirable.
 
-The next experiment should test whether five sampled answers provide a reliable semantic-entropy label: select 50 questions across the entropy range, increase each to 20 generations, and compare the 5-sample label with the 20-sample estimate. Only if label agreement is acceptable should the project collect a fresh 500-question confirmation set. Do not begin synthetic-document training or add an internal mechanistic loss yet.
+The next experiment should use 10 answers per question on a fresh 500-question SQuAD subset, with a context-grouped split and a primary layer frozen before generation. Layer 14 is the conservative fixed primary layer from the earlier analysis; layer 28 can be reported as a predeclared secondary sensitivity check. The analysis should retain output-likelihood baselines and test whether the hidden probe adds information beyond them. Do not begin synthetic-document training or add an internal mechanistic loss until that fresh-data result confirms the internal signal.
 
 ## Artifacts
 
@@ -288,5 +309,12 @@ The next experiment should test whether five sampled answers provide a reliable 
 - `plots/run_200_qwen15b_probe_performance_by_layer.png`
 - `results/run_200_qwen15b_split_stability/stability_metrics.json`
 - `plots/run_200_qwen15b_split_stability.png`
+- `results/run_50_qwen15b_label_stability/combined_generations.jsonl`
+- `results/run_50_qwen15b_label_stability/entailment_judgments_20.jsonl`
+- `results/run_50_qwen15b_label_stability/semantic_entropy_5.jsonl`
+- `results/run_50_qwen15b_label_stability/semantic_entropy_10.jsonl`
+- `results/run_50_qwen15b_label_stability/semantic_entropy_20.jsonl`
+- `results/run_50_qwen15b_label_stability/label_stability_metrics.json`
+- `plots/run_50_qwen15b_label_stability.png`
 
 Actual storage after both 200-example runs and the stability audit: isolated environment 1.1 GB, result artifacts about 11 MB, plots about 408 KB, and the local Hugging Face cache reports 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.

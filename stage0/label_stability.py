@@ -257,7 +257,7 @@ def run_label_stability(
 
     if progress:
         progress(f"Generating {analysis['additional_generations']} additional answers for {len(selected)} cached questions")
-    generator = LocalGenerator(config)
+    generator: LocalGenerator | None = None
     extra_records = []
     generation_cache_hits = 0
     try:
@@ -286,6 +286,8 @@ def run_label_stability(
                     extra_record = json.load(handle)
                 generation_cache_hits += 1
             else:
+                if generator is None:
+                    generator = LocalGenerator(config)
                 extra_record, _ = generator.run_example(
                     example,
                     config["dataset"],
@@ -299,11 +301,19 @@ def run_label_stability(
             if progress and (position + 1) % 10 == 0:
                 progress(f"Additional generation: {position + 1}/{len(selected)} questions cached")
     finally:
-        generator_runtime = {
-            **generator.runtime,
-            "cache_hits": generation_cache_hits,
-        }
-        generator.close()
+        if generator is None:
+            generator_runtime = {
+                "model_id": config["models"]["generator"]["id"],
+                "device": "cached",
+                "dtype": "cached",
+                "cache_hits": generation_cache_hits,
+            }
+        else:
+            generator_runtime = {
+                **generator.runtime,
+                "cache_hits": generation_cache_hits,
+            }
+            generator.close()
 
     combined_records = []
     for selection, extra_record in zip(selected, extra_records):

@@ -21,19 +21,24 @@ Last updated: 2026-09-29
 
 ## Current conclusion
 
-The pipeline is validated. Qwen 1.5B substantially improved answer quality and validation selected layer 14 with AUROC 0.754; its test AUROC was 0.665 with context-bootstrap 95% interval [0.481, 0.844]. This is more promising than 0.5B but not conclusive, and output baselines remain stronger. No mechanistic or causal claim is warranted.
+The pipeline is validated. Qwen 1.5B substantially improved answer quality, and the 50-question sampling diagnostic passed all predeclared point-estimate gates. Five-answer semantic-entropy labels are usable but noisy: 8/50 changed at 20 answers, mainly from low to high entropy. Ten answers improved agreement to 90%. The hidden probe remains weaker than output baselines, and no mechanistic or causal claim is warranted.
 
 ## Recommended next step
 
-Test semantic-entropy label reliability by increasing 50 stratified questions from 5 to 20 generations. Compare the 5-sample and 20-sample estimates before collecting a fresh 500-question confirmation set or adding an internal mechanistic loss.
+Use Qwen 1.5B with 10 answers per question for a fresh 500-question, context-grouped confirmation run. Freeze the primary layer and analysis before generation. Do not add an internal mechanistic loss until this fresh-data run confirms that the internal signal is above chance and evaluates whether it adds information beyond output likelihood.
 
-## Semantic-entropy sampling reliability — in progress
+## Semantic-entropy sampling reliability — completed
 
 - Configuration: `configs/stage0_qwen15b_label_stability.yaml`
 - Reuse the existing five answers for 50 questions sampled equally from five original entropy-rank strata.
 - Add 15 answers per question, then compare 5-, 10-, and 20-sample semantic entropy under the frozen original training-only cutoff.
 - Predeclared gates: 5-vs-20 agreement at least 0.80, kappa at least 0.60, Spearman at least 0.70, and 10-vs-20 agreement at least 0.90.
 - No probe is retrained in this diagnostic; it tests the reliability of the target labels used to train a future probe.
+- All four point-estimate gates passed: 5-vs-20 agreement 0.84, kappa 0.683, Spearman 0.808; 10-vs-20 agreement 0.90.
+- Five-sample labels flipped for 8/50 questions (seven low-to-high and one high-to-low). Ten-sample labels flipped for 5/50.
+- Stratified-bootstrap 95% intervals were [0.74, 0.92] for 5-vs-20 agreement and [0.688, 0.898] for Spearman; these wide intervals motivate a cautious conclusion.
+- Results: `results/run_50_qwen15b_label_stability/label_stability_metrics.json`
+- Plot: `plots/run_50_qwen15b_label_stability.png`
 
 ## Cached split-stability audit — completed
 

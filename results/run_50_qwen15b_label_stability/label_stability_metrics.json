@@ -1,0 +1,165 @@
+{
+  "comparisons": {
+    "10_vs_20": {
+      "bootstrap_95": {
+        "cohen_kappa": {
+          "lower_95": 0.5954528646284087,
+          "median": 0.7933884297520661,
+          "upper_95": 0.9199999999999999,
+          "valid_resamples": 5000
+        },
+        "label_agreement": {
+          "lower_95": 0.82,
+          "median": 0.9,
+          "upper_95": 0.96,
+          "valid_resamples": 5000
+        },
+        "mean_absolute_entropy_difference": {
+          "lower_95": 0.16397052021904235,
+          "median": 0.20944834649744923,
+          "upper_95": 0.25886524367223873,
+          "valid_resamples": 5000
+        },
+        "spearman": {
+          "lower_95": 0.8702442714793412,
+          "median": 0.9332584131598797,
+          "upper_95": 0.9637135975498536,
+          "valid_resamples": 5000
+        }
+      },
+      "cohen_kappa": 0.7899159663865547,
+      "label_agreement": 0.9,
+      "label_flips": {
+        "high_to_low": 3,
+        "low_to_high": 2,
+        "total": 5
+      },
+      "mean_absolute_entropy_difference": 0.20969481117784539,
+      "spearman": 0.9337847999148963
+    },
+    "5_vs_20": {
+      "bootstrap_95": {
+        "cohen_kappa": {
+          "lower_95": 0.4849445324881141,
+          "median": 0.6825396825396824,
+          "upper_95": 0.8410174880763117,
+          "valid_resamples": 5000
+        },
+        "label_agreement": {
+          "lower_95": 0.74,
+          "median": 0.84,
+          "upper_95": 0.92,
+          "valid_resamples": 5000
+        },
+        "mean_absolute_entropy_difference": {
+          "lower_95": 0.3107246609591069,
+          "median": 0.3987604523908131,
+          "upper_95": 0.49638450907026127,
+          "valid_resamples": 5000
+        },
+        "spearman": {
+          "lower_95": 0.6880333374604688,
+          "median": 0.8125858432828003,
+          "upper_95": 0.8978087081929522,
+          "valid_resamples": 5000
+        }
+      },
+      "cohen_kappa": 0.6825396825396824,
+      "label_agreement": 0.84,
+      "label_flips": {
+        "high_to_low": 1,
+        "low_to_high": 7,
+        "total": 8
+      },
+      "mean_absolute_entropy_difference": 0.39991342983959227,
+      "spearman": 0.8077857164331947
+    }
+  },
+  "config_path": "configs/stage0_qwen15b_label_stability.yaml",
+  "experiment": "semantic_entropy_sampling_reliability",
+  "fixed_entropy_threshold": 0.5867070452737222,
+  "gate_results": {
+    "cohen_kappa_5_vs_20": true,
+    "label_agreement_10_vs_20": true,
+    "label_agreement_5_vs_20": true,
+    "spearman_5_vs_20": true
+  },
+  "num_questions": 50,
+  "passed": true,
+  "plot_path": "plots/run_50_qwen15b_label_stability.png",
+  "prefix_summaries": {
+    "10": {
+      "high_entropy_fraction": 0.62,
+      "maximum_entropy": 2.163955656882057,
+      "mean_entropy": 0.7830093047075714,
+      "mean_semantic_clusters": 3.26,
+      "median_entropy": 0.6931471805599453,
+      "minimum_entropy": -0.0
+    },
+    "20": {
+      "high_entropy_fraction": 0.6,
+      "maximum_entropy": 2.622996276085791,
+      "mean_entropy": 0.922593981851171,
+      "mean_semantic_clusters": 4.86,
+      "median_entropy": 0.7776612957621659,
+      "minimum_entropy": -0.0
+    },
+    "5": {
+      "high_entropy_fraction": 0.48,
+      "maximum_entropy": 1.6094379124341005,
+      "mean_entropy": 0.5724721326490527,
+      "mean_semantic_clusters": 2.2,
+      "median_entropy": 0.5004024235381879,
+      "minimum_entropy": -0.0
+    }
+  },
+  "runtime": {
+    "elapsed_seconds": 610.4798470420064,
+    "generator": {
+      "cache_hits": 0,
+      "device": "mps",
+      "dtype": "bfloat16",
+      "hidden_size": 1536,
+      "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "num_hidden_layers": 28
+    },
+    "nli": {
+      "10": {
+        "device": "mps",
+        "dtype": "float32",
+        "method": "bidirectional_strict_entailment",
+        "model_id": "cross-encoder/nli-deberta-v3-small",
+        "new_judgments": 978
+      },
+      "20": {
+        "device": "mps",
+        "dtype": "float32",
+        "method": "bidirectional_strict_entailment",
+        "model_id": "cross-encoder/nli-deberta-v3-small",
+        "new_judgments": 3122
+      }
+    }
+  },
+  "selection": {
+    "method": "equal allocation from five deterministic original-entropy rank strata",
+    "seed": 424242,
+    "stratum_counts": {
+      "0": 10,
+      "1": 10,
+      "2": 10,
+      "3": 10,
+      "4": 10
+    }
+  },
+  "source": {
+    "generations_sha256": "e46128c194166db5a2f8d92459acb91fe0066d0502de756d1d583f429a5faadd",
+    "run": "run_200_qwen15b",
+    "semantic_entropy_sha256": "6fe43c050079d3111578d9de110f4c370bd92e474d1471f3d6750f217be5bb49"
+  },
+  "success_gates": {
+    "cohen_kappa_5_vs_20_min": 0.6,
+    "label_agreement_10_vs_20_min": 0.9,
+    "label_agreement_5_vs_20_min": 0.8,
+    "spearman_5_vs_20_min": 0.7
+  }
+}

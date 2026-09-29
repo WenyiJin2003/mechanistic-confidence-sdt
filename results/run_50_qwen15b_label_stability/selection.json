@@ -1,0 +1,302 @@
+[
+  {
+    "entropy_5": 1.6094379124341005,
+    "id": "56e200e4cd28a01900c67c18",
+    "source_index": 0,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "5710eca0a58dae1900cd6b3c",
+    "source_index": 5,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "57265aaf5951b619008f706d",
+    "source_index": 8,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 1.6094379124341005,
+    "id": "5726ddf6f1498d1400e8ee07",
+    "source_index": 9,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 0.5004024235381879,
+    "id": "5727c94bff5b5019007d954b",
+    "source_index": 12,
+    "stratum": 2
+  },
+  {
+    "entropy_5": 1.3321790402101223,
+    "id": "5705e26d75f01819005e76d5",
+    "source_index": 15,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 1.6094379124341005,
+    "id": "571144d1a58dae1900cd6d70",
+    "source_index": 16,
+    "stratum": 4
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "571094b7a58dae1900cd6a66",
+    "source_index": 19,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.6730116670092565,
+    "id": "57106644b654c5140001f8e8",
+    "source_index": 21,
+    "stratum": 2
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5705e63175f01819005e7720",
+    "source_index": 23,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.5004024235381879,
+    "id": "5710ed7bb654c5140001fa2e",
+    "source_index": 28,
+    "stratum": 2
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "572691bedd62a815002e89dc",
+    "source_index": 33,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.5004024235381879,
+    "id": "57302bd0b2c2fd14005689dd",
+    "source_index": 34,
+    "stratum": 2
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5711488ab654c5140001fc3d",
+    "source_index": 42,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.5004024235381879,
+    "id": "571cda1bdd7acb1400e4c197",
+    "source_index": 52,
+    "stratum": 2
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5729d51d3f37b31900478592",
+    "source_index": 53,
+    "stratum": 1
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "5710eca0a58dae1900cd6b3b",
+    "source_index": 56,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "57302e45947a6a140053d22f",
+    "source_index": 60,
+    "stratum": 1
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "57274712708984140094dbb0",
+    "source_index": 62,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.6730116670092565,
+    "id": "571ce6655efbb31900334e37",
+    "source_index": 64,
+    "stratum": 2
+  },
+  {
+    "entropy_5": 0.6730116670092565,
+    "id": "5727d6faff5b5019007d969b",
+    "source_index": 70,
+    "stratum": 2
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "56e1febfe3433e1400423238",
+    "source_index": 71,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5726e313f1498d1400e8eeb4",
+    "source_index": 76,
+    "stratum": 0
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "572867212ca10214002da2f2",
+    "source_index": 80,
+    "stratum": 1
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "57294279af94a219006aa20d",
+    "source_index": 83,
+    "stratum": 1
+  },
+  {
+    "entropy_5": 1.6094379124341005,
+    "id": "5728e8212ca10214002daa6d",
+    "source_index": 88,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 0.5004024235381879,
+    "id": "5711119cb654c5140001fae4",
+    "source_index": 92,
+    "stratum": 2
+  },
+  {
+    "entropy_5": 0.6730116670092565,
+    "id": "572756265951b619008f8871",
+    "source_index": 94,
+    "stratum": 2
+  },
+  {
+    "entropy_5": 0.6730116670092565,
+    "id": "572facb0a23a5019007fc864",
+    "source_index": 95,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5726b929f1498d1400e8e8e9",
+    "source_index": 103,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 1.3321790402101223,
+    "id": "5727aeac3acd2414000de989",
+    "source_index": 109,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 1.0549201679861442,
+    "id": "57339c16d058e614000b5ec9",
+    "source_index": 112,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "5729f4273f37b319004785fd",
+    "source_index": 118,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "57309ef18ab72b1400f9c603",
+    "source_index": 121,
+    "stratum": 1
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "56e1c4fce3433e140042314e",
+    "source_index": 124,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "57283f014b864d19001647e9",
+    "source_index": 125,
+    "stratum": 3
+  },
+  {
+    "entropy_5": 1.0549201679861442,
+    "id": "572a0c541d046914007796f3",
+    "source_index": 135,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "5725db98ec44d21400f3d6c5",
+    "source_index": 140,
+    "stratum": 3
+  },
+  {
+    "entropy_5": 1.0549201679861442,
+    "id": "572fdb17b2c2fd1400568520",
+    "source_index": 145,
+    "stratum": 4
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "57338007d058e614000b5bdc",
+    "source_index": 150,
+    "stratum": 1
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "5733f5f24776f419006615c2",
+    "source_index": 154,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "571c9074dd7acb1400e4c100",
+    "source_index": 161,
+    "stratum": 0
+  },
+  {
+    "entropy_5": 0.9502705392332347,
+    "id": "57299ec43f37b3190047850f",
+    "source_index": 165,
+    "stratum": 3
+  },
+  {
+    "entropy_5": 1.3321790402101223,
+    "id": "5729fc3d1d0469140077969d",
+    "source_index": 171,
+    "stratum": 4
+  },
+  {
+    "entropy_5": 0.5004024235381879,
+    "id": "572755b7708984140094dc50",
+    "source_index": 172,
+    "stratum": 2
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5729fefbaf94a219006aa73d",
+    "source_index": 174,
+    "stratum": 1
+  },
+  {
+    "entropy_5": 1.0549201679861442,
+    "id": "57264c42dd62a815002e80c8",
+    "source_index": 175,
+    "stratum": 3
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "5728128cff5b5019007d9c7a",
+    "source_index": 176,
+    "stratum": 1
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "572a0bafaf94a219006aa768",
+    "source_index": 179,
+    "stratum": 1
+  },
+  {
+    "entropy_5": -0.0,
+    "id": "572fbea404bcaa1900d76c5c",
+    "source_index": 197,
+    "stratum": 1
+  }
+]
