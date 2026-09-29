@@ -14,25 +14,29 @@ Last updated: 2026-09-29
 - Completed Run A: 12 examples, three generations, exact-match grouping. All checks passed.
 - Completed Run B pilot: 64 examples, five generations, local DeBERTa-small NLI. All checks passed.
 - Completed the 200-example follow-up: 1,000 generations, six layers, context-grouped train/validation/test split, 50 shuffled-label controls, and 2,000 context-bootstrap resamples. All engineering checks passed.
+- Completed the matched 200-example Qwen 1.5B comparison. All engineering and leakage checks passed.
 - Verified with a full replay that all 200 generation records, all 200 hidden-state records, the dataset subset, and every entailment judgment are reusable without repeating the expensive stages.
 - Trained linear probes and required baselines, audited the split for leakage, and created the layer plot.
 - Wrote `RESULTS_STAGE0.md`.
 
 ## Current conclusion
 
-The pipeline is validated. In the 200-example follow-up, validation selected layer 4 with validation AUROC 0.503; its test AUROC was 0.628 with context-bootstrap 95% interval [0.440, 0.800]. Predictive entropy (0.847) and answer negative log-likelihood (0.855) were much stronger on test. This run therefore does not provide robust evidence of a useful semantic-entropy-label signal in this 0.5B setup. No mechanistic or causal claim is warranted.
+The pipeline is validated. Qwen 1.5B substantially improved answer quality and validation selected layer 14 with AUROC 0.754; its test AUROC was 0.665 with context-bootstrap 95% interval [0.481, 0.844]. This is more promising than 0.5B but not conclusive, and output baselines remain stronger. No mechanistic or causal claim is warranted.
 
 ## Recommended next step
 
-Move the next measurement run to Qwen 1.5B while keeping the same examples, split, prompt, sample count, and token limit for an interpretable model-size comparison. Consider a separate longer-generation ablation afterward because 805/1,000 current generations hit the 12-token cap.
+Use the cached 1.5B artifacts for a cheap multi-split stability analysis before collecting more generations or adding an internal mechanistic training loss.
 
-## In progress — matched Qwen 1.5B comparison
+## Matched Qwen 1.5B comparison — completed
 
 - Configuration: `configs/stage0_qwen15b_200.yaml`
 - Same 200 examples, five generations, fixed grouped split, prompt, seeds, and 12-token limit as the 0.5B follow-up
 - Generator: `Qwen/Qwen2.5-1.5B-Instruct`, unquantized bfloat16 on MPS; float16 failed preflight with non-finite sampling probabilities
 - Approximately depth-matched blocks: 5, 9, 14, 19, 23, and 28
-- Planned outputs: `results/run_200_qwen15b/` and `plots/run_200_qwen15b_probe_performance_by_layer.png`
+- Results: `results/run_200_qwen15b/`
+- Plot: `plots/run_200_qwen15b_probe_performance_by_layer.png`
+- Selected layer 14: validation AUROC 0.754; test AUROC 0.665, 95% interval [0.481, 0.844]
+- Output baselines: predictive entropy 0.833 and answer NLL 0.835 test AUROC
 
 ## 200-example follow-up — completed
 

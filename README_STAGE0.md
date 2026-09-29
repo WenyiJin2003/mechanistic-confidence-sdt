@@ -46,7 +46,7 @@ This follow-up is complete. All engineering checks passed, but the validation-se
 
 ### Matched Qwen 1.5B comparison
 
-The matched follow-up changes only the generator capacity and its six approximately depth-matched probe blocks. It keeps the same 200 examples, five generations, prompt, random seeds, 12-token limit, context-grouped split, local NLI model, and analysis:
+The matched follow-up preserves the experimental protocol while changing the generator capacity and its six approximately depth-matched probe blocks. It keeps the same 200 examples, five generations, prompt, random seeds, 12-token limit, context-grouped split, local NLI model, and analysis:
 
 ```bash
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_200.yaml --run run_200_qwen15b
@@ -55,6 +55,8 @@ The matched follow-up changes only the generator capacity and its six approximat
 The 28-layer model is measured at blocks 5, 9, 14, 19, 23, and 28, corresponding approximately to blocks 4, 8, 12, 16, 20, and 24 in the 24-layer 0.5B model. Outputs are isolated under `results/run_200_qwen15b/` and `plots/run_200_qwen15b_probe_performance_by_layer.png`.
 
 The 1.5B generator uses unquantized bfloat16 on MPS. An initial float16 preflight produced non-finite sampling probabilities before the first answer; bfloat16 preserves two-byte weights while providing the exponent range needed for stable local sampling.
+
+This comparison is complete. All engineering checks passed. Validation selected layer 14 with AUROC 0.754; its test AUROC was 0.665 (context-bootstrap 95% interval [0.481, 0.844]), compared with 0.833 for predictive entropy and 0.835 for answer negative log-likelihood. Answer quality improved sharply over 0.5B, but the probe result remains preliminary; see `RESULTS_STAGE0.md`.
 
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 

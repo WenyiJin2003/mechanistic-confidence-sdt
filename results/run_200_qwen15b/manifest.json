@@ -1,0 +1,167 @@
+{
+  "checks": {
+    "checks": {
+      "answers_nonempty": true,
+      "answers_not_globally_identical": true,
+      "cluster_count_varies": true,
+      "correctness_metrics_finite": true,
+      "final_prompt_token_verified": true,
+      "generation_count_correct": true,
+      "hidden_finite": true,
+      "hidden_shape_verified": true,
+      "model_and_examples_completed": true,
+      "probe_trained": true,
+      "prompt_suffix_preserved": true,
+      "semantic_entropy_finite": true,
+      "semantic_entropy_varies": true,
+      "split_leakage_audit_passed": true
+    },
+    "diagnostics": {
+      "cluster_count_distribution": {
+        "1": 76,
+        "2": 47,
+        "3": 43,
+        "4": 19,
+        "5": 15
+      },
+      "distinct_normalized_answers": 565,
+      "hidden_dtype": "float16",
+      "hidden_shape": [
+        200,
+        6,
+        1536
+      ],
+      "nonempty_generation_fraction": 1.0,
+      "sample_exact_match_rate": 0.467,
+      "sample_mean_f1": 0.6612645270841578,
+      "semantic_entropy_mean": 0.5882088086344697,
+      "semantic_entropy_std": 0.5445795651387213,
+      "semantic_entropy_values": [
+        -0.0,
+        0.5004024235381879,
+        0.6730116670092565,
+        0.9502705392332347,
+        1.0549201679861442,
+        1.3321790402101223,
+        1.6094379124341005
+      ],
+      "truncated_prompt_count": 1
+    },
+    "passed": true
+  },
+  "configuration": {
+    "dataset": {
+      "answerable_only": true,
+      "id": "squad_v2",
+      "include_context": true,
+      "selection_seed": 1729,
+      "split": "validation",
+      "system_prompt": "Answer the question as briefly as possible using only the supplied context."
+    },
+    "device": {
+      "allow_cpu_fallback": true,
+      "entailment_dtype": "float32",
+      "generator_dtype": "bfloat16",
+      "preference": [
+        "mps",
+        "cuda",
+        "cpu"
+      ]
+    },
+    "generation": {
+      "do_sample": true,
+      "layers": [
+        5,
+        9,
+        14,
+        19,
+        23,
+        28
+      ],
+      "max_new_tokens": 12,
+      "temperature": 1.0,
+      "top_k": 0,
+      "top_p": 1.0
+    },
+    "logging": {
+      "local_only": true,
+      "wandb": false
+    },
+    "models": {
+      "entailment": {
+        "batch_size": 32,
+        "id": "cross-encoder/nli-deberta-v3-small",
+        "label_order": [
+          "contradiction",
+          "entailment",
+          "neutral"
+        ],
+        "max_length": 256
+      },
+      "generator": {
+        "attn_implementation": "eager",
+        "id": "Qwen/Qwen2.5-1.5B-Instruct",
+        "max_prompt_tokens": 768,
+        "trust_remote_code": false
+      }
+    },
+    "probe": {
+      "bootstrap_samples": 2000,
+      "bootstrap_seed": 271828,
+      "c": 1.0,
+      "max_iter": 2000,
+      "shuffle_repetitions": 50,
+      "shuffle_seed": 314159,
+      "split_seed": 42,
+      "test_fraction": 0.2,
+      "validation_fraction": 0.2
+    },
+    "project": {
+      "cache_dir": "cache",
+      "hf_cache_dir": "cache/huggingface",
+      "results_dir": "results",
+      "seed": 20260928,
+      "time_limit_minutes": 120
+    },
+    "runs": {
+      "run_200_qwen15b": {
+        "grouping": "nli",
+        "num_examples": 200,
+        "num_generations": 5,
+        "train_probe": true
+      }
+    }
+  },
+  "generator_runtime": {
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 811.6259895830008,
+    "generation_cache_hits": 0,
+    "hidden_cache_hits": 0,
+    "hidden_size": 1536,
+    "legacy_generation_cache_hits": 0,
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "num_hidden_layers": 28
+  },
+  "grouping_runtime": {
+    "device": "mps",
+    "dtype": "float32",
+    "method": "bidirectional_strict_entailment",
+    "model_id": "cross-encoder/nli-deberta-v3-small",
+    "new_judgments": 1660
+  },
+  "probe_error": null,
+  "run": "run_200_qwen15b",
+  "versions": {
+    "cuda_available": false,
+    "datasets": "3.6.0",
+    "mps_available": true,
+    "mps_built": true,
+    "numpy": "2.4.6",
+    "platform": "macOS-15.7.4-arm64-arm-64bit",
+    "python": "3.11.14",
+    "scikit_learn": "1.9.1",
+    "torch": "2.14.0",
+    "transformers": "4.57.6"
+  }
+}

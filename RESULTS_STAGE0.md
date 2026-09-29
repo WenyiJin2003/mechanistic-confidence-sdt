@@ -6,11 +6,11 @@ Last updated: 2026-09-29
 
 Stage 0 passed as a pipeline-validation experiment. Local generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end on Apple Silicon without CUDA, W&B, the OpenAI API, or another remote judge.
 
-This result does **not** establish a useful semantic-entropy probe in Qwen 0.5B. The 200-example stability follow-up passed every engineering check, but its validation-selected hidden-state probe was effectively at chance on validation and remained much weaker than output-based uncertainty baselines. The evidence supports moving the next measurement run to a stronger generator, not making a mechanistic or causal claim.
+The matched Qwen 1.5B comparison also passed every engineering check. It produced much better answers and a stronger validation-selected hidden-state probe than 0.5B, but the 41-example test confidence interval still crosses chance and output-based uncertainty remains stronger. This is encouraging pipeline evidence for continuing with 1.5B, not a paper-level replication or a mechanistic or causal result.
 
 ## Exact configuration
 
-The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B and `configs/stage0_qwen05b_200.yaml` for the 200-example follow-up.
+The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, and `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison.
 
 - Generator: `Qwen/Qwen2.5-0.5B-Instruct`, unquantized, float16, MPS
 - Dataset: fixed answerable subset of SQuAD v2 validation, selection seed 1729
@@ -40,19 +40,22 @@ The 200-example follow-up kept the same model, dataset-selection seed, prompt, s
 - 2,000 context-group bootstrap resamples for test AUROC intervals
 - SQuAD exact-match/F1 diagnostics and a hidden-state-plus-answer-NLL comparison
 
+The matched 1.5B run keeps the same 200 examples, five generations, prompt, seeds, 12-token limit, grouped split, NLI model, and analysis. It changes the generator to `Qwen/Qwen2.5-1.5B-Instruct` and uses approximately depth-matched blocks 5, 9, 14, 19, 23, and 28. The unquantized generator runs in bfloat16 on MPS; saved hidden vectors remain float16.
+
 ## Deviations from the paper and upstream repository
 
-1. The paper studies substantially larger language models. This pilot uses a 0.49B-parameter instruction model.
-2. The upstream local entailment path defaults to `microsoft/deberta-v2-xlarge-mnli`; Run B uses `cross-encoder/nli-deberta-v3-small` to fit the local resource budget.
+1. The paper studies substantially larger language models. This pilot tests 0.5B and 1.5B instruction models.
+2. The upstream local entailment path defaults to `microsoft/deberta-v2-xlarge-mnli`; the meaningful runs use `cross-encoder/nli-deberta-v3-small` to fit the local resource budget.
 3. Run A uses normalized exact match as a transparent smoke-test grouping method. Run B uses local NLI.
 4. The probe target is the notebook's cluster-assignment semantic entropy. Other likelihood-weighted semantic-entropy variants were not used as targets.
 5. Only the final prompt token (TBG) is tested. The second-last generated token (SLT) is not tested.
-6. Run B tests four representative layers rather than every layer. The 200-example follow-up restores the requested six layers: 4, 8, 12, 16, 20, and 24.
+6. Run B tests four representative layers rather than every layer. The 0.5B follow-up uses six layers; the 1.5B comparison uses six approximately depth-matched layers rather than identical absolute layer numbers.
 7. The logistic probe standardizes each layer's activations. The upstream notebook uses scikit-learn logistic regression without an explicit scaler.
 8. The entropy threshold is fitted on training data only rather than using a universal split across several datasets. This avoids test-label leakage but is not the paper's multi-dataset universal threshold.
 9. Run B is the handoff's initial 50–100-example meaningful run (64 examples); the separate 200-example follow-up supplies the requested scale-up.
 10. The 64-example run uses a fixed train/test split. The 200-example run corrects this limitation with context-grouped train/validation/test partitions and validation-only layer selection.
 11. The follow-up adds SQuAD answer-correctness diagnostics and an answer-likelihood-augmented probe. These are Stage 0 diagnostics, not causal interventions or paper-level replications.
+12. Qwen 1.5B uses bfloat16 because float16 produced non-finite sampling probabilities on MPS before the first answer. This is a documented hardware-compatibility deviation, not quantization.
 
 ## Run A — smoke test
 
@@ -95,7 +98,7 @@ The test set contains 16 examples, so these values have high sampling uncertaint
 
 Shuffled-label probe AUROCs at layers 4, 12, 20, and 24 were 0.655, 0.509, 0.436, and 0.691. Their instability and occasional strength relative to the true-label probes reinforce that this sample is too small for a substantive probe-performance conclusion.
 
-## Run 200 — fixed-split stability follow-up
+## Run 200 — Qwen 0.5B fixed-split stability follow-up
 
 The 200-example run completed end to end and passed all saved engineering checks.
 
@@ -145,22 +148,81 @@ The 50 shuffled-label fits per layer produced mean test AUROCs between 0.506 and
 - Semantic entropy and mean sample F1 had test Pearson correlation -0.328, in the expected direction but too noisy for a substantive claim.
 - 805/1,000 generations used all 12 allowed new tokens. This indicates frequent truncation or verbosity and is the clearest answer-quality limitation of the current setup.
 
+## Matched Qwen 1.5B comparison
+
+The matched 1.5B run completed in 811.6 seconds for generation and six-layer hidden-state extraction on MPS. All saved engineering checks passed.
+
+- 1,000/1,000 generations were nonempty, with 565 distinct normalized answers.
+- Individual-sample exact match rose from 3.1% at 0.5B to 46.7%; mean sample F1 rose from 0.235 to 0.661.
+- Only 204/1,000 generations used all 12 tokens, compared with 805/1,000 at 0.5B.
+- Cluster counts remained non-degenerate: 76 questions had 1 cluster, 47 had 2, 43 had 3, 19 had 4, and 15 had 5.
+- Semantic entropy had mean 0.5882 and standard deviation 0.5446. Lower entropy is consistent with the larger model's more stable answers.
+- Stored hidden states have shape `[200, 6, 1536]`, dtype float16, and all values are finite. The generator itself ran unquantized in bfloat16.
+- The same leakage audit passed: 120/39/41 train/validation/test questions with no ID, exact-question, exact-context, or high-similarity question overlap.
+- The train-only entropy threshold was 0.58671. Low/high labels were 63/57 in training, 25/14 in validation, and 19/22 in test.
+- The saved clustering path contains 977 directed NLI judgments: 396 entailment, 443 neutral, and 138 contradiction. Mean winning-class probability was 0.934.
+
+### 1.5B probe performance by layer
+
+Validation selected layer 14 with AUROC 0.754. Its untouched test AUROC was 0.665 with context-group bootstrap 95% interval [0.481, 0.844]. This is more promising than the 0.5B selection result, but the interval still crosses chance.
+
+| Layer | Validation AUROC | Test AUROC | Context-bootstrap 95% interval | Test accuracy |
+|---:|---:|---:|---:|---:|
+| 5 | 0.546 | 0.373 | [0.199, 0.563] | 0.390 |
+| 9 | 0.580 | 0.409 | [0.230, 0.605] | 0.439 |
+| **14 (selected)** | **0.754** | **0.665** | **[0.481, 0.844]** | **0.683** |
+| 19 | 0.703 | 0.651 | [0.478, 0.820] | 0.634 |
+| 23 | 0.629 | 0.656 | [0.462, 0.824] | 0.561 |
+| 28 | 0.637 | 0.675 | [0.495, 0.848] | 0.610 |
+
+Layer 28 has the highest nominal test AUROC, but layer 14 remains the primary result because it was selected on validation only.
+
+### 1.5B baselines and controls
+
+| Method | Validation AUROC | Test AUROC | Test bootstrap 95% interval |
+|---|---:|---:|---:|
+| Constant train mean | 0.500 | 0.500 | — |
+| Predictive entropy | 0.969 | 0.833 | [0.689, 0.944] |
+| Answer negative log-likelihood | 0.989 | 0.835 | [0.682, 0.941] |
+| Selected layer-14 hidden probe | 0.754 | 0.665 | [0.481, 0.844] |
+| Layer-14 hidden state + answer NLL | 0.809 | 0.713 | — |
+
+At layer 14, 50 shuffled-label fits had mean test AUROC 0.521 and empirical 95% interval [0.368, 0.658]. The observed 0.665 lies just above that interval, which is encouraging but marginal. The bootstrap interval still includes chance, and adding the hidden state to answer NLL did not outperform answer NLL alone.
+
+On the test split, 65.9% of questions had at least one exact-match sample and mean sample F1 was 0.628. Semantic entropy correlated with sample F1 at -0.714. The selected semantic-entropy probe's correctness AUROC was 0.603, while raw answer log-likelihood reached 0.854.
+
+### Matched comparison summary
+
+| Metric | Qwen 0.5B | Qwen 1.5B |
+|---|---:|---:|
+| Individual-sample exact match | 0.031 | 0.467 |
+| Mean sample F1 | 0.235 | 0.661 |
+| Generations using all 12 tokens | 80.5% | 20.4% |
+| Mean semantic entropy | 1.157 | 0.588 |
+| Selected-layer validation AUROC | 0.503 | 0.754 |
+| Selected-layer test AUROC | 0.628 | 0.665 |
+| Predictive-entropy test AUROC | 0.847 | 0.833 |
+| Answer-NLL test AUROC | 0.855 | 0.835 |
+
+The semantic-entropy targets are generated separately by each model, so the AUROC comparison is informative but not a paired evaluation of an identical target.
+
 ## Failure analysis and limitations
 
-- The primary 200-example probe is weak: the validation-selected layer has validation AUROC 0.503 and test AUROC 0.628 with a wide interval crossing chance, while output likelihood baselines are much stronger.
+- The 1.5B probe is more promising, but its selected-layer test interval still crosses chance and the test set contains only 41 questions.
+- Output likelihood baselines remain substantially stronger, and hidden-state-plus-NLL models do not improve on NLL alone.
 - Qwen 0.5B often emits incomplete or incorrect answers within the 12-token limit. This validates the machinery but makes the semantic target noisier than it would be for a stronger QA model.
-- Surface diversity is extremely high (873 distinct normalized answers out of 1,000 in the follow-up), which may reflect poor answer stability as much as useful uncertainty.
+- Qwen 1.5B greatly improves answer quality, but 38% of questions produce only one semantic cluster, changing the target distribution relative to 0.5B.
 - The small NLI model is a major deviation. Its high-confidence classifications do not by themselves validate equivalence judgments on short answer fragments.
 - The follow-up's 41-example test set still gives wide per-layer confidence intervals. The 50 shuffled-label fits and context bootstrap quantify some instability, but this is not a multi-training-seed study.
-- There are 896 hidden-state features but only 120 training examples, so even regularized linear probes can overfit.
+- There are 1,536 hidden-state features but only 120 training examples in the 1.5B run, so even regularized linear probes can overfit.
 - Only one token position and one prompt format are tested.
 - No correctness-targeted probe, causal intervention, SDT claim, biological claim, or mechanistic-causality claim is supported here.
 
 ## Recommendation
 
-Move the next measurement run to Qwen 1.5B. The 200-example follow-up provides sufficient Stage 0 evidence to justify moving on: the leakage-safe, validation-selected 0.5B probe remains unconvincing, answer correctness is very low, 80.5% of generations hit the token cap, and output-level uncertainty is much stronger than the hidden-state probe.
+Continue measurement work with Qwen 1.5B rather than 0.5B. Its answers are substantially better and the middle-to-late layers show a plausible semantic-entropy signal, but the current evidence is not yet stable enough to support an internal mechanistic training loss.
 
-For the cleanest model-size comparison, first keep the same 200 examples, split, prompt, five samples, and 12-token limit when running 1.5B. A second, clearly labeled ablation can raise the generation limit or tighten answer extraction to test whether the 12-token cap is the dominant failure mode. Do not begin synthetic-document training or add an internal mechanistic loss until a stable measurement target has been demonstrated.
+The cheapest next check is a split-stability analysis using several additional context-grouped split seeds on the already cached 1.5B artifacts; this requires no new generation or NLI calls. If the selected middle/late-layer signal survives, enlarge the evaluation set before beginning synthetic-document training. A longer-token ablation is lower priority now that only 20.4% of 1.5B generations reach the cap.
 
 ## Artifacts
 
@@ -182,5 +244,12 @@ For the cleanest model-size comparison, first keep the same 200 examples, split,
 - `results/run_200/probe_metrics.json`
 - `results/run_200/manifest.json`
 - `plots/run_200_probe_performance_by_layer.png`
+- `results/run_200_qwen15b/generations.jsonl`
+- `results/run_200_qwen15b/entailment_judgments.jsonl`
+- `results/run_200_qwen15b/semantic_entropy.jsonl`
+- `results/run_200_qwen15b/hidden_states.npz`
+- `results/run_200_qwen15b/probe_metrics.json`
+- `results/run_200_qwen15b/manifest.json`
+- `plots/run_200_qwen15b_probe_performance_by_layer.png`
 
-Actual storage after the follow-up: isolated environment 1.1 GB, result artifacts 5.2 MB, plots 176 KB, and the local Hugging Face cache reports 2.5 GB. Cached model directories are 953 MB for Qwen and 552 MB for DeBERTa-small.
+Actual storage after both 200-example runs: isolated environment 1.1 GB, result artifacts 10 MB, plots 312 KB, and the local Hugging Face cache reports 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.
