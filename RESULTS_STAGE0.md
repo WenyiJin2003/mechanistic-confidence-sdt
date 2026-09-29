@@ -6,7 +6,7 @@ Last updated: 2026-09-29
 
 Stage 0 passed as a pipeline-validation experiment. Local generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end on Apple Silicon without CUDA, W&B, the OpenAI API, or another remote judge.
 
-The matched Qwen 1.5B comparison also passed every engineering check. It produced much better answers and a stronger validation-selected hidden-state probe than 0.5B, but the 41-example test confidence interval still crosses chance and output-based uncertainty remains stronger. This is encouraging pipeline evidence for continuing with 1.5B, not a paper-level replication or a mechanistic or causal result.
+The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger. This is encouraging pipeline evidence for continuing with 1.5B, not a paper-level replication or a mechanistic or causal result.
 
 ## Exact configuration
 
@@ -206,9 +206,44 @@ On the test split, 65.9% of questions had at least one exact-match sample and me
 
 The semantic-entropy targets are generated separately by each model, so the AUROC comparison is informative but not a paired evaluation of an identical target.
 
+## Cached 1.5B split-stability audit
+
+This preregistered diagnostic reused the 200 saved questions, semantic-entropy values, and hidden states without loading either model. It ran 100 context-grouped 60/20/20 splits with seeds 42–141. For every split, the entropy threshold and feature scaler were fitted on training data only. Fixed layer 14 was the primary analysis; validation-selected layers were secondary. All 100 splits met the minimum class-count rule and passed the leakage audit.
+
+### Primary fixed-layer result
+
+- Layer-14 median test AUROC: 0.628; IQR [0.558, 0.673]
+- Above chance in 93/100 splits; at least 0.60 in 62/100 splits
+- One shuffled-label fit per split: median 0.497
+- Continuous-entropy prediction was weaker: median test Spearman correlation 0.219
+- Five-fold cross-fitted layer-14 AUROC: 0.588, context-bootstrap 95% interval [0.507, 0.666]
+- Cross-fitted correctness AUROC from the low-entropy score: 0.592, 95% interval [0.506, 0.676]
+
+The fixed-layer stability gates passed. Because the cross-fitted interval's lower bound is just above 0.5, the result supports a weak internal cross-validated association, not a strong predictor.
+
+### Layer localization and controls
+
+| Diagnostic | Result |
+|---|---:|
+| Validation-selected probe median test AUROC | 0.634 |
+| Predictive-entropy median test AUROC | 0.921 |
+| Answer-NLL median test AUROC | 0.944 |
+| Layer 14 selected | 18/100 splits |
+| Layer 19 selected | 15/100 splits |
+| Layer 23 selected | 16/100 splits |
+| Layer 28 selected | 49/100 splits |
+
+The preregistered overall gate was **not passed** because layers 14 and 19 together were selected in only 33% of splits, below the 60% requirement. Layer 28 was selected most often and had median test AUROC 0.667, but it is a post hoc observation and does not replace the fixed layer-14 primary result.
+
+The cross-fitted hidden probe trailed answer NLL by 0.342 AUROC, with context-bootstrap difference interval [-0.424, -0.259]. Therefore the internal signal is repeatable but does not add evidence of superiority over the sampled-output likelihood baseline.
+
+Repeated test sets overlap heavily, so across-split percentiles are sensitivity ranges rather than confidence intervals. The five-fold analysis provides a cross-fitted context-bootstrap interval, but it does not cover all uncertainty from model refitting, threshold estimation, or new data and cannot replace fresh-data confirmation.
+
 ## Failure analysis and limitations
 
 - The 1.5B probe is more promising, but its selected-layer test interval still crosses chance and the test set contains only 41 questions.
+- The 100-split audit supports a weak signal but rejects a stable layer-14/19 localization claim; the best validation layer shifts and favors layer 28 in 49% of splits.
+- Continuous semantic-entropy prediction is weak, suggesting part of the binary AUROC result depends on how entropy is thresholded.
 - Output likelihood baselines remain substantially stronger, and hidden-state-plus-NLL models do not improve on NLL alone.
 - Qwen 0.5B often emits incomplete or incorrect answers within the 12-token limit. This validates the machinery but makes the semantic target noisier than it would be for a stronger QA model.
 - Qwen 1.5B greatly improves answer quality, but 38% of questions produce only one semantic cluster, changing the target distribution relative to 0.5B.
@@ -220,9 +255,9 @@ The semantic-entropy targets are generated separately by each model, so the AURO
 
 ## Recommendation
 
-Continue measurement work with Qwen 1.5B rather than 0.5B. Its answers are substantially better and the middle-to-late layers show a plausible semantic-entropy signal, but the current evidence is not yet stable enough to support an internal mechanistic training loss.
+Continue measurement work with Qwen 1.5B rather than 0.5B. The split audit shows that a weak internal signal survives data re-partitioning, but its exact layer is not stable and it remains far below output-based uncertainty.
 
-The cheapest next check is a split-stability analysis using several additional context-grouped split seeds on the already cached 1.5B artifacts; this requires no new generation or NLI calls. If the selected middle/late-layer signal survives, enlarge the evaluation set before beginning synthetic-document training. A longer-token ablation is lower priority now that only 20.4% of 1.5B generations reach the cap.
+The next experiment should test whether five sampled answers provide a reliable semantic-entropy label: select 50 questions across the entropy range, increase each to 20 generations, and compare the 5-sample label with the 20-sample estimate. Only if label agreement is acceptable should the project collect a fresh 500-question confirmation set. Do not begin synthetic-document training or add an internal mechanistic loss yet.
 
 ## Artifacts
 
@@ -251,5 +286,7 @@ The cheapest next check is a split-stability analysis using several additional c
 - `results/run_200_qwen15b/probe_metrics.json`
 - `results/run_200_qwen15b/manifest.json`
 - `plots/run_200_qwen15b_probe_performance_by_layer.png`
+- `results/run_200_qwen15b_split_stability/stability_metrics.json`
+- `plots/run_200_qwen15b_split_stability.png`
 
-Actual storage after both 200-example runs: isolated environment 1.1 GB, result artifacts 10 MB, plots 312 KB, and the local Hugging Face cache reports 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.
+Actual storage after both 200-example runs and the stability audit: isolated environment 1.1 GB, result artifacts about 11 MB, plots about 408 KB, and the local Hugging Face cache reports 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.

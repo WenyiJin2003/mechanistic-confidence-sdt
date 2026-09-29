@@ -68,6 +68,8 @@ The next diagnostic reuses the saved 1.5B generations, semantic labels, and hidd
 
 No generator or NLI model is loaded. Repeated-split percentiles are reported as sensitivity ranges rather than confidence intervals; a separate five-fold cross-fitted estimate uses context-group bootstrap intervals.
 
+The audit is complete. Fixed layer 14 had median test AUROC 0.628 and exceeded chance in 93/100 splits; its cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. The full preregistered gate did not pass because layers 14/19 were selected in only 33% of splits, while layer 28 was selected in 49%. This supports a weak internal association but not stable localization to one layer.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

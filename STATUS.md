@@ -25,15 +25,18 @@ The pipeline is validated. Qwen 1.5B substantially improved answer quality and v
 
 ## Recommended next step
 
-Use the cached 1.5B artifacts for a cheap multi-split stability analysis before collecting more generations or adding an internal mechanistic training loss.
+Test semantic-entropy label reliability by increasing 50 stratified questions from 5 to 20 generations. Compare the 5-sample and 20-sample estimates before collecting a fresh 500-question confirmation set or adding an internal mechanistic loss.
 
-## In progress — cached split-stability audit
+## Cached split-stability audit — completed
 
-- 100 predeclared context-grouped split seeds using only cached 1.5B artifacts
-- Fixed layer 14 as the primary analysis; validation-selected layer as a secondary analysis
-- Training-only entropy thresholds and feature scaling for every split
-- Five-fold cross-fitted fixed-layer estimate with context-group bootstrap intervals
-- Continuous-entropy Spearman sensitivity analysis and shuffled-label controls
+- 100/100 predeclared context-grouped splits were valid and passed leakage checks.
+- Fixed layer 14: median test AUROC 0.628; 93/100 splits above chance.
+- Five-fold cross-fitted layer-14 AUROC 0.588, context-bootstrap 95% interval [0.507, 0.666].
+- Validation-selected layer median test AUROC 0.634.
+- Overall preregistered gate did not pass: layers 14/19 were selected in 33% of splits, below the 60% criterion; layer 28 was selected in 49%.
+- Output baselines remained much stronger: predictive entropy median 0.921 and answer NLL median 0.944.
+- Results: `results/run_200_qwen15b_split_stability/stability_metrics.json`
+- Plot: `plots/run_200_qwen15b_split_stability.png`
 
 ## Matched Qwen 1.5B comparison — completed
 
