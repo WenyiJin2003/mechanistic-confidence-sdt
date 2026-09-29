@@ -21,16 +21,26 @@ from uncertainty.models.base_model import BaseModel
 from uncertainty.models.base_model import STOP_SEQUENCES
 
 
+def get_local_device():
+    """Prefer Apple Silicon, then CUDA, with a portable CPU fallback."""
+    if torch.backends.mps.is_available():
+        return torch.device('mps')
+    if torch.cuda.is_available():
+        return torch.device('cuda')
+    return torch.device('cpu')
+
+
 class StoppingCriteriaSub(StoppingCriteria):
     """Stop generations when they match a particular text or token."""
-    def __init__(self, stops, tokenizer, match_on='text', initial_length=None):
+    def __init__(self, stops, tokenizer, match_on='text', initial_length=None, device=None):
         super().__init__()
         self.stops = stops
         self.initial_length = initial_length
         self.tokenizer = tokenizer
         self.match_on = match_on
+        self.device = device or get_local_device()
         if self.match_on == 'tokens':
-            self.stops = [torch.tensor(self.tokenizer.encode(i)).to('cuda') for i in self.stops]
+            self.stops = [torch.tensor(self.tokenizer.encode(i)).to(self.device) for i in self.stops]
             print(self.stops)
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor):
@@ -95,7 +105,16 @@ class HuggingfaceModel(BaseModel):
         if stop_sequences == 'default':
             stop_sequences = STOP_SEQUENCES
         print(model_name)
-        if 'llama' in model_name.lower():
+        self.device = get_local_device()
+        if '/' in model_name:
+            model_id = model_name
+            dtype = torch.float16 if self.device.type in ('mps', 'cuda') else torch.float32
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_id, token_type_ids=None, clean_up_tokenization_spaces=False)
+            self.model = AutoModelForCausalLM.from_pretrained(
+                model_id, dtype=dtype, trust_remote_code=False).to(self.device)
+
+        elif 'llama' in model_name.lower():
 
             if model_name.endswith('-8bit'):
                 kwargs = {'quantization_config': BitsAndBytesConfig(
@@ -219,9 +238,12 @@ class HuggingfaceModel(BaseModel):
         else:
             raise ValueError
 
+        self.model.eval()
+        if '/' not in model_name:
+            self.device = next(self.model.parameters()).device
         self.model_name = model_name
         self.stop_sequences = stop_sequences + [self.tokenizer.eos_token]
-        self.token_limit = 4096 if 'Llama-2' in model_name else 2048
+        self.token_limit = getattr(self.model.config, 'max_position_embeddings', 4096)
 
     
     def predict(self, input_data, temperature, return_full=False, return_latent=False):
@@ -230,7 +252,7 @@ class HuggingfaceModel(BaseModel):
             logging.WARNING("INPUT IS A TUPLE.")
             input_data = input_data[0]
 
-        inputs = self.tokenizer(input_data, return_tensors="pt").to("cuda")
+        inputs = self.tokenizer(input_data, return_tensors="pt").to(self.device)
 
         if 'llama' in self.model_name.lower() or 'falcon' in self.model_name or 'mistral' in self.model_name.lower():
             if 'token_type_ids' in inputs:  # HF models seems has changed.
@@ -243,7 +265,8 @@ class HuggingfaceModel(BaseModel):
             stopping_criteria = StoppingCriteriaList([StoppingCriteriaSub(
                 stops=self.stop_sequences,
                 initial_length=len(inputs['input_ids'][0]),
-                tokenizer=self.tokenizer)])
+                tokenizer=self.tokenizer,
+                device=self.device)])
         else:
             stopping_criteria = None
 
@@ -385,7 +408,7 @@ class HuggingfaceModel(BaseModel):
         """Get the probability of the model anwering A (True) for the given input"""
 
         input_data += ' A'
-        tokenized_prompt_true = self.tokenizer(input_data, return_tensors='pt').to('cuda')['input_ids']
+        tokenized_prompt_true = self.tokenizer(input_data, return_tensors='pt').to(self.device)['input_ids']
 
         target_ids_true = tokenized_prompt_true.clone()
         # Set all target_ids except the last one to -100.
@@ -401,7 +424,7 @@ class HuggingfaceModel(BaseModel):
     def get_perplexity(self, input_data):
         """Get the probability of the model anwering A (True) for the given input"""
 
-        tokenized_data = self.tokenizer(input_data, return_tensors='pt').to('cuda')['input_ids']
+        tokenized_data = self.tokenizer(input_data, return_tensors='pt').to(self.device)['input_ids']
 
         with torch.no_grad():
             model_output_true = self.model(tokenized_data, labels=tokenized_data)

@@ -147,7 +147,10 @@ def main(args):
         for index in tqdm(indices):
             if (it + 1 % 10) == 0:
                 gc.collect()
-                torch.cuda.empty_cache()
+                if torch.backends.mps.is_available():
+                    torch.mps.empty_cache()
+                elif torch.cuda.is_available():
+                    torch.cuda.empty_cache()
             it += 1
 
             # Grab example at index.

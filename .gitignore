@@ -139,4 +139,7 @@ dmypy.json
 # WanDB
 */wandb/
 
+# Local Stage 0 model and resumable inference caches
+cache/
+
 .env

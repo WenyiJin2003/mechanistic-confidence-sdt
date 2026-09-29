@@ -1,0 +1,167 @@
+{
+  "baselines": {
+    "answer_negative_log_likelihood": {
+      "accuracy": 0.8125,
+      "auroc": 0.8363636363636364,
+      "log_loss": 0.48486101298528617
+    },
+    "constant_train_mean": {
+      "accuracy": 0.6875,
+      "auroc": 0.5,
+      "log_loss": 0.644144074676816
+    },
+    "mean_answer_length": {
+      "accuracy": 0.6875,
+      "auroc": 0.5,
+      "log_loss": 0.6538222821410634
+    },
+    "predictive_entropy": {
+      "accuracy": 0.75,
+      "auroc": 0.7818181818181817,
+      "log_loss": 0.4981994981313832
+    },
+    "prompt_length": {
+      "accuracy": 0.4375,
+      "auroc": 0.3818181818181818,
+      "log_loss": 0.6673082320469499
+    }
+  },
+  "label_distribution": {
+    "test": {
+      "0": 5,
+      "1": 11
+    },
+    "train": {
+      "0": 20,
+      "1": 28
+    }
+  },
+  "layers": [
+    {
+      "accuracy": 0.4375,
+      "auroc": 0.43636363636363634,
+      "layer": 4,
+      "log_loss": 1.2711091041564941
+    },
+    {
+      "accuracy": 0.6875,
+      "auroc": 0.5636363636363637,
+      "layer": 12,
+      "log_loss": 1.459306240081787
+    },
+    {
+      "accuracy": 0.4375,
+      "auroc": 0.21818181818181814,
+      "layer": 20,
+      "log_loss": 1.6241060495376587
+    },
+    {
+      "accuracy": 0.625,
+      "auroc": 0.5272727272727272,
+      "layer": 24,
+      "log_loss": 0.963470458984375
+    }
+  ],
+  "shuffled_label_layers": [
+    {
+      "accuracy": 0.6875,
+      "auroc": 0.6545454545454545,
+      "layer": 4,
+      "log_loss": 1.3363698720932007
+    },
+    {
+      "accuracy": 0.5625,
+      "auroc": 0.509090909090909,
+      "layer": 12,
+      "log_loss": 1.8140168190002441
+    },
+    {
+      "accuracy": 0.6875,
+      "auroc": 0.4363636363636364,
+      "layer": 20,
+      "log_loss": 1.529026746749878
+    },
+    {
+      "accuracy": 0.6875,
+      "auroc": 0.6909090909090909,
+      "layer": 24,
+      "log_loss": 0.6788651943206787
+    }
+  ],
+  "split_audit": {
+    "exact_context_overlap_count": 0,
+    "exact_question_overlap_count": 0,
+    "id_overlap_count": 0,
+    "near_duplicate_question_pairs_at_jaccard_0.9": [],
+    "passed": true
+  },
+  "test_indices": [
+    52,
+    58,
+    0,
+    44,
+    5,
+    36,
+    16,
+    12,
+    25,
+    61,
+    56,
+    9,
+    40,
+    13,
+    34,
+    50
+  ],
+  "threshold_fit_on_training_only": 1.1935496040981333,
+  "train_indices": [
+    3,
+    17,
+    49,
+    8,
+    6,
+    33,
+    4,
+    47,
+    19,
+    54,
+    41,
+    55,
+    31,
+    30,
+    59,
+    60,
+    15,
+    27,
+    26,
+    24,
+    46,
+    11,
+    32,
+    57,
+    45,
+    37,
+    29,
+    43,
+    48,
+    1,
+    21,
+    2,
+    62,
+    39,
+    35,
+    23,
+    53,
+    10,
+    22,
+    18,
+    63,
+    20,
+    7,
+    42,
+    14,
+    28,
+    51,
+    38
+  ]
+}

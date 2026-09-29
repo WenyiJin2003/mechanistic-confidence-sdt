@@ -1,0 +1,115 @@
+{
+  "baselines": {
+    "answer_negative_log_likelihood": {
+      "accuracy": 0.6666666666666666,
+      "auroc": 1.0,
+      "log_loss": 0.4147483389051472
+    },
+    "constant_train_mean": {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.5,
+      "log_loss": 0.6689020844460288
+    },
+    "mean_answer_length": {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.0,
+      "log_loss": 0.8345393382695753
+    },
+    "predictive_entropy": {
+      "accuracy": 0.6666666666666666,
+      "auroc": 1.0,
+      "log_loss": 0.36909478406353186
+    },
+    "prompt_length": {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.5,
+      "log_loss": 0.9209668767989788
+    }
+  },
+  "label_distribution": {
+    "test": {
+      "0": 1,
+      "1": 2
+    },
+    "train": {
+      "0": 2,
+      "1": 7
+    }
+  },
+  "layers": [
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.5,
+      "layer": 4,
+      "log_loss": 1.1239053010940552
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 1.0,
+      "layer": 12,
+      "log_loss": 0.9959738254547119
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.0,
+      "layer": 20,
+      "log_loss": 1.46819007396698
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.0,
+      "layer": 24,
+      "log_loss": 1.4094023704528809
+    }
+  ],
+  "shuffled_label_layers": [
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 1.0,
+      "layer": 4,
+      "log_loss": 1.1462950706481934
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 1.0,
+      "layer": 12,
+      "log_loss": 1.4767006635665894
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 1.0,
+      "layer": 20,
+      "log_loss": 1.2001259326934814
+    },
+    {
+      "accuracy": 0.6666666666666666,
+      "auroc": 0.5,
+      "layer": 24,
+      "log_loss": 1.2661899328231812
+    }
+  ],
+  "split_audit": {
+    "exact_context_overlap_count": 0,
+    "exact_question_overlap_count": 0,
+    "id_overlap_count": 0,
+    "near_duplicate_question_pairs_at_jaccard_0.9": [],
+    "passed": true
+  },
+  "test_indices": [
+    10,
+    9,
+    0
+  ],
+  "threshold_fit_on_training_only": 0.8675632284814612,
+  "train_indices": [
+    8,
+    5,
+    2,
+    1,
+    11,
+    4,
+    7,
+    3,
+    6
+  ]
+}

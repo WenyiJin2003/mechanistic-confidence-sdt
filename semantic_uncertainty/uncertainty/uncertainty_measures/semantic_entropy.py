@@ -21,7 +21,12 @@ random.seed(10)
 
 # Set up OpenAI API credentials
 openai.api_key = os.getenv("OPENAI_API_KEY")
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+if torch.backends.mps.is_available():
+    DEVICE = "mps"
+elif torch.cuda.is_available():
+    DEVICE = "cuda"
+else:
+    DEVICE = "cpu"
 
 
 class BaseEntailment:
@@ -31,10 +36,10 @@ class BaseEntailment:
 
 
 class EntailmentDeberta(BaseEntailment):
-    def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/deberta-v2-xlarge-mnli")
+    def __init__(self, model_id="microsoft/deberta-v2-xlarge-mnli"):
+        self.tokenizer = AutoTokenizer.from_pretrained(model_id)
         self.model = AutoModelForSequenceClassification.from_pretrained(
-            "microsoft/deberta-v2-xlarge-mnli").to(DEVICE)
+            model_id).to(DEVICE)
 
     def check_implication(self, text1, text2, *args, **kwargs):
         inputs = self.tokenizer(text1, text2, return_tensors="pt").to(DEVICE)

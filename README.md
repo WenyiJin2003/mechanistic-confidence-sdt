@@ -1,134 +1,100 @@
-# Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs
+# Semantic Entropy Probes — Resource-Efficient Stage 0
 
-Jannik Kossen*, Jiatong Han*, Muhammed Razzak*, Lisa Schut, Shreshth Malik, Yarin Gal
+An Apple-Silicon reproduction of the core **Semantic Entropy Probes (SEP)** pipeline, designed to answer one narrow question: can the published workflow be made local, reproducible, and inexpensive enough for a first mechanistic-confidence validation?
 
-| **[Abstract](#Abstract)**
-| **[Citation](#Citation)**
-| **[Requirements](#Requirements)**
-| **[Installation](#Installation)**
-| **[Tutorial](#Tutorial)**
-| **[Codebase](#Codebase)**
+> **Executive takeaway:** the pipeline works end to end, but this pilot does **not** yet show a reliable hidden-state probe. Output likelihood baselines outperform the tested activation probes, so the correct next step is a larger stability run—not a mechanistic or causal claim.
 
-[![arXiv](https://img.shields.io/badge/arXiv-2406.15927-b31b1b.svg)](https://arxiv.org/abs/2406.15927)
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-3110/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.1-red.svg)](https://pytorch.org/get-started/locally/)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
+## Experiment at a glance
 
-## Abstract
-We propose semantic entropy probes (SEPs), a cheap and reliable method for uncertainty quantification in Large Language Models (LLMs). Hallucinations, which are plausible-sounding but factually incorrect and arbitrary model generations, present a major challenge to the practical adoption of LLMs. Recent work by [Farquhar et al. (2024)](https://www.nature.com/articles/s41586-024-07421-0) proposes semantic entropy (SE), which can detect hallucinations by estimating uncertainty in the space semantic meaning for a set of model generations. However, the 5-to-10-fold increase in computation cost associated with SE computation hinders practical adoption. To address this, we propose SEPs, which directly approximate SE from the hidden states of a single generation. SEPs are simple to train and do not require sampling multiple model generations at test time, reducing the overhead of semantic uncertainty quantification to almost zero. We show that SEPs retain high performance for hallucination detection and generalize better to out-of-distribution data than previous probing methods that directly predict model accuracy. Our results across models and tasks suggest that model hidden states capture SE, and our ablation studies give further insights into the token positions and model layers for which this is the case.
+| Component | Stage 0 choice |
+|---|---|
+| Hardware | Apple M3 MacBook Air, 16 GB RAM |
+| Generator | `Qwen/Qwen2.5-0.5B-Instruct`, unquantized FP16 on MPS |
+| Dataset | Fixed answerable subset of SQuAD v2 validation |
+| Semantic grouping | Local `cross-encoder/nli-deberta-v3-small` |
+| Samples | 64 questions × 5 generations in the meaningful pilot |
+| Hidden state | Final prompt token before generation |
+| Layers | 4, 12, 20, 24 |
+| Probe | Standardized logistic regression |
+| External services | None: no OpenAI API, W&B, or remote judge |
 
-## Citation
-```
-@misc{kossen2024semanticentropyprobesrobust,
-      title={Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs}, 
-      author={Jannik Kossen and Jiatong Han and Muhammed Razzak and Lisa Schut and Shreshth Malik and Yarin Gal},
-      year={2024},
-      eprint={2406.15927},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2406.15927}, 
-}
-```
+The five-example preflight, 12-example smoke test, and 64-example meaningful pilot all passed their engineering checks. Generations, token log probabilities, semantic labels, entailment decisions, and hidden states are cached locally and the checked-in results are reproducible from one YAML configuration.
 
-## Requirements
+## Main result
 
-### Hardware Dependencies
+The held-out test set contains only 16 examples, so the numbers below are diagnostic rather than paper-level evidence.
 
-To obtain the hidden states of the large language model, you are required to do forward passes through the model on the relevant prompts/answers. Our code makes use of GPUs doing inference at FP16.
+| Method | Best/tested result (AUROC) |
+|---|---:|
+| Hidden-state probe, best layer (12) | **0.564** |
+| Constant baseline | 0.500 |
+| Predictive entropy | **0.782** |
+| Answer negative log-likelihood | **0.836** |
 
-Common memory requirements per model size:
-- 7B models: ~24 GB
-- 13B models: ~48GB
-- 70B model: ~160GB
+![Probe performance by layer](plots/probe_performance_by_layer.png)
 
+The target was non-degenerate: the 64 examples produced 1–5 semantic clusters and seven distinct entropy values. However, shuffled-label probes were unstable and sometimes stronger than the true-label probes. This is consistent with small-sample variance and high-dimensional overfitting, not evidence of a robust activation signal.
 
-### Software Dependencies
+## What was validated
 
-Dependecies for this code include Python 3.11 and PyTorch 2.1.
+- local MPS generation and CPU fallback logic;
+- arbitrary Hugging Face model IDs in the adapted loader;
+- extraction of the intended final-prompt-token activation;
+- resumable per-example generation and hidden-state caches;
+- local bidirectional NLI clustering with cached judgments;
+- semantic-entropy and output-uncertainty computation;
+- leakage-aware linear probing and shuffled-label controls;
+- train/test audits for duplicate IDs, questions, contexts, and near-duplicate questions;
+- local artifacts and plots without W&B.
 
-In `environment_export.yaml`, we list the precise versions for all Python packages.
+## What was **not** established
 
-## Installation
+This repository does not support claims about SDT, biological knowledge, tamper resistance, confidence-loss effectiveness, or mechanistic causality. Qwen 0.5B also produced many incomplete or incorrect 12-token answers, which may add label noise. See [RESULTS_STAGE0.md](RESULTS_STAGE0.md) for the complete failure analysis.
 
+## Recommendation
 
-To install Python with all necessary dependencies, we recommend you use conda.
+Run one 200-example Qwen 0.5B stability experiment with layers 4, 8, 12, 16, 20, and 24 and a fixed train/validation/test split. Move to Qwen 1.5B only if the larger 0.5B experiment remains near chance or answer-quality review identifies model capacity as the dominant limitation.
 
-We refer to [https://conda.io/](https://conda.io/) for an installation guide.
+## Reproduce locally
 
-After installing conda, you can set up and activate the conda environment by executing the following commands at the root folder of this repository:
+Requirements: Python 3.11 and approximately 3 GB of free disk beyond the repository.
 
-```
-conda-env update -f sep_enviroment.yaml
-conda activate se_probes
-```
+```bash
+uv venv --python 3.11 .venv
+uv pip install --python .venv/bin/python -r requirements-stage0.txt
 
+.venv/bin/python scripts/run_stage0.py \
+  --config configs/stage0_qwen05b.yaml \
+  --run preflight
 
-Our experiments rely on [Weights & Biases](https://wandb.ai/) to log results. You may need to log in with your wandb API key upon initial execution.
+.venv/bin/python scripts/run_stage0.py \
+  --config configs/stage0_qwen05b.yaml \
+  --run run_a
 
-Our experiments rely on HuggingFace for all LLM models and most of the datasets. Set the environment variable `HUGGING_FACE_HUB_TOKEN` to the token associated with your Hugging Face account. For Llama models, [apply for access](https://huggingface.co/meta-llama) to use the official repository of Meta's LLaMa-2 models.
-
-
-Our experiments with sentence-length generation use GPT models from the OpenAI API.
-Please set the environment variable `OPENAI_API_KEY` to your OpenAI API key in order to use these models.
-Costs for reproducing our results vary depending on experiment configuration, but, without any guarantee, should lie somewhere between 10 and 100 USD.
-
-
-For almost all tasks, the dataset is downloaded automatically from HuggingFace Datasets library upon first execution.
-Only for bioasq, data needs to be [downloaded](http://participants-area.bioasq.org/datasets) manually.
-
-
-## Tutorial
-
-### Generate Semantic Entropy Probes Dataset
-
-Execute
-
-```
-python generate_answers.py --model_name=Llama-2-7b-chat --dataset=trivia_qa
+.venv/bin/python scripts/run_stage0.py \
+  --config configs/stage0_qwen05b.yaml \
+  --run run_b
 ```
 
-to reproduce results for short-phrase generation with LLaMa-2 Chat (7B) on the TriviaQA dataset.
+The model and inference caches are intentionally excluded from Git. Checked-in result artifacts are under `results/`.
 
-The expected runtime of this demo is 1 hour using an A100 GPU, 24 cores of a Intel(R) Xeon(R) Gold 6248R CPU @ 3.00GHz, and 192 GB of RAM.
-Runtime may be longer upon first execution, as models need to be downloaded first.
+## Repository guide
 
-Note down the wandb id assigned to your demo run.
+- [RESULTS_STAGE0.md](RESULTS_STAGE0.md) — complete configuration, metrics, deviations, and recommendation
+- [README_STAGE0.md](README_STAGE0.md) — implementation and execution details
+- [MACHINE_ASSESSMENT.md](MACHINE_ASSESSMENT.md) — measured local environment and resource assessment
+- [PLAN_STAGE0.md](PLAN_STAGE0.md) — staged experimental plan
+- [STATUS.md](STATUS.md) — current state and next action
+- [`configs/stage0_qwen05b.yaml`](configs/stage0_qwen05b.yaml) — canonical configuration
+- [`stage0/pipeline.py`](stage0/pipeline.py) — local cached pipeline
+- [`results/run_b/`](results/run_b/) — meaningful-run artifacts
+- [`docs/UPSTREAM_README.md`](docs/UPSTREAM_README.md) — preserved upstream documentation
 
-To obtain a barplot similar to those of the paper, open the the iPython notebook in `semantic_entropy_probes/train-latent-probe.ipynb`, populate `wandb_id` with the id of your demo run, and execute all cells.
+## Provenance
 
-### Training Semantic Entropy Probes
+This work is based on:
 
-We retrieve saved model hidden states on two token positions (TBG, SLT) with which we train linear probes to predict model semantic uncertainty and further predict correctness.
+- Kossen et al., [*Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs*](https://arxiv.org/abs/2406.15927)
+- OATML, [`semantic-entropy-probes`](https://github.com/OATML/semantic-entropy-probes), inspected at commit `02e2167dd1c00e27080d421f9b40e13e00f0452b`
 
-See [this notebook](./semantic_entropy_probes/latent-probe.ipynb) for step-by-step guide on training SEPs, which also contains handy tools for data loading, visualizations, and computing baselines. 
-
-## Codebase
-### Repository Structure
-
-* Code to generate the semantic entropy is contained in the semantic uncertainty folder, and adapted from the repo for [semantic uncertainty](https://github.com/jlko/semantic_uncertainty). With in this, a standard SE generation run executes the following three scripts in order:
-
-    1. `generate_answers.py`: Sample responses (and their likelihods/hidden states) from the models for the questions.
-    2. `compute_uncertainties.py`: Compute uncertainty metrics given responses.
-    3. `analyze_results.py`: Compute aggregate performance metrics.
-* Once this is calculated, you can use the train_latent-probe.ipynb notebook, contained in the semantic_entropy_probes folder to train your SEPs.
-
-### Reproducing the Experiments
-
-To reproduce the experiments of the paper, one just needs to run the above demo for the various combinations of models and datasets.
-
-The simplest way is to execute `slurm/run.sh` (with commands to generate both short-form and long-form answers to all datasets) if you are using `slurm`. 
-
-Or you may directly execute iteratively
-
-```
-python generate_answers.py --model_name=$MODEL --dataset=$DATASET $EXTRA_CFG
-```
-
-where
-
-* `$MODEL` is one of: [`Llama-2-7b, Llama-2-13b, Llama-2-70b, Llama-2-7b-chat, Llama-2-13b-chat, Llama-2-70b-chat, falcon-7b, falcon-40b, falcon-7b-instruct, falcon-40b-instruct, Mistral-7B-v0.1, Mistral-7B-Instruct-v0.1, Phi-3-mini-128k-instruct`],
-* `$DATASET` is one of [`trivia_qa, squad, med_qa, bioasq, record, nq, svamp`],
-* and `$EXTRA_CFG` is empty for short-phrase generation and for sentence-length generation, `EXTRA_CFG=--num_few_shot=0 --model_max_new_tokens=100 --brief_prompt=chat --metric=llm_gpt-4 --entailment_model=gpt-3.5 --no-compute_accuracy_at_all_temps`.
-
-The results for any run can be obtained by passing their `wandb_id` to an evaluation notebook identical to the demonstration in `semantic_entropy_probes/train-latent-probe.ipynb`.
+The original MIT license is retained. Stage 0 deviations—especially the 0.5B generator, smaller NLI model, sample size, and token/layer subset—are documented explicitly in the results report.

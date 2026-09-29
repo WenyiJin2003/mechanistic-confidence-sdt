@@ -1,0 +1,68 @@
+project:
+  seed: 20260928
+  time_limit_minutes: 20
+  cache_dir: cache
+  results_dir: results
+  hf_cache_dir: cache/huggingface
+
+device:
+  preference: [mps, cuda, cpu]
+  generator_dtype: float16
+  entailment_dtype: float32
+  allow_cpu_fallback: true
+
+models:
+  generator:
+    id: Qwen/Qwen2.5-0.5B-Instruct
+    trust_remote_code: false
+    attn_implementation: eager
+    max_prompt_tokens: 768
+  entailment:
+    id: cross-encoder/nli-deberta-v3-small
+    batch_size: 32
+    max_length: 256
+    label_order: [contradiction, entailment, neutral]
+
+dataset:
+  id: squad_v2
+  split: validation
+  answerable_only: true
+  selection_seed: 1729
+  include_context: true
+  system_prompt: Answer the question as briefly as possible using only the supplied context.
+
+generation:
+  temperature: 1.0
+  do_sample: true
+  top_p: 1.0
+  top_k: 0
+  max_new_tokens: 12
+  layers: [4, 12, 20, 24]
+
+probe:
+  test_fraction: 0.25
+  split_seed: 42
+  shuffle_seed: 314159
+  c: 1.0
+  max_iter: 2000
+
+runs:
+  preflight:
+    num_examples: 5
+    num_generations: 3
+    grouping: exact_match
+    train_probe: false
+  run_a:
+    num_examples: 12
+    num_generations: 3
+    grouping: exact_match
+    train_probe: true
+  run_b:
+    num_examples: 64
+    num_generations: 5
+    grouping: nli
+    train_probe: true
+
+logging:
+  wandb: false
+  local_only: true
