@@ -1,16 +1,17 @@
-# Semantic Entropy Probes — Stage 0
+# Stage 0 Technical Runbook
 
-This directory contains a local, resource-aware validation of the Semantic Entropy Probes pipeline using Qwen2.5 0.5B and 1.5B models with SQuAD v2.
+## Pipeline
 
-## What it does
+`stage0/pipeline.py` provides one local, resumable workflow:
 
-- selects a deterministic answerable subset of SQuAD v2;
-- samples short local generations;
-- saves per-token log probabilities;
-- caches the hidden state of the exact final prompt token at selected layers;
-- groups sampled answers and computes semantic-entropy labels;
-- trains a simple linear probe and evaluates required baselines;
-- writes all artifacts locally without W&B or the OpenAI API.
+1. select a deterministic answerable SQuAD v2 subset;
+2. generate sampled answers and token log probabilities;
+3. cache selected-layer hidden states at the final prompt token;
+4. cluster answers by strict bidirectional local NLI;
+5. compute semantic entropy and output-level uncertainty;
+6. train standardized logistic probes and evaluate controls.
+
+Device order is MPS, CUDA, then CPU. W&B is disabled and essential outputs are written locally.
 
 ## Setup
 
@@ -19,87 +20,48 @@ uv venv --python 3.11 .venv
 uv pip install --python .venv/bin/python -r requirements-stage0.txt
 ```
 
-## Run
+## Commands
 
-```bash
-.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run preflight
-.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_a
-```
+| Experiment | Command |
+|---|---|
+| Smoke test | `.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_a` |
+| Initial NLI pilot | `.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_b` |
+| 0.5B, 200 questions | `.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b_200.yaml --run run_200` |
+| 1.5B, 200 questions | `.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_200.yaml --run run_200_qwen15b` |
+| Cached split audit | `.venv/bin/python scripts/run_split_stability.py --config configs/stage0_qwen15b_split_stability.yaml` |
+| Sampling reliability | `.venv/bin/python scripts/run_label_stability.py --config configs/stage0_qwen15b_label_stability.yaml` |
+| Fresh 1.5B confirmation | `.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_500_confirm.yaml --run run_500_qwen15b_confirm` |
 
-Run B is intentionally gated on Run A:
+## Artifacts
 
-```bash
-.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_b
-```
+Each main run writes:
 
-### 200-example stability follow-up
+- `generations.jsonl` — answers, token IDs, token log probabilities, correctness scores, and prompt metadata;
+- `hidden_states.npz` — example IDs, layer IDs, and float16 hidden states;
+- `entailment_judgments.jsonl` — NLI decisions used by semantic clustering;
+- `semantic_entropy.jsonl` — cluster assignments and uncertainty measures;
+- `probe_metrics.json` — splits, thresholds, probe results, baselines, and controls;
+- `manifest.json` — exact configuration, software versions, runtimes, and integrity checks.
 
-The pre-registered follow-up uses a separate configuration so the 64-example pilot remains reproducible:
+See [`results/README.md`](results/README.md) for the run index.
 
-```bash
-.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b_200.yaml --run run_200
-```
+## Cache behavior
 
-It adds layers 8 and 16, a fixed context-grouped train/validation/test split, validation-only layer selection, bootstrap intervals, 50 shuffled-label controls, SQuAD EM/F1 diagnostics, and a hidden-state-plus-answer-NLL comparison. Outputs are isolated under `results/run_200/` and `plots/run_200_probe_performance_by_layer.png`. The ignored local cache remains resumable per example and per NLI batch.
-
-This follow-up is complete. All engineering checks passed, but the validation-selected hidden probe was not robust: layer 4 scored 0.503 validation AUROC and 0.628 test AUROC (context-bootstrap 95% interval [0.440, 0.800]), versus 0.847 for predictive entropy and 0.855 for answer negative log-likelihood on test. See `RESULTS_STAGE0.md` for the full table, leakage audit, failure analysis, and recommendation to move the next measurement run to Qwen 1.5B.
-
-### Matched Qwen 1.5B comparison
-
-The matched follow-up preserves the experimental protocol while changing the generator capacity and its six approximately depth-matched probe blocks. It keeps the same 200 examples, five generations, prompt, random seeds, 12-token limit, context-grouped split, local NLI model, and analysis:
-
-```bash
-.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_200.yaml --run run_200_qwen15b
-```
-
-The 28-layer model is measured at blocks 5, 9, 14, 19, 23, and 28, corresponding approximately to blocks 4, 8, 12, 16, 20, and 24 in the 24-layer 0.5B model. Outputs are isolated under `results/run_200_qwen15b/` and `plots/run_200_qwen15b_probe_performance_by_layer.png`.
-
-The 1.5B generator uses unquantized bfloat16 on MPS. An initial float16 preflight produced non-finite sampling probabilities before the first answer; bfloat16 preserves two-byte weights while providing the exponent range needed for stable local sampling.
-
-This comparison is complete. All engineering checks passed. Validation selected layer 14 with AUROC 0.754; its test AUROC was 0.665 (context-bootstrap 95% interval [0.481, 0.844]), compared with 0.833 for predictive entropy and 0.835 for answer negative log-likelihood. Answer quality improved sharply over 0.5B, but the probe result remains preliminary; see `RESULTS_STAGE0.md`.
-
-### Cached split-stability audit
-
-The next diagnostic reuses the saved 1.5B generations, semantic labels, and hidden states. It performs 100 predeclared context-grouped splits, treats fixed layer 14 as the primary analysis, and treats validation-selected layers as secondary:
-
-```bash
-.venv/bin/python scripts/run_split_stability.py --config configs/stage0_qwen15b_split_stability.yaml
-```
-
-No generator or NLI model is loaded. Repeated-split percentiles are reported as sensitivity ranges rather than confidence intervals; a separate five-fold cross-fitted estimate uses context-group bootstrap intervals.
-
-The audit is complete. Fixed layer 14 had median test AUROC 0.628 and exceeded chance in 93/100 splits; its cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. The full preregistered gate did not pass because layers 14/19 were selected in only 33% of splits, while layer 28 was selected in 49%. This supports a weak internal association but not stable localization to one layer.
-
-### Semantic-entropy sampling reliability
-
-The next measurement checks whether five sampled answers provide a stable enough target for probe training. It selects 50 questions evenly across five original entropy-rank strata, reuses their existing five answers, adds 15 locally generated answers, and compares semantic entropy after 5, 10, and 20 samples:
-
-```bash
-.venv/bin/python scripts/run_label_stability.py --config configs/stage0_qwen15b_label_stability.yaml
-```
-
-The entropy cutoff remains frozen at `0.5867070452737222`, which was learned only from the original Run B training split. The predeclared pass criteria are at least 80% fixed-label agreement, Cohen's kappa of 0.60, and Spearman correlation of 0.70 for 5 versus 20 samples, plus at least 90% agreement for 10 versus 20. The ignored per-question cache makes additional generation resumable.
-
-This diagnostic is complete and passed all four point-estimate gates. Five versus 20 samples gave 84% label agreement, kappa 0.683, and Spearman 0.808; 10 versus 20 gave 90% agreement, kappa 0.790, and Spearman 0.934. Five samples still changed 8/50 labels, mostly from low to high entropy, and the 95% bootstrap lower bounds fell below the point-estimate gates. Ten generations per question are therefore the recommended minimum for the next fresh-data confirmation run.
-
-### Fresh 500-question confirmation
-
-The confirmatory run uses 500 new SQuAD questions and 10 answers per question. It excludes every ID, exact question, exact context, and question with token-Jaccard similarity at least 0.9 to the earlier 200-question 1.5B run. Layer 14 is frozen as the primary hidden-state analysis; layer 28 and validation-selected layers are secondary.
-
-```bash
-.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_500_confirm.yaml --run run_500_qwen15b_confirm
-```
-
-The signal gate requires primary-layer test AUROC at least 0.60, a context-bootstrap lower 95% bound at least 0.50, and performance above the shuffled-label 95% upper bound. A separate, stricter readiness gate requires layer-14 hidden state plus answer NLL to improve on answer NLL alone with a positive lower 95% bound. Failure of that incremental gate means the project should not yet use a mechanistic loss.
-
-The run is complete. Every engineering, leakage, and fresh-data exclusion check passed. The frozen layer-14 probe reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821], above the shuffled-label 95% upper bound of 0.613, so the internal-signal gate passed. Answer NLL remained much stronger at 0.911. Combining layer 14 with answer NLL scored 0.776 and was worse than NLL by 0.135 AUROC, with difference interval [-0.226, -0.050]. The incremental-information gate therefore failed, and the project is not yet ready for mechanistic-loss training.
-
-The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
+- Generation and hidden-state caches are written per example.
+- NLI judgments are checkpointed in batches.
+- Interrupted runs resume without repeating completed inference.
+- `cache/` and Hugging Face weights are excluded from Git.
+- Shareable aggregate artifacts remain under `results/`.
 
 ## Token and layer convention
 
-The cached token is the last token in the fully rendered chat prompt immediately before generation. For Hugging Face causal models, `hidden_states[0]` is the embedding output; requested layer `L` is stored from `hidden_states[L]`, the output after transformer block `L`.
+The cached activation is the final token of the fully rendered chat prompt, immediately before answer generation. For Hugging Face causal models, requested layer `L` is stored from `hidden_states[L]`, the output after transformer block `L`; `hidden_states[0]` is the embedding output.
 
-## Important deviation
+## Model notes
 
-The upstream repository uses `microsoft/deberta-v2-xlarge-mnli` in its local NLI path. The meaningful Stage 0 run uses `cross-encoder/nli-deberta-v3-small`. The smoke test uses normalized exact-match grouping to validate the rest of the pipeline cheaply before downloading NLI weights.
+- Qwen2.5-0.5B runs unquantized float16 on MPS.
+- Qwen2.5-1.5B runs unquantized bfloat16 on MPS; float16 failed its sampling preflight.
+- Meaningful runs use `cross-encoder/nli-deberta-v3-small`, a resource-saving deviation from the upstream xlarge NLI model.
+- The confirmation run excludes IDs, contexts, and exact or near-duplicate questions from the earlier 1.5B run.
+
+Full interpretation belongs in [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md); current project decisions belong in [`STATUS.md`](STATUS.md).

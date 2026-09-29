@@ -1,100 +1,90 @@
-# Semantic Entropy Probes — Resource-Efficient Stage 0
+# Semantic Entropy Probes — Local Stage 0
 
-An Apple-Silicon reproduction of the core **Semantic Entropy Probes (SEP)** pipeline, designed to answer one narrow question: can the published workflow be made local, reproducible, and inexpensive enough for a first mechanistic-confidence validation?
+A resource-efficient validation of the [Semantic Entropy Probes](https://arxiv.org/abs/2406.15927) pipeline on Apple Silicon. All generation, entailment, hidden-state extraction, and analysis run locally; no OpenAI API, remote judge, CUDA, or Weights & Biases is used.
 
-> **Executive takeaway:** the pipeline works end to end, but this pilot does **not** yet show a reliable hidden-state probe. Output likelihood baselines outperform the tested activation probes, so the correct next step is a larger stability run—not a mechanistic or causal claim.
+## Bottom line
 
-## Experiment at a glance
+- The pipeline runs end to end and passes its engineering, caching, and leakage checks.
+- On 500 fresh SQuAD questions, the preregistered Qwen2.5-1.5B layer-14 probe predicts semantic entropy with test AUROC **0.718** and a context-bootstrap 95% interval of **[0.603, 0.821]**.
+- Answer negative log-likelihood is substantially stronger at **0.911** AUROC. Adding layer 14 to this baseline reduces AUROC to **0.776**.
 
-| Component | Stage 0 choice |
-|---|---|
-| Hardware | Apple M3 MacBook Air, 16 GB RAM |
-| Generator | `Qwen/Qwen2.5-0.5B-Instruct`, unquantized FP16 on MPS |
-| Dataset | Fixed answerable subset of SQuAD v2 validation |
-| Semantic grouping | Local `cross-encoder/nli-deberta-v3-small` |
-| Samples | 64 questions × 5 generations in the meaningful pilot |
-| Hidden state | Final prompt token before generation |
-| Layers | 4, 12, 20, 24 |
-| Probe | Standardized logistic regression |
-| External services | None: no OpenAI API, W&B, or remote judge |
+**Decision:** the internal activation contains a reproducible predictive signal, but it has not shown incremental value beyond output likelihood. The project is not yet ready for a mechanistic-confidence training loss.
 
-The five-example preflight, 12-example smoke test, and 64-example meaningful pilot all passed their engineering checks. Generations, token log probabilities, semantic labels, entailment decisions, and hidden states are cached locally and the checked-in results are reproducible from one YAML configuration.
+## What was tested
 
-## Main result
+For each question, the pipeline:
 
-The held-out test set contains only 16 examples, so the numbers below are diagnostic rather than paper-level evidence.
+1. samples short answers from a local Qwen model;
+2. clusters semantically equivalent answers with a local NLI model;
+3. converts cluster frequencies into semantic entropy;
+4. saves the hidden state of the final prompt token;
+5. trains a linear probe to predict high versus low semantic entropy;
+6. compares the probe with constant, output-likelihood, and shuffled-label controls.
 
-| Method | Best/tested result (AUROC) |
-|---|---:|
-| Hidden-state probe, best layer (12) | **0.564** |
-| Constant baseline | 0.500 |
-| Predictive entropy | **0.782** |
-| Answer negative log-likelihood | **0.836** |
+This tests whether uncertainty is statistically decodable from one activation. It does **not** establish mechanistic causality, tamper resistance, SDT, or biological knowledge.
 
-![Probe performance by layer](plots/probe_performance_by_layer.png)
+## Confirmatory result
 
-The target was non-degenerate: the 64 examples produced 1–5 semantic clusters and seven distinct entropy values. However, shuffled-label probes were unstable and sometimes stronger than the true-label probes. This is consistent with small-sample variance and high-dimensional overfitting, not evidence of a robust activation signal.
+The primary result uses 500 questions that do not overlap the earlier 200-question experiment by ID, context, exact question, or near-duplicate question. Each question has 10 sampled answers. The context-grouped split contains 307 training, 94 validation, and 99 test questions.
 
-## What was validated
+| Method | Test AUROC | 95% interval |
+|---|---:|---:|
+| Constant baseline | 0.500 | — |
+| Preregistered layer 14 | **0.718** | **[0.603, 0.821]** |
+| Validation-selected layer 23 | 0.848 | [0.751, 0.927] |
+| Predictive entropy | 0.859 | [0.783, 0.922] |
+| Answer negative log-likelihood | **0.911** | **[0.851, 0.958]** |
+| Layer 14 + answer NLL | 0.776 | — |
 
-- local MPS generation and CPU fallback logic;
-- arbitrary Hugging Face model IDs in the adapted loader;
-- extraction of the intended final-prompt-token activation;
-- resumable per-example generation and hidden-state caches;
-- local bidirectional NLI clustering with cached judgments;
-- semantic-entropy and output-uncertainty computation;
-- leakage-aware linear probing and shuffled-label controls;
-- train/test audits for duplicate IDs, questions, contexts, and near-duplicate questions;
-- local artifacts and plots without W&B.
+AUROC is 0.5 at chance and 1.0 for perfect ranking. Layer 14 exceeds both chance and the shuffled-label 95% upper bound of 0.613. Its combination with answer NLL underperforms NLL alone by 0.135 AUROC; the paired interval is [-0.226, -0.050].
 
-## What was **not** established
+![Probe performance by layer](plots/run_500_qwen15b_confirm_probe_performance_by_layer.png)
 
-This repository does not support claims about SDT, biological knowledge, tamper resistance, confidence-loss effectiveness, or mechanistic causality. Qwen 0.5B also produced many incomplete or incorrect 12-token answers, which may add label noise. See [RESULTS_STAGE0.md](RESULTS_STAGE0.md) for the complete failure analysis.
+## Evidence chain
 
-## Recommendation
+| Phase | Purpose | Main outcome |
+|---|---|---|
+| 0.5B smoke and pilot | Validate the pipeline | Engineering checks passed; probe evidence was weak |
+| Matched 1.5B run, 200 questions | Improve answer quality | Layer 14 test AUROC 0.665; interval crossed chance |
+| Cached split audit | Test partition sensitivity | Fixed layer 14 cross-fitted AUROC 0.588 [0.507, 0.666] |
+| Sampling audit, 50 questions | Test label reliability | 5-vs-20 agreement 84%; 10-vs-20 agreement 90% |
+| Fresh 1.5B confirmation, 500 questions | Confirm the internal signal | Layer 14 passed; incremental-information gate failed |
 
-Run one 200-example Qwen 0.5B stability experiment with layers 4, 8, 12, 16, 20, and 24 and a fixed train/validation/test split. Move to Qwen 1.5B only if the larger 0.5B experiment remains near chance or answer-quality review identifies model capacity as the dominant limitation.
+## Reproduce
 
-## Reproduce locally
-
-Requirements: Python 3.11 and approximately 3 GB of free disk beyond the repository.
+Requirements: Apple Silicon or CPU, Python 3.11, and [`uv`](https://docs.astral.sh/uv/).
 
 ```bash
 uv venv --python 3.11 .venv
 uv pip install --python .venv/bin/python -r requirements-stage0.txt
 
 .venv/bin/python scripts/run_stage0.py \
-  --config configs/stage0_qwen05b.yaml \
-  --run preflight
-
-.venv/bin/python scripts/run_stage0.py \
-  --config configs/stage0_qwen05b.yaml \
-  --run run_a
-
-.venv/bin/python scripts/run_stage0.py \
-  --config configs/stage0_qwen05b.yaml \
-  --run run_b
+  --config configs/stage0_qwen15b_500_confirm.yaml \
+  --run run_500_qwen15b_confirm
 ```
 
-The model and inference caches are intentionally excluded from Git. Checked-in result artifacts are under `results/`.
+The latest run takes about 41 minutes for generation on an M3 MacBook Air, followed by local NLI and probe analysis. Per-example caches under `cache/` are resumable and intentionally excluded from Git. Checked-in aggregate artifacts are under `results/`.
 
 ## Repository guide
 
-- [RESULTS_STAGE0.md](RESULTS_STAGE0.md) — complete configuration, metrics, deviations, and recommendation
-- [README_STAGE0.md](README_STAGE0.md) — implementation and execution details
-- [MACHINE_ASSESSMENT.md](MACHINE_ASSESSMENT.md) — measured local environment and resource assessment
-- [PLAN_STAGE0.md](PLAN_STAGE0.md) — staged experimental plan
-- [STATUS.md](STATUS.md) — current state and next action
-- [`configs/stage0_qwen05b.yaml`](configs/stage0_qwen05b.yaml) — canonical configuration
-- [`stage0/pipeline.py`](stage0/pipeline.py) — local cached pipeline
-- [`results/run_b/`](results/run_b/) — meaningful-run artifacts
+- [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md) — full methods, metrics, deviations, and limitations
+- [`README_STAGE0.md`](README_STAGE0.md) — commands, cache behavior, and artifact format
+- [`STATUS.md`](STATUS.md) — current decision and next experiment
+- [`results/README.md`](results/README.md) — result-directory index
+- [`configs/`](configs/) — frozen experiment configurations
+- [`stage0/`](stage0/) — local generation, clustering, probe, and stability code
+- [`scripts/`](scripts/) — command-line entry points
 - [`docs/UPSTREAM_README.md`](docs/UPSTREAM_README.md) — preserved upstream documentation
+
+## Important deviations
+
+- Generator size is 0.5B or 1.5B rather than the larger models studied in the paper.
+- The upstream `microsoft/deberta-v2-xlarge-mnli` judge is replaced with `cross-encoder/nli-deberta-v3-small` for local execution.
+- Only selected layers and the final prompt token are tested.
+- Qwen2.5-1.5B uses unquantized bfloat16 on MPS because float16 sampling produced non-finite probabilities.
+
+See [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md) for the complete deviation and failure analysis.
 
 ## Provenance
 
-This work is based on:
-
-- Kossen et al., [*Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs*](https://arxiv.org/abs/2406.15927)
-- OATML, [`semantic-entropy-probes`](https://github.com/OATML/semantic-entropy-probes), inspected at commit `02e2167dd1c00e27080d421f9b40e13e00f0452b`
-
-The original MIT license is retained. Stage 0 deviations—especially the 0.5B generator, smaller NLI model, sample size, and token/layer subset—are documented explicitly in the results report.
+Based on Kossen et al., [*Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs*](https://arxiv.org/abs/2406.15927), and the [OATML reference implementation](https://github.com/OATML/semantic-entropy-probes) at commit `02e2167dd1c00e27080d421f9b40e13e00f0452b`. The upstream MIT license is retained.
