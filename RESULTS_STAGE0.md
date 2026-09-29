@@ -4,6 +4,8 @@ Last updated: 2026-09-29
 
 ## Outcome
 
+Stage 0 supports continuing the project to a controlled activation-steering study. It does not yet support using the probe direction as a mechanistic loss during synthetic-document training.
+
 Stage 0 passed as a pipeline-validation experiment. Generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end and passed their engineering checks.
 
 The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger.
@@ -368,7 +370,7 @@ NLL-minus-combined log-loss was -0.00270 with paired context-bootstrap 95% inter
 
 ## Recommendation
 
-Continue with Qwen 1.5B, but do not begin synthetic-document mechanistic-loss training yet. The fresh-data run confirms a predictive internal association, and the cached audit now confirms that its layer-14 direction is reproducible. The corrected incremental-information gate still fails, and no causal intervention has been tested.
+Continue with Qwen 1.5B, but move only to the intervention stage. The fresh-data run confirms a predictive internal association, and the cached audit confirms that its layer-14 direction is reproducible enough to test. The corrected incremental-information gate still fails, and no causal intervention has been tested; Stage 0 therefore validates the measurement and target-selection steps, not the proposed training loss itself.
 
 The next experiment should be a small bidirectional activation-steering diagnostic using the frozen layer-14 unit direction. Before sampling, confirm that the hook captures the same cached activation and that `alpha = 0` exactly reproduces baseline logits. Then compare negative-direction confidence steering, positive-direction uncertainty steering, zero-hook, matched-norm random direction, shuffled direction, and a matched output-temperature control. Evaluate semantic entropy together with exact match/F1, wrong-consensus rate, output length, and degeneration.
 

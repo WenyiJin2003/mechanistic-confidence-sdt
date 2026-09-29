@@ -2,7 +2,9 @@
 
 Last updated: 2026-09-29
 
-## Current state
+## Project decision
+
+Continue to a controlled activation-steering experiment. Do not begin synthetic-document mechanistic-loss training unless the intervention changes semantic entropy in both intended directions, outperforms the controls, and preserves answer quality.
 
 | Question | Answer |
 |---|---|

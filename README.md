@@ -2,13 +2,25 @@
 
 ## Conclusion
 
-These experiments show that the sampled semantic-entropy label is linearly decodable from Qwen2.5-1.5B activations and that the resulting layer-14 probe direction is reproducible across grouped data splits. Using a fresh 500-question SQuAD dataset, the preregistered probe reached AUROC **0.718 [0.603, 0.821]** on the locked 99-question test split. In a separate nested cross-validation audit, its out-of-fold AUROC was **0.738 [0.680, 0.793]**, and independently trained directions had median cosine similarity **0.600**, compared with a shuffled-label upper bound of **0.123**.
+**Project decision: continue to a controlled activation-steering study, but do not begin mechanistic-loss training yet.**
 
-The internal signal is nevertheless weaker than answer likelihood. A strictly nested model combining answer negative log-likelihood with the probe score performed slightly worse than answer likelihood alone. The present evidence therefore supports a controlled activation-steering experiment, but it does **not** justify a mechanistic-confidence training loss or a claim of causal control.
+Stage 0 establishes two prerequisites for the proposed mechanistic-confidence study. First, sampled semantic entropy is measurable and linearly decodable from Qwen2.5-1.5B activations under the present protocol. Second, the resulting layer-14 probe direction is reproducible across grouped data splits. On a fresh 500-question SQuAD dataset, the preregistered probe reached AUROC **0.718 [0.603, 0.821]** on the locked 99-question test split. In a separate nested cross-validation audit, its out-of-fold AUROC was **0.738 [0.680, 0.793]**, and independently trained directions had median cosine similarity **0.600**, compared with a shuffled-label upper bound of **0.123**.
+
+What remains unresolved is causality. The internal signal is weaker than answer likelihood, and a strictly nested model combining answer negative log-likelihood with the probe score performed slightly worse than answer likelihood alone. Stage 0 therefore identifies a defensible intervention target; it does not show that changing this activation changes uncertainty.
+
+The next experiment should manipulate the frozen layer-14 direction in both directions. If this changes semantic entropy as predicted, exceeds random, shuffled, and temperature-matched controls, and preserves answer quality, the direction becomes a defensible candidate for an auxiliary internal loss during otherwise standard synthetic-document training. If it fails, the proposed mechanistic loss should not proceed in its current form.
 
 The 0.5B model was sufficient to validate the pipeline but produced weak and frequently truncated answers. Qwen2.5-1.5B is the appropriate model for the next experiment.
 
 This is a pipeline-validation study rather than a paper-level replication.
+
+## Connection to the proposed study
+
+| Research stage | Question | Decision |
+|---|---|---|
+| Stage 0: measurement and readout | Is there a sufficiently reliable uncertainty label and a reproducible internal direction? | **Yes, for an intervention test** |
+| Stage 1: causal intervention | Does moving the model along that direction change semantic entropy without damaging answer quality? | **Next experiment** |
+| Stage 2: synthetic-document training | Can the direction serve as an auxiliary internal loss during normal training? | **Conditional on Stage 1** |
 
 ## Method overview
 
@@ -22,7 +34,8 @@ flowchart LR
     E --> P
     P --> C["Baselines + shuffled controls"]
     C --> D["Direction-stability audit"]
-    D --> S["Next: activation steering"]
+    D --> S["Activation-steering test"]
+    S -->|"only if causal and quality gates pass"| T["Synthetic-document training + internal loss"]
 ```
 
 The probe is a standardized logistic regression trained to classify high versus low sampled semantic entropy from the final prompt-token activation. Its weight vector defines the candidate intervention direction.
