@@ -10,7 +10,7 @@ This repository is a small-scale validation study adapted from the official impl
 
 ### What “Stage 0” means
 
-Stage 0 is the **feasibility and measurement stage** that comes before causal intervention or model training. It asks three questions:
+“Stage 0” is **our name for the feasibility and measurement stage**; it is not a stage defined by the original paper. It comes before causal intervention or model training and asks three questions:
 
 1. Can sampled answers provide a usable measure of semantic uncertainty?
 2. Can a simple linear probe read that uncertainty from the model's hidden state on unseen questions?
