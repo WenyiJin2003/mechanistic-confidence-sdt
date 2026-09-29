@@ -8,6 +8,7 @@ from stage0.pipeline import (
     squad_exact_match,
     squad_f1,
 )
+from stage0.stability import summarize_scores
 
 
 def test_normalize_answer():
@@ -54,3 +55,10 @@ def test_training_threshold_is_nondegenerate():
     threshold = best_train_threshold(values)
     labels = values >= threshold
     assert labels.any() and (~labels).any()
+
+
+def test_stability_score_summary():
+    summary = summarize_scores([0.4, 0.6, 0.7, 0.8])
+    assert summary["count"] == 4
+    assert np.isclose(summary["median"], 0.65)
+    assert np.isclose(summary["fraction_above_0.5"], 0.75)

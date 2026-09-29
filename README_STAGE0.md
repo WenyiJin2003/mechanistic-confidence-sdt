@@ -58,6 +58,16 @@ The 1.5B generator uses unquantized bfloat16 on MPS. An initial float16 prefligh
 
 This comparison is complete. All engineering checks passed. Validation selected layer 14 with AUROC 0.754; its test AUROC was 0.665 (context-bootstrap 95% interval [0.481, 0.844]), compared with 0.833 for predictive entropy and 0.835 for answer negative log-likelihood. Answer quality improved sharply over 0.5B, but the probe result remains preliminary; see `RESULTS_STAGE0.md`.
 
+### Cached split-stability audit
+
+The next diagnostic reuses the saved 1.5B generations, semantic labels, and hidden states. It performs 100 predeclared context-grouped splits, treats fixed layer 14 as the primary analysis, and treats validation-selected layers as secondary:
+
+```bash
+.venv/bin/python scripts/run_split_stability.py --config configs/stage0_qwen15b_split_stability.yaml
+```
+
+No generator or NLI model is loaded. Repeated-split percentiles are reported as sensitivity ranges rather than confidence intervals; a separate five-fold cross-fitted estimate uses context-group bootstrap intervals.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

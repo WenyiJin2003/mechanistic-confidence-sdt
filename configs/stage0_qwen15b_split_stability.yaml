@@ -1,0 +1,23 @@
+base_config: configs/stage0_qwen15b_200.yaml
+source_run: run_200_qwen15b
+
+analysis:
+  split_seeds:
+    start: 42
+    count: 100
+  fixed_primary_layer: 14
+  minimum_class_count_per_test_split: 8
+  shuffled_labels_per_seed: 1
+  cross_fit_folds: 5
+  cross_fit_seed: 314159
+  cross_fit_bootstrap_samples: 5000
+  output_dir: results/run_200_qwen15b_split_stability
+  plot_path: plots/run_200_qwen15b_split_stability.png
+
+success_gates:
+  valid_split_count: 100
+  fixed_layer_median_test_auroc_min: 0.60
+  fixed_layer_fraction_above_chance_min: 0.75
+  cross_fitted_auroc_lower_95_min: 0.50
+  middle_layers: [14, 19]
+  middle_layer_selection_fraction_min: 0.60

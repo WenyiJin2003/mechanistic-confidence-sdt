@@ -27,6 +27,14 @@ The pipeline is validated. Qwen 1.5B substantially improved answer quality and v
 
 Use the cached 1.5B artifacts for a cheap multi-split stability analysis before collecting more generations or adding an internal mechanistic training loss.
 
+## In progress — cached split-stability audit
+
+- 100 predeclared context-grouped split seeds using only cached 1.5B artifacts
+- Fixed layer 14 as the primary analysis; validation-selected layer as a secondary analysis
+- Training-only entropy thresholds and feature scaling for every split
+- Five-fold cross-fitted fixed-layer estimate with context-group bootstrap intervals
+- Continuous-entropy Spearman sensitivity analysis and shuffled-label controls
+
 ## Matched Qwen 1.5B comparison — completed
 
 - Configuration: `configs/stage0_qwen15b_200.yaml`
