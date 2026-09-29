@@ -54,6 +54,8 @@ The matched follow-up changes only the generator capacity and its six approximat
 
 The 28-layer model is measured at blocks 5, 9, 14, 19, 23, and 28, corresponding approximately to blocks 4, 8, 12, 16, 20, and 24 in the 24-layer 0.5B model. Outputs are isolated under `results/run_200_qwen15b/` and `plots/run_200_qwen15b_probe_performance_by_layer.png`.
 
+The 1.5B generator uses unquantized bfloat16 on MPS. An initial float16 preflight produced non-finite sampling probabilities before the first answer; bfloat16 preserves two-byte weights while providing the exponent range needed for stable local sampling.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

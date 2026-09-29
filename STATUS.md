@@ -30,7 +30,7 @@ Move the next measurement run to Qwen 1.5B while keeping the same examples, spli
 
 - Configuration: `configs/stage0_qwen15b_200.yaml`
 - Same 200 examples, five generations, fixed grouped split, prompt, seeds, and 12-token limit as the 0.5B follow-up
-- Generator: `Qwen/Qwen2.5-1.5B-Instruct`, unquantized float16 on MPS
+- Generator: `Qwen/Qwen2.5-1.5B-Instruct`, unquantized bfloat16 on MPS; float16 failed preflight with non-finite sampling probabilities
 - Approximately depth-matched blocks: 5, 9, 14, 19, 23, and 28
 - Planned outputs: `results/run_200_qwen15b/` and `plots/run_200_qwen15b_probe_performance_by_layer.png`
 

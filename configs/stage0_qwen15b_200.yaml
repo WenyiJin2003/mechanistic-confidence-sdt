@@ -7,7 +7,8 @@ project:
 
 device:
   preference: [mps, cuda, cpu]
-  generator_dtype: float16
+  # float16 produced non-finite sampling probabilities on MPS for this model.
+  generator_dtype: bfloat16
   entailment_dtype: float32
   allow_cpu_fallback: true
 
