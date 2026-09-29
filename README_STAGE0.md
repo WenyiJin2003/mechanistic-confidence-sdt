@@ -1,6 +1,6 @@
 # Semantic Entropy Probes — Stage 0
 
-This directory contains a small, local, resource-aware validation of the Semantic Entropy Probes pipeline using `Qwen/Qwen2.5-0.5B-Instruct` and SQuAD v2.
+This directory contains a local, resource-aware validation of the Semantic Entropy Probes pipeline using Qwen2.5 0.5B and 1.5B models with SQuAD v2.
 
 ## What it does
 
@@ -91,6 +91,8 @@ The confirmatory run uses 500 new SQuAD questions and 10 answers per question. I
 ```
 
 The signal gate requires primary-layer test AUROC at least 0.60, a context-bootstrap lower 95% bound at least 0.50, and performance above the shuffled-label 95% upper bound. A separate, stricter readiness gate requires layer-14 hidden state plus answer NLL to improve on answer NLL alone with a positive lower 95% bound. Failure of that incremental gate means the project should not yet use a mechanistic loss.
+
+The run is complete. Every engineering, leakage, and fresh-data exclusion check passed. The frozen layer-14 probe reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821], above the shuffled-label 95% upper bound of 0.613, so the internal-signal gate passed. Answer NLL remained much stronger at 0.911. Combining layer 14 with answer NLL scored 0.776 and was worse than NLL by 0.135 AUROC, with difference interval [-0.226, -0.050]. The incremental-information gate therefore failed, and the project is not yet ready for mechanistic-loss training.
 
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 

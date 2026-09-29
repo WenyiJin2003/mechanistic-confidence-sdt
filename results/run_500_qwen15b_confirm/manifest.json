@@ -1,0 +1,238 @@
+{
+  "checks": {
+    "checks": {
+      "answers_nonempty": true,
+      "answers_not_globally_identical": true,
+      "cluster_count_varies": true,
+      "correctness_metrics_finite": true,
+      "final_prompt_token_verified": true,
+      "fresh_dataset_exclusion_passed": true,
+      "generation_count_correct": true,
+      "hidden_finite": true,
+      "hidden_shape_verified": true,
+      "model_and_examples_completed": true,
+      "probe_trained": true,
+      "prompt_suffix_preserved": true,
+      "semantic_entropy_finite": true,
+      "semantic_entropy_varies": true,
+      "split_leakage_audit_passed": true
+    },
+    "diagnostics": {
+      "cluster_count_distribution": {
+        "1": 142,
+        "10": 11,
+        "2": 113,
+        "3": 85,
+        "4": 42,
+        "5": 28,
+        "6": 25,
+        "7": 20,
+        "8": 22,
+        "9": 12
+      },
+      "distinct_normalized_answers": 2242,
+      "hidden_dtype": "float16",
+      "hidden_shape": [
+        500,
+        6,
+        1536
+      ],
+      "nonempty_generation_fraction": 1.0,
+      "sample_exact_match_rate": 0.5018,
+      "sample_mean_f1": 0.6927296072481187,
+      "semantic_entropy_mean": 0.7373642157321142,
+      "semantic_entropy_std": 0.6940464579662393,
+      "semantic_entropy_values": [
+        -0.0,
+        0.3250829733914482,
+        0.5004024235381879,
+        0.6108643020548935,
+        0.639031859650177,
+        0.6730116670092565,
+        0.6931471805599453,
+        0.8018185525433372,
+        0.8018185525433373,
+        0.8979457248567797,
+        0.8979457248567798,
+        0.9404479886553263,
+        0.9404479886553264,
+        0.9433483923290391,
+        0.9433483923290392,
+        0.9433483923290393,
+        0.9502705392332347,
+        1.0296530140645737,
+        1.0888999753452235,
+        1.0888999753452238,
+        1.1682824501765625,
+        1.193549604098133,
+        1.1935496040981333,
+        1.2206072645530173,
+        1.2275294114572126,
+        1.2798542258336674,
+        1.2798542258336676,
+        1.313834033192747,
+        1.3592367006650063,
+        1.4184836619456562,
+        1.4184836619456564,
+        1.4708084763221112,
+        1.4978661367769952,
+        1.5047882836811908,
+        1.5571130980576458,
+        1.6094379124341,
+        1.6094379124341003,
+        1.6434177197931796,
+        1.6957425341696344,
+        1.6957425341696346,
+        1.7480673485460891,
+        1.8343719702816235,
+        1.8343719702816237,
+        1.8866967846580784,
+        1.9730014063936128,
+        2.0253262207700677,
+        2.163955656882057,
+        2.3025850929940455
+      ],
+      "truncated_prompt_count": 0
+    },
+    "passed": true
+  },
+  "configuration": {
+    "confirmation_gates": {
+      "hidden_plus_nll_minus_nll_lower_95_min": 0.0,
+      "primary_test_auroc_lower_95_min": 0.5,
+      "primary_test_auroc_min": 0.6
+    },
+    "dataset": {
+      "answerable_only": true,
+      "exclude_near_duplicate_questions_at_jaccard": 0.9,
+      "exclude_result_runs": [
+        "run_200_qwen15b"
+      ],
+      "id": "squad_v2",
+      "include_context": true,
+      "selection_seed": 1729,
+      "split": "validation",
+      "system_prompt": "Answer the question as briefly as possible using only the supplied context."
+    },
+    "device": {
+      "allow_cpu_fallback": true,
+      "entailment_dtype": "float32",
+      "generator_dtype": "bfloat16",
+      "preference": [
+        "mps",
+        "cuda",
+        "cpu"
+      ]
+    },
+    "generation": {
+      "do_sample": true,
+      "layers": [
+        5,
+        9,
+        14,
+        19,
+        23,
+        28
+      ],
+      "max_new_tokens": 12,
+      "temperature": 1.0,
+      "top_k": 0,
+      "top_p": 1.0
+    },
+    "logging": {
+      "local_only": true,
+      "wandb": false
+    },
+    "models": {
+      "entailment": {
+        "batch_size": 32,
+        "id": "cross-encoder/nli-deberta-v3-small",
+        "label_order": [
+          "contradiction",
+          "entailment",
+          "neutral"
+        ],
+        "max_length": 256
+      },
+      "generator": {
+        "attn_implementation": "eager",
+        "id": "Qwen/Qwen2.5-1.5B-Instruct",
+        "max_prompt_tokens": 768,
+        "trust_remote_code": false
+      }
+    },
+    "probe": {
+      "bootstrap_samples": 5000,
+      "bootstrap_seed": 271828,
+      "c": 1.0,
+      "max_iter": 2000,
+      "primary_layer": 14,
+      "secondary_layers": [
+        28
+      ],
+      "shuffle_repetitions": 50,
+      "shuffle_seed": 314159,
+      "split_seed": 42,
+      "test_fraction": 0.2,
+      "validation_fraction": 0.2
+    },
+    "project": {
+      "cache_dir": "cache",
+      "hf_cache_dir": "cache/huggingface",
+      "results_dir": "results",
+      "seed": 20260928,
+      "time_limit_minutes": 180
+    },
+    "runs": {
+      "run_500_qwen15b_confirm": {
+        "grouping": "nli",
+        "num_examples": 500,
+        "num_generations": 10,
+        "train_probe": true
+      }
+    }
+  },
+  "generator_runtime": {
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 2428.8233622090193,
+    "generation_cache_hits": 0,
+    "hidden_cache_hits": 0,
+    "hidden_size": 1536,
+    "legacy_generation_cache_hits": 0,
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "num_hidden_layers": 28
+  },
+  "grouping_runtime": {
+    "device": "mps",
+    "dtype": "float32",
+    "method": "bidirectional_strict_entailment",
+    "model_id": "cross-encoder/nli-deberta-v3-small",
+    "new_judgments": 14936
+  },
+  "probe_error": null,
+  "run": "run_500_qwen15b_confirm",
+  "source_exclusion_audit": {
+    "exact_context_overlap_count": 0,
+    "exact_question_overlap_count": 0,
+    "excluded_record_count": 200,
+    "excluded_result_runs": [
+      "run_200_qwen15b"
+    ],
+    "id_overlap_count": 0,
+    "near_duplicate_question_pairs": [],
+    "passed": true
+  },
+  "versions": {
+    "cuda_available": false,
+    "datasets": "3.6.0",
+    "mps_available": true,
+    "mps_built": true,
+    "numpy": "2.4.6",
+    "platform": "macOS-15.7.4-arm64-arm-64bit",
+    "python": "3.11.14",
+    "scikit_learn": "1.9.1",
+    "torch": "2.14.0",
+    "transformers": "4.57.6"
+  }
+}

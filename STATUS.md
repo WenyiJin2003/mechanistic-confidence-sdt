@@ -21,19 +21,25 @@ Last updated: 2026-09-29
 
 ## Current conclusion
 
-The pipeline is validated. Qwen 1.5B substantially improved answer quality, and the 50-question sampling diagnostic passed all predeclared point-estimate gates. Five-answer semantic-entropy labels are usable but noisy: 8/50 changed at 20 answers, mainly from low to high entropy. Ten answers improved agreement to 90%. The hidden probe remains weaker than output baselines, and no mechanistic or causal claim is warranted.
+The pipeline is validated. On a genuinely fresh 500-question confirmation set, the frozen layer-14 probe reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821] and exceeded the shuffled-label upper bound. This confirms a predictive internal association. Answer NLL was much stronger at 0.911, and adding layer 14 made it worse rather than better. The internal-signal gate passed, but the incremental-information and mechanistic-readiness gates failed. No mechanistic or causal claim is warranted.
 
 ## Recommended next step
 
-Use Qwen 1.5B with 10 answers per question for a fresh 500-question, context-grouped confirmation run. Freeze the primary layer and analysis before generation. Do not add an internal mechanistic loss until this fresh-data run confirms that the internal signal is above chance and evaluates whether it adds information beyond output likelihood.
+Do not start synthetic-document mechanistic-loss training yet. First use the cached 500-question run to measure whether the learned layer-14 probe direction is stable across grouped folds and regularization choices. If the direction is stable, run a small activation-steering intervention with random-direction controls before deciding whether it is a defensible training loss.
 
-## Fresh 500-question confirmation — in progress
+## Fresh 500-question confirmation — completed
 
 - Configuration: `configs/stage0_qwen15b_500_confirm.yaml`
 - 500 SQuAD questions with 10 local answers each; exclude IDs, contexts, and exact or near-duplicate questions from the earlier 200-question 1.5B run.
 - Layer 14 is the frozen primary analysis; layer 28 and validation selection are secondary.
 - Signal gates: test AUROC at least 0.60, context-bootstrap lower 95% bound at least 0.50, and AUROC above the shuffled-label upper 95% bound.
 - Mechanistic-readiness gate: adding layer-14 hidden state to answer NLL must beat answer NLL with a positive lower 95% bound.
+- All engineering, leakage, and fresh-data exclusion checks passed.
+- Frozen layer 14: test AUROC 0.718, context-bootstrap 95% interval [0.603, 0.821]; shuffled-label 95% upper bound 0.613. The signal gate passed.
+- Answer NLL: test AUROC 0.911. Layer 14 plus NLL: 0.776; difference from NLL -0.135, interval [-0.226, -0.050]. The incremental and readiness gates failed.
+- Validation selected layer 23 as a secondary result: validation AUROC 0.787 and test AUROC 0.848. It still trailed answer NLL.
+- Results: `results/run_500_qwen15b_confirm/`
+- Plot: `plots/run_500_qwen15b_confirm_probe_performance_by_layer.png`
 
 ## Semantic-entropy sampling reliability — completed
 

@@ -8,11 +8,13 @@ Stage 0 passed as a pipeline-validation experiment. Local generation, prompt-tok
 
 The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger.
 
-A 50-question sampling-reliability diagnostic then increased each question from 5 to 20 generated answers. It passed all four predeclared point-estimate gates, but 8/50 five-sample labels changed and bootstrap intervals remained wide. This supports using 10 rather than 5 answers per question in the next confirmation run. Together these results are encouraging pipeline evidence for continuing with 1.5B, not a paper-level replication or a mechanistic or causal result.
+A 50-question sampling-reliability diagnostic then increased each question from 5 to 20 generated answers. It passed all four predeclared point-estimate gates, but 8/50 five-sample labels changed and bootstrap intervals remained wide. This supported using 10 rather than 5 answers per question in a fresh 500-question confirmation.
+
+That fresh confirmation passed its predeclared internal-signal gate. Frozen layer 14 reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821] and exceeded the shuffled-label upper bound. However, answer NLL reached 0.911, and combining it with layer 14 significantly degraded AUROC. The mechanistic-readiness gate therefore failed. Together these results confirm a predictive internal association, not incremental information, a paper-level replication, or a mechanistic or causal result.
 
 ## Exact configuration
 
-The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison, and `configs/stage0_qwen15b_label_stability.yaml` for sampling reliability.
+The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison, `configs/stage0_qwen15b_label_stability.yaml` for sampling reliability, and `configs/stage0_qwen15b_500_confirm.yaml` for fresh-data confirmation.
 
 - Generator: `Qwen/Qwen2.5-0.5B-Instruct`, unquantized, float16, MPS
 - Dataset: fixed answerable subset of SQuAD v2 validation, selection seed 1729
@@ -258,6 +260,43 @@ The fixed high-entropy fraction increased from 0.48 at five answers to 0.62 at t
 
 The result supports semantic entropy as a workable target for the next experiment, but does not validate a model's confidence by itself. It only measures the repeatability of labels constructed from sampled outputs and a small local NLI model.
 
+## Fresh 500-question Qwen 1.5B confirmation
+
+This preregistered run used 500 SQuAD questions with 10 answers per question. It excluded every ID, exact context, exact question, and question with token-Jaccard similarity at least 0.9 to the earlier 200-question run. The exclusion audit found zero overlaps. The internal train/validation/test split contained 307/94/99 questions and 243/81/81 unique contexts, with zero cross-split ID, question, context, or near-duplicate overlap.
+
+Generation and six-layer hidden-state extraction took 2,428.8 seconds on MPS. All 5,000 answers were nonempty, with 2,242 distinct normalized answers globally and a mean of 4.554 distinct answers per question. Individual-sample exact match was 0.502, mean F1 was 0.693, and 1,119/5,000 answers used all 12 tokens. Semantic entropy remained non-degenerate: mean 0.737, standard deviation 0.694, and cluster counts ranging from 1 to 10. Hidden states have shape `[500, 6, 1536]`, dtype float16, and finite values.
+
+The train-only entropy threshold was 0.98996. Low/high label counts were 220/87 in training, 66/28 in validation, and 66/33 in test. Layer 14 was frozen as the primary analysis before generation; layer 28 and validation-selected layers were secondary.
+
+### Confirmatory probe results
+
+| Layer | Validation AUROC | Test AUROC | Context-bootstrap 95% interval | Status |
+|---:|---:|---:|---:|---|
+| 5 | 0.659 | 0.517 | [0.407, 0.633] | secondary |
+| 9 | 0.631 | 0.660 | [0.541, 0.768] | secondary |
+| **14** | **0.639** | **0.718** | **[0.603, 0.821]** | **predeclared primary** |
+| 19 | 0.747 | 0.792 | [0.678, 0.882] | secondary |
+| 23 | 0.787 | 0.848 | [0.751, 0.927] | validation-selected secondary |
+| 28 | 0.711 | 0.790 | [0.689, 0.877] | predeclared secondary |
+
+At layer 14, 50 shuffled-label fits had mean AUROC 0.498 and empirical 95% interval [0.385, 0.613]. The primary AUROC was at least 0.60, its bootstrap lower bound exceeded 0.50, and it exceeded the shuffled-label upper bound. All three predeclared internal-signal gates passed.
+
+### Incremental-information test
+
+| Method | Test AUROC | Context-bootstrap 95% interval |
+|---|---:|---:|
+| Constant train mean | 0.500 | — |
+| Predictive entropy | 0.859 | [0.783, 0.922] |
+| Answer negative log-likelihood | 0.911 | [0.851, 0.958] |
+| Frozen layer-14 probe | 0.718 | [0.603, 0.821] |
+| Layer 14 + answer NLL | 0.776 | — |
+
+Layer 14 plus answer NLL underperformed answer NLL by 0.135 AUROC; the paired context-bootstrap difference interval was [-0.226, -0.050]. Therefore the incremental-information gate failed, and the preregistered conclusion is **not ready for mechanistic-loss training**. This does not prove that the hidden state contains no unique information; it shows that this standardized linear combination did not extract useful incremental information under the fixed protocol.
+
+Validation selected layer 23, which reached test AUROC 0.848. This is a valid secondary result because selection used validation only, but it still trailed answer NLL, and it cannot replace layer 14 as the preregistered primary result.
+
+On the test split, 87.9% of questions had at least one exact-match answer and mean sample F1 was 0.713. The layer-14 score predicted correctness with AUROC 0.766; the validation-selected layer reached 0.898, while raw answer likelihood reached 0.920. These are diagnostics, not independently preregistered correctness-probe results.
+
 ## Failure analysis and limitations
 
 - The 1.5B probe is more promising, but its selected-layer test interval still crosses chance and the test set contains only 41 questions.
@@ -265,6 +304,8 @@ The result supports semantic entropy as a workable target for the next experimen
 - Continuous semantic-entropy prediction is weak, suggesting part of the binary AUROC result depends on how entropy is thresholded.
 - Five-answer labels are imperfect: 16% changed when expanded to 20 answers, and their bootstrap lower bounds did not clear the point-estimate gates.
 - The entropy cutoff was originally learned from a five-answer distribution. Holding it fixed prevents post hoc tuning but exposes a sampling-budget shift; the next run must use one fixed answer count throughout training and evaluation.
+- The fresh 500-question result confirms predictiveness but not incremental value: the frozen internal probe is substantially weaker than answer NLL, and the specified combined model performs worse than NLL alone.
+- Layer strength rises sharply in later blocks and validation selects layer 23 rather than the frozen layer 14. A probe direction intended for use as a loss must be shown stable across folds and regularization choices before intervention.
 - Output likelihood baselines remain substantially stronger, and hidden-state-plus-NLL models do not improve on NLL alone.
 - Qwen 0.5B often emits incomplete or incorrect answers within the 12-token limit. This validates the machinery but makes the semantic target noisier than it would be for a stronger QA model.
 - Qwen 1.5B greatly improves answer quality, but 38% of questions produce only one semantic cluster, changing the target distribution relative to 0.5B.
@@ -276,9 +317,9 @@ The result supports semantic entropy as a workable target for the next experimen
 
 ## Recommendation
 
-Continue measurement work with Qwen 1.5B rather than 0.5B. The split audit shows that a weak internal signal survives data re-partitioning, but its exact layer is not stable and it remains far below output-based uncertainty. The label diagnostic passed, while also showing that five answers are noisier than desirable.
+Continue with Qwen 1.5B, but do not begin synthetic-document mechanistic-loss training yet. The fresh-data run confirms a real predictive internal association, while failing the stricter incremental-information gate.
 
-The next experiment should use 10 answers per question on a fresh 500-question SQuAD subset, with a context-grouped split and a primary layer frozen before generation. Layer 14 is the conservative fixed primary layer from the earlier analysis; layer 28 can be reported as a predeclared secondary sensitivity check. The analysis should retain output-likelihood baselines and test whether the hidden probe adds information beyond them. Do not begin synthetic-document training or add an internal mechanistic loss until that fresh-data result confirms the internal signal.
+The next step should be a cached probe-direction stability analysis over the 500 questions: grouped cross-fitting, multiple regularization strengths chosen without test access, and cosine similarity of learned directions across folds. This requires no new generation. If a stable direction emerges, the following experiment should be a small held-out activation-steering test with positive, negative, and random-direction controls. Only a reproducible intervention that changes semantic entropy in the intended direction without unacceptable correctness loss would justify promoting the direction into a synthetic-training loss.
 
 ## Artifacts
 
@@ -316,5 +357,12 @@ The next experiment should use 10 answers per question on a fresh 500-question S
 - `results/run_50_qwen15b_label_stability/semantic_entropy_20.jsonl`
 - `results/run_50_qwen15b_label_stability/label_stability_metrics.json`
 - `plots/run_50_qwen15b_label_stability.png`
+- `results/run_500_qwen15b_confirm/generations.jsonl`
+- `results/run_500_qwen15b_confirm/entailment_judgments.jsonl`
+- `results/run_500_qwen15b_confirm/semantic_entropy.jsonl`
+- `results/run_500_qwen15b_confirm/hidden_states.npz`
+- `results/run_500_qwen15b_confirm/probe_metrics.json`
+- `results/run_500_qwen15b_confirm/manifest.json`
+- `plots/run_500_qwen15b_confirm_probe_performance_by_layer.png`
 
 Actual storage after both 200-example runs and the stability audit: isolated environment 1.1 GB, result artifacts about 11 MB, plots about 408 KB, and the local Hugging Face cache reports 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.

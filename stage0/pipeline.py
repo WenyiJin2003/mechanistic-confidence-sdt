@@ -1277,6 +1277,16 @@ def plot_probe(config: dict[str, Any], probe: dict[str, Any], run_name: str) -> 
         linewidth=1,
         label="Validation-selected layer",
     )
+    predeclared = probe.get("predeclared_analysis")
+    if predeclared is not None:
+        axis.axvline(
+            predeclared["primary_layer"],
+            color="tab:purple",
+            alpha=0.65,
+            linewidth=1.5,
+            linestyle="--",
+            label="Predeclared primary layer",
+        )
     axis.set(
         xlabel="Transformer block",
         ylabel="Held-out test AUROC",
