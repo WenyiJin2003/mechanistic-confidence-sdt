@@ -1,8 +1,22 @@
 # Semantic Entropy Probes: Stage 0 Validation
 
+**Original work:** Kossen et al., [*Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs*](https://arxiv.org/abs/2406.15927) · [Official OATML GitHub repository](https://github.com/OATML/semantic-entropy-probes)
+
+This repository is a small-scale validation study adapted from the official implementation. It tests whether the method produces a reliable enough internal signal to support the next experiment; it is not a full replication of the paper.
+
 ## Conclusion
 
 > **Project decision: continue to a controlled activation-steering experiment. Do not begin mechanistic-loss training yet.**
+
+### What “Stage 0” means
+
+Stage 0 is the **feasibility and measurement stage** that comes before causal intervention or model training. It asks three questions:
+
+1. Can sampled answers provide a usable measure of semantic uncertainty?
+2. Can a simple linear probe read that uncertainty from the model's hidden state on unseen questions?
+3. Is the learned direction stable enough to justify an intervention test?
+
+Passing Stage 0 supports **Stage 1: activation steering**. It does not by itself support **Stage 2: adding an internal loss during synthetic-document training**.
 
 ### What we did
 
@@ -36,7 +50,7 @@
 
 This is a pipeline-validation study, not a paper-level replication or evidence of mechanistic causality.
 
-## Method overview
+## Method at a glance
 
 ```mermaid
 flowchart LR
@@ -52,7 +66,37 @@ flowchart LR
     S -->|"only if causal and quality gates pass"| T["Synthetic-document training + internal loss"]
 ```
 
-The probe is a standardized logistic regression trained to classify high versus low sampled semantic entropy from the final prompt-token activation. Its weight vector defines the candidate intervention direction.
+## How the probe was built
+
+**In one sentence:** the probe tests whether the 1,536 values in one pre-generation hidden state can linearly distinguish questions with low versus high sampled semantic entropy.
+
+1. **Generate multiple answers.** For each of 500 fresh SQuAD questions, Qwen2.5-1.5B generated 10 short answers with temperature 1.0. Repeated sampling reveals whether the model consistently gives the same meaning or produces competing answers.
+
+2. **Group answers by meaning.** The local NLI model compared each pair of answers in both directions, with the question included as context. Two answers entered the same cluster only when they matched after normalization or both NLI directions predicted entailment. This is stricter than grouping by wording alone.
+
+3. **Compute the uncertainty target.** If cluster \(c\) contains a fraction \(p_c\) of the 10 answers, cluster-assignment semantic entropy is
+
+   $$
+   H_{\mathrm{sem}}=-\sum_c p_c\log p_c.
+   $$
+
+   Low entropy means that sampled answers concentrate on one meaning. High entropy means that they split across several meanings. This is an **operational proxy for uncertainty**, not direct access to the model's true confidence. The pilot follows the upstream probe notebook by using cluster-assignment entropy as the target rather than a likelihood-weighted entropy variant.
+
+4. **Create labels without test leakage.** Questions were split by SQuAD context into 307 training, 94 validation, and 99 test examples, so questions sharing a context could not cross splits. Using only the training entropies, the pipeline selected the cutoff that best separated them into two compact groups; the confirmatory cutoff was **0.98996**. Questions at or above the cutoff were labelled high entropy. The test set remained untouched until evaluation.
+
+5. **Extract one internal representation per question.** Before generating an answer, the pipeline saved the hidden vector at the **final token of the complete prompt**. For Qwen2.5-1.5B, each vector has 1,536 values. The primary analysis used transformer layer 14, fixed before the fresh 500-question run.
+
+6. **Train the linear probe.** Each hidden-state dimension was standardized using training data only. Logistic regression then learned
+
+   $$
+   s=w^Tz+b, \qquad P(\text{high entropy})=\sigma(s),
+   $$
+
+   where \(z\) is the standardized layer-14 hidden vector. The probe therefore learns the simplest linear boundary between low- and high-entropy questions; it does not update Qwen itself.
+
+7. **Evaluate on unseen questions and controls.** Probe scores were evaluated with AUROC on the locked test set and context-level bootstrap intervals. Comparisons included a constant predictor, predictive entropy, answer negative log-likelihood, and probes trained on shuffled labels.
+
+8. **Recover the candidate intervention direction.** The fitted weight vector was converted from standardized coordinates back to the model's raw hidden-state coordinates and normalized. Moving in the positive direction is associated with higher semantic entropy; moving in the negative direction is associated with lower semantic entropy. Stage 0 tests whether this direction is reproducible. Stage 1 must test whether manipulating it actually causes uncertainty to change.
 
 ## Confirmatory result
 
@@ -145,6 +189,4 @@ Per-example caches under `cache/` are resumable and intentionally excluded from 
 
 See [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md) for the complete deviation and failure analysis.
 
-## Provenance
-
-Based on Kossen et al., [*Semantic Entropy Probes: Robust and Cheap Hallucination Detection in LLMs*](https://arxiv.org/abs/2406.15927), and the [OATML reference implementation](https://github.com/OATML/semantic-entropy-probes) at commit `02e2167dd1c00e27080d421f9b40e13e00f0452b`. The upstream MIT license is retained.
+The preserved upstream snapshot is pinned to commit `02e2167dd1c00e27080d421f9b40e13e00f0452b`, and its MIT license is retained.
