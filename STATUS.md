@@ -26,6 +26,14 @@ The pipeline is validated. In the 200-example follow-up, validation selected lay
 
 Move the next measurement run to Qwen 1.5B while keeping the same examples, split, prompt, sample count, and token limit for an interpretable model-size comparison. Consider a separate longer-generation ablation afterward because 805/1,000 current generations hit the 12-token cap.
 
+## In progress — matched Qwen 1.5B comparison
+
+- Configuration: `configs/stage0_qwen15b_200.yaml`
+- Same 200 examples, five generations, fixed grouped split, prompt, seeds, and 12-token limit as the 0.5B follow-up
+- Generator: `Qwen/Qwen2.5-1.5B-Instruct`, unquantized float16 on MPS
+- Approximately depth-matched blocks: 5, 9, 14, 19, 23, and 28
+- Planned outputs: `results/run_200_qwen15b/` and `plots/run_200_qwen15b_probe_performance_by_layer.png`
+
 ## 200-example follow-up — completed
 
 - Configuration: `configs/stage0_qwen05b_200.yaml`
@@ -41,4 +49,5 @@ All completed phases replay from cache:
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_a
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_b
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b_200.yaml --run run_200
+.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_200.yaml --run run_200_qwen15b
 ```
