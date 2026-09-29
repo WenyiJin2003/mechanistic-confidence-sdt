@@ -1,0 +1,110 @@
+# Preregistered cached-only audit. This file must be committed before the audit runs.
+base_config: configs/stage0_qwen15b_500_confirm.yaml
+source_run: run_500_qwen15b_confirm
+
+source_artifacts:
+  probe_metrics:
+    path: results/run_500_qwen15b_confirm/probe_metrics.json
+    sha256: e8d502632305fdf267b38a93632da4bbead30fd453183b05f17be12ca4035a10
+  generations:
+    path: results/run_500_qwen15b_confirm/generations.jsonl
+    sha256: 9700babbe652d1a136350eefd2de90e06ea44ecd4f9d7d128cd5f066d5c2afab
+  semantic_entropy:
+    path: results/run_500_qwen15b_confirm/semantic_entropy.jsonl
+    sha256: 71eb5b61a396f4a35bd7702be99302d1f79ca036c4305605e7c6c0e5284ca3e6
+  hidden_states:
+    path: results/run_500_qwen15b_confirm/hidden_states.npz
+    sha256: c0d5869a9b04c44400bfc37668435fd441efad4264131f07a7869a92af6a54c0
+
+locked_data:
+  development_parts: [train_indices, validation_indices]
+  reserved_part: test_indices
+  expected_development_size: 401
+  expected_reserved_size: 99
+  threshold_source_field: threshold_fit_on_training_only
+  expected_threshold: 0.9899617766489042
+  positive_label: cluster_assignment_entropy_gte_threshold
+  group_key: normalized_context_sha256
+  # The reserved 99 examples were reported previously, so they are not a pristine
+  # confirmation set. This audit does not fit, select, or score on them.
+  access_reserved_during_audit: false
+
+analysis:
+  output_dir: results/run_500_qwen15b_direction_stability
+  plot_path: plots/run_500_qwen15b_direction_stability.png
+  primary_layer: 14
+  challenger_layer: 23
+  layers:
+    primary: 14
+    challenger: 23
+  seed: 20260929
+
+  nested_cv:
+    splitter: stratified_group_kfold
+    outer_folds: 5
+    outer_repeats: 5
+    inner_folds: 4
+    c_grid: [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0]
+    selection_rule: one_standard_error
+    one_se_tie_break: smallest_c
+    score: auroc
+  # Flat aliases keep the analysis script straightforward and explicit.
+  outer_folds: 5
+  outer_repeats: 5
+  inner_folds: 4
+  c_grid: [0.0001, 0.001, 0.01, 0.1, 1.0, 10.0]
+
+  direction_stability:
+    method: repeated_disjoint_split_half_with_common_holdout
+    repetitions: 20
+    folds_per_repetition: 5
+    train_a_folds: [0, 1]
+    train_b_folds: [2, 3]
+    common_evaluation_fold: 4
+    coordinate_space: raw_hidden_state
+    raw_weight_formula: coef_divided_by_scaler_scale
+    normalize_direction: unit_l2
+    metrics: [cosine_similarity, common_holdout_score_spearman, cross_half_auroc]
+    adjacent_c_robustness: true
+  split_half_repeats: 20
+
+  shuffled_control:
+    repetitions: 100
+    seed: 271828
+    preserve: [sample_count, positive_count, outer_splits]
+    metrics: [oof_auroc, raw_direction_cosine]
+  shuffle_repetitions: 100
+
+  stacking:
+    method: nested_cross_fitted_scalar_stacking
+    probe_score: decision_function
+    features: [answer_negative_log_likelihood, probe_score]
+    comparators: [answer_negative_log_likelihood, probe_score, combined]
+    meta_model: logistic_regression
+    meta_c: 1.0
+    primary_incremental_metric: nll_minus_combined_log_loss
+    secondary_incremental_metric: combined_minus_nll_auroc
+
+  bootstrap:
+    unit: normalized_context
+    samples: 5000
+    seed: 161803
+    paired_for_model_differences: true
+  bootstrap_samples: 5000
+
+success_gates:
+  primary_nested_oof_auroc_min: 0.65
+  primary_nested_oof_auroc_lower_95_min: 0.50
+  primary_raw_cosine_median_min: 0.50
+  primary_raw_cosine_positive_fraction_min: 0.80
+  primary_raw_cosine_empirical_lower_95_min: 0.0
+  primary_common_holdout_score_spearman_median_min: 0.80
+  primary_adjacent_c_cosine_min: 0.80
+  primary_cosine_must_exceed_shuffled_upper_95: true
+  incremental_nll_minus_combined_log_loss_lower_95_min: 0.0
+
+decision_policy:
+  activation_steering_eligible_if: all_primary_direction_gates_pass
+  incremental_information_if: incremental_log_loss_gate_passes
+  challenger_policy: layer_23_can_be_a_stage1_candidate_but_cannot_rescue_layer_14
+  mechanistic_loss_policy: never_authorized_by_this_audit_alone
