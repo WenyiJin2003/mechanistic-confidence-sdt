@@ -2,7 +2,9 @@
 
 A resource-efficient validation of the [Semantic Entropy Probes](https://arxiv.org/abs/2406.15927) pipeline on Apple Silicon. All generation, entailment, hidden-state extraction, and analysis run locally; no OpenAI API, remote judge, CUDA, or Weights & Biases is used.
 
-## Bottom line
+**Research question:** can a small local language model expose a reproducible internal direction associated with semantic uncertainty, strong enough to justify a later causal intervention test?
+
+## Executive conclusion
 
 - The pipeline runs end to end and passes its engineering, caching, and leakage checks.
 - On 500 fresh SQuAD questions, the preregistered Qwen2.5-1.5B layer-14 probe predicts semantic entropy with test AUROC **0.718** and a context-bootstrap 95% interval of **[0.603, 0.821]**.
@@ -11,18 +13,36 @@ A resource-efficient validation of the [Semantic Entropy Probes](https://arxiv.o
 
 **Decision:** the direction is stable enough for a small controlled activation-steering test. It has not shown incremental predictive value beyond output likelihood, so the project is still not ready for a mechanistic-confidence training loss.
 
-## What was tested
+This is a **pipeline validation**, not a paper-level replication and not evidence of mechanistic causality.
 
-For each question, the pipeline:
+## Experiment in one diagram
 
-1. samples short answers from a local Qwen model;
-2. clusters semantically equivalent answers with a local NLI model;
-3. converts cluster frequencies into semantic entropy;
-4. saves the hidden state of the final prompt token;
-5. trains a linear probe to predict high versus low semantic entropy;
-6. compares the probe with constant, output-likelihood, and shuffled-label controls.
+```mermaid
+flowchart LR
+    Q["SQuAD question + context"] --> G["10 local Qwen answers"]
+    G --> N["Local NLI clustering"]
+    N --> E["Semantic-entropy label"]
+    Q --> H["Final prompt-token hidden state"]
+    H --> P["Linear probe"]
+    E --> P
+    P --> C["Baselines + shuffled controls"]
+    C --> D["Direction-stability audit"]
+    D --> S["Next: activation steering"]
+```
 
-This tests whether uncertainty is statistically decodable from one activation. It does **not** establish mechanistic causality, tamper resistance, SDT, or biological knowledge.
+The probe is a standardized logistic regression trained to classify **high versus low sampled semantic entropy** from one saved activation. Its weight vector is the candidate intervention direction.
+
+The 0.5B model validated the software but produced weak, often truncated answers. Qwen2.5-1.5B improved answer quality enough for the confirmatory and direction analyses.
+
+### Terms in plain English
+
+| Term | Meaning here |
+|---|---|
+| Semantic entropy | How much the sampled answers disagree in meaning |
+| Probe | A simple linear classifier that reads one hidden state |
+| AUROC | Ranking quality: 0.5 is chance and 1.0 is perfect |
+| Direction cosine | Whether probes trained on different data learn the same internal direction; 1.0 means identical |
+| Answer NLL | How surprising the generated answer is to the model; a strong output-based uncertainty baseline |
 
 ## Confirmatory result
 
@@ -55,7 +75,7 @@ This follow-up used only the locked 401-example development pool. The previously
 
 ![Direction stability](plots/run_500_qwen15b_direction_stability.png)
 
-## Evidence chain
+## Decision trail
 
 | Phase | Purpose | Main outcome |
 |---|---|---|
@@ -65,6 +85,28 @@ This follow-up used only the locked 401-example development pool. The previously
 | Sampling audit, 50 questions | Test label reliability | 5-vs-20 agreement 84%; 10-vs-20 agreement 90% |
 | Fresh 1.5B confirmation, 500 questions | Confirm the internal signal | Layer 14 passed; incremental-information gate failed |
 | Cached direction audit, 401 development questions | Test whether one intervention direction is reproducible | Direction gate passed; corrected incremental gate failed |
+
+```mermaid
+flowchart TD
+    A{"Pipeline works end to end?"} -->|Yes| B{"Fresh hidden-state signal?"}
+    B -->|Yes| C{"Direction stable across splits?"}
+    C -->|Yes| D{"Adds information beyond answer NLL?"}
+    D -->|No| E["Run a small causal steering diagnostic"]
+    E --> F{"Bidirectional effect, stronger than controls, quality preserved?"}
+    F -->|Yes| H["Consider a small training-loss pilot"]
+    F -->|No| I["Stop or revise the representation"]
+    F -.->|Current status: not tested| G["No mechanistic loss yet"]
+```
+
+## What the evidence supports
+
+| Supported | Not supported |
+|---|---|
+| Local end-to-end reproduction of the probe pipeline | Paper-level replication |
+| A predictive layer-14 uncertainty association | A proof that the feature causes confidence |
+| A direction reproducible across grouped data splits | Incremental information beyond answer likelihood |
+| Proceeding to a small activation-steering diagnostic | Synthetic-document mechanistic-loss training |
+| Continuing with Qwen2.5-1.5B rather than 0.5B | SDT, biological, tamper-resistance, or safety claims |
 
 ## Reproduce
 
@@ -86,13 +128,15 @@ The 500-question generation takes about 41 minutes on an M3 MacBook Air. The cac
 
 ## Repository guide
 
-- [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md) — full methods, metrics, deviations, and limitations
-- [`README_STAGE0.md`](README_STAGE0.md) — commands, cache behavior, and artifact format
-- [`STATUS.md`](STATUS.md) — current decision and next experiment
+- [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md) — canonical evidence report; all quantitative conclusions live here
+- [`README_STAGE0.md`](README_STAGE0.md) — reproducibility commands and artifact definitions only
+- [`STATUS.md`](STATUS.md) — one-screen current state and next decision gate
 - [`results/README.md`](results/README.md) — result-directory index
 - [`configs/`](configs/) — frozen experiment configurations
 - [`stage0/`](stage0/) — local generation, clustering, probe, and stability code
 - [`scripts/`](scripts/) — command-line entry points
+- [`semantic_entropy_probes/`](semantic_entropy_probes/) — preserved upstream probe notebook snapshot, not the main local pipeline
+- [`semantic_uncertainty/`](semantic_uncertainty/) — upstream semantic-uncertainty support code retained for provenance
 - [`docs/UPSTREAM_README.md`](docs/UPSTREAM_README.md) — preserved upstream documentation
 
 ## Important deviations
