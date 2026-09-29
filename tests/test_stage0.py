@@ -2,6 +2,7 @@ import numpy as np
 
 from stage0.pipeline import (
     best_train_threshold,
+    bootstrap_auroc_difference,
     cluster_entropy,
     fixed_group_split,
     normalize_answer,
@@ -96,3 +97,19 @@ def test_prefix_comparison_detects_one_label_flip():
     assert np.isclose(result["5_vs_20"]["label_agreement"], 0.75)
     assert result["5_vs_20"]["label_flips"]["low_to_high"] == 1
     assert np.isclose(result["10_vs_20"]["label_agreement"], 1.0)
+
+
+def test_bootstrap_auroc_difference_reports_point_estimate():
+    labels = np.asarray([0, 0, 1, 1])
+    perfect = np.asarray([0.1, 0.2, 0.8, 0.9])
+    chance = np.asarray([0.5, 0.5, 0.5, 0.5])
+    result = bootstrap_auroc_difference(
+        labels,
+        perfect,
+        chance,
+        samples=50,
+        seed=11,
+    )
+    assert result is not None
+    assert np.isclose(result["estimate"], 0.5)
+    assert result["valid_resamples"] > 0

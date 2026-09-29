@@ -1,0 +1,73 @@
+project:
+  seed: 20260928
+  time_limit_minutes: 180
+  cache_dir: cache
+  results_dir: results
+  hf_cache_dir: cache/huggingface
+
+device:
+  preference: [mps, cuda, cpu]
+  generator_dtype: bfloat16
+  entailment_dtype: float32
+  allow_cpu_fallback: true
+
+models:
+  generator:
+    id: Qwen/Qwen2.5-1.5B-Instruct
+    trust_remote_code: false
+    attn_implementation: eager
+    max_prompt_tokens: 768
+  entailment:
+    id: cross-encoder/nli-deberta-v3-small
+    batch_size: 32
+    max_length: 256
+    label_order: [contradiction, entailment, neutral]
+
+dataset:
+  id: squad_v2
+  split: validation
+  answerable_only: true
+  selection_seed: 1729
+  include_context: true
+  system_prompt: Answer the question as briefly as possible using only the supplied context.
+  # Make this a genuinely fresh confirmation set, not a larger reuse of Run B.
+  exclude_result_runs: [run_200_qwen15b]
+  exclude_near_duplicate_questions_at_jaccard: 0.9
+
+generation:
+  temperature: 1.0
+  do_sample: true
+  top_p: 1.0
+  top_k: 0
+  max_new_tokens: 12
+  layers: [5, 9, 14, 19, 23, 28]
+
+probe:
+  validation_fraction: 0.20
+  test_fraction: 0.20
+  split_seed: 42
+  shuffle_seed: 314159
+  shuffle_repetitions: 50
+  bootstrap_seed: 271828
+  bootstrap_samples: 5000
+  c: 1.0
+  max_iter: 2000
+  # Frozen before generation. Validation-selected layers remain secondary only.
+  primary_layer: 14
+  secondary_layers: [28]
+
+confirmation_gates:
+  primary_test_auroc_min: 0.60
+  primary_test_auroc_lower_95_min: 0.50
+  hidden_plus_nll_minus_nll_lower_95_min: 0.0
+
+runs:
+  run_500_qwen15b_confirm:
+    num_examples: 500
+    num_generations: 10
+    grouping: nli
+    train_probe: true
+
+logging:
+  wandb: false
+  local_only: true

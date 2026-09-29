@@ -27,6 +27,14 @@ The pipeline is validated. Qwen 1.5B substantially improved answer quality, and 
 
 Use Qwen 1.5B with 10 answers per question for a fresh 500-question, context-grouped confirmation run. Freeze the primary layer and analysis before generation. Do not add an internal mechanistic loss until this fresh-data run confirms that the internal signal is above chance and evaluates whether it adds information beyond output likelihood.
 
+## Fresh 500-question confirmation — in progress
+
+- Configuration: `configs/stage0_qwen15b_500_confirm.yaml`
+- 500 SQuAD questions with 10 local answers each; exclude IDs, contexts, and exact or near-duplicate questions from the earlier 200-question 1.5B run.
+- Layer 14 is the frozen primary analysis; layer 28 and validation selection are secondary.
+- Signal gates: test AUROC at least 0.60, context-bootstrap lower 95% bound at least 0.50, and AUROC above the shuffled-label upper 95% bound.
+- Mechanistic-readiness gate: adding layer-14 hidden state to answer NLL must beat answer NLL with a positive lower 95% bound.
+
 ## Semantic-entropy sampling reliability — completed
 
 - Configuration: `configs/stage0_qwen15b_label_stability.yaml`

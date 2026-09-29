@@ -173,14 +173,43 @@ def portable_config(config: dict[str, Any]) -> dict[str, Any]:
     return output
 
 
+def _normalized_text(value: str) -> str:
+    return " ".join(value.lower().split())
+
+
+def _question_jaccard(left: str, right: str) -> float:
+    left_tokens = set(normalize_answer(left).split())
+    right_tokens = set(normalize_answer(right).split())
+    union = left_tokens | right_tokens
+    return len(left_tokens & right_tokens) / len(union) if union else 1.0
+
+
+def _excluded_dataset_records(config: dict[str, Any]) -> list[dict[str, Any]]:
+    records = []
+    for run_name in config["dataset"].get("exclude_result_runs", []):
+        path = Path(config["project"]["results_dir"]) / run_name / "generations.jsonl"
+        if not path.exists():
+            raise FileNotFoundError(f"Dataset exclusion source does not exist: {path}")
+        records.extend(read_jsonl(path))
+    return records
+
+
 def fixed_dataset(config: dict[str, Any], count: int) -> list[dict[str, Any]]:
     dataset_config = config["dataset"]
+    excluded_records = _excluded_dataset_records(config)
+    exclusion_identity = {
+        "ids": sorted(record["id"] for record in excluded_records),
+        "contexts": sorted({_normalized_text(record["context"]) for record in excluded_records}),
+        "questions": sorted({_normalized_text(record["question"]) for record in excluded_records}),
+        "near_duplicate_threshold": dataset_config.get("exclude_near_duplicate_questions_at_jaccard"),
+    }
     cache_identity = {
         "id": dataset_config["id"],
         "split": dataset_config["split"],
         "answerable_only": dataset_config.get("answerable_only", True),
         "selection_seed": int(dataset_config["selection_seed"]),
         "revision": dataset_config.get("revision"),
+        "exclusions": stable_hash(exclusion_identity),
     }
     cache_path = (
         Path(config["project"]["cache_dir"])
@@ -198,16 +227,35 @@ def fixed_dataset(config: dict[str, Any], count: int) -> list[dict[str, Any]]:
         cache_dir=config["project"]["hf_cache_dir"],
         revision=dataset_config.get("revision"),
     )
+    excluded_ids = {record["id"] for record in excluded_records}
+    excluded_contexts = {_normalized_text(record["context"]) for record in excluded_records}
+    excluded_questions = {_normalized_text(record["question"]) for record in excluded_records}
+    excluded_question_texts = [record["question"] for record in excluded_records]
+    near_duplicate_threshold = dataset_config.get("exclude_near_duplicate_questions_at_jaccard")
     candidates = []
     for row in dataset:
         answers = list(row["answers"]["text"])
         if dataset_config.get("answerable_only", True) and not answers:
             continue
+        row_id = str(row["id"])
+        question = row["question"]
+        context = row.get("context", "")
+        if (
+            row_id in excluded_ids
+            or _normalized_text(context) in excluded_contexts
+            or _normalized_text(question) in excluded_questions
+        ):
+            continue
+        if near_duplicate_threshold is not None and any(
+            _question_jaccard(question, excluded) >= float(near_duplicate_threshold)
+            for excluded in excluded_question_texts
+        ):
+            continue
         candidates.append(
             {
-                "id": str(row["id"]),
-                "question": row["question"],
-                "context": row.get("context", ""),
+                "id": row_id,
+                "question": question,
+                "context": context,
                 "answers": answers,
             }
         )
@@ -761,6 +809,50 @@ def bootstrap_auroc(
     }
 
 
+def bootstrap_auroc_difference(
+    labels: np.ndarray,
+    first_probabilities: np.ndarray,
+    second_probabilities: np.ndarray,
+    samples: int,
+    seed: int,
+    groups: np.ndarray | None = None,
+) -> dict[str, Any] | None:
+    if np.unique(labels).size < 2:
+        return None
+    rng = np.random.default_rng(seed)
+    unique_groups = np.unique(groups) if groups is not None else None
+    differences = []
+    for _ in range(samples):
+        if unique_groups is None:
+            indices = rng.integers(0, len(labels), size=len(labels))
+        else:
+            sampled_groups = rng.choice(unique_groups, size=len(unique_groups), replace=True)
+            indices = np.concatenate(
+                [np.flatnonzero(groups == group) for group in sampled_groups]
+            )
+        if np.unique(labels[indices]).size < 2:
+            continue
+        differences.append(
+            float(
+                roc_auc_score(labels[indices], first_probabilities[indices])
+                - roc_auc_score(labels[indices], second_probabilities[indices])
+            )
+        )
+    if not differences:
+        return None
+    values = np.asarray(differences, dtype=np.float64)
+    return {
+        "estimate": float(
+            roc_auc_score(labels, first_probabilities)
+            - roc_auc_score(labels, second_probabilities)
+        ),
+        "lower_95": float(np.percentile(values, 2.5)),
+        "median": float(np.median(values)),
+        "upper_95": float(np.percentile(values, 97.5)),
+        "valid_resamples": int(values.size),
+    }
+
+
 def fixed_group_split(
     records: list[dict[str, Any]],
     probe_config: dict[str, Any],
@@ -857,6 +949,9 @@ def train_probe(
     )
     layer_results = []
     combined_results = []
+    layer_test_probabilities: dict[int, np.ndarray] = {}
+    combined_test_probabilities_by_layer: dict[int, np.ndarray] = {}
+    baseline_test_probabilities: dict[str, np.ndarray] = {}
 
     for position, layer in enumerate(layers):
         features = hidden[:, position, :].astype(np.float32)
@@ -868,6 +963,7 @@ def train_probe(
             else np.asarray([], dtype=np.float64)
         )
         test_probabilities = model.predict_proba(features[test_indices])[:, 1]
+        layer_test_probabilities[layer] = test_probabilities
         test_metrics = safe_metrics(labels[test_indices], test_probabilities)
         test_metrics["auroc_bootstrap_95"] = bootstrap_auroc(
             labels[test_indices],
@@ -896,9 +992,10 @@ def train_probe(
         combined_features = np.column_stack([features, nll])
         combined = probe_model(config, int(probe_config["split_seed"]))
         combined.fit(combined_features[train_indices], labels[train_indices])
-        combined_test_probabilities = combined.predict_proba(
+        combined_probabilities = combined.predict_proba(
             combined_features[test_indices]
         )[:, 1]
+        combined_test_probabilities_by_layer[layer] = combined_probabilities
         combined_results.append(
             {
                 "layer": layer,
@@ -910,7 +1007,7 @@ def train_probe(
                     if len(validation_indices)
                     else None
                 ),
-                "test": safe_metrics(labels[test_indices], combined_test_probabilities),
+                "test": safe_metrics(labels[test_indices], combined_probabilities),
             }
         )
 
@@ -959,6 +1056,7 @@ def train_probe(
             else np.asarray([], dtype=np.float64)
         )
         test_probabilities = scalar.predict_proba(values[test_indices])[:, 1]
+        baseline_test_probabilities[name] = test_probabilities
         baselines[name] = {
             "validation": (
                 safe_metrics(labels[validation_indices], validation_probabilities)
@@ -974,6 +1072,40 @@ def train_probe(
             bootstrap_seed + int(stable_hash(name)[:8], 16) % 10000,
             test_groups,
         )
+
+    predeclared_analysis = None
+    if "primary_layer" in probe_config:
+        primary_layer = int(probe_config["primary_layer"])
+        if primary_layer not in layers:
+            raise ValueError(f"Predeclared primary layer {primary_layer} is not among {layers}")
+        primary_row = next(row for row in layer_results if row["layer"] == primary_layer)
+        combined_row = next(row for row in combined_results if row["layer"] == primary_layer)
+        answer_nll_probabilities = baseline_test_probabilities[
+            "answer_negative_log_likelihood"
+        ]
+        predeclared_analysis = {
+            "primary_layer": primary_layer,
+            "secondary_layers": [int(value) for value in probe_config.get("secondary_layers", [])],
+            "primary_layer_test": primary_row["test"],
+            "primary_hidden_plus_answer_nll_test": combined_row["test"],
+            "answer_nll_test": baselines["answer_negative_log_likelihood"]["test"],
+            "primary_minus_answer_nll_auroc": bootstrap_auroc_difference(
+                labels[test_indices],
+                layer_test_probabilities[primary_layer],
+                answer_nll_probabilities,
+                bootstrap_samples,
+                bootstrap_seed + 40000,
+                test_groups,
+            ),
+            "primary_hidden_plus_answer_nll_minus_answer_nll_auroc": bootstrap_auroc_difference(
+                labels[test_indices],
+                combined_test_probabilities_by_layer[primary_layer],
+                answer_nll_probabilities,
+                bootstrap_samples,
+                bootstrap_seed + 50000,
+                test_groups,
+            ),
+        }
 
     shuffle_repetitions = int(probe_config.get("shuffle_repetitions", 20))
     shuffle_rng = np.random.default_rng(int(probe_config["shuffle_seed"]))
@@ -1058,6 +1190,7 @@ def train_probe(
         "shuffled_label_null": shuffled_results,
         "baselines": baselines,
         "correctness_diagnostics": correctness_diagnostics,
+        "predeclared_analysis": predeclared_analysis,
     }
 
 
@@ -1235,6 +1368,91 @@ def audit_split(records: list[dict[str, Any]], probe: dict[str, Any]) -> dict[st
     return result
 
 
+def audit_dataset_exclusions(
+    config: dict[str, Any], records: list[dict[str, Any]]
+) -> dict[str, Any] | None:
+    excluded_records = _excluded_dataset_records(config)
+    if not excluded_records:
+        return None
+    threshold = config["dataset"].get("exclude_near_duplicate_questions_at_jaccard")
+    excluded_ids = {record["id"] for record in excluded_records}
+    excluded_contexts = {_normalized_text(record["context"]) for record in excluded_records}
+    excluded_questions = {_normalized_text(record["question"]) for record in excluded_records}
+    near_duplicates = []
+    if threshold is not None:
+        for index, record in enumerate(records):
+            for excluded_index, excluded in enumerate(excluded_records):
+                similarity = _question_jaccard(record["question"], excluded["question"])
+                if similarity >= float(threshold):
+                    near_duplicates.append(
+                        {
+                            "index": index,
+                            "excluded_index": excluded_index,
+                            "token_jaccard": similarity,
+                        }
+                    )
+    result = {
+        "excluded_result_runs": config["dataset"].get("exclude_result_runs", []),
+        "excluded_record_count": len(excluded_records),
+        "id_overlap_count": sum(record["id"] in excluded_ids for record in records),
+        "exact_context_overlap_count": sum(
+            _normalized_text(record["context"]) in excluded_contexts for record in records
+        ),
+        "exact_question_overlap_count": sum(
+            _normalized_text(record["question"]) in excluded_questions for record in records
+        ),
+        "near_duplicate_question_pairs": near_duplicates,
+    }
+    result["passed"] = (
+        result["id_overlap_count"] == 0
+        and result["exact_context_overlap_count"] == 0
+        and result["exact_question_overlap_count"] == 0
+        and not near_duplicates
+    )
+    return result
+
+
+def evaluate_confirmation_gates(
+    config: dict[str, Any], probe: dict[str, Any]
+) -> dict[str, Any] | None:
+    gates = config.get("confirmation_gates")
+    analysis = probe.get("predeclared_analysis")
+    if not gates or analysis is None:
+        return None
+    primary_layer = int(analysis["primary_layer"])
+    primary = analysis["primary_layer_test"]
+    shuffled = next(
+        row for row in probe["shuffled_label_null"] if int(row["layer"]) == primary_layer
+    )
+    incremental = analysis[
+        "primary_hidden_plus_answer_nll_minus_answer_nll_auroc"
+    ]
+    signal_results = {
+        "primary_test_auroc": primary["auroc"]
+        >= float(gates["primary_test_auroc_min"]),
+        "primary_test_auroc_lower_95": primary["auroc_bootstrap_95"]["lower_95"]
+        >= float(gates["primary_test_auroc_lower_95_min"]),
+        "primary_above_shuffled_upper_95": primary["auroc"]
+        > float(shuffled["test_auroc_interval_95"][1]),
+    }
+    incremental_results = {
+        "hidden_plus_nll_minus_nll_lower_95": incremental is not None
+        and incremental["lower_95"]
+        > float(gates["hidden_plus_nll_minus_nll_lower_95_min"]),
+    }
+    return {
+        "primary_layer": primary_layer,
+        "thresholds": gates,
+        "signal_gate_results": signal_results,
+        "incremental_gate_results": incremental_results,
+        "measurement_signal_passed": bool(all(signal_results.values())),
+        "incremental_information_passed": bool(all(incremental_results.values())),
+        "ready_for_mechanistic_loss": bool(
+            all(signal_results.values()) and all(incremental_results.values())
+        ),
+    }
+
+
 def checks_for_run(
     run_name: str,
     config: dict[str, Any],
@@ -1328,12 +1546,17 @@ def run(config: dict[str, Any], run_name: str) -> dict[str, Any]:
         try:
             probe = train_probe(config, hidden, semantic_rows, records)
             probe["split_audit"] = audit_split(records, probe)
+            probe["confirmation_gates"] = evaluate_confirmation_gates(config, probe)
             atomic_json(results_dir / "probe_metrics.json", probe)
             plot_probe(config, probe, run_name)
         except ValueError as error:
             probe_error = str(error)
             LOGGER.warning("Probe could not be trained: %s", error)
     checks = checks_for_run(run_name, config, records, hidden, semantic_rows, probe)
+    exclusion_audit = audit_dataset_exclusions(config, records)
+    if exclusion_audit is not None:
+        checks["checks"]["fresh_dataset_exclusion_passed"] = exclusion_audit["passed"]
+        checks["passed"] = bool(checks["passed"] and exclusion_audit["passed"])
     manifest = {
         "run": run_name,
         "configuration": portable_config(config),
@@ -1341,6 +1564,7 @@ def run(config: dict[str, Any], run_name: str) -> dict[str, Any]:
         "generator_runtime": generator_runtime,
         "grouping_runtime": grouping_runtime,
         "checks": checks,
+        "source_exclusion_audit": exclusion_audit,
         "probe_error": probe_error,
     }
     atomic_json(results_dir / "manifest.json", manifest)

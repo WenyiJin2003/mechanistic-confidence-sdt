@@ -82,6 +82,16 @@ The entropy cutoff remains frozen at `0.5867070452737222`, which was learned onl
 
 This diagnostic is complete and passed all four point-estimate gates. Five versus 20 samples gave 84% label agreement, kappa 0.683, and Spearman 0.808; 10 versus 20 gave 90% agreement, kappa 0.790, and Spearman 0.934. Five samples still changed 8/50 labels, mostly from low to high entropy, and the 95% bootstrap lower bounds fell below the point-estimate gates. Ten generations per question are therefore the recommended minimum for the next fresh-data confirmation run.
 
+### Fresh 500-question confirmation
+
+The confirmatory run uses 500 new SQuAD questions and 10 answers per question. It excludes every ID, exact question, exact context, and question with token-Jaccard similarity at least 0.9 to the earlier 200-question 1.5B run. Layer 14 is frozen as the primary hidden-state analysis; layer 28 and validation-selected layers are secondary.
+
+```bash
+.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_500_confirm.yaml --run run_500_qwen15b_confirm
+```
+
+The signal gate requires primary-layer test AUROC at least 0.60, a context-bootstrap lower 95% bound at least 0.50, and performance above the shuffled-label 95% upper bound. A separate, stricter readiness gate requires layer-14 hidden state plus answer NLL to improve on answer NLL alone with a positive lower 95% bound. Failure of that incremental gate means the project should not yet use a mechanistic loss.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention
