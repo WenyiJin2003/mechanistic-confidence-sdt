@@ -27,7 +27,7 @@ locked_data:
   group_key: normalized_context_sha256
   # The reserved 99 examples were reported previously, so they are not a pristine
   # confirmation set. This audit does not fit, select, or score on them.
-  access_reserved_during_audit: false
+  use_reserved_outcomes_or_features_in_analysis: false
 
 analysis:
   output_dir: results/run_500_qwen15b_direction_stability
@@ -72,11 +72,14 @@ analysis:
     repetitions: 100
     seed: 271828
     preserve: [sample_count, positive_count, outer_splits]
-    metrics: [oof_auroc, raw_direction_cosine]
+    c_policy: reuse_corresponding_real_split_selected_c
+    null_statistic: median_raw_direction_cosine_across_all_20_splits
+    metrics: [median_raw_direction_cosine]
   shuffle_repetitions: 100
 
   stacking:
     method: nested_cross_fitted_scalar_stacking
+    tune_probe_c_inside_each_meta_oof_training_fold: true
     probe_score: decision_function
     features: [answer_negative_log_likelihood, probe_score]
     comparators: [answer_negative_log_likelihood, probe_score, combined]
