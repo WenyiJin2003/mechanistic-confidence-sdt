@@ -42,6 +42,8 @@ The pre-registered follow-up uses a separate configuration so the 64-example pil
 
 It adds layers 8 and 16, a fixed context-grouped train/validation/test split, validation-only layer selection, bootstrap intervals, 50 shuffled-label controls, SQuAD EM/F1 diagnostics, and a hidden-state-plus-answer-NLL comparison. Outputs are isolated under `results/run_200/` and `plots/run_200_probe_performance_by_layer.png`. The ignored local cache remains resumable per example and per NLI batch.
 
+This follow-up is complete. All engineering checks passed, but the validation-selected hidden probe was not robust: layer 4 scored 0.503 validation AUROC and 0.628 test AUROC (context-bootstrap 95% interval [0.440, 0.800]), versus 0.847 for predictive entropy and 0.855 for answer negative log-likelihood on test. See `RESULTS_STAGE0.md` for the full table, leakage audit, failure analysis, and recommendation to move the next measurement run to Qwen 1.5B.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

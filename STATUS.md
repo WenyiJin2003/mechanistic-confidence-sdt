@@ -1,6 +1,6 @@
 # Stage 0 Status
 
-Last updated: 2026-09-28
+Last updated: 2026-09-29
 
 ## Completed
 
@@ -13,25 +13,25 @@ Last updated: 2026-09-28
 - Completed and cached the five-example preflight.
 - Completed Run A: 12 examples, three generations, exact-match grouping. All checks passed.
 - Completed Run B pilot: 64 examples, five generations, local DeBERTa-small NLI. All checks passed.
-- Verified that generation, hidden-state, dataset, and entailment caches are reusable.
+- Completed the 200-example follow-up: 1,000 generations, six layers, context-grouped train/validation/test split, 50 shuffled-label controls, and 2,000 context-bootstrap resamples. All engineering checks passed.
+- Verified with a full replay that all 200 generation records, all 200 hidden-state records, the dataset subset, and every entailment judgment are reusable without repeating the expensive stages.
 - Trained linear probes and required baselines, audited the split for leakage, and created the layer plot.
 - Wrote `RESULTS_STAGE0.md`.
 
 ## Current conclusion
 
-The pipeline is validated, but the 64-example probe result is inconclusive and near chance. Output likelihood baselines outperform the hidden-state probes. No mechanistic or causal claim is warranted.
+The pipeline is validated. In the 200-example follow-up, validation selected layer 4 with validation AUROC 0.503; its test AUROC was 0.628 with context-bootstrap 95% interval [0.440, 0.800]. Predictive entropy (0.847) and answer negative log-likelihood (0.855) were much stronger on test. This run therefore does not provide robust evidence of a useful semantic-entropy-label signal in this 0.5B setup. No mechanistic or causal claim is warranted.
 
 ## Recommended next step
 
-Run a 200-example Qwen 0.5B stability experiment with layers 4, 8, 12, 16, 20, and 24 and a fixed train/validation/test split. Move to 1.5B only if the larger 0.5B run remains at chance or answer-quality review identifies model capacity as the main limitation.
+Move the next measurement run to Qwen 1.5B while keeping the same examples, split, prompt, sample count, and token limit for an interpretable model-size comparison. Consider a separate longer-generation ablation afterward because 805/1,000 current generations hit the 12-token cap.
 
-## In progress — 200-example stability run
+## 200-example follow-up — completed
 
-- Added the separate `configs/stage0_qwen05b_200.yaml` configuration.
-- Restored layers 4, 8, 12, 16, 20, and 24.
-- Added fixed context-grouped train/validation/test splits, validation-only layer selection, bootstrap intervals, 50 shuffled-label repetitions, correctness diagnostics, and a hidden-plus-NLL comparison.
-- Decoupled generation and hidden-state caches so the first 64 five-sample generations can be reused while six-layer hidden states are recomputed.
-- Next checkpoint: commit and push the implementation, then execute and cache `run_200`.
+- Configuration: `configs/stage0_qwen05b_200.yaml`
+- Results: `results/run_200/`
+- Plot: `plots/run_200_probe_performance_by_layer.png`
+- Full interpretation and limitations: `RESULTS_STAGE0.md`
 
 ## Resume commands
 
@@ -40,4 +40,5 @@ All completed phases replay from cache:
 ```bash
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_a
 .venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b.yaml --run run_b
+.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen05b_200.yaml --run run_200
 ```
