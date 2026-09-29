@@ -2,25 +2,39 @@
 
 ## Conclusion
 
-**Project decision: continue to a controlled activation-steering study, but do not begin mechanistic-loss training yet.**
+> **Project decision: continue to a controlled activation-steering experiment. Do not begin mechanistic-loss training yet.**
 
-Stage 0 establishes two prerequisites for the proposed mechanistic-confidence study. First, sampled semantic entropy is measurable and linearly decodable from Qwen2.5-1.5B activations under the present protocol. Second, the resulting layer-14 probe direction is reproducible across grouped data splits. On a fresh 500-question SQuAD dataset, the preregistered probe reached AUROC **0.718 [0.603, 0.821]** on the locked 99-question test split. In a separate nested cross-validation audit, its out-of-fold AUROC was **0.738 [0.680, 0.793]**, and independently trained directions had median cosine similarity **0.600**, compared with a shuffled-label upper bound of **0.123**.
+### What we did
 
-What remains unresolved is causality. The internal signal is weaker than answer likelihood, and a strictly nested model combining answer negative log-likelihood with the probe score performed slightly worse than answer likelihood alone. Stage 0 therefore identifies a defensible intervention target; it does not show that changing this activation changes uncertainty.
+- Reproduced the Semantic Entropy Probes pipeline with **Qwen2.5-1.5B**.
+- Ran a fresh, non-overlapping set of **500 SQuAD questions**, with **10 sampled answers per question**.
+- Computed semantic entropy, cached final-prompt-token activations, trained linear probes, and compared them with output-based uncertainty baselines.
+- Audited whether the learned layer-14 direction remained consistent across independent grouped data splits.
 
-The next experiment should manipulate the frozen layer-14 direction in both directions. If this changes semantic entropy as predicted, exceeds random, shuffled, and temperature-matched controls, and preserves answer quality, the direction becomes a defensible candidate for an auxiliary internal loss during otherwise standard synthetic-document training. If it fails, the proposed mechanistic loss should not proceed in its current form.
+### What we found
 
-The 0.5B model was sufficient to validate the pipeline but produced weak and frequently truncated answers. Qwen2.5-1.5B is the appropriate model for the next experiment.
+- **The internal uncertainty signal is detectable.** The preregistered layer-14 probe reached test AUROC **0.718 [0.603, 0.821]**.
+- **The layer-14 direction is reproducible.** Nested cross-validation AUROC was **0.738 [0.680, 0.793]**; independently fitted directions had median cosine similarity **0.600**, above the shuffled-label upper bound of **0.123**.
+- **The probe is not better than answer likelihood.** Answer negative log-likelihood remained the stronger predictor, and adding the probe did not improve it.
+- **The 1.5B model should be retained.** The 0.5B model validated the code path but produced weaker and frequently truncated answers.
 
-This is a pipeline-validation study rather than a paper-level replication.
+### What Stage 0 confirms
 
-## Connection to the proposed study
+**There is a stable, testable internal direction associated with sampled semantic uncertainty.** This is enough evidence to proceed to a causal intervention experiment.
 
-| Research stage | Question | Decision |
+### What Stage 0 does not confirm
+
+**It does not show that this direction controls uncertainty.** It therefore does not yet justify using the direction as an internal loss during synthetic-document training.
+
+### Connection to the proposed study
+
+| Research stage | Main question | Status |
 |---|---|---|
-| Stage 0: measurement and readout | Is there a sufficiently reliable uncertainty label and a reproducible internal direction? | **Yes, for an intervention test** |
-| Stage 1: causal intervention | Does moving the model along that direction change semantic entropy without damaging answer quality? | **Next experiment** |
-| Stage 2: synthetic-document training | Can the direction serve as an auxiliary internal loss during normal training? | **Conditional on Stage 1** |
+| **Stage 0: measurement** | Can uncertainty be measured and read out from a reproducible internal direction? | **Completed** |
+| **Stage 1: intervention** | Does bidirectional activation steering change uncertainty without harming answer quality? | **Next** |
+| **Stage 2: training** | Can the validated direction guide normal synthetic-document training through an auxiliary loss? | **Conditional on Stage 1** |
+
+This is a pipeline-validation study, not a paper-level replication or evidence of mechanistic causality.
 
 ## Method overview
 

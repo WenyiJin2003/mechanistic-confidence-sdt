@@ -4,7 +4,9 @@ Last updated: 2026-09-29
 
 ## Project decision
 
-Continue to a controlled activation-steering experiment. Do not begin synthetic-document mechanistic-loss training unless the intervention changes semantic entropy in both intended directions, outperforms the controls, and preserves answer quality.
+**Proceed:** run a controlled activation-steering experiment with the frozen layer-14 direction.
+
+**Do not proceed yet:** begin synthetic-document mechanistic-loss training. That step requires a bidirectional entropy change that outperforms the controls and preserves answer quality.
 
 | Question | Answer |
 |---|---|

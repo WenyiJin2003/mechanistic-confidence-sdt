@@ -4,17 +4,24 @@ Last updated: 2026-09-29
 
 ## Outcome
 
-Stage 0 supports continuing the project to a controlled activation-steering study. It does not yet support using the probe direction as a mechanistic loss during synthetic-document training.
+> **Decision: continue to a controlled activation-steering study. Do not use the probe direction as a training loss yet.**
 
-Stage 0 passed as a pipeline-validation experiment. Generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end and passed their engineering checks.
+### Confirmed
 
-The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger.
+- **The full pipeline works:** generation, semantic clustering, entropy labels, hidden-state caching, linear probing, baselines, and leakage checks all ran end to end.
+- **A layer-14 internal signal is detectable:** test AUROC **0.718 [0.603, 0.821]** on a fresh 500-question dataset.
+- **The direction is reproducible enough to test:** nested-CV AUROC **0.738 [0.680, 0.793]** and median cross-split cosine similarity **0.600**, above the shuffled-label upper bound of **0.123**.
+- **Qwen2.5-1.5B is the appropriate model for the next experiment.**
 
-A 50-question sampling-reliability diagnostic then increased each question from 5 to 20 generated answers. It passed all four predeclared point-estimate gates, but 8/50 five-sample labels changed and bootstrap intervals remained wide. This supported using 10 rather than 5 answers per question in a fresh 500-question confirmation.
+### Not confirmed
 
-That fresh confirmation passed its predeclared internal-signal gate. Frozen layer 14 reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821] and exceeded the shuffled-label upper bound. However, answer NLL reached 0.911, and combining it with layer 14 significantly degraded AUROC.
+- **The probe does not add predictive value beyond answer likelihood.** Answer NLL reached AUROC **0.911**, and combining it with the probe did not improve performance.
+- **No causal effect has been demonstrated.** The experiments show an association, not that the direction controls confidence.
+- **Mechanistic-loss training is not yet justified.** That decision depends on the activation-steering experiment.
 
-A final cached-only audit then tested whether layer 14 provides one reproducible direction suitable for intervention. On the locked 401-example development pool, repeated nested grouped CV reached OOF AUROC 0.738 [0.680, 0.793]. Independently trained directions had median raw-space cosine 0.600, versus a shuffled-null upper bound of 0.123; all eight direction gates passed. Corrected scalar stacking still slightly worsened NLL-only log-loss, so the direction is eligible for a small activation-steering diagnostic but **not** for mechanistic-loss training. These results show a stable predictive association, not a paper-level replication or a mechanistic or causal result.
+### Research implication
+
+Stage 0 validates the **measurement and target-selection steps** of the proposed project. Stage 1 must test whether bidirectional manipulation of the frozen direction changes semantic entropy beyond the controls while preserving answer quality. Only a successful intervention should lead to a synthetic-document training pilot.
 
 ## Exact configuration
 
