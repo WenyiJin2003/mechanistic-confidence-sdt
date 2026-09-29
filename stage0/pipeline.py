@@ -733,13 +733,21 @@ def bootstrap_auroc(
     probabilities: np.ndarray,
     samples: int,
     seed: int,
+    groups: np.ndarray | None = None,
 ) -> dict[str, Any] | None:
     if np.unique(labels).size < 2:
         return None
     rng = np.random.default_rng(seed)
     values = []
+    unique_groups = np.unique(groups) if groups is not None else None
     for _ in range(samples):
-        sample = rng.integers(0, len(labels), size=len(labels))
+        if unique_groups is None:
+            sample = rng.integers(0, len(labels), size=len(labels))
+        else:
+            sampled_groups = rng.choice(unique_groups, size=len(unique_groups), replace=True)
+            sample = np.concatenate(
+                [np.flatnonzero(groups == group) for group in sampled_groups]
+            )
         if np.unique(labels[sample]).size < 2:
             continue
         values.append(float(roc_auc_score(labels[sample], probabilities[sample])))
@@ -841,6 +849,12 @@ def train_probe(
     )
     bootstrap_samples = int(probe_config.get("bootstrap_samples", 1000))
     bootstrap_seed = int(probe_config.get("bootstrap_seed", 271828))
+    test_groups = np.asarray(
+        [
+            stable_hash(" ".join(records[index]["context"].lower().split()))
+            for index in test_indices
+        ]
+    )
     layer_results = []
     combined_results = []
 
@@ -860,6 +874,7 @@ def train_probe(
             test_probabilities,
             bootstrap_samples,
             bootstrap_seed + layer,
+            test_groups,
         )
         test_metrics["correctness_auroc_from_low_entropy_score"] = (
             float(roc_auc_score(correctness[test_indices], 1 - test_probabilities))
@@ -923,9 +938,6 @@ def train_probe(
             "test": safe_metrics(labels[test_indices], constant_test),
         }
     }
-    baseline_test_probabilities: dict[str, np.ndarray] = {
-        "constant_train_mean": constant_test
-    }
     for name in (
         "predictive_entropy",
         "answer_negative_log_likelihood",
@@ -947,7 +959,6 @@ def train_probe(
             else np.asarray([], dtype=np.float64)
         )
         test_probabilities = scalar.predict_proba(values[test_indices])[:, 1]
-        baseline_test_probabilities[name] = test_probabilities
         baselines[name] = {
             "validation": (
                 safe_metrics(labels[validation_indices], validation_probabilities)
@@ -961,6 +972,7 @@ def train_probe(
             test_probabilities,
             bootstrap_samples,
             bootstrap_seed + int(stable_hash(name)[:8], 16) % 10000,
+            test_groups,
         )
 
     shuffle_repetitions = int(probe_config.get("shuffle_repetitions", 20))
@@ -1016,11 +1028,11 @@ def train_probe(
             for row in layer_results
             if row["layer"] == selected_layer
         ),
-        "answer_nll_correctness_auroc": (
+        "raw_answer_log_likelihood_correctness_auroc": (
             float(
                 roc_auc_score(
                     correctness[test_indices],
-                    1 - baseline_test_probabilities["answer_negative_log_likelihood"],
+                    -nll[test_indices, 0],
                 )
             )
             if np.unique(correctness[test_indices]).size == 2
