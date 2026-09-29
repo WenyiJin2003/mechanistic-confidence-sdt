@@ -4,7 +4,7 @@ Last updated: 2026-09-29
 
 ## Outcome
 
-Stage 0 passed as a pipeline-validation experiment. Local generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end on Apple Silicon without CUDA, W&B, the OpenAI API, or another remote judge.
+Stage 0 passed as a pipeline-validation experiment. Generation, prompt-token hidden-state extraction, semantic grouping, entropy calculation, caching, linear probing, baseline evaluation, and leakage checks all ran end to end and passed their engineering checks.
 
 The matched Qwen 1.5B comparison also passed every engineering check. A subsequent 100-split cached audit found a weak hidden-state association that persisted across data re-partitioning: fixed layer 14 exceeded chance in 93/100 splits, and its five-fold cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. However, the best layer was not stable and output-based uncertainty remained much stronger.
 
@@ -18,7 +18,7 @@ A final cached-only audit then tested whether layer 14 provides one reproducible
 
 The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison, `configs/stage0_qwen15b_label_stability.yaml` for sampling reliability, `configs/stage0_qwen15b_500_confirm.yaml` for fresh-data confirmation, and `configs/stage0_qwen15b_direction_stability.yaml` for the cached direction audit.
 
-- Generator: `Qwen/Qwen2.5-0.5B-Instruct`, unquantized, float16, MPS
+- Generator: `Qwen/Qwen2.5-0.5B-Instruct`, unquantized, float16
 - Dataset: fixed answerable subset of SQuAD v2 validation, selection seed 1729
 - Global seed: 20260928; per-example generation seed is global seed plus fixed subset index
 - Prompt: Qwen chat template with context and a short-answer system instruction
@@ -27,7 +27,7 @@ The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` 
 - Transformer blocks: 4, 12, 20, and 24
 - Run A: 12 examples, 3 generations, normalized exact-match grouping
 - Run B: 64 examples, 5 generations, strict bidirectional NLI grouping
-- Entailment model: `cross-encoder/nli-deberta-v3-small`, float32, MPS
+- Entailment model: `cross-encoder/nli-deberta-v3-small`, float32
 - Probe: standardized logistic regression, C=1.0, maximum 2,000 iterations
 - Split: fixed 48/16 train/test split, seed 42
 - Entropy threshold: reconstruction-error split fitted on training semantic-entropy values only
@@ -46,15 +46,15 @@ The 200-example follow-up kept the same model, dataset-selection seed, prompt, s
 - 2,000 context-group bootstrap resamples for test AUROC intervals
 - SQuAD exact-match/F1 diagnostics and a hidden-state-plus-answer-NLL comparison
 
-The matched 1.5B run keeps the same 200 examples, five generations, prompt, seeds, 12-token limit, grouped split, NLI model, and analysis. It changes the generator to `Qwen/Qwen2.5-1.5B-Instruct` and uses approximately depth-matched blocks 5, 9, 14, 19, 23, and 28. The unquantized generator runs in bfloat16 on MPS; saved hidden vectors remain float16.
+The matched 1.5B run keeps the same 200 examples, five generations, prompt, seeds, 12-token limit, grouped split, NLI model, and analysis. It changes the generator to `Qwen/Qwen2.5-1.5B-Instruct` and uses approximately depth-matched blocks 5, 9, 14, 19, 23, and 28. The unquantized generator uses bfloat16; saved hidden vectors remain float16.
 
 The direction audit loads no language model and generates no new answers. It freezes the confirmation threshold at 0.9899617766489042, uses source train+validation indices as a 401-example development pool, and leaves the source 99-example test split unfit and unscored. Layer 14 is primary and layer 23 is an exploratory challenger. It uses five outer context-grouped folds repeated five times, four inner folds, C values from 0.0001 to 10, a one-standard-error selection rule favoring the smallest eligible C, 20 disjoint split-half comparisons, 100 matched shuffled-label null repetitions, 5,000 context bootstrap resamples, and strictly nested scalar stacking of answer NLL with out-of-fold probe scores.
 
 ## Deviations from the paper and upstream repository
 
 1. The paper studies substantially larger language models. This pilot tests 0.5B and 1.5B instruction models.
-2. The upstream local entailment path defaults to `microsoft/deberta-v2-xlarge-mnli`; the meaningful runs use `cross-encoder/nli-deberta-v3-small` to fit the local resource budget.
-3. Run A uses normalized exact match as a transparent smoke-test grouping method. Run B uses local NLI.
+2. The upstream entailment path defaults to `microsoft/deberta-v2-xlarge-mnli`; the meaningful runs use the smaller `cross-encoder/nli-deberta-v3-small`.
+3. Run A uses normalized exact match as a transparent smoke-test grouping method. Run B uses NLI.
 4. The probe target is the notebook's cluster-assignment semantic entropy. Other likelihood-weighted semantic-entropy variants were not used as targets.
 5. Only the final prompt token (TBG) is tested. The second-last generated token (SLT) is not tested.
 6. Run B tests four representative layers rather than every layer. The 0.5B follow-up uses six layers; the 1.5B comparison uses six approximately depth-matched layers rather than identical absolute layer numbers.
@@ -63,7 +63,7 @@ The direction audit loads no language model and generates no new answers. It fre
 9. Run B is the handoff's initial 50–100-example meaningful run (64 examples); the separate 200-example follow-up supplies the requested scale-up.
 10. The 64-example run uses a fixed train/test split. The 200-example run corrects this limitation with context-grouped train/validation/test partitions and validation-only layer selection.
 11. The follow-up adds SQuAD answer-correctness diagnostics and an answer-likelihood-augmented probe. These are Stage 0 diagnostics, not causal interventions or paper-level replications.
-12. Qwen 1.5B uses bfloat16 because float16 produced non-finite sampling probabilities on MPS before the first answer. This is a documented hardware-compatibility deviation, not quantization.
+12. Qwen 1.5B uses bfloat16 because float16 produced non-finite sampling probabilities during preflight. This is a numerical-stability choice, not quantization.
 13. Direction cosine, repeated nested CV, and scalar stacking are project-specific readiness checks rather than a direct reproduction of a reported paper table.
 14. The direction audit reuses the confirmation run's train+validation pool. Its 99-example test split was already reported earlier and is reserved rather than treated as a new confirmatory set.
 
@@ -117,7 +117,7 @@ The 200-example run completed end to end and passed all saved engineering checks
 - Semantic entropy had mean 1.1569 and standard deviation 0.4336, with seven observed values from 0 to log(5).
 - Hidden states have shape `[200, 6, 896]`, dtype float16, and all values are finite.
 - The final prompt-token position and prompt suffix were verified for every example. One 844-token prompt was left-truncated to the configured 768-token limit while preserving the question-bearing suffix.
-- Generation plus six-layer hidden-state extraction took 153.5 seconds on MPS. The first 64 generation records were reused from the earlier five-sample run; their hidden states were recomputed because the layer set changed.
+- The first 64 generation records were reused from the earlier five-sample run; their hidden states were recomputed because the layer set changed.
 - A full replay then reused 200/200 generation records, 200/200 hidden-state records, and all NLI judgments; the cached generator stage completed in 0.4 seconds. The saved manifest records this latest replay.
 - The saved clustering path contains 1,783 directed NLI judgments: 483 entailment, 1,041 neutral, and 259 contradiction. Mean winning-class probability was 0.935.
 
@@ -160,7 +160,7 @@ The 50 shuffled-label fits per layer produced mean test AUROCs between 0.506 and
 
 ## Matched Qwen 1.5B comparison
 
-The matched 1.5B run completed in 811.6 seconds for generation and six-layer hidden-state extraction on MPS. All saved engineering checks passed.
+The matched 1.5B run passed all saved engineering checks.
 
 - 1,000/1,000 generations were nonempty, with 565 distinct normalized answers.
 - Individual-sample exact match rose from 3.1% at 0.5B to 46.7%; mean sample F1 rose from 0.235 to 0.661.
@@ -251,9 +251,9 @@ Repeated test sets overlap heavily, so across-split percentiles are sensitivity 
 
 ## Semantic-entropy sampling reliability
 
-This predeclared diagnostic sampled 50 questions equally from five rank strata of the original five-answer entropy distribution. It reused the original 250 answers and generated 750 new answers locally, producing 20 answers per question. The fixed cutoff `0.5867070452737222` came from the original Run B training split and was not refitted. No probe was trained in this analysis.
+This predeclared diagnostic sampled 50 questions equally from five rank strata of the original five-answer entropy distribution. It reused the original 250 answers and generated 750 new answers, producing 20 answers per question. The fixed cutoff `0.5867070452737222` came from the original Run B training split and was not refitted. No probe was trained in this analysis.
 
-All answers and NLI decisions were cached. The run took 610.5 seconds on MPS and added 978 NLI judgments for the 10-answer prefix and 3,122 for the 20-answer prefix. Answers were non-degenerate: mean distinct normalized answers increased from 2.76 at five samples to 4.44 at ten and 7.46 at twenty; no question had only empty answers.
+All answers and NLI decisions were cached. The analysis added 978 NLI judgments for the 10-answer prefix and 3,122 for the 20-answer prefix. Answers were non-degenerate: mean distinct normalized answers increased from 2.76 at five samples to 4.44 at ten and 7.46 at twenty; no question had only empty answers.
 
 | Comparison against 20 answers | Label agreement | Cohen's kappa | Spearman correlation | Mean absolute entropy difference | Label flips |
 |---|---:|---:|---:|---:|---:|
@@ -264,13 +264,13 @@ The 5-vs-20 stratified-bootstrap 95% intervals were [0.74, 0.92] for agreement, 
 
 The fixed high-entropy fraction increased from 0.48 at five answers to 0.62 at ten and 0.60 at twenty. Of the eight 5-vs-20 flips, seven were low-to-high and one high-to-low. This shows the practical weakness of five samples: rare alternative meanings can be missed, making some questions look more certain than they do with more sampling. It also means the raw entropy distribution depends on sampling budget, so comparisons must keep that budget fixed.
 
-The result supports semantic entropy as a workable target for the next experiment, but does not validate a model's confidence by itself. It only measures the repeatability of labels constructed from sampled outputs and a small local NLI model.
+The result supports semantic entropy as a workable target for the next experiment, but does not validate a model's confidence by itself. It only measures the repeatability of labels constructed from sampled outputs and a smaller NLI model.
 
 ## Fresh 500-question Qwen 1.5B confirmation
 
 This preregistered run used 500 SQuAD questions with 10 answers per question. It excluded every ID, exact context, exact question, and question with token-Jaccard similarity at least 0.9 to the earlier 200-question run. The exclusion audit found zero overlaps. The internal train/validation/test split contained 307/94/99 questions and 243/81/81 unique contexts, with zero cross-split ID, question, context, or near-duplicate overlap.
 
-Generation and six-layer hidden-state extraction took 2,428.8 seconds on MPS. All 5,000 answers were nonempty, with 2,242 distinct normalized answers globally and a mean of 4.554 distinct answers per question. Individual-sample exact match was 0.502, mean F1 was 0.693, and 1,119/5,000 answers used all 12 tokens. Semantic entropy remained non-degenerate: mean 0.737, standard deviation 0.694, and cluster counts ranging from 1 to 10. Hidden states have shape `[500, 6, 1536]`, dtype float16, and finite values.
+All 5,000 answers were nonempty, with 2,242 distinct normalized answers globally and a mean of 4.554 distinct answers per question. Individual-sample exact match was 0.502, mean F1 was 0.693, and 1,119/5,000 answers used all 12 tokens. Semantic entropy remained non-degenerate: mean 0.737, standard deviation 0.694, and cluster counts ranging from 1 to 10. Hidden states have shape `[500, 6, 1536]`, dtype float16, and finite values.
 
 The train-only entropy threshold was 0.98996. Low/high label counts were 220/87 in training, 66/28 in validation, and 66/33 in test. Layer 14 was frozen as the primary analysis before generation; layer 28 and validation-selected layers were secondary.
 
@@ -420,5 +420,3 @@ Only a bidirectional, control-beating entropy change that preserves answer quali
 - `results/run_500_qwen15b_direction_stability/direction_stability_metrics.json`
 - `results/run_500_qwen15b_direction_stability/frozen_probe_directions.npz`
 - `plots/run_500_qwen15b_direction_stability.png`
-
-Current local storage: isolated environment 1.1 GB, checked-in result artifacts about 26 MB, plots about 656 KB, and the local Hugging Face cache 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.

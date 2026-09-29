@@ -1,26 +1,21 @@
-# Semantic Entropy Probes — Local Stage 0
+# Semantic Entropy Probes: Stage 0 Validation
 
-A resource-efficient validation of the [Semantic Entropy Probes](https://arxiv.org/abs/2406.15927) pipeline on Apple Silicon. All generation, entailment, hidden-state extraction, and analysis run locally; no OpenAI API, remote judge, CUDA, or Weights & Biases is used.
+## Conclusion
 
-**Research question:** can a small local language model expose a reproducible internal direction associated with semantic uncertainty, strong enough to justify a later causal intervention test?
+These experiments show that the sampled semantic-entropy label is linearly decodable from Qwen2.5-1.5B activations and that the resulting layer-14 probe direction is reproducible across grouped data splits. Using a fresh 500-question SQuAD dataset, the preregistered probe reached AUROC **0.718 [0.603, 0.821]** on the locked 99-question test split. In a separate nested cross-validation audit, its out-of-fold AUROC was **0.738 [0.680, 0.793]**, and independently trained directions had median cosine similarity **0.600**, compared with a shuffled-label upper bound of **0.123**.
 
-## Executive conclusion
+The internal signal is nevertheless weaker than answer likelihood. A strictly nested model combining answer negative log-likelihood with the probe score performed slightly worse than answer likelihood alone. The present evidence therefore supports a controlled activation-steering experiment, but it does **not** justify a mechanistic-confidence training loss or a claim of causal control.
 
-- The pipeline runs end to end and passes its engineering, caching, and leakage checks.
-- On 500 fresh SQuAD questions, the preregistered Qwen2.5-1.5B layer-14 probe predicts semantic entropy with test AUROC **0.718** and a context-bootstrap 95% interval of **[0.603, 0.821]**.
-- A cached nested-CV audit found a stable layer-14 direction: OOF AUROC **0.738 [0.680, 0.793]** and median disjoint-half cosine **0.600**, versus a shuffled-null upper bound of **0.123**.
-- Answer likelihood remains stronger. Corrected scalar stacking did not improve it: NLL-minus-combined log-loss was **-0.0027 [-0.0052, -0.0010]**.
+The 0.5B model was sufficient to validate the pipeline but produced weak and frequently truncated answers. Qwen2.5-1.5B is the appropriate model for the next experiment.
 
-**Decision:** the direction is stable enough for a small controlled activation-steering test. It has not shown incremental predictive value beyond output likelihood, so the project is still not ready for a mechanistic-confidence training loss.
+This is a pipeline-validation study rather than a paper-level replication.
 
-This is a **pipeline validation**, not a paper-level replication and not evidence of mechanistic causality.
-
-## Experiment in one diagram
+## Method overview
 
 ```mermaid
 flowchart LR
-    Q["SQuAD question + context"] --> G["10 local Qwen answers"]
-    G --> N["Local NLI clustering"]
+    Q["SQuAD question + context"] --> G["10 sampled Qwen answers"]
+    G --> N["NLI-based semantic clustering"]
     N --> E["Semantic-entropy label"]
     Q --> H["Final prompt-token hidden state"]
     H --> P["Linear probe"]
@@ -30,19 +25,7 @@ flowchart LR
     D --> S["Next: activation steering"]
 ```
 
-The probe is a standardized logistic regression trained to classify **high versus low sampled semantic entropy** from one saved activation. Its weight vector is the candidate intervention direction.
-
-The 0.5B model validated the software but produced weak, often truncated answers. Qwen2.5-1.5B improved answer quality enough for the confirmatory and direction analyses.
-
-### Terms in plain English
-
-| Term | Meaning here |
-|---|---|
-| Semantic entropy | How much the sampled answers disagree in meaning |
-| Probe | A simple linear classifier that reads one hidden state |
-| AUROC | Ranking quality: 0.5 is chance and 1.0 is perfect |
-| Direction cosine | Whether probes trained on different data learn the same internal direction; 1.0 means identical |
-| Answer NLL | How surprising the generated answer is to the model; a strong output-based uncertainty baseline |
+The probe is a standardized logistic regression trained to classify high versus low sampled semantic entropy from the final prompt-token activation. Its weight vector defines the candidate intervention direction.
 
 ## Confirmatory result
 
@@ -75,7 +58,7 @@ This follow-up used only the locked 401-example development pool. The previously
 
 ![Direction stability](plots/run_500_qwen15b_direction_stability.png)
 
-## Decision trail
+## Experimental progression
 
 | Phase | Purpose | Main outcome |
 |---|---|---|
@@ -86,23 +69,11 @@ This follow-up used only the locked 401-example development pool. The previously
 | Fresh 1.5B confirmation, 500 questions | Confirm the internal signal | Layer 14 passed; incremental-information gate failed |
 | Cached direction audit, 401 development questions | Test whether one intervention direction is reproducible | Direction gate passed; corrected incremental gate failed |
 
-```mermaid
-flowchart TD
-    A{"Pipeline works end to end?"} -->|Yes| B{"Fresh hidden-state signal?"}
-    B -->|Yes| C{"Direction stable across splits?"}
-    C -->|Yes| D{"Adds information beyond answer NLL?"}
-    D -->|No| E["Run a small causal steering diagnostic"]
-    E --> F{"Bidirectional effect, stronger than controls, quality preserved?"}
-    F -->|Yes| H["Consider a small training-loss pilot"]
-    F -->|No| I["Stop or revise the representation"]
-    F -.->|Current status: not tested| G["No mechanistic loss yet"]
-```
+## Interpretation
 
-## What the evidence supports
-
-| Supported | Not supported |
+| Supported by Stage 0 | Not established |
 |---|---|
-| Local end-to-end reproduction of the probe pipeline | Paper-level replication |
+| End-to-end reproduction of the probe pipeline | Paper-level replication |
 | A predictive layer-14 uncertainty association | A proof that the feature causes confidence |
 | A direction reproducible across grouped data splits | Incremental information beyond answer likelihood |
 | Proceeding to a small activation-steering diagnostic | Synthetic-document mechanistic-loss training |
@@ -110,7 +81,7 @@ flowchart TD
 
 ## Reproduce
 
-Requirements: Apple Silicon or CPU, Python 3.11, and [`uv`](https://docs.astral.sh/uv/).
+Requirements: Python 3.11 and [`uv`](https://docs.astral.sh/uv/).
 
 ```bash
 uv venv --python 3.11 .venv
@@ -124,7 +95,7 @@ uv pip install --python .venv/bin/python -r requirements-stage0.txt
   --config configs/stage0_qwen15b_direction_stability.yaml
 ```
 
-The 500-question generation takes about 41 minutes on an M3 MacBook Air. The cached direction audit takes about two minutes on CPU and loads no language model. Per-example caches under `cache/` are resumable and intentionally excluded from Git; checked-in aggregate artifacts are under `results/`.
+Per-example caches under `cache/` are resumable and intentionally excluded from Git. Checked-in aggregate artifacts are under `results/`. Detailed setup and execution notes are in [`README_STAGE0.md`](README_STAGE0.md).
 
 ## Repository guide
 
@@ -133,7 +104,7 @@ The 500-question generation takes about 41 minutes on an M3 MacBook Air. The cac
 - [`STATUS.md`](STATUS.md) — one-screen current state and next decision gate
 - [`results/README.md`](results/README.md) — result-directory index
 - [`configs/`](configs/) — frozen experiment configurations
-- [`stage0/`](stage0/) — local generation, clustering, probe, and stability code
+- [`stage0/`](stage0/) — Stage 0 generation, clustering, probe, and stability code
 - [`scripts/`](scripts/) — command-line entry points
 - [`semantic_entropy_probes/`](semantic_entropy_probes/) — preserved upstream probe notebook snapshot, not the main local pipeline
 - [`semantic_uncertainty/`](semantic_uncertainty/) — upstream semantic-uncertainty support code retained for provenance
@@ -142,9 +113,8 @@ The 500-question generation takes about 41 minutes on an M3 MacBook Air. The cac
 ## Important deviations
 
 - Generator size is 0.5B or 1.5B rather than the larger models studied in the paper.
-- The upstream `microsoft/deberta-v2-xlarge-mnli` judge is replaced with `cross-encoder/nli-deberta-v3-small` for local execution.
+- The upstream `microsoft/deberta-v2-xlarge-mnli` judge is replaced with the smaller `cross-encoder/nli-deberta-v3-small`.
 - Only selected layers and the final prompt token are tested.
-- Qwen2.5-1.5B uses unquantized bfloat16 on MPS because float16 sampling produced non-finite probabilities.
 
 See [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md) for the complete deviation and failure analysis.
 

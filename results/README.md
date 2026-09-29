@@ -6,7 +6,7 @@ Each directory contains checked-in aggregate artifacts. Large model weights and 
 |---|---|---|---|
 | `preflight/` | Qwen 0.5B, 5 questions | Device and generation check | `manifest.json` |
 | `run_a/` | Qwen 0.5B, 12 questions | Smoke test | `manifest.json` |
-| `run_b/` | Qwen 0.5B, 64 questions | Initial local-NLI pilot | `probe_metrics.json` |
+| `run_b/` | Qwen 0.5B, 64 questions | Initial NLI pilot | `probe_metrics.json` |
 | `run_200/` | Qwen 0.5B, 200 questions | Fixed-split follow-up | `probe_metrics.json` |
 | `run_200_qwen15b/` | Qwen 1.5B, 200 questions | Matched model comparison | `probe_metrics.json` |
 | `run_200_qwen15b_split_stability/` | Cached 1.5B data | Repeated-split and cross-fit audit | `stability_metrics.json` |
