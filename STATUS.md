@@ -27,6 +27,14 @@ The pipeline is validated. Qwen 1.5B substantially improved answer quality and v
 
 Test semantic-entropy label reliability by increasing 50 stratified questions from 5 to 20 generations. Compare the 5-sample and 20-sample estimates before collecting a fresh 500-question confirmation set or adding an internal mechanistic loss.
 
+## Semantic-entropy sampling reliability — in progress
+
+- Configuration: `configs/stage0_qwen15b_label_stability.yaml`
+- Reuse the existing five answers for 50 questions sampled equally from five original entropy-rank strata.
+- Add 15 answers per question, then compare 5-, 10-, and 20-sample semantic entropy under the frozen original training-only cutoff.
+- Predeclared gates: 5-vs-20 agreement at least 0.80, kappa at least 0.60, Spearman at least 0.70, and 10-vs-20 agreement at least 0.90.
+- No probe is retrained in this diagnostic; it tests the reliability of the target labels used to train a future probe.
+
 ## Cached split-stability audit — completed
 
 - 100/100 predeclared context-grouped splits were valid and passed leakage checks.

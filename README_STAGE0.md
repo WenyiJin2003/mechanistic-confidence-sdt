@@ -70,6 +70,16 @@ No generator or NLI model is loaded. Repeated-split percentiles are reported as 
 
 The audit is complete. Fixed layer 14 had median test AUROC 0.628 and exceeded chance in 93/100 splits; its cross-fitted AUROC was 0.588 with context-bootstrap 95% interval [0.507, 0.666]. The full preregistered gate did not pass because layers 14/19 were selected in only 33% of splits, while layer 28 was selected in 49%. This supports a weak internal association but not stable localization to one layer.
 
+### Semantic-entropy sampling reliability
+
+The next measurement checks whether five sampled answers provide a stable enough target for probe training. It selects 50 questions evenly across five original entropy-rank strata, reuses their existing five answers, adds 15 locally generated answers, and compares semantic entropy after 5, 10, and 20 samples:
+
+```bash
+.venv/bin/python scripts/run_label_stability.py --config configs/stage0_qwen15b_label_stability.yaml
+```
+
+The entropy cutoff remains frozen at `0.5867070452737222`, which was learned only from the original Run B training split. The predeclared pass criteria are at least 80% fixed-label agreement, Cohen's kappa of 0.60, and Spearman correlation of 0.70 for 5 versus 20 samples, plus at least 90% agreement for 10 versus 20. The ignored per-question cache makes additional generation resumable.
+
 The script is resumable. Generation records and hidden states are written per example before aggregate analysis, and completed cache entries are reused.
 
 ## Token and layer convention

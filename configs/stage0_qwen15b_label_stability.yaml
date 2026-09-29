@@ -1,0 +1,25 @@
+base_config: configs/stage0_qwen15b_200.yaml
+source_run: run_200_qwen15b
+
+analysis:
+  selection_seed: 424242
+  num_questions: 50
+  rank_strata: 5
+  questions_per_stratum: 10
+  existing_generations: 5
+  additional_generations: 15
+  prefixes: [5, 10, 20]
+  extra_seed_offset: 10000000
+  # Frozen from the original Run B training split; never refit on these 50 questions.
+  fixed_entropy_threshold: 0.5867070452737222
+  bootstrap_samples: 5000
+  bootstrap_seed: 161803
+  cache_dir: cache/label_stability_qwen15b
+  output_dir: results/run_50_qwen15b_label_stability
+  plot_path: plots/run_50_qwen15b_label_stability.png
+
+success_gates:
+  label_agreement_5_vs_20_min: 0.80
+  cohen_kappa_5_vs_20_min: 0.60
+  spearman_5_vs_20_min: 0.70
+  label_agreement_10_vs_20_min: 0.90
