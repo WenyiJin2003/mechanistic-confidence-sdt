@@ -31,6 +31,7 @@ uv pip install --python .venv/bin/python -r requirements-stage0.txt
 | Cached split audit | `.venv/bin/python scripts/run_split_stability.py --config configs/stage0_qwen15b_split_stability.yaml` |
 | Sampling reliability | `.venv/bin/python scripts/run_label_stability.py --config configs/stage0_qwen15b_label_stability.yaml` |
 | Fresh 1.5B confirmation | `.venv/bin/python scripts/run_stage0.py --config configs/stage0_qwen15b_500_confirm.yaml --run run_500_qwen15b_confirm` |
+| Cached direction and stacking audit | `.venv/bin/python scripts/run_direction_stability.py --config configs/stage0_qwen15b_direction_stability.yaml` |
 
 ## Artifacts
 
@@ -44,6 +45,8 @@ Each main run writes:
 - `manifest.json` — exact configuration, software versions, runtimes, and integrity checks.
 
 See [`results/README.md`](results/README.md) for the run index.
+
+The cached direction audit writes `direction_stability_metrics.json`, a frozen raw-space direction artifact `frozen_probe_directions.npz`, and `plots/run_500_qwen15b_direction_stability.png`. It uses only the original train+validation pool (401 examples); the locked 99-example test split is not fitted or scored.
 
 ## Cache behavior
 

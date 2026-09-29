@@ -6,9 +6,10 @@ A resource-efficient validation of the [Semantic Entropy Probes](https://arxiv.o
 
 - The pipeline runs end to end and passes its engineering, caching, and leakage checks.
 - On 500 fresh SQuAD questions, the preregistered Qwen2.5-1.5B layer-14 probe predicts semantic entropy with test AUROC **0.718** and a context-bootstrap 95% interval of **[0.603, 0.821]**.
-- Answer negative log-likelihood is substantially stronger at **0.911** AUROC. Adding layer 14 to this baseline reduces AUROC to **0.776**.
+- A cached nested-CV audit found a stable layer-14 direction: OOF AUROC **0.738 [0.680, 0.793]** and median disjoint-half cosine **0.600**, versus a shuffled-null upper bound of **0.123**.
+- Answer likelihood remains stronger. Corrected scalar stacking did not improve it: NLL-minus-combined log-loss was **-0.0027 [-0.0052, -0.0010]**.
 
-**Decision:** the internal activation contains a reproducible predictive signal, but it has not shown incremental value beyond output likelihood. The project is not yet ready for a mechanistic-confidence training loss.
+**Decision:** the direction is stable enough for a small controlled activation-steering test. It has not shown incremental predictive value beyond output likelihood, so the project is still not ready for a mechanistic-confidence training loss.
 
 ## What was tested
 
@@ -40,6 +41,20 @@ AUROC is 0.5 at chance and 1.0 for perfect ranking. Layer 14 exceeds both chance
 
 ![Probe performance by layer](plots/run_500_qwen15b_confirm_probe_performance_by_layer.png)
 
+## Direction-stability gate
+
+This follow-up used only the locked 401-example development pool. The previously reported 99-example test split was not fitted or scored.
+
+| Diagnostic | Layer 14 result | Gate |
+|---|---:|---:|
+| Repeated nested-CV OOF AUROC | 0.738 [0.680, 0.793] | Passed |
+| Disjoint-half raw-direction cosine | 0.600 median [0.347, 0.717] | Passed |
+| Shuffled-null median-cosine upper 95% | 0.123 | Passed |
+| Common-holdout score correlation | 0.900 median | Passed |
+| NLL-minus-combined log-loss | -0.0027 [-0.0052, -0.0010] | Failed incremental-value gate |
+
+![Direction stability](plots/run_500_qwen15b_direction_stability.png)
+
 ## Evidence chain
 
 | Phase | Purpose | Main outcome |
@@ -49,6 +64,7 @@ AUROC is 0.5 at chance and 1.0 for perfect ranking. Layer 14 exceeds both chance
 | Cached split audit | Test partition sensitivity | Fixed layer 14 cross-fitted AUROC 0.588 [0.507, 0.666] |
 | Sampling audit, 50 questions | Test label reliability | 5-vs-20 agreement 84%; 10-vs-20 agreement 90% |
 | Fresh 1.5B confirmation, 500 questions | Confirm the internal signal | Layer 14 passed; incremental-information gate failed |
+| Cached direction audit, 401 development questions | Test whether one intervention direction is reproducible | Direction gate passed; corrected incremental gate failed |
 
 ## Reproduce
 
@@ -61,9 +77,12 @@ uv pip install --python .venv/bin/python -r requirements-stage0.txt
 .venv/bin/python scripts/run_stage0.py \
   --config configs/stage0_qwen15b_500_confirm.yaml \
   --run run_500_qwen15b_confirm
+
+.venv/bin/python scripts/run_direction_stability.py \
+  --config configs/stage0_qwen15b_direction_stability.yaml
 ```
 
-The latest run takes about 41 minutes for generation on an M3 MacBook Air, followed by local NLI and probe analysis. Per-example caches under `cache/` are resumable and intentionally excluded from Git. Checked-in aggregate artifacts are under `results/`.
+The 500-question generation takes about 41 minutes on an M3 MacBook Air. The cached direction audit takes about two minutes on CPU and loads no language model. Per-example caches under `cache/` are resumable and intentionally excluded from Git; checked-in aggregate artifacts are under `results/`.
 
 ## Repository guide
 

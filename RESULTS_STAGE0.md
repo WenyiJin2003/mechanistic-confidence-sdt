@@ -10,11 +10,13 @@ The matched Qwen 1.5B comparison also passed every engineering check. A subseque
 
 A 50-question sampling-reliability diagnostic then increased each question from 5 to 20 generated answers. It passed all four predeclared point-estimate gates, but 8/50 five-sample labels changed and bootstrap intervals remained wide. This supported using 10 rather than 5 answers per question in a fresh 500-question confirmation.
 
-That fresh confirmation passed its predeclared internal-signal gate. Frozen layer 14 reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821] and exceeded the shuffled-label upper bound. However, answer NLL reached 0.911, and combining it with layer 14 significantly degraded AUROC. The mechanistic-readiness gate therefore failed. Together these results confirm a predictive internal association, not incremental information, a paper-level replication, or a mechanistic or causal result.
+That fresh confirmation passed its predeclared internal-signal gate. Frozen layer 14 reached test AUROC 0.718 with context-bootstrap 95% interval [0.603, 0.821] and exceeded the shuffled-label upper bound. However, answer NLL reached 0.911, and combining it with layer 14 significantly degraded AUROC.
+
+A final cached-only audit then tested whether layer 14 provides one reproducible direction suitable for intervention. On the locked 401-example development pool, repeated nested grouped CV reached OOF AUROC 0.738 [0.680, 0.793]. Independently trained directions had median raw-space cosine 0.600, versus a shuffled-null upper bound of 0.123; all eight direction gates passed. Corrected scalar stacking still slightly worsened NLL-only log-loss, so the direction is eligible for a small activation-steering diagnostic but **not** for mechanistic-loss training. These results show a stable predictive association, not a paper-level replication or a mechanistic or causal result.
 
 ## Exact configuration
 
-The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison, `configs/stage0_qwen15b_label_stability.yaml` for sampling reliability, and `configs/stage0_qwen15b_500_confirm.yaml` for fresh-data confirmation.
+The canonical machine-readable configurations are `configs/stage0_qwen05b.yaml` for Run A/Run B, `configs/stage0_qwen05b_200.yaml` for the 0.5B follow-up, `configs/stage0_qwen15b_200.yaml` for the matched 1.5B comparison, `configs/stage0_qwen15b_label_stability.yaml` for sampling reliability, `configs/stage0_qwen15b_500_confirm.yaml` for fresh-data confirmation, and `configs/stage0_qwen15b_direction_stability.yaml` for the cached direction audit.
 
 - Generator: `Qwen/Qwen2.5-0.5B-Instruct`, unquantized, float16, MPS
 - Dataset: fixed answerable subset of SQuAD v2 validation, selection seed 1729
@@ -46,6 +48,8 @@ The 200-example follow-up kept the same model, dataset-selection seed, prompt, s
 
 The matched 1.5B run keeps the same 200 examples, five generations, prompt, seeds, 12-token limit, grouped split, NLI model, and analysis. It changes the generator to `Qwen/Qwen2.5-1.5B-Instruct` and uses approximately depth-matched blocks 5, 9, 14, 19, 23, and 28. The unquantized generator runs in bfloat16 on MPS; saved hidden vectors remain float16.
 
+The direction audit loads no language model and generates no new answers. It freezes the confirmation threshold at 0.9899617766489042, uses source train+validation indices as a 401-example development pool, and leaves the source 99-example test split unfit and unscored. Layer 14 is primary and layer 23 is an exploratory challenger. It uses five outer context-grouped folds repeated five times, four inner folds, C values from 0.0001 to 10, a one-standard-error selection rule favoring the smallest eligible C, 20 disjoint split-half comparisons, 100 matched shuffled-label null repetitions, 5,000 context bootstrap resamples, and strictly nested scalar stacking of answer NLL with out-of-fold probe scores.
+
 ## Deviations from the paper and upstream repository
 
 1. The paper studies substantially larger language models. This pilot tests 0.5B and 1.5B instruction models.
@@ -60,6 +64,8 @@ The matched 1.5B run keeps the same 200 examples, five generations, prompt, seed
 10. The 64-example run uses a fixed train/test split. The 200-example run corrects this limitation with context-grouped train/validation/test partitions and validation-only layer selection.
 11. The follow-up adds SQuAD answer-correctness diagnostics and an answer-likelihood-augmented probe. These are Stage 0 diagnostics, not causal interventions or paper-level replications.
 12. Qwen 1.5B uses bfloat16 because float16 produced non-finite sampling probabilities on MPS before the first answer. This is a documented hardware-compatibility deviation, not quantization.
+13. Direction cosine, repeated nested CV, and scalar stacking are project-specific readiness checks rather than a direct reproduction of a reported paper table.
+14. The direction audit reuses the confirmation run's train+validation pool. Its 99-example test split was already reported earlier and is reserved rather than treated as a new confirmatory set.
 
 ## Run A — smoke test
 
@@ -297,29 +303,76 @@ Validation selected layer 23, which reached test AUROC 0.848. This is a valid se
 
 On the test split, 87.9% of questions had at least one exact-match answer and mean sample F1 was 0.713. The layer-14 score predicted correctness with AUROC 0.766; the validation-selected layer reached 0.898, while raw answer likelihood reached 0.920. These are diagnostics, not independently preregistered correctness-probe results.
 
+## Cached 500-question direction and stacking audit
+
+This preregistered follow-up used only the 401 source train+validation examples and their 324 unique contexts. The locked 99-example test set was not used for fitting, model selection, gate selection, or scoring. Source artifact hashes, example order, threshold, layer map, split membership, and context separation were verified before analysis.
+
+### Nested predictive performance
+
+| Layer | Role | Development OOF AUROC | Context-bootstrap 95% interval | Continuous-entropy Spearman |
+|---:|---|---:|---:|---:|
+| **14** | **primary** | **0.738** | **[0.680, 0.793]** | 0.428 |
+| 23 | exploratory challenger | 0.823 | [0.774, 0.868] | 0.598 |
+
+Every one of the 25 primary-layer outer fits selected `C=0.0001` using inner grouped CV and the frozen one-standard-error rule. Layer 23 remains exploratory and cannot replace layer 14 as the primary analysis.
+
+### Direction stability
+
+Each of 20 repetitions trained two probes on disjoint 40% context-group subsets and compared their raw-coordinate directions on a shared 20% holdout.
+
+| Layer-14 diagnostic | Result |
+|---|---:|
+| Median raw-direction cosine | **0.600** |
+| 2.5th–97.5th percentile across splits | [0.347, 0.717] |
+| Positive cosine fraction | 1.00 |
+| Cosine at least 0.5 fraction | 0.85 |
+| Median common-holdout score Spearman | 0.900 |
+| Adjacent-C cosine | 0.837 |
+| Shuffled-null median | -0.009 |
+| Shuffled-null 97.5th percentile | 0.123 |
+| Matched permutation p-value | 0.0099 |
+
+All eight preregistered layer-14 direction gates passed. The final raw-space directions and exact scaler/probe parameters are frozen in `frozen_probe_directions.npz`; the saved unit vectors have norm 1.0 and the artifact hash is recorded in the metrics JSON.
+
+### Corrected incremental-information test
+
+The earlier hidden-plus-NLL comparison concatenated all 1,536 activations with NLL. This audit instead used only a cross-fitted scalar probe score plus NLL. Each meta-training score, its scaler, and its selected probe regularization excluded that row and its context.
+
+| Model | Development OOF AUROC | OOF log-loss |
+|---|---:|---:|
+| Answer NLL only | **0.945** | **0.2807** |
+| Layer-14 probe score only | 0.744 | 0.5082 |
+| Answer NLL + layer-14 score | 0.943 | 0.2834 |
+
+NLL-minus-combined log-loss was -0.00270 with paired context-bootstrap 95% interval [-0.00516, -0.00097]; combined-minus-NLL AUROC was -0.00134 [-0.00296, -0.00008]. The internal score therefore did not add predictive value under this corrected low-dimensional test. Direction stability and incremental value answer different questions: the former now supports a small intervention test, while the latter still blocks mechanistic-loss training.
+
 ## Failure analysis and limitations
 
-- The 1.5B probe is more promising, but its selected-layer test interval still crosses chance and the test set contains only 41 questions.
+- The earlier 200-question 1.5B probe was underpowered: its selected-layer interval crossed chance and its test set contained only 41 questions.
 - The 100-split audit supports a weak signal but rejects a stable layer-14/19 localization claim; the best validation layer shifts and favors layer 28 in 49% of splits.
 - Continuous semantic-entropy prediction is weak, suggesting part of the binary AUROC result depends on how entropy is thresholded.
 - Five-answer labels are imperfect: 16% changed when expanded to 20 answers, and their bootstrap lower bounds did not clear the point-estimate gates.
 - The entropy cutoff was originally learned from a five-answer distribution. Holding it fixed prevents post hoc tuning but exposes a sampling-budget shift; the next run must use one fixed answer count throughout training and evaluation.
 - The fresh 500-question result confirms predictiveness but not incremental value: the frozen internal probe is substantially weaker than answer NLL, and the specified combined model performs worse than NLL alone.
-- Layer strength rises sharply in later blocks and validation selects layer 23 rather than the frozen layer 14. A probe direction intended for use as a loss must be shown stable across folds and regularization choices before intervention.
+- Layer strength rises sharply in later blocks, and exploratory layer 23 remains more predictive than primary layer 14. The direction audit resolves the immediate stability question for layer 14 but not why the signal is distributed this way.
 - Output likelihood baselines remain substantially stronger, and hidden-state-plus-NLL models do not improve on NLL alone.
 - Qwen 0.5B often emits incomplete or incorrect answers within the 12-token limit. This validates the machinery but makes the semantic target noisier than it would be for a stronger QA model.
 - Qwen 1.5B greatly improves answer quality, but 38% of questions produce only one semantic cluster, changing the target distribution relative to 0.5B.
 - The small NLI model is a major deviation. Its high-confidence classifications do not by themselves validate equivalence judgments on short answer fragments.
 - The follow-up's 41-example test set still gives wide per-layer confidence intervals. The 50 shuffled-label fits and context bootstrap quantify some instability, but this is not a multi-training-seed study.
-- There are 1,536 hidden-state features but only 120 training examples in the 1.5B run, so even regularized linear probes can overfit.
+- There are 1,536 hidden-state features. The direction audit uses 401 development examples, nested regularization, disjoint fits, and shuffled controls, but it is still not an independent new-data replication of the direction.
 - Only one token position and one prompt format are tested.
+- A stable decodable direction does not imply that moving activations along it will control uncertainty. Hook placement, zero-intervention equivalence, bidirectionality, random-direction controls, correctness preservation, and wrong-consensus behavior remain untested.
+- The reserved 99-example split was already observed in the confirmation report. It remains clean for intervention selection but is not a pristine new-data confirmation set; a later confirmatory steering run should use fresh questions if resources permit.
 - No correctness-targeted probe, causal intervention, SDT claim, biological claim, or mechanistic-causality claim is supported here.
 
 ## Recommendation
 
-Continue with Qwen 1.5B, but do not begin synthetic-document mechanistic-loss training yet. The fresh-data run confirms a real predictive internal association, while failing the stricter incremental-information gate.
+Continue with Qwen 1.5B, but do not begin synthetic-document mechanistic-loss training yet. The fresh-data run confirms a predictive internal association, and the cached audit now confirms that its layer-14 direction is reproducible. The corrected incremental-information gate still fails, and no causal intervention has been tested.
 
-The next step should be a cached probe-direction stability analysis over the 500 questions: grouped cross-fitting, multiple regularization strengths chosen without test access, and cosine similarity of learned directions across folds. This requires no new generation. If a stable direction emerges, the following experiment should be a small held-out activation-steering test with positive, negative, and random-direction controls. Only a reproducible intervention that changes semantic entropy in the intended direction without unacceptable correctness loss would justify promoting the direction into a synthetic-training loss.
+The next experiment should be a small bidirectional activation-steering diagnostic using the frozen layer-14 unit direction. Before sampling, confirm that the hook captures the same cached activation and that `alpha = 0` exactly reproduces baseline logits. Then compare negative-direction confidence steering, positive-direction uncertainty steering, zero-hook, matched-norm random direction, shuffled direction, and a matched output-temperature control. Evaluate semantic entropy together with exact match/F1, wrong-consensus rate, output length, and degeneration.
+
+Only a bidirectional, control-beating entropy change that preserves answer quality should justify designing a synthetic-document mechanistic-loss pilot. Otherwise, stop or revise the representation rather than scaling training.
 
 ## Artifacts
 
@@ -364,5 +417,8 @@ The next step should be a cached probe-direction stability analysis over the 500
 - `results/run_500_qwen15b_confirm/probe_metrics.json`
 - `results/run_500_qwen15b_confirm/manifest.json`
 - `plots/run_500_qwen15b_confirm_probe_performance_by_layer.png`
+- `results/run_500_qwen15b_direction_stability/direction_stability_metrics.json`
+- `results/run_500_qwen15b_direction_stability/frozen_probe_directions.npz`
+- `plots/run_500_qwen15b_direction_stability.png`
 
-Actual storage after both 200-example runs and the stability audit: isolated environment 1.1 GB, result artifacts about 11 MB, plots about 408 KB, and the local Hugging Face cache reports 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.
+Current local storage: isolated environment 1.1 GB, checked-in result artifacts about 26 MB, plots about 656 KB, and the local Hugging Face cache 5.4 GB. Cached model directories are 953 MB for Qwen 0.5B, 2.9 GB for Qwen 1.5B, and 552 MB for DeBERTa-small.

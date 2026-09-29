@@ -12,5 +12,6 @@ Each directory contains checked-in aggregate artifacts. Large model weights and 
 | `run_200_qwen15b_split_stability/` | Cached 1.5B data | Repeated-split and cross-fit audit | `stability_metrics.json` |
 | `run_50_qwen15b_label_stability/` | Qwen 1.5B, 50 questions | 5/10/20-sample label reliability | `label_stability_metrics.json` |
 | `run_500_qwen15b_confirm/` | Qwen 1.5B, 500 fresh questions | Preregistered confirmation | `probe_metrics.json` |
+| `run_500_qwen15b_direction_stability/` | Cached 1.5B development data | Nested direction stability and corrected stacking | `direction_stability_metrics.json` |
 
 The canonical narrative report is [`../RESULTS_STAGE0.md`](../RESULTS_STAGE0.md). Figures are under [`../plots/`](../plots/).
