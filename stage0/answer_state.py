@@ -8,6 +8,7 @@ the original fixed split.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import math
@@ -456,9 +457,26 @@ def _load_generator(config: dict[str, Any]) -> tuple[Any, Any, torch.device, tor
     device = choose_device(config["device"]["preference"])
     dtype = choose_dtype(config["device"]["dtype"], device)
     cache_dir = _resolve(model_config["hf_cache_dir"])
+    repository_cache_name = "models--" + model_config["id"].replace("/", "--")
+    snapshot_path = (
+        cache_dir
+        / repository_cache_name
+        / "snapshots"
+        / str(model_config["revision"])
+    )
+    if bool(model_config.get("local_files_only", True)):
+        if not snapshot_path.is_dir():
+            raise FileNotFoundError(
+                f"Pinned local model snapshot is missing: {snapshot_path}; refusing to download"
+            )
+        model_source = str(snapshot_path)
+        revision_kwargs: dict[str, Any] = {}
+    else:
+        model_source = model_config["id"]
+        revision_kwargs = {"revision": model_config["revision"]}
     tokenizer = AutoTokenizer.from_pretrained(
-        model_config["id"],
-        revision=model_config["revision"],
+        model_source,
+        **revision_kwargs,
         cache_dir=cache_dir,
         local_files_only=bool(model_config.get("local_files_only", True)),
     )
@@ -466,8 +484,8 @@ def _load_generator(config: dict[str, Any]) -> tuple[Any, Any, torch.device, tor
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token_id = tokenizer.eos_token_id
     model = AutoModelForCausalLM.from_pretrained(
-        model_config["id"],
-        revision=model_config["revision"],
+        model_source,
+        **revision_kwargs,
         cache_dir=cache_dir,
         local_files_only=bool(model_config.get("local_files_only", True)),
         trust_remote_code=bool(model_config.get("trust_remote_code", False)),
@@ -1559,6 +1577,11 @@ def run_stage0b(config_path: str | Path, mode: str = "full") -> dict[str, Any]:
         ),
         "representation_construction": {
             "teacher_forced_sequence": "retokenized cached prompt + exact cached answer token_ids",
+            "prompt_token_verification": (
+                "The source run did not store full prompt token-ID arrays. Stage 0B verifies "
+                "exact cached prompt text, pinned-tokenizer reconstruction, cached token count, "
+                "and cached final prompt token ID; answer token IDs are compared exactly."
+            ),
             "primary": "hidden_states[14] at final cached answer content token",
             "secondary": "mean hidden_states[14] over cached answer-content token span only",
             "exploratory": "hidden_states[23] at final cached answer content token",
@@ -1612,4 +1635,232 @@ def run_stage0b(config_path: str | Path, mode: str = "full") -> dict[str, Any]:
         "combined_minus_nll_auroc_95": paired_auc,
         "nll_minus_combined_log_loss_95": paired_log_loss,
         "elapsed_seconds": float(time.monotonic() - started),
+    }
+
+
+def _incremental_conclusion(metrics: dict[str, Any]) -> tuple[bool, str]:
+    paired_auc = metrics["paired_test_differences"][
+        "combined_minus_sequence_nll_auroc"
+    ]
+    paired_log_loss = metrics["paired_test_differences"][
+        "sequence_nll_minus_combined_log_loss"
+    ]
+    supported = bool(paired_auc["lower_95"] > 0 or paired_log_loss["lower_95"] > 0)
+    if supported:
+        conclusion = (
+            "This rotation supports incremental semantic-uncertainty information beyond "
+            "same-answer sequence NLL under the predeclared linear readout."
+        )
+    else:
+        conclusion = (
+            "This rotation does not show reliable incremental semantic-uncertainty "
+            "information beyond same-answer sequence NLL under the linear readout."
+        )
+    return supported, conclusion
+
+
+def _plot_rotation_summary(config: dict[str, Any], summaries: list[dict[str, Any]]) -> Path:
+    ordered = sorted(summaries, key=lambda row: int(row["observed_answer_index"]))
+    indices = [int(row["observed_answer_index"]) for row in ordered]
+    series = {
+        "Same-answer sequence NLL": [row["sequence_nll_auroc"] for row in ordered],
+        "Layer-14 final-token probe": [row["layer_14_probe_auroc"] for row in ordered],
+        "NLL + scalar probe score": [row["combined_auroc"] for row in ordered],
+    }
+    figure, axis = plt.subplots(figsize=(7.5, 4.8))
+    for name, values in series.items():
+        axis.plot(indices, values, marker="o", linewidth=2, label=name)
+    axis.axhline(0.5, color="black", linestyle="--", linewidth=1, alpha=0.65)
+    axis.set_xticks(indices)
+    axis.set_xlabel("Observed cached answer index")
+    axis.set_ylabel("Held-out AUROC")
+    axis.set_ylim(0.35, 1.0)
+    axis.set_title("Stage 0B leave-one-out rotations (question remains the unit)")
+    axis.legend(frameon=False)
+    figure.tight_layout()
+    path = ROOT / "plots" / "run_500_qwen15b_answer_state_rotations.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    figure.savefig(path, dpi=180)
+    plt.close(figure)
+    return path
+
+
+def run_stage0b_robustness(config_path: str | Path) -> dict[str, Any]:
+    """Run predeclared answer-index rotations as separate question-level analyses."""
+
+    started = time.monotonic()
+    config = load_stage0b_config(config_path)
+    sources = _load_sources(config)
+    records = sources["records"]
+    split = sources["split"]
+    indices = [int(value) for value in config["experiment"]["optional_robustness_indices"]]
+    primary_index = int(config["experiment"]["primary_observed_answer_index"])
+    if primary_index in indices or len(set(indices)) != len(indices):
+        raise ValueError("Robustness indices must be unique and exclude the primary index")
+    base_results_dir = _resolve(config["output"]["results_dir"])
+    primary_metrics_path = base_results_dir / "answer_state_probe_metrics.json"
+    if not primary_metrics_path.exists():
+        raise FileNotFoundError("Run the primary index-0 analysis before robustness rotations")
+    with primary_metrics_path.open("r", encoding="utf-8") as handle:
+        primary_metrics = json.load(handle)
+
+    summaries = [
+        {
+            "observed_answer_index": primary_index,
+            "role": "primary",
+            "sequence_nll_auroc": primary_metrics["baselines"][
+                "same_answer_sequence_nll"
+            ]["test"]["auroc"],
+            "layer_14_probe_auroc": primary_metrics["probes"][
+                "layer_14_final_answer_token"
+            ]["test"]["auroc"],
+            "combined_auroc": primary_metrics[
+                "combined_sequence_nll_plus_scalar_probe"
+            ]["test"]["auroc"],
+            "combined_minus_nll_auroc_95": primary_metrics[
+                "paired_test_differences"
+            ]["combined_minus_sequence_nll_auroc"],
+        }
+    ]
+    nli_path = sources["paths"]["nli_cache"]
+    nli_hash_before = _sha256(nli_path)
+    rotation_manifests = []
+    for observed_index in indices:
+        rotation_started = time.monotonic()
+        coverage = audit_nli_coverage(
+            records,
+            observed_index,
+            sources["nli_cache"],
+            sources["nli_model_id"],
+        )
+        target_rows, labels, threshold, used_judgments = build_leave_one_out_targets(
+            records,
+            observed_index,
+            sources["nli_cache"],
+            sources["nli_model_id"],
+            split["train"],
+        )
+        entropy = np.asarray(
+            [row["leave_one_out_semantic_entropy"] for row in target_rows],
+            dtype=np.float64,
+        )
+        state_arrays, state_metadata, runtime = extract_post_answer_states(
+            config,
+            records,
+            sources["source_manifest"],
+            observed_index,
+            limit=None,
+        )
+        for target_row, metadata in zip(target_rows, state_metadata):
+            if target_row["id"] != metadata["id"]:
+                raise ValueError("Rotation target and state row order differs")
+            target_row.update(
+                {
+                    key: metadata[key]
+                    for key in (
+                        "prompt_token_count",
+                        "answer_start_index",
+                        "answer_stop_index_exclusive",
+                        "final_answer_token_index",
+                        "prompt_ids_sha256",
+                        "answer_ids_sha256",
+                        "full_ids_sha256",
+                    )
+                }
+            )
+        metrics, predictions = analyze_answer_states(
+            config,
+            records,
+            target_rows,
+            labels,
+            entropy,
+            state_arrays,
+            split,
+            sources["source_semantic_rows"],
+        )
+        rotation_dir = base_results_dir / "robustness" / f"answer_index_{observed_index}"
+        _atomic_npz(rotation_dir / "post_answer_hidden_states.npz", state_arrays)
+        _atomic_jsonl(rotation_dir / "leave_one_out_entropy.jsonl", target_rows)
+        _atomic_jsonl(
+            rotation_dir / "used_leave_one_out_nli_judgments.jsonl",
+            [used_judgments[key] for key in sorted(used_judgments)],
+        )
+        _atomic_json(rotation_dir / "answer_state_probe_metrics.json", metrics)
+        _atomic_npz(
+            rotation_dir / "test_predictions.npz",
+            {
+                **{name: values.astype(np.float64) for name, values in predictions.items()},
+                "test_source_indices": np.asarray(split["test"], dtype=np.int64),
+                "test_labels": labels[split["test"]].astype(np.int8),
+                "test_entropy": entropy[split["test"]].astype(np.float64),
+                "test_context_groups": split["groups"][split["test"]].astype(str),
+            },
+        )
+        rotation_config = copy.deepcopy(config)
+        rotation_config["output"]["plot"] = str(
+            Path("plots")
+            / f"run_500_qwen15b_answer_state_answer_index_{observed_index}.png"
+        )
+        plot_path = _plot_comparison(rotation_config, metrics)
+        supported, conclusion = _incremental_conclusion(metrics)
+        manifest = {
+            "experiment": "Stage 0B predeclared answer-index robustness rotation",
+            "role": "secondary robustness; not a new independent sample",
+            "observed_answer_index": observed_index,
+            "question_is_statistical_unit": True,
+            "pooled_with_other_rotations": False,
+            "threshold_fit_on_training_only": threshold,
+            "source_split": split["audit"],
+            "source_artifact_sha256": sources["hashes"],
+            "nli_coverage": coverage,
+            "runtime": runtime,
+            "incremental_information_supported": supported,
+            "conclusion": conclusion,
+            "answer_generation_calls": 0,
+            "nli_inference_calls": 0,
+            "plot": str(plot_path.relative_to(ROOT)),
+            "elapsed_seconds": float(time.monotonic() - rotation_started),
+        }
+        _atomic_json(rotation_dir / "manifest.json", manifest)
+        rotation_manifests.append(manifest)
+        summaries.append(
+            {
+                "observed_answer_index": observed_index,
+                "role": "predeclared_secondary_robustness",
+                "sequence_nll_auroc": metrics["baselines"][
+                    "same_answer_sequence_nll"
+                ]["test"]["auroc"],
+                "layer_14_probe_auroc": metrics["probes"][
+                    "layer_14_final_answer_token"
+                ]["test"]["auroc"],
+                "combined_auroc": metrics[
+                    "combined_sequence_nll_plus_scalar_probe"
+                ]["test"]["auroc"],
+                "combined_minus_nll_auroc_95": metrics[
+                    "paired_test_differences"
+                ]["combined_minus_sequence_nll_auroc"],
+                "incremental_information_supported": supported,
+            }
+        )
+    if _sha256(nli_path) != nli_hash_before:
+        raise RuntimeError("NLI cache changed during robustness rotations")
+    summary_plot = _plot_rotation_summary(config, summaries)
+    summary = {
+        "experiment": "Stage 0B predeclared answer-index robustness",
+        "primary_index": primary_index,
+        "secondary_indices": indices,
+        "question_is_statistical_unit": True,
+        "rotations_pooled_as_independent_rows": False,
+        "results": summaries,
+        "summary_plot": str(summary_plot.relative_to(ROOT)),
+        "answer_generation_calls": 0,
+        "nli_inference_calls": 0,
+        "elapsed_seconds": float(time.monotonic() - started),
+    }
+    _atomic_json(base_results_dir / "robustness_summary.json", summary)
+    return {
+        "completed": True,
+        "mode": "robustness",
+        "results": summaries,
+        "elapsed_seconds": summary["elapsed_seconds"],
     }

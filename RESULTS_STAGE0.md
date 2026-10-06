@@ -1,6 +1,66 @@
 # Stage 0 Results
 
-Last updated: 2026-09-29
+Last updated: 2026-10-06
+
+## Stage 0B — post-answer hidden-state diagnostic
+
+> **Conclusion: after one answer has been observed, its layer-14 hidden state contains a readable association with the semantic variability of nine alternative answers, but it does not improve on the likelihood of that same observed answer. This diagnostic therefore does not yet justify treating the probe direction as an independent confidence signal or turning it into a training loss.**
+
+### Why this diagnostic was needed
+
+The original Stage 0 probe reads the model at the end of the prompt, before an answer is generated. Stage 0B asks a narrower question that is closer to the proposed training setup: **after the model has produced one answer, does its internal state contain information about how much its other possible answers would vary?**
+
+The comparison was designed to keep the information budget fair:
+
+```text
+one cached observed answer  ->  layer-14 hidden state and answer NLL
+other nine cached answers   ->  leave-one-out semantic-entropy target
+```
+
+For each of the 500 questions, answer 0 was the predeclared observed answer. The model was run in teacher-forcing mode on the exact cached prompt and exact cached answer token IDs. The primary feature was the layer-14 state at the final answer-content token. The target was semantic entropy recomputed from answers 1–9 using the same greedy, bidirectional-NLI clustering procedure. A new high/low threshold was fitted on the 307 training questions only. The existing context-grouped split was preserved exactly: 307 train, 94 validation, and 99 test questions, with no context overlap.
+
+The 20-question sanity gate and the full 500-question run passed. No answers were regenerated and no new NLI inference was performed.
+
+### Primary held-out results
+
+| Method | Information used | Test AUROC (95% context-bootstrap CI) | Log loss | Entropy Spearman |
+|---|---|---:|---:|---:|
+| Constant train mean | No answer-specific information | 0.500 | 0.679 | — |
+| Answer length | One observed answer | 0.629 [0.503, 0.746] | 0.655 | 0.367 |
+| Simple lexical controls | One observed answer | 0.644 [0.516, 0.766] | 0.663 | 0.408 |
+| **Layer-14 final-token probe** | **One observed answer** | **0.693 [0.584, 0.794]** | **1.417** | **0.453** |
+| **Same-answer sequence NLL** | **The same observed answer** | **0.773 [0.668, 0.864]** | **0.642** | **0.624** |
+| NLL + cross-fitted scalar probe score | The same observed answer | 0.763 [0.659, 0.855] | 0.639 | 0.597 |
+
+The primary probe was above chance, but it was weaker than same-answer NLL by 0.079 AUROC; the paired 95% interval was [-0.176, 0.015]. Adding a cross-fitted scalar probe score to NLL changed AUROC by -0.010 [-0.074, 0.049] and log loss by only 0.004 in favor of the combined model [-0.036, 0.039]. These intervals include zero, so there is **no reliable incremental gain over NLL**.
+
+The secondary layer-14 mean-over-answer-tokens representation reached AUROC 0.708 [0.587, 0.812]. The exploratory layer-23 final-token representation reached 0.669 [0.560, 0.773]. Neither changes the primary conclusion. Fifty shuffled-label fits for the primary representation had mean test AUROC 0.478 and an empirical 95% range of [0.390, 0.581].
+
+### Predeclared answer-index robustness check
+
+Repeating the full analysis with answer 3 as the observed answer produced the same ordering:
+
+| Method | Test AUROC (95% context-bootstrap CI) |
+|---|---:|
+| Layer-14 final-token probe | 0.720 [0.598, 0.827] |
+| Same-answer sequence NLL | 0.789 [0.699, 0.873] |
+| NLL + cross-fitted scalar probe score | 0.766 [0.659, 0.861] |
+
+For answer 3, the combined model changed AUROC relative to NLL by -0.023 [-0.091, 0.039]. This makes the result less likely to be an artifact of choosing answer 0. Answer index 7 was an optional extension, not a required gate, and was deferred to prioritize a complete, checked analysis before the meeting.
+
+### Interpretation and limitations
+
+- The post-answer state is **associated** with leave-one-out semantic entropy under a linear readout. It is not established as a causal control variable or a distinct confidence quantity.
+- The same answer's likelihood is a stronger and much better calibrated predictor. The probe's high log loss also cautions against interpreting its raw probabilities literally.
+- The target is estimated from nine samples and inherits errors from the local NLI clustering model.
+- Only two answer-index choices, two layers, and simple linear probes were tested. Answer wording, length, and likelihood remain plausible sources of the decodable association.
+- This experiment diagnoses representations only. It performs no activation intervention and trains no confidence loss.
+
+### Implication for the Casper meeting
+
+Stage 0B sharpens the decision point. We can say that **a post-answer layer-14 representation carries some information about future answer variability, but the current probe does not extract information beyond ordinary answer likelihood**. The useful meeting question is therefore not yet how to add this direction as a loss. It is what independent property the proposed mechanistic term should capture beyond likelihood, and what controlled evidence would be sufficient before using it during synthetic-document training.
+
+The original Stage 0 conclusions are preserved below; Stage 0B is a separate diagnostic and does not revise them.
 
 ## Outcome
 

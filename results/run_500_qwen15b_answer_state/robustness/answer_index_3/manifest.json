@@ -1,0 +1,63 @@
+{
+  "answer_generation_calls": 0,
+  "conclusion": "This rotation does not show reliable incremental semantic-uncertainty information beyond same-answer sequence NLL under the linear readout.",
+  "elapsed_seconds": 293.1411193329841,
+  "experiment": "Stage 0B predeclared answer-index robustness rotation",
+  "incremental_information_supported": false,
+  "nli_coverage": {
+    "coverage_complete": true,
+    "directed_nonduplicate_pair_occurrences": 20428,
+    "missing_cached_judgments": 0,
+    "nli_inference_calls": 0,
+    "normalized_equal_pair_occurrences": 15572,
+    "observed_answer_index": 3,
+    "unique_required_cached_judgments": 12374
+  },
+  "nli_inference_calls": 0,
+  "observed_answer_index": 3,
+  "plot": "plots/run_500_qwen15b_answer_state_answer_index_3.png",
+  "pooled_with_other_rotations": false,
+  "question_is_statistical_unit": true,
+  "role": "secondary robustness; not a new independent sample",
+  "runtime": {
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 188.6079618340009,
+    "examples": 500,
+    "generation_calls": 0,
+    "hidden_width": 1536,
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "nli_model_calls": 0,
+    "resumable_state_cache_hits": 0,
+    "teacher_forced_forward_calls": 500
+  },
+  "source_artifact_sha256": {
+    "generations": "9700babbe652d1a136350eefd2de90e06ea44ecd4f9d7d128cd5f066d5c2afab",
+    "manifest": "02aaeb3540fa3e890775fcad2f1bc80dd4525960212fdcf39dd27a60c3e4be7e",
+    "nli_cache": "4590958ab3b473012307c3c57250a3700c9c52f11cba665aff8fb716f9f4fb67",
+    "probe_metrics": "e8d502632305fdf267b38a93632da4bbead30fd453183b05f17be12ca4035a10",
+    "semantic_entropy": "71eb5b61a396f4a35bd7702be99302d1f79ca036c4305605e7c6c0e5284ca3e6"
+  },
+  "source_split": {
+    "context_overlap_counts": {
+      "train_test": 0,
+      "train_validation": 0,
+      "validation_test": 0
+    },
+    "membership_sha256": "71ec60438131250bf6f998e253458a11a5dd851e6cb827b0bc76f2b0109dc33d",
+    "method": "fixed_group_split_by_normalized_context",
+    "sizes": {
+      "test": 99,
+      "train": 307,
+      "validation": 94
+    },
+    "source_membership_reused_exactly": true,
+    "unique_contexts": {
+      "test": 81,
+      "train": 243,
+      "validation": 81
+    }
+  },
+  "threshold_fit_on_training_only": 0.8927869326327165
+}

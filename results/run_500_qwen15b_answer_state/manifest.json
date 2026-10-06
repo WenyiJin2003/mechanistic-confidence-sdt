@@ -1,0 +1,198 @@
+{
+  "artifacts": {
+    "hidden_states": {
+      "path": "results/run_500_qwen15b_answer_state/post_answer_hidden_states.npz",
+      "sha256": "1bb6e766e5ba0bcd6394341e95cac42b5de5b1e5cf54733759b39bcfbd07633d"
+    },
+    "metrics": {
+      "path": "results/run_500_qwen15b_answer_state/answer_state_probe_metrics.json",
+      "sha256": "609d66c6193770fd030fd798315d0354eadf68fd83f164bfec5f4bc36daede91"
+    },
+    "plot": {
+      "path": "plots/run_500_qwen15b_answer_state_comparison.png",
+      "sha256": "97ced9e6c9ba994fd47d0a2f46ab5e95e195c3617d82415e6b607a0a1f0d1b07"
+    },
+    "sanity_check": {
+      "path": "results/run_500_qwen15b_answer_state/sanity_check.json",
+        "sha256": "8934e48c669017bd32c04c5ce752aef488989982c90c8dc1ed56c148a210d47a"
+    },
+    "targets": {
+      "path": "results/run_500_qwen15b_answer_state/leave_one_out_entropy.jsonl",
+      "sha256": "8e0d130d14a28a4c09907f6e3d0e1914c8963fe92f747b2369c7274ee259d676"
+    },
+    "test_predictions": {
+      "path": "results/run_500_qwen15b_answer_state/test_predictions.npz",
+      "sha256": "fc428db07e48c14b55bd762b3cc5de088675fe81b605d82f7bfabd5bd851e666"
+    },
+    "used_nli_judgments": {
+      "path": "results/run_500_qwen15b_answer_state/used_leave_one_out_nli_judgments.jsonl",
+      "sha256": "01e664908c977a4a5d873a39a8013685d46c94ca8c0e53561090931712a36930"
+    }
+  },
+  "completed": true,
+  "configuration": {
+    "_config_path": "configs/stage0b_qwen15b_answer_state.yaml",
+    "analysis": {
+      "bootstrap_samples": 5000,
+      "bootstrap_seed": 161803,
+      "classifier_c": 1.0,
+      "cross_fit_folds": 5,
+      "max_iter": 3000,
+      "primary_likelihood_baseline": "same_answer_sequence_nll",
+      "ridge_alpha": 1.0,
+      "seed": 20261005,
+      "shuffle_repetitions": 50,
+      "shuffle_seed": 314159,
+      "tfidf_max_features": 1000
+    },
+    "device": {
+      "allow_cpu_fallback": true,
+      "dtype": "bfloat16",
+      "preference": [
+        "mps",
+        "cuda",
+        "cpu"
+      ]
+    },
+    "experiment": {
+      "exclude_eos_and_padding": true,
+      "expected_examples": 500,
+      "expected_generations_per_question": 10,
+      "expected_split_sizes": {
+        "test": 99,
+        "train": 307,
+        "validation": 94
+      },
+      "exploratory_layer": 23,
+      "optional_robustness_indices": [
+        3,
+        7
+      ],
+      "primary_layer": 14,
+      "primary_observed_answer_index": 0,
+      "primary_representation": "final_answer_content_token",
+      "sanity_examples": 20,
+      "secondary_representation": "mean_answer_content_tokens"
+    },
+    "model": {
+      "attn_implementation": "eager",
+      "hf_cache_dir": "cache/huggingface",
+      "id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "local_files_only": true,
+      "max_prompt_tokens": 768,
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "trust_remote_code": false
+    },
+    "output": {
+      "plot": "plots/run_500_qwen15b_answer_state_comparison.png",
+      "results_dir": "results/run_500_qwen15b_answer_state",
+      "resumable_state_cache": "cache/answer_state/run_500_qwen15b_answer_state",
+      "run_name": "run_500_qwen15b_answer_state"
+    },
+    "source": {
+      "expected_sha256": {
+        "generations": "9700babbe652d1a136350eefd2de90e06ea44ecd4f9d7d128cd5f066d5c2afab",
+        "manifest": "02aaeb3540fa3e890775fcad2f1bc80dd4525960212fdcf39dd27a60c3e4be7e",
+        "nli_cache": "4590958ab3b473012307c3c57250a3700c9c52f11cba665aff8fb716f9f4fb67",
+        "probe_metrics": "e8d502632305fdf267b38a93632da4bbead30fd453183b05f17be12ca4035a10",
+        "semantic_entropy": "71eb5b61a396f4a35bd7702be99302d1f79ca036c4305605e7c6c0e5284ca3e6"
+      },
+      "generations": "results/run_500_qwen15b_confirm/generations.jsonl",
+      "manifest": "results/run_500_qwen15b_confirm/manifest.json",
+      "nli_cache": "cache/entailment/nli_cache.json",
+      "probe_metrics": "results/run_500_qwen15b_confirm/probe_metrics.json",
+      "run_name": "run_500_qwen15b_confirm",
+      "semantic_entropy": "results/run_500_qwen15b_confirm/semantic_entropy.jsonl"
+    }
+  },
+  "elapsed_seconds_total": 270.5073411669582,
+  "experiment": "STAGE 0B — POST-ANSWER HIDDEN-STATE DIAGNOSTIC",
+  "incremental_information_supported": false,
+  "information_budget": {
+    "combined": "same-answer sequence NLL + scalar cross-fitted hidden-probe score",
+    "comparable": true,
+    "contextual_old_baselines": "ten answers; explicitly not apples-to-apples",
+    "primary_hidden_probe": "one observed answer",
+    "primary_nll_baseline": "the same one observed answer"
+  },
+  "nli_coverage": {
+    "coverage_complete": true,
+    "directed_nonduplicate_pair_occurrences": 20410,
+    "missing_cached_judgments": 0,
+    "nli_inference_calls": 0,
+    "normalized_equal_pair_occurrences": 15590,
+    "observed_answer_index": 0,
+    "unique_required_cached_judgments": 12436
+  },
+  "observed_answer_index": 0,
+  "primary_conclusion": "Under this representation and linear readout, the post-answer hidden state does not show reliable incremental semantic-uncertainty information beyond the likelihood of the same answer.",
+  "prohibited_operations": {
+    "activation_steering": false,
+    "answer_generation_calls": 0,
+    "confidence_loss_training": false,
+    "nli_inference_calls": 0,
+    "openai_api_calls": 0
+  },
+  "representation_construction": {
+    "eos_padding_included": false,
+    "exploratory": "hidden_states[23] at final cached answer content token",
+    "primary": "hidden_states[14] at final cached answer content token",
+    "prompt_token_verification": "The source run did not store full prompt token-ID arrays. Stage 0B verifies exact cached prompt text, pinned-tokenizer reconstruction, cached token count, and cached final prompt token ID; answer token IDs are compared exactly.",
+    "secondary": "mean hidden_states[14] over cached answer-content token span only",
+    "teacher_forced_sequence": "retokenized cached prompt + exact cached answer token_ids"
+  },
+  "runtime": {
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 170.05279279098613,
+    "examples": 500,
+    "generation_calls": 0,
+    "hidden_width": 1536,
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "nli_model_calls": 0,
+    "resumable_state_cache_hits": 20,
+    "teacher_forced_forward_calls": 480
+  },
+  "sanity_gate_passed": true,
+  "source_artifact_sha256": {
+    "generations": "9700babbe652d1a136350eefd2de90e06ea44ecd4f9d7d128cd5f066d5c2afab",
+    "manifest": "02aaeb3540fa3e890775fcad2f1bc80dd4525960212fdcf39dd27a60c3e4be7e",
+    "nli_cache": "4590958ab3b473012307c3c57250a3700c9c52f11cba665aff8fb716f9f4fb67",
+    "probe_metrics": "e8d502632305fdf267b38a93632da4bbead30fd453183b05f17be12ca4035a10",
+    "semantic_entropy": "71eb5b61a396f4a35bd7702be99302d1f79ca036c4305605e7c6c0e5284ca3e6"
+  },
+  "source_run": "run_500_qwen15b_confirm",
+  "source_split": {
+    "context_overlap_counts": {
+      "train_test": 0,
+      "train_validation": 0,
+      "validation_test": 0
+    },
+    "membership_sha256": "71ec60438131250bf6f998e253458a11a5dd851e6cb827b0bc76f2b0109dc33d",
+    "method": "fixed_group_split_by_normalized_context",
+    "sizes": {
+      "test": 99,
+      "train": 307,
+      "validation": 94
+    },
+    "source_membership_reused_exactly": true,
+    "unique_contexts": {
+      "test": 81,
+      "train": 243,
+      "validation": 81
+    }
+  },
+  "target_construction": "Greedy bidirectional-NLI semantic clustering of the other nine cached answers, with a new high/low threshold fitted only on the preserved training questions.",
+  "versions": {
+    "cuda_available": false,
+    "mps_available": true,
+    "mps_built": true,
+    "numpy": "2.4.6",
+    "platform": "macOS-15.7.4-arm64-arm-64bit",
+    "python": "3.11.14",
+    "scikit_learn": "1.9.1",
+    "torch": "2.14.0",
+    "transformers": "4.57.6"
+  }
+}

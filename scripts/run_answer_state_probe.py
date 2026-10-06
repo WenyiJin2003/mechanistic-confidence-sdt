@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from stage0.answer_state import run_stage0b  # noqa: E402
+from stage0.answer_state import run_stage0b, run_stage0b_robustness  # noqa: E402
 
 
 def main() -> int:
@@ -23,12 +23,16 @@ def main() -> int:
     )
     parser.add_argument(
         "--mode",
-        choices=("sanity", "full"),
+        choices=("sanity", "full", "robustness"),
         default="full",
         help="Run only the 20-question gate or the complete primary analysis.",
     )
     args = parser.parse_args()
-    result = run_stage0b(args.config, mode=args.mode)
+    result = (
+        run_stage0b_robustness(args.config)
+        if args.mode == "robustness"
+        else run_stage0b(args.config, mode=args.mode)
+    )
     print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
     return 0
 
