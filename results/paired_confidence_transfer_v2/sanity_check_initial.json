@@ -1,0 +1,75 @@
+{
+  "checks": {
+    "exact_cache_resume": true,
+    "finite_hidden_shape": true,
+    "four_fact_types_checked": true,
+    "intended_token_positions": true,
+    "neutral_response_and_absolute_position_match": true,
+    "no_generation_nli_or_api": true,
+    "within_prompt_group_invariance": true
+  },
+  "first_pass_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 0,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 11.377741834003245,
+    "forward_calls": 40,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_extraction_group": true,
+    "prompt_invariance_scope": "source + experiment + format + evidence condition",
+    "right_padding_reference": "written variants sharing an identical prompt; neutral absolute token positions are matched",
+    "shape": [
+      40,
+      2,
+      4,
+      1536
+    ]
+  },
+  "outcome_scores_inspected": false,
+  "passed": true,
+  "resume_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 40,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 0.30796945900510764,
+    "forward_calls": 0,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_extraction_group": true,
+    "prompt_invariance_scope": "source + experiment + format + evidence condition",
+    "right_padding_reference": "written variants sharing an identical prompt; neutral absolute token positions are matched",
+    "shape": [
+      40,
+      2,
+      4,
+      1536
+    ]
+  },
+  "source_ids": [
+    "v2-access_code-01",
+    "v2-room_assignment-01",
+    "v2-release_year-01",
+    "v2-material-01"
+  ]
+}

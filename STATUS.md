@@ -1,38 +1,48 @@
 # Project Status
 
-Last updated: 2026-10-06
+Last updated: 7 October 2026. **Frozen Transfer v2 is complete.**
 
-## Latest diagnostic: Stage 0B
+**Decision: do not use the primary boundary readout as an SDT loss. Preregister
+fresh confirmation of the response-content candidates next.**
 
-**Conclusion:** the post-answer hidden state contains a readable semantic-uncertainty signal, but it does **not** add reliable held-out information beyond the likelihood of the same answer.
+The unchanged v1 post-response layer-14 `<|im_end|>` expressed-certainty
+direction ordered 87/96 new wording pairs
+(90.6%, source-bootstrap interval 81.3–97.9%) and 35/48 neutral QA evidence pairs
+(72.9%, 60.4–85.4%). The latter holds answer tokens and prompt lengths fixed.
+Raw negative mean-token NLL ordered all 48 evidence pairs correctly, passing
+the independent manipulation check.
 
-| Observed answer | Same-answer NLL | Layer-14 post-answer probe | NLL + scalar probe |
-|---|---:|---:|---:|
-| Index 0 (primary) | **0.773** | 0.693 | 0.763 |
-| Index 3 (predeclared robustness) | **0.789** | 0.720 | 0.766 |
+## Why the primary gate fails
 
-For the primary run, combined-minus-NLL AUROC was **-0.010**, with a context-grouped 95% interval of **[-0.074, 0.049]**. The log-loss improvement interval also crossed zero. The 20-question gate and all 500 primary examples passed; the run made **zero new generation and zero NLI inference calls**. Optional index 7 was not run because the meeting-time result was already stable across the primary and index-3 analyses.
+Release-year evidence ordering was 4/12 (33.3%), violating the registered rule
+that no fact type fall below chance. Access codes scored 8/12, materials 11/12,
+and rooms 12/12. Pooled evidence ordering is above chance in this sample, but
+the required robustness gate fails. The manipulation itself is valid.
 
-**Research implication:** do not convert this probe into a confidence loss on the basis of Stage 0B. The result does not erase the earlier Stage 0 association or direction-stability finding; it answers a narrower question and shows that the tested post-answer linear representation is not better than same-answer likelihood. The next meeting should clarify the intended confidence target and why an internal loss should add something that ordinary likelihood does not already provide.
+Natural wording passed its registered checks, including correct/wrong content.
+The study still labels supplied-context sufficiency and expressed certainty,
+not subjective confidence or calibration. Strong individual null directions
+and the drop to 50% evidence ordering after removing one estimated correctness
+direction limit mechanistic interpretation.
 
-Full details are in the separate **Stage 0B** section of [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md).
+## Next gate
 
-## Project decision
+The separately frozen layer-14 final-content and response-mean candidates
+reached 93.8% evidence ordering, with wording scores of 86.5% and 100%.
+They cannot rescue the failed primary endpoint. A new confirmation should
+prospectively fix candidate positions and gates, then test fresh facts, varied
+field names, and same-proposition wording controls against raw likelihood.
 
-**Proceed:** run a controlled activation-steering experiment with the frozen layer-14 direction.
+The eventual aim remains ordinary synthetic-document training (SDT) plus a
+possible auxiliary internal-confidence loss that preserves answer accuracy.
+Transfer confirmation comes before causal and answer-quality checks; no
+confidence loss has been validated or trained.
 
-**Do not proceed yet:** begin synthetic-document mechanistic-loss training. That step requires a bidirectional entropy change that outperforms the controls and preserves answer quality.
-
-| Question | Answer |
-|---|---|
-| Is the pipeline validated? | **Yes** |
-| Is the layer-14 direction stable enough for an intervention test? | **Yes** |
-| Is a mechanistic-confidence training loss justified? | **No** |
-
-## Immediate experiment
-
-1. Verify the layer-14 hook against cached activations and require `alpha = 0` to reproduce baseline logits.
-2. Compare negative-direction, positive-direction, zero-hook, matched random, shuffled-direction, and matched-temperature conditions.
-3. Measure semantic entropy, exact match/F1, wrong consensus, output length, and degeneration.
-
-The canonical quantitative record is [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md). Reproduction commands are in [`README_STAGE0.md`](README_STAGE0.md), and artifacts are indexed in [`results/README.md`](results/README.md).
+Read the [v2 results](CONFIDENCE_TRANSFER_RESULTS_V2.md),
+[unchanged preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and
+[execution runbook](CONFIDENCE_TRANSFER_README_V2.md). The
+[experiment map](EXPERIMENT_MAP.md) distinguishes the target, token position,
+data, and fitted direction used in each stage. The
+[root README](README.md) distinguishes this work from the preserved
+[Stage 0/0B semantic-uncertainty diagnostics](RESULTS_STAGE0.md) and
+[paired expressed-certainty pilot v1](PAIRED_CONFIDENCE_RESULTS_V1.md).

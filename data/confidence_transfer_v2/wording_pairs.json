@@ -1,0 +1,218 @@
+[
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "I think that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "think adds epistemic reservation to the same declarative claim",
+    "single_same_proposition": true,
+    "wording_id": "N01"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "It seems that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "seems adds epistemic reservation to the same declarative claim",
+    "single_same_proposition": true,
+    "wording_id": "N02"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "Perhaps {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "perhaps qualifies only the same declarative claim",
+    "single_same_proposition": true,
+    "wording_id": "N03"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "{claim} I could be mistaken.",
+    "quote_free": true,
+    "scoreless_review": "could be mistaken qualifies only the same preceding claim",
+    "single_same_proposition": true,
+    "wording_id": "N04"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "My answer is that {lower_claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "It seems to me that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "seems to me qualifies the same answer proposition",
+    "single_same_proposition": true,
+    "wording_id": "N05"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim} That is my response.",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "{claim} I could be mistaken.",
+    "quote_free": true,
+    "scoreless_review": "same-word-count suffixes contrast an answer declaration with fallibility",
+    "single_same_proposition": true,
+    "wording_id": "N06"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim} That is the answer I give for this item.",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "I think that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "answer-declaration suffix adds no evidence; think qualifies the same claim",
+    "single_same_proposition": true,
+    "wording_id": "N07"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim} This is the answer I would give for this item.",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "It seems that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "answer-declaration suffix adds no evidence; seems qualifies the same claim",
+    "single_same_proposition": true,
+    "wording_id": "N08"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "For this item, my answer is that {lower_claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "Perhaps {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "answer framing adds no evidence; perhaps qualifies the same claim",
+    "single_same_proposition": true,
+    "wording_id": "N09"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim} I give this as my answer for the item.",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "My working answer is that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "answer-declaration suffix adds no evidence; working answer qualifies the same claim",
+    "single_same_proposition": true,
+    "wording_id": "N10"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "{claim} This is my answer to the question for this item.",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "I think {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "answer-declaration suffix adds no evidence; think qualifies the same claim",
+    "single_same_proposition": true,
+    "wording_id": "N11"
+  },
+  {
+    "additional_answer": false,
+    "additional_evidence": false,
+    "assigned_fact_types": [
+      "access_code",
+      "material",
+      "release_year",
+      "room_assignment"
+    ],
+    "assigned_source_count": 4,
+    "confident_template": "For this item, I give the following answer: {lower_claim}",
+    "excluded_v1_words_absent": true,
+    "hedged_template": "It might be that {lower_claim}",
+    "quote_free": true,
+    "scoreless_review": "answer framing adds no evidence; might qualifies the same claim",
+    "single_same_proposition": true,
+    "wording_id": "N12"
+  }
+]

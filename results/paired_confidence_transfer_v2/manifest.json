@@ -1,0 +1,183 @@
+{
+  "artifacts": {
+    "data_audit.json": "d77b5a3d0077deec411326145d1fc87d4f3907e5e6c675440724a8a70450ab4f",
+    "extraction_rows.jsonl": "892d3474a1cb10c7c1afb5e50529b57125df6074bf3781e8a7ec7e7141b78874",
+    "frozen_control_parameters.npz": "71b285ec244e7aa636eca1cc4be043d476dd00b02aa4ce4d6ae7772afb5badf7",
+    "frozen_control_provenance.json": "d0f9d5d8df1f2dd5e90278e75dd2a5278a0cbfc55c83adbc1af7528b3ed808d7",
+    "frozen_readout_and_null_directions.npz": "169bb96b00a12c7010dfda122cf1989b5e5c74416c930e7cc453da79236c1257",
+    "hidden_states.npz": "e398b46befff2e68fbf2fb4406bd8903ebaabe15fc47f1a9a5a5f08919a28a6b",
+    "sanity_check.json": "c13e4ad1c889c822f996c0398e21100277aa77aca535db6575d4261490bce3ce",
+    "sanity_check_initial.json": "e211f90c136b642c114f376aee119ca7189ba3b88cd483081a1572d221b6d686",
+    "transfer_metrics.json": "667f62e25cea2a61e14ca9bb99923f401cec33bbaed3e94c4d1982b07ee6e43a",
+    "transfer_results.png": "9a19fb6787dbf98af5c91ec3e4202896ca63bdf6162311e31b3e4c7e37a30f23"
+  },
+  "configuration": {
+    "analysis": {
+      "bootstrap_samples": 2000,
+      "bootstrap_seed": 161803,
+      "frozen_baseline_c": 1.0,
+      "frozen_baseline_max_iter": 2000,
+      "natural_correctness_accuracy_min": 0.6,
+      "nll_manipulation_accuracy_min": 0.75,
+      "no_v2_fitting": true,
+      "null_repetitions": 200,
+      "null_seed": 20261007,
+      "ordering_accuracy_min": 0.65,
+      "primary_direction": "layer14_boundary",
+      "random_directions": 200,
+      "seed": 20261008
+    },
+    "data": {
+      "source_items": "data/confidence_transfer_v2/source_items.jsonl",
+      "variants": "data/confidence_transfer_v2/variants.jsonl"
+    },
+    "dataset": {
+      "expected_responses": 480,
+      "fact_types": [
+        "access_code",
+        "room_assignment",
+        "release_year",
+        "material"
+      ],
+      "natural_wording_types": 12,
+      "num_sources": 48,
+      "seed": 20261008,
+      "sources_per_fact_type": 12
+    },
+    "experiment": "paired_confidence_transfer_v2",
+    "model": {
+      "attention": "eager",
+      "boundary_token": "<|im_end|>",
+      "boundary_token_id": 151645,
+      "id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "layers": [
+        14,
+        23
+      ],
+      "max_tokens": 1024,
+      "positions": [
+        "boundary",
+        "final_content",
+        "response_mean",
+        "prompt"
+      ],
+      "prompt_control_atol": 1e-06,
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "snapshot": "cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "output": {
+      "cache_dir": "cache/confidence_transfer_v2",
+      "plot": "plots/paired_confidence_transfer_v2.png",
+      "results_dir": "results/paired_confidence_transfer_v2"
+    },
+    "runtime": {
+      "cpu_fallback": true,
+      "device_preference": [
+        "mps",
+        "cuda",
+        "cpu"
+      ],
+      "dtype": "bfloat16",
+      "shared_repo": "../semantic-entropy-probes-stage0"
+    },
+    "source_artifacts": {
+      "directions": {
+        "path": "results/paired_confidence_phase_b/readout_directions.npz",
+        "sha256": "62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c"
+      },
+      "extraction_rows": {
+        "path": "results/paired_confidence_phase_b/extraction_rows.jsonl",
+        "sha256": "3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c"
+      },
+      "hidden_states": {
+        "path": "results/paired_confidence_phase_b/hidden_states.npz",
+        "sha256": "1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46"
+      },
+      "pair_metrics": {
+        "path": "results/paired_confidence_phase_b/pair_metrics.json",
+        "sha256": "46b1e6d65607fa26e685610568e69c4517d30798ac1d855d036a3ec99eaaabb5"
+      }
+    }
+  },
+  "data_gate_passed": true,
+  "data_sha256": {
+    "data/confidence_transfer_v2/data_audit.json": "d77b5a3d0077deec411326145d1fc87d4f3907e5e6c675440724a8a70450ab4f",
+    "data/confidence_transfer_v2/manual_audit.md": "3d829a3297e90a2354c6ee1332967e9ba95f7ab4a31ba7e1a743ecf37e8d62b4",
+    "data/confidence_transfer_v2/source_items.jsonl": "d3110a2fc4ab6b3ca5fde0e663f638314fd21a1668ed4a546abf8236127e5c6a",
+    "data/confidence_transfer_v2/variants.jsonl": "700e98f7cec6eb95ac558ee1e37e0be5fbb6cb881408d269fce8f01b14e2681c",
+    "data/confidence_transfer_v2/wording_pairs.json": "4c23cc15e872fe4594f16ce1165b7ae4fe1b1a9143835d75be251cc608854afc"
+  },
+  "elapsed_seconds": 83.16399545800232,
+  "experiment": "Frozen confidence-readout transfer v2",
+  "implementation_commit": "54121d9237bd34a477ad53c16cd2e1b237bd0039",
+  "implementation_sha256": {
+    "confidence_pilot/__init__.py": "df3cdb523105e27e95b80ae1e8315db4b686aba8e3baf63337d0d7559dc7a5d9",
+    "confidence_pilot/analyze_pairs.py": "4615abd081b1f56dd123235327581d39be35435f6e991f6f73cd684f6b189537",
+    "confidence_pilot/common.py": "6d3bc8376c557a1541caaae4a48990aef841ddef2a4caab1f4e9e3c56fb0c933",
+    "confidence_pilot/data_validation.py": "bbe0a545cebf7dbd01568eba1bc3433cd74a6b942991c2d47662a49db3bd87d6",
+    "confidence_pilot/extract_activations.py": "14d709334751532f4d6b89a4d5575dff5233bb05acaac7cb24bf36ea8bf57f5e",
+    "confidence_pilot/transfer_analysis_v2.py": "0f8b2ac67d3d631b225ac6c2e2f8823175e27d00be030f1d12ef9afb8aeab6a8",
+    "confidence_pilot/transfer_data_v2.py": "5d66079248fb2a96cbf96de4e0fbf31aeacb71aae2ca611677368e905953c86a",
+    "confidence_pilot/transfer_run_v2.py": "166872d147258bc60be221c29bbc9504b1185dd4edc78855279683b1296b302e",
+    "scripts/run_confidence_transfer_v2.py": "7e4ee30097129692e5c60378c1c9e1c6438707e003407bd4a41df40449605dc8"
+  },
+  "preregistration_sha256": "4616832e1010d54cec9241ce60258d5664d6a2c7087a94c2e62f02ab7d1a2798",
+  "runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 40,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 79.63493587500125,
+    "forward_calls": 440,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_extraction_group": true,
+    "prompt_invariance_scope": "source + experiment + format + evidence condition",
+    "right_padding_reference": "written variants sharing an identical prompt; neutral absolute token positions are matched",
+    "shape": [
+      480,
+      2,
+      4,
+      1536
+    ]
+  },
+  "sanity_passed": true,
+  "scope": "Construct-validation only; no generation, fine-tuning, steering or SDT loss",
+  "statistical_gates": {
+    "bridge_promising": false,
+    "checks": {
+      "natural_style_both_correctness_cells_at_least_060": true,
+      "natural_style_lower_bound_above_chance": true,
+      "natural_style_no_fact_type_below_chance": true,
+      "natural_style_ordering_at_least_065": true,
+      "neutral_qa_lower_bound_above_chance": true,
+      "neutral_qa_no_fact_type_below_chance": false,
+      "neutral_qa_ordering_at_least_065": true,
+      "nll_manipulation_lower_bound_above_chance": true,
+      "nll_manipulation_ordering_at_least_075": true
+    },
+    "evidence_inconclusive": false,
+    "natural_style_passed": true,
+    "neutral_qa_passed": false,
+    "nll_manipulation_passed": true,
+    "statistical_passed": false
+  },
+  "versions": {
+    "numpy": "2.4.6",
+    "platform": "macOS-15.7.4-arm64-arm-64bit",
+    "python": "3.11.14",
+    "sklearn": "1.9.1",
+    "torch": "2.14.0",
+    "transformers": "4.57.6"
+  }
+}
