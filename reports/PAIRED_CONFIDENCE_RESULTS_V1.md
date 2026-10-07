@@ -33,9 +33,9 @@ selection. Splits stay grouped by source.
 The recorded preservation rate is 100% in both phases, with no source leakage
 or duplicate question/context groups. This is research-agent source/content
 review plus deterministic pair validation, **not human review**. See the full
-[A audit table](data/paired_confidence/phase_a_audit_table.md),
-[B audit table](data/paired_confidence/phase_b_audit_table.md), and
-[MMLU provenance](data/paired_confidence/mmlu_selection.json).
+[A audit table](../data/paired_confidence/phase_a_audit_table.md),
+[B audit table](../data/paired_confidence/phase_b_audit_table.md), and
+[MMLU provenance](../data/paired_confidence/mmlu_selection.json).
 
 ## Frozen extraction and readout
 
@@ -123,8 +123,8 @@ Family C scored 98.61% on training sources and 93.75% on validation sources.
 All **five reversed pairs** were academic C2: `academic-012` in training
 (correct and wrong), `academic-016` in validation (correct), and `academic-020`
 in validation (correct and wrong). None was excluded. Exact scores and indices
-are in [saved scores](results/paired_confidence_phase_b/readout_scores.npz) and
-[pair metadata/metrics](results/paired_confidence_phase_b/pair_metrics.json).
+are in [saved scores](../results/paired_confidence_phase_b/readout_scores.npz) and
+[pair metadata/metrics](../results/paired_confidence_phase_b/pair_metrics.json).
 
 ## Decision and reproducibility
 
@@ -135,12 +135,12 @@ probed semantic uncertainty from sampled-answer diversity; this experiment
 labels expressed certainty in fixed written responses. The historical
 [Stage 0 results](RESULTS_STAGE0.md) are unchanged.
 
-The [preregistration](PAIRED_CONFIDENCE_PREREGISTRATION_V1.md),
-[A configuration](configs/paired_confidence_phase_a.yaml),
-[B configuration](configs/paired_confidence_phase_b.yaml),
-[A metrics](results/paired_confidence_phase_a/pair_metrics.json),
-[A manifest](results/paired_confidence_phase_a/manifest.json), and
-[B manifest](results/paired_confidence_phase_b/manifest.json) record the locked
+The [preregistration](../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md),
+[A configuration](../configs/paired_confidence_phase_a.yaml),
+[B configuration](../configs/paired_confidence_phase_b.yaml),
+[A metrics](../results/paired_confidence_phase_a/pair_metrics.json),
+[A manifest](../results/paired_confidence_phase_a/manifest.json), and
+[B manifest](../results/paired_confidence_phase_b/manifest.json) record the locked
 choices, gates, hashes, and runtime. The
-[comparison plot](plots/paired_confidence_pairwise_results.png) summarizes the
+[comparison plot](../plots/paired_confidence_pairwise_results.png) summarizes the
 endpoints; numerical claims above follow the saved metrics.

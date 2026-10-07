@@ -1,6 +1,6 @@
 # Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test
 
-7 October 2026. Completed under the [registered design](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md).
+7 October 2026. Completed under the [registered design](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md).
 
 ## Conclusion
 
@@ -36,7 +36,7 @@ queried role is absent. This tests **supplied-context sufficiency**, not a
 ground-truth label for subjective confidence. Supported/conflicting contexts
 and factual-document requests are secondary checks. All sources are test-only.
 
-The [scoreless audit](data/confidence_transfer_v2/manual_audit.md) was saved
+The [scoreless audit](../data/confidence_transfer_v2/manual_audit.md) was saved
 before extraction. It records all world keys, contexts and wording pairs.
 Response-length controls include 48 pairs with the assertion longer than the
 hedge and eight matched exactly in tokens, words and characters.
@@ -91,7 +91,7 @@ the context change was detectable. Its saturated bootstrap interval is not a
 population guarantee of perfect performance. Sequence NLL gives the same
 ordering here; the reconstructed v1 NLL classifiers also score 100% on evidence.
 
-![Frozen transfer endpoints and controls](plots/paired_confidence_transfer_v2.png)
+![Frozen transfer endpoints and controls](../plots/paired_confidence_transfer_v2.png)
 
 This figure shows pooled results. **The pooled evidence score does not override
 the failed release-year check below.**
@@ -163,10 +163,10 @@ auxiliary activation loss.
 
 The design/data commit is `71c696d`; the final analysis was frozen at `54121d9`
 before full evaluation. The unchanged v1 primary-direction file is SHA-256
-pinned in the [configuration](configs/paired_confidence_transfer_v2.yaml).
+pinned in the [configuration](../configs/paired_confidence_transfer_v2.yaml).
 The exact model snapshot, dtype, device, layers, seeds, software versions,
 implementation hashes and artifact hashes are recorded in the
-[manifest](results/paired_confidence_transfer_v2/manifest.json).
+[manifest](../results/paired_confidence_transfer_v2/manifest.json).
 
 All 69 regression tests, all extraction/cache-resume gates and 27 independent
 saved-artifact audit checks pass. This confirms pipeline integrity, not a pass
@@ -176,8 +176,8 @@ sanity used 40 forwards; full extraction reused them and made 440 new forwards.
 The full command took 83.2 seconds after the initial sanity run. No generation,
 NLI inference, external API inference, steering or training was performed.
 
-See the [execution runbook](CONFIDENCE_TRANSFER_README_V2.md) and
-[saved metrics](results/paired_confidence_transfer_v2/transfer_metrics.json).
+See the [execution runbook](../docs/experiments/CONFIDENCE_TRANSFER_README_V2.md) and
+[saved metrics](../results/paired_confidence_transfer_v2/transfer_metrics.json).
 Model weights and per-input resumable caches stay local; aggregate states,
 data, readouts and controls are checked in. The independent saved-artifact
-audit is in [`independent_audit.json`](results/paired_confidence_transfer_v2/independent_audit.json).
+audit is in [`independent_audit.json`](../results/paired_confidence_transfer_v2/independent_audit.json).

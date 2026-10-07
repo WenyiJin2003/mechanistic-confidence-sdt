@@ -50,9 +50,9 @@ flowchart LR
     T --> R["Correctness, length, text, NLL, and shuffled/random controls"]
 ```
 
-Read the [preregistration](PAIRED_CONFIDENCE_PREREGISTRATION_V1.md),
+Read the [preregistration](../../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md),
 [current status](PAIRED_CONFIDENCE_STATUS.md), and
-[results report](PAIRED_CONFIDENCE_RESULTS_V1.md).
+[results report](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md).
 
 ## Execution
 

@@ -4,9 +4,9 @@ This test asks whether Paired Confidence v1's **unchanged** expressed-certainty
 direction transfers to new wording and to changes in supplied evidence. It
 does not train a confidence loss or fit a new readout on the transfer data.
 
-Start with the [results](CONFIDENCE_TRANSFER_RESULTS_V2.md). The
-[preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) fixes the decisions
-made before extraction; the [config](configs/paired_confidence_transfer_v2.yaml)
+Start with the [results](../../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md). The
+[preregistration](../../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) fixes the decisions
+made before extraction; the [config](../../configs/paired_confidence_transfer_v2.yaml)
 contains all settings and pinned v1 artifact hashes.
 
 ## Run

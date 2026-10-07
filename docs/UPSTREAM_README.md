@@ -101,7 +101,7 @@ To obtain a barplot similar to those of the paper, open the the iPython notebook
 
 We retrieve saved model hidden states on two token positions (TBG, SLT) with which we train linear probes to predict model semantic uncertainty and further predict correctness.
 
-See [this notebook](./semantic_entropy_probes/latent-probe.ipynb) for step-by-step guide on training SEPs, which also contains handy tools for data loading, visualizations, and computing baselines.
+See [this notebook](../semantic_entropy_probes/train-latent-probe.ipynb) for step-by-step guide on training SEPs, which also contains handy tools for data loading, visualizations, and computing baselines.
 
 ## Codebase
 ### Repository Structure
