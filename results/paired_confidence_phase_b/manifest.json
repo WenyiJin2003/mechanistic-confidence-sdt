@@ -1,0 +1,154 @@
+{
+  "artifacts": {
+    "data_audit.json": "99a6ef8f7b961d8c1b5736ee4ab8be907121d004cbe43f1271b894f517749650",
+    "extraction_rows.jsonl": "3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c",
+    "hidden_states.npz": "1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46",
+    "pair_metrics.json": "46b1e6d65607fa26e685610568e69c4517d30798ac1d855d036a3ec99eaaabb5",
+    "pairwise_results.png": "e133f21506f774867789790857af13ceb11cc5a3d9df63b8a2cf21090e47f8c9",
+    "readout_directions.npz": "62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c",
+    "readout_scores.npz": "ed3c79dc7df76e43a48e93eb517fdec1fb2818b7353069de49e593d50cc6c743",
+    "sanity_check.json": "696c8ba3a614c650a267126f28aa87e9544023749eca6d109d5139e986770f99"
+  },
+  "configuration": {
+    "analysis": {
+      "bootstrap_samples": 2000,
+      "bootstrap_seed": 161803,
+      "logistic_c": 1.0,
+      "max_iter": 2000,
+      "null_repetitions": 200,
+      "primary_test_accuracy_min": 0.65,
+      "random_directions": 200,
+      "seed": 20261007
+    },
+    "data": {
+      "source_items": "data/paired_confidence/source_items.jsonl",
+      "variants": "data/paired_confidence/variants.jsonl"
+    },
+    "dataset": {
+      "data_preservation_min": 0.95,
+      "families": [
+        "A",
+        "B",
+        "C"
+      ],
+      "sources_per_domain": 40,
+      "split_sizes": {
+        "test": 24,
+        "train": 72,
+        "validation": 24
+      }
+    },
+    "model": {
+      "attention": "eager",
+      "boundary_token": "<|im_end|>",
+      "boundary_token_id": 151645,
+      "id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "layers": [
+        14,
+        23
+      ],
+      "max_tokens": 1024,
+      "positions": [
+        "boundary",
+        "final_content",
+        "response_mean",
+        "prompt"
+      ],
+      "prompt_control_atol": 1e-06,
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "snapshot": "cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "output": {
+      "cache_dir": "cache/paired_confidence",
+      "plot": "plots/paired_confidence_pairwise_results.png",
+      "results_dir": "results/paired_confidence_phase_b"
+    },
+    "phase": "b",
+    "runtime": {
+      "cpu_fallback": true,
+      "device_preference": [
+        "mps",
+        "cuda",
+        "cpu"
+      ],
+      "dtype": "bfloat16",
+      "shared_repo": "../semantic-entropy-probes-stage0"
+    }
+  },
+  "data_gate_passed": true,
+  "data_sha256": {
+    "source_items": "e45df9436dddc8482de5ca1ce040b1f7947be5740d7ccae1895ab28ec05844ec",
+    "variants": "f8582e9246f602c6c1b4b8f00105ac45168fea3f9c4dd008c745f714e4350343"
+  },
+  "elapsed_seconds": 246.2713165419991,
+  "experiment": "Paired Confidence Pilot v1",
+  "figure_finalization": "Footnote moved below axes; statistics and model inference unchanged.",
+  "implementation_commit": "8165a021c20ef71ca92a5123f13fbaf318cca7c0",
+  "implementation_sha256": {
+    "confidence_pilot/__init__.py": "df3cdb523105e27e95b80ae1e8315db4b686aba8e3baf63337d0d7559dc7a5d9",
+    "confidence_pilot/analyze_pairs.py": "4615abd081b1f56dd123235327581d39be35435f6e991f6f73cd684f6b189537",
+    "confidence_pilot/common.py": "6d3bc8376c557a1541caaae4a48990aef841ddef2a4caab1f4e9e3c56fb0c933",
+    "confidence_pilot/data_validation.py": "bbe0a545cebf7dbd01568eba1bc3433cd74a6b942991c2d47662a49db3bd87d6",
+    "confidence_pilot/extract_activations.py": "14d709334751532f4d6b89a4d5575dff5233bb05acaac7cb24bf36ea8bf57f5e"
+  },
+  "interpretation_scope": "candidate expressed-certainty readout; no causal intervention or SDT training",
+  "phase": "b",
+  "preregistration_sha256": "7bd1a74d19bf0d33108405b5b7f043b34ba41cf925803e1ac53011d307a5b0cd",
+  "runner_sha256": "18b4d1a2c1def1985a39f921f97d1789ba53de994c8afbf6d5f00b2643623264",
+  "runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 208,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 235.42563175000396,
+    "forward_calls": 1232,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      1440,
+      2,
+      4,
+      1536
+    ]
+  },
+  "sanity_passed": true,
+  "statistical_gates": {
+    "checks": {
+      "both_correctness_cells_at_least_0.60": true,
+      "length_robust_subset_above_chance": true,
+      "length_robust_subset_testable": true,
+      "multiple_C_subtypes_above_chance": true,
+      "no_domain_below_chance": true,
+      "primary_accuracy_at_least_0.65": true,
+      "primary_direction_defined": true,
+      "projected_ordering_above_chance": true,
+      "prompt_negative_control_passed": true,
+      "random_ensemble_mean_near_chance": true,
+      "shuffled_ensemble_mean_near_chance": true,
+      "source_bootstrap_lower_above_chance": true
+    },
+    "interpretation": "Phase A is an engineering progression screen. Phase B validates at most expressed certainty; no loss training or causal claim follows from these gates.",
+    "requires_separate_data_and_extraction_gates": true,
+    "statistical_passed": true
+  },
+  "versions": {
+    "numpy": "2.4.6",
+    "platform": "macOS-15.7.4-arm64-arm-64bit",
+    "python": "3.11.14",
+    "sklearn": "1.9.1",
+    "torch": "2.14.0",
+    "transformers": "4.57.6"
+  }
+}

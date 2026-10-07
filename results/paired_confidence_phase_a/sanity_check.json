@@ -1,0 +1,75 @@
+{
+  "checks": {
+    "final_prompt_negative_control_identical": true,
+    "finite_states_correct_layers_width": true,
+    "fixed_post_response_token": true,
+    "four_sources_checked": true,
+    "identical_question_context_ids": true,
+    "no_model_generation": true,
+    "no_nli_or_api_calls": true,
+    "response_boundaries_correct": true,
+    "resumable_cache_zero_second_pass_forwards": true,
+    "resume_exact_same_hidden_states": true
+  },
+  "first_pass_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 32,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 0.2912182500003837,
+    "forward_calls": 0,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      32,
+      2,
+      4,
+      1536
+    ]
+  },
+  "passed": true,
+  "resume_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 32,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 0.252455750000081,
+    "forward_calls": 0,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      32,
+      2,
+      4,
+      1536
+    ]
+  },
+  "source_ids": [
+    "factual_qa-000",
+    "arithmetic-000",
+    "academic-000",
+    "factual_qa-001"
+  ]
+}

@@ -97,9 +97,9 @@ def plot(result, config):
     ax.set_ylabel("Confident > hedged paired ordering accuracy")
     families = "/".join(result["primary_endpoint"]["families"])
     ax.set_title(f"Paired Confidence Pilot v1: Phase {result['phase']}, test sources, family {families}")
-    ax.text(.99, .03, "Intervals resample source questions; target is expressed certainty.", transform=ax.transAxes,
-            ha="right", fontsize=9)
-    fig.tight_layout()
+    fig.text(.5, .015, "95% intervals resample source questions. All-success intervals are saturated; target is expressed certainty.",
+             ha="center", fontsize=8.5)
+    fig.tight_layout(rect=[0, .055, 1, 1])
     path = resolve(config["output"]["plot"])
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(path, dpi=180)
