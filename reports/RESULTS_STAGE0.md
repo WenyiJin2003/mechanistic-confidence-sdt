@@ -7,7 +7,7 @@ they fit separate probes at different positions. Stage 0 reads the final
 rendered prompt token before any answer. Stage 0B reads the final ordinary
 content token of one observed answer. Neither direction is the later Paired
 Confidence v1 expressed-certainty direction at the post-response `<|im_end|>`
-token. See the [canonical experiment map](EXPERIMENT_MAP.md).
+token. See the [canonical experiment map](../docs/experiments/EXPERIMENT_MAP.md).
 
 ## Stage 0B — post-answer hidden-state diagnostic
 

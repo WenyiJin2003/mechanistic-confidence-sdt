@@ -104,7 +104,7 @@ The arrows show the research sequence, not reuse of one fitted vector. Stage 0,
 Stage 0B and Paired Confidence v1 each estimate a different readout. Only Paired
 Confidence v1 → Frozen Transfer v2 reuses the same primary direction.
 
-See the [Stage 0/0B report](RESULTS_STAGE0.md),
-[Paired Confidence v1 report](PAIRED_CONFIDENCE_RESULTS_V1.md), and
-[Frozen Transfer v2 report](CONFIDENCE_TRANSFER_RESULTS_V2.md) for results and
+See the [Stage 0/0B report](../../reports/RESULTS_STAGE0.md),
+[Paired Confidence v1 report](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md), and
+[Frozen Transfer v2 report](../../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) for results and
 limitations.

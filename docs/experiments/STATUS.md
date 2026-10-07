@@ -38,11 +38,11 @@ possible auxiliary internal-confidence loss that preserves answer accuracy.
 Transfer confirmation comes before causal and answer-quality checks; no
 confidence loss has been validated or trained.
 
-Read the [v2 results](CONFIDENCE_TRANSFER_RESULTS_V2.md),
-[unchanged preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and
+Read the [v2 results](../../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md),
+[unchanged preregistration](../../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and
 [execution runbook](CONFIDENCE_TRANSFER_README_V2.md). The
 [experiment map](EXPERIMENT_MAP.md) distinguishes the target, token position,
 data, and fitted direction used in each stage. The
-[root README](README.md) distinguishes this work from the preserved
-[Stage 0/0B semantic-uncertainty diagnostics](RESULTS_STAGE0.md) and
-[paired expressed-certainty pilot v1](PAIRED_CONFIDENCE_RESULTS_V1.md).
+[root README](../../README.md) distinguishes this work from the preserved
+[Stage 0/0B semantic-uncertainty diagnostics](../../reports/RESULTS_STAGE0.md) and
+[paired expressed-certainty pilot v1](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md).

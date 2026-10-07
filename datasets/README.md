@@ -1,0 +1,45 @@
+# Questions and answers
+
+Start here to inspect the actual experiment inputs and answers. Each collection
+contains every saved source and response, not a selected set of successful
+examples. The pages render directly on GitHub; CSV files provide the same rows
+for download.
+
+| Collection | Sources | Responses | What the answers are |
+|---|---:|---:|---|
+| [Paired Confidence v1](paired-confidence-v1/README.md) | 120 | 1,440 | Authored confident/hedged rewrites, with both correct and deliberately wrong content |
+| [Frozen Transfer v2](frozen-transfer-v2/README.md) | 48 | 480 | Authored response pairs and identical neutral answers under different evidence conditions |
+| [Stage 0 / 0B](stage0/README.md) | Listed separately by run | Every cached sample | Responses generated locally by Qwen from SQuAD prompts |
+
+## How to read a question
+
+1. Read the **question and context** before looking at the answers.
+2. Check the **reference answer or fictional world key**.
+3. Compare the complete response variants or sampled answers.
+4. Inspect the split, labels and saved score where available.
+
+V1 and v2 probe scores come from the saved layer-14 response-end readout.
+Higher means more aligned with the trained expressed-certainty direction.
+It is not a probability, a confidence rating supplied by the model, or a
+correctness guarantee. The catalog includes reversed orderings as well as
+successful ones.
+
+Stage 0 semantic entropy describes disagreement between sampled answer meanings.
+Low entropy can also occur when the model repeatedly gives a wrong answer.
+The Stage 0B diagnostic reuses the 500-question collection, observing one answer
+and estimating entropy from the other nine.
+
+## Data provenance
+
+The readable collections are deterministic exports of the checked-in
+[raw inputs](../data/README.md) and [saved experiment outputs](../results/README.md).
+Source IDs and response IDs are retained for tracing an example back to its
+original row. No answers are generated or labels recomputed by the exporter.
+
+Regenerate the pages from the repository root:
+
+```bash
+python scripts/export_question_sets.py
+```
+
+[Research reports](../reports/README.md) · [Experiment map](../docs/experiments/EXPERIMENT_MAP.md) · [Repository home](../README.md)

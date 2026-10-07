@@ -1,0 +1,337 @@
+dataset_version,document_request,entity,fact_type,false_value,nuisance_label,omission_label,qa_question,source_id,split,target_label,target_line_order,true_value,wording_id,world_claim,original_source,original_benchmark_split,context_conflicting,context_omitted,context_supported
+paired-confidence-transfer-v2,Summarize the access code for Neris-K01 as a factual sentence.,Neris-K01,access_code,146,Parcel code,Ticket code,What is the access code for Neris-K01?,v2-access_code-01,test,Access code,first,399,N01,The access code for Neris-K01 is 399.,constructed_fictional_world,not_applicable,"Item: Neris-K01
+Access code: 146
+Parcel code: 399","Item: Neris-K01
+Ticket code: 399
+Parcel code: 146","Item: Neris-K01
+Access code: 399
+Parcel code: 146"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K02 as a factual sentence.,Neris-K02,access_code,345,Parcel code,Ticket code,What is the access code for Neris-K02?,v2-access_code-02,test,Access code,second,549,N02,The access code for Neris-K02 is 549.,constructed_fictional_world,not_applicable,"Item: Neris-K02
+Parcel code: 549
+Access code: 345","Item: Neris-K02
+Parcel code: 345
+Ticket code: 549","Item: Neris-K02
+Parcel code: 345
+Access code: 549"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K03 as a factual sentence.,Neris-K03,access_code,386,Parcel code,Ticket code,What is the access code for Neris-K03?,v2-access_code-03,test,Access code,first,256,N03,The access code for Neris-K03 is 256.,constructed_fictional_world,not_applicable,"Item: Neris-K03
+Access code: 386
+Parcel code: 256","Item: Neris-K03
+Ticket code: 256
+Parcel code: 386","Item: Neris-K03
+Access code: 256
+Parcel code: 386"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K04 as a factual sentence.,Neris-K04,access_code,832,Parcel code,Ticket code,What is the access code for Neris-K04?,v2-access_code-04,test,Access code,second,188,N04,The access code for Neris-K04 is 188.,constructed_fictional_world,not_applicable,"Item: Neris-K04
+Parcel code: 188
+Access code: 832","Item: Neris-K04
+Parcel code: 832
+Ticket code: 188","Item: Neris-K04
+Parcel code: 832
+Access code: 188"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K05 as a factual sentence.,Neris-K05,access_code,417,Parcel code,Ticket code,What is the access code for Neris-K05?,v2-access_code-05,test,Access code,first,319,N05,The access code for Neris-K05 is 319.,constructed_fictional_world,not_applicable,"Item: Neris-K05
+Access code: 417
+Parcel code: 319","Item: Neris-K05
+Ticket code: 319
+Parcel code: 417","Item: Neris-K05
+Access code: 319
+Parcel code: 417"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K06 as a factual sentence.,Neris-K06,access_code,791,Parcel code,Ticket code,What is the access code for Neris-K06?,v2-access_code-06,test,Access code,second,901,N06,The access code for Neris-K06 is 901.,constructed_fictional_world,not_applicable,"Item: Neris-K06
+Parcel code: 901
+Access code: 791","Item: Neris-K06
+Parcel code: 791
+Ticket code: 901","Item: Neris-K06
+Parcel code: 791
+Access code: 901"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K07 as a factual sentence.,Neris-K07,access_code,323,Parcel code,Ticket code,What is the access code for Neris-K07?,v2-access_code-07,test,Access code,first,826,N07,The access code for Neris-K07 is 826.,constructed_fictional_world,not_applicable,"Item: Neris-K07
+Access code: 323
+Parcel code: 826","Item: Neris-K07
+Ticket code: 826
+Parcel code: 323","Item: Neris-K07
+Access code: 826
+Parcel code: 323"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K08 as a factual sentence.,Neris-K08,access_code,224,Parcel code,Ticket code,What is the access code for Neris-K08?,v2-access_code-08,test,Access code,second,519,N08,The access code for Neris-K08 is 519.,constructed_fictional_world,not_applicable,"Item: Neris-K08
+Parcel code: 519
+Access code: 224","Item: Neris-K08
+Parcel code: 224
+Ticket code: 519","Item: Neris-K08
+Parcel code: 224
+Access code: 519"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K09 as a factual sentence.,Neris-K09,access_code,865,Parcel code,Ticket code,What is the access code for Neris-K09?,v2-access_code-09,test,Access code,first,680,N09,The access code for Neris-K09 is 680.,constructed_fictional_world,not_applicable,"Item: Neris-K09
+Access code: 865
+Parcel code: 680","Item: Neris-K09
+Ticket code: 680
+Parcel code: 865","Item: Neris-K09
+Access code: 680
+Parcel code: 865"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K10 as a factual sentence.,Neris-K10,access_code,128,Parcel code,Ticket code,What is the access code for Neris-K10?,v2-access_code-10,test,Access code,second,578,N10,The access code for Neris-K10 is 578.,constructed_fictional_world,not_applicable,"Item: Neris-K10
+Parcel code: 578
+Access code: 128","Item: Neris-K10
+Parcel code: 128
+Ticket code: 578","Item: Neris-K10
+Parcel code: 128
+Access code: 578"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K11 as a factual sentence.,Neris-K11,access_code,473,Parcel code,Ticket code,What is the access code for Neris-K11?,v2-access_code-11,test,Access code,first,508,N11,The access code for Neris-K11 is 508.,constructed_fictional_world,not_applicable,"Item: Neris-K11
+Access code: 473
+Parcel code: 508","Item: Neris-K11
+Ticket code: 508
+Parcel code: 473","Item: Neris-K11
+Access code: 508
+Parcel code: 473"
+paired-confidence-transfer-v2,Summarize the access code for Neris-K12 as a factual sentence.,Neris-K12,access_code,342,Parcel code,Ticket code,What is the access code for Neris-K12?,v2-access_code-12,test,Access code,second,329,N12,The access code for Neris-K12 is 329.,constructed_fictional_world,not_applicable,"Item: Neris-K12
+Parcel code: 329
+Access code: 342","Item: Neris-K12
+Parcel code: 342
+Ticket code: 329","Item: Neris-K12
+Parcel code: 342
+Access code: 329"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R01 as a factual sentence.,Velen-R01,room_assignment,Birch Hall,Meeting room,Storage room,What is the assigned room for Velen-R01?,v2-room_assignment-01,test,Assigned room,first,Fir Hall,N01,The assigned room for Velen-R01 is Fir Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R01
+Assigned room: Birch Hall
+Meeting room: Fir Hall","Item: Velen-R01
+Storage room: Fir Hall
+Meeting room: Birch Hall","Item: Velen-R01
+Assigned room: Fir Hall
+Meeting room: Birch Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R02 as a factual sentence.,Velen-R02,room_assignment,Spruce Hall,Meeting room,Storage room,What is the assigned room for Velen-R02?,v2-room_assignment-02,test,Assigned room,second,Aspen Hall,N02,The assigned room for Velen-R02 is Aspen Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R02
+Meeting room: Aspen Hall
+Assigned room: Spruce Hall","Item: Velen-R02
+Meeting room: Spruce Hall
+Storage room: Aspen Hall","Item: Velen-R02
+Meeting room: Spruce Hall
+Assigned room: Aspen Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R03 as a factual sentence.,Velen-R03,room_assignment,Willow Hall,Meeting room,Storage room,What is the assigned room for Velen-R03?,v2-room_assignment-03,test,Assigned room,first,Alder Hall,N03,The assigned room for Velen-R03 is Alder Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R03
+Assigned room: Willow Hall
+Meeting room: Alder Hall","Item: Velen-R03
+Storage room: Alder Hall
+Meeting room: Willow Hall","Item: Velen-R03
+Assigned room: Alder Hall
+Meeting room: Willow Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R04 as a factual sentence.,Velen-R04,room_assignment,Beech Hall,Meeting room,Storage room,What is the assigned room for Velen-R04?,v2-room_assignment-04,test,Assigned room,second,Cypress Hall,N04,The assigned room for Velen-R04 is Cypress Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R04
+Meeting room: Cypress Hall
+Assigned room: Beech Hall","Item: Velen-R04
+Meeting room: Beech Hall
+Storage room: Cypress Hall","Item: Velen-R04
+Meeting room: Beech Hall
+Assigned room: Cypress Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R05 as a factual sentence.,Velen-R05,room_assignment,Sequoia Hall,Meeting room,Storage room,What is the assigned room for Velen-R05?,v2-room_assignment-05,test,Assigned room,first,Holly Hall,N05,The assigned room for Velen-R05 is Holly Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R05
+Assigned room: Sequoia Hall
+Meeting room: Holly Hall","Item: Velen-R05
+Storage room: Holly Hall
+Meeting room: Sequoia Hall","Item: Velen-R05
+Assigned room: Holly Hall
+Meeting room: Sequoia Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R06 as a factual sentence.,Velen-R06,room_assignment,Ash Hall,Meeting room,Storage room,What is the assigned room for Velen-R06?,v2-room_assignment-06,test,Assigned room,second,Elm Hall,N06,The assigned room for Velen-R06 is Elm Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R06
+Meeting room: Elm Hall
+Assigned room: Ash Hall","Item: Velen-R06
+Meeting room: Ash Hall
+Storage room: Elm Hall","Item: Velen-R06
+Meeting room: Ash Hall
+Assigned room: Elm Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R07 as a factual sentence.,Velen-R07,room_assignment,Yew Hall,Meeting room,Storage room,What is the assigned room for Velen-R07?,v2-room_assignment-07,test,Assigned room,first,Cedar Hall,N07,The assigned room for Velen-R07 is Cedar Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R07
+Assigned room: Yew Hall
+Meeting room: Cedar Hall","Item: Velen-R07
+Storage room: Cedar Hall
+Meeting room: Yew Hall","Item: Velen-R07
+Assigned room: Cedar Hall
+Meeting room: Yew Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R08 as a factual sentence.,Velen-R08,room_assignment,Rowan Hall,Meeting room,Storage room,What is the assigned room for Velen-R08?,v2-room_assignment-08,test,Assigned room,second,Oak Hall,N08,The assigned room for Velen-R08 is Oak Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R08
+Meeting room: Oak Hall
+Assigned room: Rowan Hall","Item: Velen-R08
+Meeting room: Rowan Hall
+Storage room: Oak Hall","Item: Velen-R08
+Meeting room: Rowan Hall
+Assigned room: Oak Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R09 as a factual sentence.,Velen-R09,room_assignment,Sycamore Hall,Meeting room,Storage room,What is the assigned room for Velen-R09?,v2-room_assignment-09,test,Assigned room,first,Juniper Hall,N09,The assigned room for Velen-R09 is Juniper Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R09
+Assigned room: Sycamore Hall
+Meeting room: Juniper Hall","Item: Velen-R09
+Storage room: Juniper Hall
+Meeting room: Sycamore Hall","Item: Velen-R09
+Assigned room: Juniper Hall
+Meeting room: Sycamore Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R10 as a factual sentence.,Velen-R10,room_assignment,Laurel Hall,Meeting room,Storage room,What is the assigned room for Velen-R10?,v2-room_assignment-10,test,Assigned room,second,Poplar Hall,N10,The assigned room for Velen-R10 is Poplar Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R10
+Meeting room: Poplar Hall
+Assigned room: Laurel Hall","Item: Velen-R10
+Meeting room: Laurel Hall
+Storage room: Poplar Hall","Item: Velen-R10
+Meeting room: Laurel Hall
+Assigned room: Poplar Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R11 as a factual sentence.,Velen-R11,room_assignment,Maple Hall,Meeting room,Storage room,What is the assigned room for Velen-R11?,v2-room_assignment-11,test,Assigned room,first,Pine Hall,N11,The assigned room for Velen-R11 is Pine Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R11
+Assigned room: Maple Hall
+Meeting room: Pine Hall","Item: Velen-R11
+Storage room: Pine Hall
+Meeting room: Maple Hall","Item: Velen-R11
+Assigned room: Pine Hall
+Meeting room: Maple Hall"
+paired-confidence-transfer-v2,Summarize the assigned room for Velen-R12 as a factual sentence.,Velen-R12,room_assignment,Hazel Hall,Meeting room,Storage room,What is the assigned room for Velen-R12?,v2-room_assignment-12,test,Assigned room,second,Linden Hall,N12,The assigned room for Velen-R12 is Linden Hall.,constructed_fictional_world,not_applicable,"Item: Velen-R12
+Meeting room: Linden Hall
+Assigned room: Hazel Hall","Item: Velen-R12
+Meeting room: Hazel Hall
+Storage room: Linden Hall","Item: Velen-R12
+Meeting room: Hazel Hall
+Assigned room: Linden Hall"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y01 as a factual sentence.,Torin-Y01,release_year,1983,Archive year,Review year,What is the release year for Torin-Y01?,v2-release_year-01,test,Release year,first,2002,N01,The release year for Torin-Y01 is 2002.,constructed_fictional_world,not_applicable,"Item: Torin-Y01
+Release year: 1983
+Archive year: 2002","Item: Torin-Y01
+Review year: 2002
+Archive year: 1983","Item: Torin-Y01
+Release year: 2002
+Archive year: 1983"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y02 as a factual sentence.,Torin-Y02,release_year,1987,Archive year,Review year,What is the release year for Torin-Y02?,v2-release_year-02,test,Release year,second,1985,N02,The release year for Torin-Y02 is 1985.,constructed_fictional_world,not_applicable,"Item: Torin-Y02
+Archive year: 1985
+Release year: 1987","Item: Torin-Y02
+Archive year: 1987
+Review year: 1985","Item: Torin-Y02
+Archive year: 1987
+Release year: 1985"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y03 as a factual sentence.,Torin-Y03,release_year,1992,Archive year,Review year,What is the release year for Torin-Y03?,v2-release_year-03,test,Release year,first,1998,N03,The release year for Torin-Y03 is 1998.,constructed_fictional_world,not_applicable,"Item: Torin-Y03
+Release year: 1992
+Archive year: 1998","Item: Torin-Y03
+Review year: 1998
+Archive year: 1992","Item: Torin-Y03
+Release year: 1998
+Archive year: 1992"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y04 as a factual sentence.,Torin-Y04,release_year,1990,Archive year,Review year,What is the release year for Torin-Y04?,v2-release_year-04,test,Release year,second,1996,N04,The release year for Torin-Y04 is 1996.,constructed_fictional_world,not_applicable,"Item: Torin-Y04
+Archive year: 1996
+Release year: 1990","Item: Torin-Y04
+Archive year: 1990
+Review year: 1996","Item: Torin-Y04
+Archive year: 1990
+Release year: 1996"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y05 as a factual sentence.,Torin-Y05,release_year,1997,Archive year,Review year,What is the release year for Torin-Y05?,v2-release_year-05,test,Release year,first,2022,N05,The release year for Torin-Y05 is 2022.,constructed_fictional_world,not_applicable,"Item: Torin-Y05
+Release year: 1997
+Archive year: 2022","Item: Torin-Y05
+Review year: 2022
+Archive year: 1997","Item: Torin-Y05
+Release year: 2022
+Archive year: 1997"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y06 as a factual sentence.,Torin-Y06,release_year,2019,Archive year,Review year,What is the release year for Torin-Y06?,v2-release_year-06,test,Release year,second,1980,N06,The release year for Torin-Y06 is 1980.,constructed_fictional_world,not_applicable,"Item: Torin-Y06
+Archive year: 1980
+Release year: 2019","Item: Torin-Y06
+Archive year: 2019
+Review year: 1980","Item: Torin-Y06
+Archive year: 2019
+Release year: 1980"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y07 as a factual sentence.,Torin-Y07,release_year,1981,Archive year,Review year,What is the release year for Torin-Y07?,v2-release_year-07,test,Release year,first,1986,N07,The release year for Torin-Y07 is 1986.,constructed_fictional_world,not_applicable,"Item: Torin-Y07
+Release year: 1981
+Archive year: 1986","Item: Torin-Y07
+Review year: 1986
+Archive year: 1981","Item: Torin-Y07
+Release year: 1986
+Archive year: 1981"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y08 as a factual sentence.,Torin-Y08,release_year,1993,Archive year,Review year,What is the release year for Torin-Y08?,v2-release_year-08,test,Release year,second,2018,N08,The release year for Torin-Y08 is 2018.,constructed_fictional_world,not_applicable,"Item: Torin-Y08
+Archive year: 2018
+Release year: 1993","Item: Torin-Y08
+Archive year: 1993
+Review year: 2018","Item: Torin-Y08
+Archive year: 1993
+Release year: 2018"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y09 as a factual sentence.,Torin-Y09,release_year,2014,Archive year,Review year,What is the release year for Torin-Y09?,v2-release_year-09,test,Release year,first,2005,N09,The release year for Torin-Y09 is 2005.,constructed_fictional_world,not_applicable,"Item: Torin-Y09
+Release year: 2014
+Archive year: 2005","Item: Torin-Y09
+Review year: 2005
+Archive year: 2014","Item: Torin-Y09
+Release year: 2005
+Archive year: 2014"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y10 as a factual sentence.,Torin-Y10,release_year,2010,Archive year,Review year,What is the release year for Torin-Y10?,v2-release_year-10,test,Release year,second,1982,N10,The release year for Torin-Y10 is 1982.,constructed_fictional_world,not_applicable,"Item: Torin-Y10
+Archive year: 1982
+Release year: 2010","Item: Torin-Y10
+Archive year: 2010
+Review year: 1982","Item: Torin-Y10
+Archive year: 2010
+Release year: 1982"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y11 as a factual sentence.,Torin-Y11,release_year,2024,Archive year,Review year,What is the release year for Torin-Y11?,v2-release_year-11,test,Release year,first,2004,N11,The release year for Torin-Y11 is 2004.,constructed_fictional_world,not_applicable,"Item: Torin-Y11
+Release year: 2024
+Archive year: 2004","Item: Torin-Y11
+Review year: 2004
+Archive year: 2024","Item: Torin-Y11
+Release year: 2004
+Archive year: 2024"
+paired-confidence-transfer-v2,Summarize the release year for Torin-Y12 as a factual sentence.,Torin-Y12,release_year,2009,Archive year,Review year,What is the release year for Torin-Y12?,v2-release_year-12,test,Release year,second,2006,N12,The release year for Torin-Y12 is 2006.,constructed_fictional_world,not_applicable,"Item: Torin-Y12
+Archive year: 2006
+Release year: 2009","Item: Torin-Y12
+Archive year: 2009
+Review year: 2006","Item: Torin-Y12
+Archive year: 2009
+Release year: 2006"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M01 as a factual sentence.,Savel-M01,material,linen,Crate material,Label material,What is the main material for Savel-M01?,v2-material-01,test,Main material,first,cotton,N01,The main material for Savel-M01 is cotton.,constructed_fictional_world,not_applicable,"Item: Savel-M01
+Main material: linen
+Crate material: cotton","Item: Savel-M01
+Label material: cotton
+Crate material: linen","Item: Savel-M01
+Main material: cotton
+Crate material: linen"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M02 as a factual sentence.,Savel-M02,material,bronze,Crate material,Label material,What is the main material for Savel-M02?,v2-material-02,test,Main material,second,silk,N02,The main material for Savel-M02 is silk.,constructed_fictional_world,not_applicable,"Item: Savel-M02
+Crate material: silk
+Main material: bronze","Item: Savel-M02
+Crate material: bronze
+Label material: silk","Item: Savel-M02
+Crate material: bronze
+Main material: silk"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M03 as a factual sentence.,Savel-M03,material,ceramic,Crate material,Label material,What is the main material for Savel-M03?,v2-material-03,test,Main material,first,bamboo,N03,The main material for Savel-M03 is bamboo.,constructed_fictional_world,not_applicable,"Item: Savel-M03
+Main material: ceramic
+Crate material: bamboo","Item: Savel-M03
+Label material: bamboo
+Crate material: ceramic","Item: Savel-M03
+Main material: bamboo
+Crate material: ceramic"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M04 as a factual sentence.,Savel-M04,material,paper,Crate material,Label material,What is the main material for Savel-M04?,v2-material-04,test,Main material,second,wool,N04,The main material for Savel-M04 is wool.,constructed_fictional_world,not_applicable,"Item: Savel-M04
+Crate material: wool
+Main material: paper","Item: Savel-M04
+Crate material: paper
+Label material: wool","Item: Savel-M04
+Crate material: paper
+Main material: wool"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M05 as a factual sentence.,Savel-M05,material,wood,Crate material,Label material,What is the main material for Savel-M05?,v2-material-05,test,Main material,first,brass,N05,The main material for Savel-M05 is brass.,constructed_fictional_world,not_applicable,"Item: Savel-M05
+Main material: wood
+Crate material: brass","Item: Savel-M05
+Label material: brass
+Crate material: wood","Item: Savel-M05
+Main material: brass
+Crate material: wood"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M06 as a factual sentence.,Savel-M06,material,foam,Crate material,Label material,What is the main material for Savel-M06?,v2-material-06,test,Main material,second,aluminum,N06,The main material for Savel-M06 is aluminum.,constructed_fictional_world,not_applicable,"Item: Savel-M06
+Crate material: aluminum
+Main material: foam","Item: Savel-M06
+Crate material: foam
+Label material: aluminum","Item: Savel-M06
+Crate material: foam
+Main material: aluminum"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M07 as a factual sentence.,Savel-M07,material,iron,Crate material,Label material,What is the main material for Savel-M07?,v2-material-07,test,Main material,first,cork,N07,The main material for Savel-M07 is cork.,constructed_fictional_world,not_applicable,"Item: Savel-M07
+Main material: iron
+Crate material: cork","Item: Savel-M07
+Label material: cork
+Crate material: iron","Item: Savel-M07
+Main material: cork
+Crate material: iron"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M08 as a factual sentence.,Savel-M08,material,plastic,Crate material,Label material,What is the main material for Savel-M08?,v2-material-08,test,Main material,second,felt,N08,The main material for Savel-M08 is felt.,constructed_fictional_world,not_applicable,"Item: Savel-M08
+Crate material: felt
+Main material: plastic","Item: Savel-M08
+Crate material: plastic
+Label material: felt","Item: Savel-M08
+Crate material: plastic
+Main material: felt"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M09 as a factual sentence.,Savel-M09,material,nylon,Crate material,Label material,What is the main material for Savel-M09?,v2-material-09,test,Main material,first,glass,N09,The main material for Savel-M09 is glass.,constructed_fictional_world,not_applicable,"Item: Savel-M09
+Main material: nylon
+Crate material: glass","Item: Savel-M09
+Label material: glass
+Crate material: nylon","Item: Savel-M09
+Main material: glass
+Crate material: nylon"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M10 as a factual sentence.,Savel-M10,material,rubber,Crate material,Label material,What is the main material for Savel-M10?,v2-material-10,test,Main material,second,clay,N10,The main material for Savel-M10 is clay.,constructed_fictional_world,not_applicable,"Item: Savel-M10
+Crate material: clay
+Main material: rubber","Item: Savel-M10
+Crate material: rubber
+Label material: clay","Item: Savel-M10
+Crate material: rubber
+Main material: clay"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M11 as a factual sentence.,Savel-M11,material,leather,Crate material,Label material,What is the main material for Savel-M11?,v2-material-11,test,Main material,first,stone,N11,The main material for Savel-M11 is stone.,constructed_fictional_world,not_applicable,"Item: Savel-M11
+Main material: leather
+Crate material: stone","Item: Savel-M11
+Label material: stone
+Crate material: leather","Item: Savel-M11
+Main material: stone
+Crate material: leather"
+paired-confidence-transfer-v2,Summarize the main material for Savel-M12 as a factual sentence.,Savel-M12,material,copper,Crate material,Label material,What is the main material for Savel-M12?,v2-material-12,test,Main material,second,steel,N12,The main material for Savel-M12 is steel.,constructed_fictional_world,not_applicable,"Item: Savel-M12
+Crate material: steel
+Main material: copper","Item: Savel-M12
+Crate material: copper
+Label material: steel","Item: Savel-M12
+Crate material: copper
+Main material: steel"

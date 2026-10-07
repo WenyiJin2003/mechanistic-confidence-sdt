@@ -29,5 +29,5 @@ subjective confidence, factual belief strength, or an SDT-ready loss.
 neutral-phrased QA or synthetic-document representations. Stop here pending that
 next decision; this pilot did not perform steering or training.
 
-Read [the preregistration](PAIRED_CONFIDENCE_PREREGISTRATION_V1.md) for the design
-and [the results](PAIRED_CONFIDENCE_RESULTS_V1.md) for completed evidence.
+Read [the preregistration](../../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md) for the design
+and [the results](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md) for completed evidence.

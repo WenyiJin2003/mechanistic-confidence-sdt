@@ -44,7 +44,7 @@ Each main run writes:
 - `probe_metrics.json` — splits, thresholds, probe results, baselines, and controls;
 - `manifest.json` — exact configuration, software versions, runtimes, and integrity checks.
 
-See [`results/README.md`](results/README.md) for the run index.
+See [`results/README.md`](../../results/README.md) for the run index.
 
 The cached direction audit writes `direction_stability_metrics.json`, a frozen raw-space direction artifact `frozen_probe_directions.npz`, and `plots/run_500_qwen15b_direction_stability.png`. It uses only the original train+validation pool (401 examples); the locked 99-example test split is not fitted or scored.
 
@@ -67,4 +67,4 @@ The cached activation is the final token of the fully rendered chat prompt, imme
 - Meaningful runs use `cross-encoder/nli-deberta-v3-small`, a resource-saving deviation from the upstream xlarge NLI model.
 - The confirmation run excludes IDs, contexts, and exact or near-duplicate questions from the earlier 1.5B run.
 
-Full interpretation belongs in [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md); current project decisions belong in [`STATUS.md`](STATUS.md).
+Full interpretation belongs in [`RESULTS_STAGE0.md`](../../reports/RESULTS_STAGE0.md); current project decisions belong in [`STATUS.md`](STATUS.md).
