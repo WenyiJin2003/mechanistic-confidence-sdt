@@ -26,7 +26,11 @@ def verify_frozen_inputs(config: dict[str, Any], *, require_commit: bool = True)
         protected = ["CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md",
                      "configs/paired_confidence_transfer_v2.yaml",
                      *config["data"].values(), "data/confidence_transfer_v2/data_audit.json",
-                     "data/confidence_transfer_v2/manual_audit.md"]
+                     "data/confidence_transfer_v2/manual_audit.md",
+                     "confidence_pilot/common.py", "confidence_pilot/extract_activations.py",
+                     "confidence_pilot/analyze_pairs.py", "confidence_pilot/transfer_data_v2.py",
+                     "confidence_pilot/transfer_run_v2.py", "confidence_pilot/transfer_analysis_v2.py",
+                     "scripts/run_confidence_transfer_v2.py"]
         for name in protected:
             tracked = subprocess.run(["git", "ls-files", "--error-unmatch", name],
                                      cwd=ROOT, capture_output=True)
@@ -117,7 +121,8 @@ def prepare_frozen_controls(rows: list[dict[str, Any]], config: dict[str, Any]):
         vectors[name + "_intercept"] = lr.intercept_
         vectors[name + "_idf"] = vectorizer.idf_
         provenance["text_models"][name] = {"settings": settings,
-            "vocabulary": vectorizer.vocabulary_, "classes": lr.classes_.tolist()}
+            "vocabulary": {str(term): int(index) for term, index in vectorizer.vocabulary_.items()},
+            "classes": lr.classes_.tolist()}
     for field in ("sequence_nll", "mean_token_nll"):
         model = make_pipeline(StandardScaler(), LogisticRegression(**classifier))
         model.fit(np.asarray([[row[field]] for row in train_rows]), labels,

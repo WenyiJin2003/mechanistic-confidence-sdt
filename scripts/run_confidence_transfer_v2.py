@@ -51,7 +51,12 @@ def sanity(rows, sources, config):
     report = {"passed": all(checks.values()), "checks": checks, "source_ids": chosen,
               "first_pass_runtime": first_runtime, "resume_runtime": second_runtime,
               "outcome_scores_inspected": False}
-    write_json(resolve(config["output"]["results_dir"]) / "sanity_check.json", report)
+    output = resolve(config["output"]["results_dir"])
+    previous = output / "sanity_check.json"
+    initial = output / "sanity_check_initial.json"
+    if previous.exists() and not initial.exists():
+        write_json(initial, json.loads(previous.read_text(encoding="utf-8")))
+    write_json(previous, report)
     if not report["passed"]:
         raise RuntimeError("Engineering gate failed; full v2 extraction is blocked")
     return report
