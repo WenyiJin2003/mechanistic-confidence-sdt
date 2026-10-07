@@ -4,6 +4,12 @@
 
 This repository is a small-scale validation study adapted from the official implementation. It tests whether the method produces a reliable enough internal signal to support the next experiment; it is not a full replication of the paper.
 
+## Latest result: Stage 0B
+
+**A hidden-state probe taken after one complete answer can predict some of the semantic variability in nine alternative answers, but it does not outperform the likelihood of that same observed answer.** On the held-out test set, the layer-14 probe reached AUROC 0.693, same-answer NLL reached 0.773, and their leakage-safe combination reached 0.763. A predeclared answer-index-3 check produced the same ordering.
+
+In plain language, the internal representation contains a readable uncertainty-related association, but the tested probe does not provide useful information beyond the probability Qwen already assigned to its answer. **Stage 0B therefore does not justify using this probe as an independent confidence signal or training loss.** See [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md#stage-0b--post-answer-hidden-state-diagnostic).
+
 ## Conclusion
 
 > **Project decision: continue to a controlled activation-steering experiment. Do not begin mechanistic-loss training yet.**

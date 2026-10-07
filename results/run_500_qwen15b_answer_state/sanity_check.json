@@ -1,0 +1,67 @@
+{
+  "checks": {
+    "all_required_nli_judgments_cached": true,
+    "cached_answer_ids_appended_exactly": true,
+    "cached_prompt_reconstructed_and_token_metadata_matched": true,
+    "final_answer_token_locations_correct": true,
+    "layer_14_hidden_states_finite": true,
+    "mean_pooling_excludes_prompt_eos_and_padding": true,
+    "nli_cache_unchanged": true,
+    "no_answer_generation": true,
+    "no_nli_model_calls": true,
+    "sanity_binary_labels_non_degenerate": true,
+    "sanity_leave_one_out_entropy_varies": true,
+    "source_context_split_has_zero_overlap": true,
+    "source_split_membership_preserved": true
+  },
+  "examples": 20,
+  "leave_one_out_threshold_fit_on_full_source_training_split": 0.7678235671618703,
+  "nli_coverage": {
+    "coverage_complete": true,
+    "directed_nonduplicate_pair_occurrences": 20410,
+    "missing_cached_judgments": 0,
+    "nli_inference_calls": 0,
+    "normalized_equal_pair_occurrences": 15590,
+    "observed_answer_index": 0,
+    "unique_required_cached_judgments": 12436
+  },
+  "observed_answer_index": 0,
+  "passed": true,
+  "runtime": {
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 0.38941962498938665,
+    "examples": 20,
+    "generation_calls": 0,
+    "hidden_width": 1536,
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "nli_model_calls": 0,
+    "resumable_state_cache_hits": 20,
+    "teacher_forced_forward_calls": 0
+  },
+  "sanity_label_distribution": {
+    "0": 12,
+    "1": 8
+  },
+  "split_audit": {
+    "context_overlap_counts": {
+      "train_test": 0,
+      "train_validation": 0,
+      "validation_test": 0
+    },
+    "membership_sha256": "71ec60438131250bf6f998e253458a11a5dd851e6cb827b0bc76f2b0109dc33d",
+    "method": "fixed_group_split_by_normalized_context",
+    "sizes": {
+      "test": 99,
+      "train": 307,
+      "validation": 94
+    },
+    "source_membership_reused_exactly": true,
+    "unique_contexts": {
+      "test": 81,
+      "train": 243,
+      "validation": 81
+    }
+  }
+}
