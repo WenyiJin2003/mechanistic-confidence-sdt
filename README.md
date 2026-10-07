@@ -1,75 +1,72 @@
-# Semantic Uncertainty and Expressed-Certainty Readouts
+# Confidence Readouts Before Synthetic-Document Training
 
-This repository studies two related but distinct constructs: semantic uncertainty
-in sampled answers and expressed certainty in fixed written responses. It adapts
-Kossen et al.'s [*Semantic Entropy Probes*](https://arxiv.org/abs/2406.15927) and
-[official OATML implementation](https://github.com/OATML/semantic-entropy-probes)
-for small-scale Qwen experiments, then adds a controlled paired-response pilot.
-It is not a full replication of the original paper.
+**Transfer v2 is complete: the frozen readout transfers to new certainty wording
+and shows a pooled association with supplied evidence, but fails its registered
+fact-type robustness gate. The boundary readout is not ready for an SDT loss.**
 
-## Current conclusion
+The primary direction was unchanged from paired pilot v1. V2 tested 48 fresh
+fictional facts, with identical neutral answer tokens across evidence conditions.
 
-Paired confidence pilot v1 supports a candidate layer-14 readout of **expressed
-certainty** on a controlled dataset: it ordered all 48 held-out rewrite pairs
-across 24 unseen sources. Shared phrasing effects remain plausible: 12 of 200
-shuffled directions also achieved perfect ordering, and five family-C pairs
-failed outside the test split. See the [v1 results](PAIRED_CONFIDENCE_RESULTS_V1.md).
+| Required endpoint | Ordering | Source-bootstrap 95% interval |
+|---|---:|---:|
+| New confident/hedged wording | 87/96 (90.6%) | 81.3–97.9% |
+| Neutral QA: supported > omitted evidence | 35/48 (72.9%) | 60.4–85.4% |
+| Independent raw-likelihood manipulation check | 48/48 (100%) | Saturated empirical interval |
 
-**Next decision: test the unchanged v1 readout on fresh wording and on identical
-neutral answers with different supplied evidence, before considering a
-mechanistic loss for synthetic-document training (SDT).** Transfer v2 is
-[preregistered](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md); no v2 outcome has
-been evaluated yet. Its [results page](CONFIDENCE_TRANSFER_RESULTS_V2.md) records
-the current execution state.
+Both pooled readout scores exceed their thresholds, but release-year evidence
+ordering is **4/12 (33.3%)**, below chance. The preregistration required no fact
+type below chance. The evidence manipulation passed, so this is a completed
+robustness failure, not absence of a pooled signal or an inconclusive manipulation.
+See the [v2 results](CONFIDENCE_TRANSFER_RESULTS_V2.md).
 
-The present evidence does not establish subjective confidence, factual belief,
-calibration, or causal control. A tone-sensitive readout could reward assertive
-writing without tracking support for an answer. The evidence-transfer test
-therefore comes before any decision to use this readout as an SDT loss; even a
-successful transfer would leave causal and training validation outstanding.
+The research aim is ordinary synthetic-document training (SDT) plus a possible
+auxiliary internal-confidence loss that preserves answer accuracy. Before that
+term can guide training, we need to know whether it measures support for an
+answer rather than rewarding assertive wording. Transfer is one prerequisite;
+causal effects and held-out accuracy/calibration still need separate validation.
+
+## Next decision
+
+The separately frozen layer-14 final-content and response-mean readouts reached
+93.8% evidence ordering; their wording scores were 86.5% and 100%, respectively.
+They are candidates for **prospective confirmation on fresh data**, not substitutes
+for the failed primary endpoint. Fix the candidate positions and decision rules
+before testing new facts, field names, and same-proposition wording controls.
+
+Removing the single v1 correctness direction reduced primary evidence ordering
+to 50%; that ablation does not prove independence or a confidence mechanism.
+Strong individual null directions also remain possible. No subjective-confidence,
+calibration, causal-control, or training-loss claim is established.
 
 ## Research sequence
 
-Stage 0 and Stage 0B are this project's names for measurement diagnostics, not
-stages defined by the original paper. Stage 0B adds a post-answer comparison
-using the same observed answer for the probe and likelihood baseline.
+Stage 0 and Stage 0B are this project's measurement-stage names, not stages
+defined by the original paper. These studies use distinct targets and endpoints.
 
-| Study | Question | Evidence and decision |
+| Study | Question | Conclusion |
 |---|---|---|
-| Stage 0 | Can pre-answer activations predict sampled semantic uncertainty? | A reproducible association and direction, without improvement over answer likelihood. [Report](RESULTS_STAGE0.md) |
-| Stage 0B | Does a post-answer probe add information beyond the same answer's likelihood? | No reliable incremental gain. [Report](RESULTS_STAGE0.md#stage-0b--post-answer-hidden-state-diagnostic) |
-| Paired pilot v1 | Can a readout distinguish expressed certainty with answer content fixed? | A candidate on controlled rewrites; broader transfer remains untested. [Report](PAIRED_CONFIDENCE_RESULTS_V1.md) |
-| Frozen-readout transfer v2 | Does the v1 direction transfer to fresh wording and neutral answers under different evidence? | Design registered; outcomes pending. [Design](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) |
+| [Stage 0](RESULTS_STAGE0.md) | Do pre-answer states predict sampled semantic uncertainty? | Reproducible association and direction; no improvement over answer likelihood. |
+| [Stage 0B](RESULTS_STAGE0.md#stage-0b--post-answer-hidden-state-diagnostic) | Does a post-answer probe add information beyond the same answer's likelihood? | No reliable incremental gain. |
+| [Paired pilot v1](PAIRED_CONFIDENCE_RESULTS_V1.md) | Can a readout order expressed certainty with answer content fixed? | Candidate on controlled rewrites; shared phrasing shifts and broad nulls limit interpretation. |
+| [Frozen transfer v2](CONFIDENCE_TRANSFER_RESULTS_V2.md) | Does that unchanged readout transfer to wording and supplied evidence? | Pooled transfer association; required fact-type gate fails. |
 
-These studies have different targets and endpoints. Their scores are not a
-single improving confidence benchmark. Historical reports retain their original
-findings and decisions; [STATUS.md](STATUS.md) gives the current project decision.
+```mermaid
+flowchart LR
+    V["v2: primary robustness gate fails"] --> F["Freeze content-readout candidates; test fresh data"]
+    F -->|"only if confirmed"| C["Causal and answer-quality checks"]
+    C -->|"only if validated"| L["Consider an auxiliary SDT loss"]
+```
 
-## Transfer v2 at a glance
+## Evidence and reproduction
 
-The primary v1 layer-14 boundary direction is frozen without refitting, sign
-selection, or new thresholds. Forty-eight fictional registry facts supply fresh
-test sources. Two required endpoints ask whether it orders new confident/hedged
-wording and whether it scores a neutral answer higher when the context supplies
-its target fact than when that fact is omitted. The evidence comparison requires
-identical response tokens and exactly matched full prompt token counts.
+- [Current status](STATUS.md) — completed result and next decision
+- [V2 results](CONFIDENCE_TRANSFER_RESULTS_V2.md), [preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and [execution runbook](CONFIDENCE_TRANSFER_README_V2.md)
+- [V1 results](PAIRED_CONFIDENCE_RESULTS_V1.md), [preregistration](PAIRED_CONFIDENCE_PREREGISTRATION_V1.md), and [execution](PAIRED_CONFIDENCE_README.md)
+- [Stage 0/0B report](RESULTS_STAGE0.md) and [technical runbook](README_STAGE0.md) — historical findings preserved
+- [Artifact index](results/README.md) and [documentation/provenance](docs/README.md)
 
-An independent response-likelihood check must verify that the evidence
-manipulation works. Both primary endpoints must pass their registered gates;
-secondary positions and document-format results cannot rescue a failure.
-Supported-versus-omitted labels measure supplied-context sufficiency, not the
-model's true confidence. The [preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md)
-and [configuration](configs/paired_confidence_transfer_v2.yaml) specify the
-controls, hashes, and decision rules. V2 performs no steering or model training.
-
-## Reproduction and evidence
-
-- [Current project status](STATUS.md) — current result, next gate, and limits
-- [Transfer v2 preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) and [results](CONFIDENCE_TRANSFER_RESULTS_V2.md) — frozen design and execution state
-- [Paired pilot v1 execution](PAIRED_CONFIDENCE_README.md), [preregistration](PAIRED_CONFIDENCE_PREREGISTRATION_V1.md), and [results](PAIRED_CONFIDENCE_RESULTS_V1.md) — completed construct pilot
-- [Stage 0/0B results](RESULTS_STAGE0.md) and [technical runbook](README_STAGE0.md) — historical semantic-uncertainty evidence and reproduction
-- [Aggregate artifact index](results/README.md) — checked-in evidence; resumable inference caches and model weights are excluded from Git
-- [Documentation index](docs/README.md) — upstream provenance and historical plans
-
-The preserved upstream snapshot is pinned to commit
-`02e2167dd1c00e27080d421f9b40e13e00f0452b`, and its MIT license is retained.
+This small-scale Qwen study adapts Kossen et al.'s
+[*Semantic Entropy Probes*](https://arxiv.org/abs/2406.15927) and
+[official OATML implementation](https://github.com/OATML/semantic-entropy-probes);
+it is not a full paper replication. The preserved upstream snapshot is commit
+`02e2167dd1c00e27080d421f9b40e13e00f0452b`, with its MIT license retained.
