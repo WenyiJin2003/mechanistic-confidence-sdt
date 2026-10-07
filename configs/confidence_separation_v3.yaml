@@ -1,0 +1,55 @@
+experiment: confidence_correctness_separation_v3
+runtime:
+  shared_repo: ../semantic-entropy-probes-stage0
+  device_preference: [mps, cuda, cpu]
+  dtype: bfloat16
+  cpu_fallback: true
+model:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  snapshot: cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  attention: eager
+  max_tokens: 1024
+  system_prompt: You are a helpful assistant.
+  layers: [14, 23]
+  boundary_token: <|im_end|>
+  boundary_token_id: 151645
+  positions: [boundary, final_content, response_mean, prompt]
+  prompt_control_atol: 0.000001
+source_artifacts:
+  directions:
+    path: results/paired_confidence_phase_b/readout_directions.npz
+    sha256: 62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c
+  extraction_rows:
+    path: results/paired_confidence_phase_b/extraction_rows.jsonl
+    sha256: 3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c
+  hidden_states:
+    path: results/paired_confidence_phase_b/hidden_states.npz
+    sha256: 1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46
+data:
+  source_items: data/confidence_separation_v3/source_items.jsonl
+  variants: data/confidence_separation_v3/variants.jsonl
+dataset:
+  seed: 20261009
+  num_sources: 48
+  sources_per_fact_type: 12
+  expected_responses: 672
+  fact_types: [access_code, room_assignment, release_year, material]
+  wording_families: 3
+analysis:
+  primary_candidates: [layer14_final_content, layer14_response_mean]
+  reference_readout: layer14_boundary
+  endpoints: [certainty_wording, neutral_true_vs_false, neutral_supported_vs_omitted]
+  seed: 20261009
+  bootstrap_seed: 271828
+  bootstrap_samples: 2000
+  ordering_accuracy_min: 0.65
+  nll_manipulation_accuracy_min: 0.75
+  null_seed: 20261009
+  random_directions: 200
+  no_v3_fitting: true
+output:
+  results_dir: results/confidence_separation_v3
+  cache_dir: cache/confidence_separation_v3
+  plot: plots/confidence_separation_v3.png
+  browser_dir: datasets/confidence-separation-v3
