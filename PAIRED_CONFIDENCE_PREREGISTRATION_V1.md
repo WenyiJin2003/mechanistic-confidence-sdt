@@ -29,7 +29,9 @@ template, and gate choice below is our implementation choice.
 
 Each source has correct and deliberately incorrect answer content. Each content
 has confident and hedged versions, preserving the exact answer proposition and
-all qualifications. The four cells are balanced. Templates use multiple distinct
+all qualifications. Answers are uniformly double-quoted in both versions so
+fragmentary MMLU choices remain grammatical as short-answer content. The four
+cells are balanced. Templates use multiple distinct
 phrasings; no rewrite instruction or certainty/correctness label enters Qwen's
 input. No response generation or entailment inference is needed.
 
