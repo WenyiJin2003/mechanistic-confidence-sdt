@@ -1,0 +1,3391 @@
+{
+  "all_rows_test_only": true,
+  "all_sources_test_only": true,
+  "candidate_value_presence_all_conditions": true,
+  "catalog_sha256": "1f6bb8dc8d58ff6200e7348afeafdaeffc5c27913000cc5f927302aebbb2de5c",
+  "condition_variant_counts": {
+    "conflicting": 96,
+    "omitted": 96,
+    "supported": 288
+  },
+  "downloads": 0,
+  "errors": [],
+  "evidence_definition": "supported/omitted/conflicting label evidence sufficiency, not true or internal confidence.",
+  "experiment_variant_counts": {
+    "natural_style": 192,
+    "neutral_evidence": 288
+  },
+  "fact_type_source_counts": {
+    "access_code": 12,
+    "material": 12,
+    "release_year": 12,
+    "room_assignment": 12
+  },
+  "format_variant_counts": {
+    "document": 144,
+    "qa": 336
+  },
+  "label_selection_uses_tokenizer_only": true,
+  "length_subsets": {
+    "assertion_longer_all_lengths": [
+      "v2-access_code-07--natural--correct--confident",
+      "v2-access_code-07--natural--incorrect--confident",
+      "v2-access_code-08--natural--correct--confident",
+      "v2-access_code-08--natural--incorrect--confident",
+      "v2-access_code-09--natural--correct--confident",
+      "v2-access_code-09--natural--incorrect--confident",
+      "v2-access_code-10--natural--correct--confident",
+      "v2-access_code-10--natural--incorrect--confident",
+      "v2-access_code-11--natural--correct--confident",
+      "v2-access_code-11--natural--incorrect--confident",
+      "v2-access_code-12--natural--correct--confident",
+      "v2-access_code-12--natural--incorrect--confident",
+      "v2-room_assignment-07--natural--correct--confident",
+      "v2-room_assignment-07--natural--incorrect--confident",
+      "v2-room_assignment-08--natural--correct--confident",
+      "v2-room_assignment-08--natural--incorrect--confident",
+      "v2-room_assignment-09--natural--correct--confident",
+      "v2-room_assignment-09--natural--incorrect--confident",
+      "v2-room_assignment-10--natural--correct--confident",
+      "v2-room_assignment-10--natural--incorrect--confident",
+      "v2-room_assignment-11--natural--correct--confident",
+      "v2-room_assignment-11--natural--incorrect--confident",
+      "v2-room_assignment-12--natural--correct--confident",
+      "v2-room_assignment-12--natural--incorrect--confident",
+      "v2-release_year-07--natural--correct--confident",
+      "v2-release_year-07--natural--incorrect--confident",
+      "v2-release_year-08--natural--correct--confident",
+      "v2-release_year-08--natural--incorrect--confident",
+      "v2-release_year-09--natural--correct--confident",
+      "v2-release_year-09--natural--incorrect--confident",
+      "v2-release_year-10--natural--correct--confident",
+      "v2-release_year-10--natural--incorrect--confident",
+      "v2-release_year-11--natural--correct--confident",
+      "v2-release_year-11--natural--incorrect--confident",
+      "v2-release_year-12--natural--correct--confident",
+      "v2-release_year-12--natural--incorrect--confident",
+      "v2-material-07--natural--correct--confident",
+      "v2-material-07--natural--incorrect--confident",
+      "v2-material-08--natural--correct--confident",
+      "v2-material-08--natural--incorrect--confident",
+      "v2-material-09--natural--correct--confident",
+      "v2-material-09--natural--incorrect--confident",
+      "v2-material-10--natural--correct--confident",
+      "v2-material-10--natural--incorrect--confident",
+      "v2-material-11--natural--correct--confident",
+      "v2-material-11--natural--incorrect--confident",
+      "v2-material-12--natural--correct--confident",
+      "v2-material-12--natural--incorrect--confident"
+    ],
+    "assertion_shorter_all_lengths": [
+      "v2-access_code-01--natural--correct--confident",
+      "v2-access_code-01--natural--incorrect--confident",
+      "v2-access_code-02--natural--correct--confident",
+      "v2-access_code-02--natural--incorrect--confident",
+      "v2-access_code-03--natural--correct--confident",
+      "v2-access_code-03--natural--incorrect--confident",
+      "v2-access_code-04--natural--correct--confident",
+      "v2-access_code-04--natural--incorrect--confident",
+      "v2-access_code-05--natural--correct--confident",
+      "v2-access_code-05--natural--incorrect--confident",
+      "v2-room_assignment-01--natural--correct--confident",
+      "v2-room_assignment-01--natural--incorrect--confident",
+      "v2-room_assignment-02--natural--correct--confident",
+      "v2-room_assignment-02--natural--incorrect--confident",
+      "v2-room_assignment-03--natural--correct--confident",
+      "v2-room_assignment-03--natural--incorrect--confident",
+      "v2-room_assignment-04--natural--correct--confident",
+      "v2-room_assignment-04--natural--incorrect--confident",
+      "v2-room_assignment-05--natural--correct--confident",
+      "v2-room_assignment-05--natural--incorrect--confident",
+      "v2-release_year-01--natural--correct--confident",
+      "v2-release_year-01--natural--incorrect--confident",
+      "v2-release_year-02--natural--correct--confident",
+      "v2-release_year-02--natural--incorrect--confident",
+      "v2-release_year-03--natural--correct--confident",
+      "v2-release_year-03--natural--incorrect--confident",
+      "v2-release_year-04--natural--correct--confident",
+      "v2-release_year-04--natural--incorrect--confident",
+      "v2-release_year-05--natural--correct--confident",
+      "v2-release_year-05--natural--incorrect--confident",
+      "v2-material-01--natural--correct--confident",
+      "v2-material-01--natural--incorrect--confident",
+      "v2-material-02--natural--correct--confident",
+      "v2-material-02--natural--incorrect--confident",
+      "v2-material-03--natural--correct--confident",
+      "v2-material-03--natural--incorrect--confident",
+      "v2-material-04--natural--correct--confident",
+      "v2-material-04--natural--incorrect--confident",
+      "v2-material-05--natural--correct--confident",
+      "v2-material-05--natural--incorrect--confident"
+    ],
+    "char_length_matched": [
+      "v2-access_code-06--natural--correct--confident",
+      "v2-access_code-06--natural--incorrect--confident",
+      "v2-room_assignment-06--natural--correct--confident",
+      "v2-room_assignment-06--natural--incorrect--confident",
+      "v2-release_year-06--natural--correct--confident",
+      "v2-release_year-06--natural--incorrect--confident",
+      "v2-material-06--natural--correct--confident",
+      "v2-material-06--natural--incorrect--confident"
+    ],
+    "token_length_matched": [
+      "v2-access_code-06--natural--correct--confident",
+      "v2-access_code-06--natural--incorrect--confident",
+      "v2-room_assignment-06--natural--correct--confident",
+      "v2-room_assignment-06--natural--incorrect--confident",
+      "v2-release_year-06--natural--correct--confident",
+      "v2-release_year-06--natural--incorrect--confident",
+      "v2-material-06--natural--correct--confident",
+      "v2-material-06--natural--incorrect--confident"
+    ],
+    "word_length_matched": [
+      "v2-access_code-06--natural--correct--confident",
+      "v2-access_code-06--natural--incorrect--confident",
+      "v2-room_assignment-06--natural--correct--confident",
+      "v2-room_assignment-06--natural--incorrect--confident",
+      "v2-release_year-06--natural--correct--confident",
+      "v2-release_year-06--natural--incorrect--confident",
+      "v2-material-06--natural--correct--confident",
+      "v2-material-06--natural--incorrect--confident"
+    ]
+  },
+  "model_generation_calls": 0,
+  "model_scoring_calls": 0,
+  "natural_pair_count": 96,
+  "natural_pair_length_checks": [
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-access_code-01--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-01--natural--correct--hedged",
+      "source_id": "v2-access_code-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-access_code-01--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-01--natural--incorrect--hedged",
+      "source_id": "v2-access_code-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-access_code-02--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-02--natural--correct--hedged",
+      "source_id": "v2-access_code-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-access_code-02--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-02--natural--incorrect--hedged",
+      "source_id": "v2-access_code-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-access_code-03--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-03--natural--correct--hedged",
+      "source_id": "v2-access_code-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-access_code-03--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-03--natural--incorrect--hedged",
+      "source_id": "v2-access_code-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-access_code-04--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-04--natural--correct--hedged",
+      "source_id": "v2-access_code-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-access_code-04--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-04--natural--incorrect--hedged",
+      "source_id": "v2-access_code-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-access_code-05--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-05--natural--correct--hedged",
+      "source_id": "v2-access_code-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-access_code-05--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-05--natural--incorrect--hedged",
+      "source_id": "v2-access_code-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-access_code-06--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-06--natural--correct--hedged",
+      "source_id": "v2-access_code-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-access_code-06--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-06--natural--incorrect--hedged",
+      "source_id": "v2-access_code-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-access_code-07--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-07--natural--correct--hedged",
+      "source_id": "v2-access_code-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-access_code-07--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-07--natural--incorrect--hedged",
+      "source_id": "v2-access_code-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-access_code-08--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-08--natural--correct--hedged",
+      "source_id": "v2-access_code-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-access_code-08--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-08--natural--incorrect--hedged",
+      "source_id": "v2-access_code-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-access_code-09--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-09--natural--correct--hedged",
+      "source_id": "v2-access_code-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-access_code-09--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-09--natural--incorrect--hedged",
+      "source_id": "v2-access_code-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-access_code-10--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-10--natural--correct--hedged",
+      "source_id": "v2-access_code-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-access_code-10--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-10--natural--incorrect--hedged",
+      "source_id": "v2-access_code-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-access_code-11--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-11--natural--correct--hedged",
+      "source_id": "v2-access_code-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-access_code-11--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-11--natural--incorrect--hedged",
+      "source_id": "v2-access_code-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-access_code-12--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-access_code-12--natural--correct--hedged",
+      "source_id": "v2-access_code-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-access_code-12--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-access_code-12--natural--incorrect--hedged",
+      "source_id": "v2-access_code-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-room_assignment-01--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-01--natural--correct--hedged",
+      "source_id": "v2-room_assignment-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-room_assignment-01--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-01--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-room_assignment-02--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-02--natural--correct--hedged",
+      "source_id": "v2-room_assignment-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-room_assignment-02--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-02--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-room_assignment-03--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-03--natural--correct--hedged",
+      "source_id": "v2-room_assignment-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-room_assignment-03--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-03--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-room_assignment-04--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-04--natural--correct--hedged",
+      "source_id": "v2-room_assignment-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-room_assignment-04--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-04--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-room_assignment-05--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-05--natural--correct--hedged",
+      "source_id": "v2-room_assignment-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-room_assignment-05--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-05--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-room_assignment-06--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-06--natural--correct--hedged",
+      "source_id": "v2-room_assignment-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-room_assignment-06--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-06--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-room_assignment-07--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-07--natural--correct--hedged",
+      "source_id": "v2-room_assignment-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-room_assignment-07--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-07--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-room_assignment-08--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-08--natural--correct--hedged",
+      "source_id": "v2-room_assignment-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-room_assignment-08--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-08--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-room_assignment-09--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-09--natural--correct--hedged",
+      "source_id": "v2-room_assignment-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-room_assignment-09--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-09--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-room_assignment-10--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-10--natural--correct--hedged",
+      "source_id": "v2-room_assignment-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-room_assignment-10--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-10--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-room_assignment-11--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-11--natural--correct--hedged",
+      "source_id": "v2-room_assignment-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-room_assignment-11--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-11--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-room_assignment-12--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-room_assignment-12--natural--correct--hedged",
+      "source_id": "v2-room_assignment-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-room_assignment-12--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-room_assignment-12--natural--incorrect--hedged",
+      "source_id": "v2-room_assignment-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-release_year-01--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-01--natural--correct--hedged",
+      "source_id": "v2-release_year-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-release_year-01--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-01--natural--incorrect--hedged",
+      "source_id": "v2-release_year-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-release_year-02--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-02--natural--correct--hedged",
+      "source_id": "v2-release_year-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-release_year-02--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-02--natural--incorrect--hedged",
+      "source_id": "v2-release_year-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-release_year-03--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-03--natural--correct--hedged",
+      "source_id": "v2-release_year-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-release_year-03--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-03--natural--incorrect--hedged",
+      "source_id": "v2-release_year-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-release_year-04--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-04--natural--correct--hedged",
+      "source_id": "v2-release_year-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-release_year-04--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-04--natural--incorrect--hedged",
+      "source_id": "v2-release_year-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-release_year-05--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-05--natural--correct--hedged",
+      "source_id": "v2-release_year-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-release_year-05--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-05--natural--incorrect--hedged",
+      "source_id": "v2-release_year-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-release_year-06--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-06--natural--correct--hedged",
+      "source_id": "v2-release_year-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-release_year-06--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-06--natural--incorrect--hedged",
+      "source_id": "v2-release_year-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-release_year-07--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-07--natural--correct--hedged",
+      "source_id": "v2-release_year-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-release_year-07--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-07--natural--incorrect--hedged",
+      "source_id": "v2-release_year-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-release_year-08--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-08--natural--correct--hedged",
+      "source_id": "v2-release_year-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-release_year-08--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-08--natural--incorrect--hedged",
+      "source_id": "v2-release_year-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-release_year-09--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-09--natural--correct--hedged",
+      "source_id": "v2-release_year-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-release_year-09--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-09--natural--incorrect--hedged",
+      "source_id": "v2-release_year-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-release_year-10--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-10--natural--correct--hedged",
+      "source_id": "v2-release_year-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-release_year-10--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-10--natural--incorrect--hedged",
+      "source_id": "v2-release_year-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-release_year-11--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-11--natural--correct--hedged",
+      "source_id": "v2-release_year-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-release_year-11--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-11--natural--incorrect--hedged",
+      "source_id": "v2-release_year-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-release_year-12--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-release_year-12--natural--correct--hedged",
+      "source_id": "v2-release_year-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-release_year-12--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-release_year-12--natural--incorrect--hedged",
+      "source_id": "v2-release_year-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-material-01--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-01--natural--correct--hedged",
+      "source_id": "v2-material-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -13,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-material-01--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-01--natural--incorrect--hedged",
+      "source_id": "v2-material-01",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N01"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-material-02--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-02--natural--correct--hedged",
+      "source_id": "v2-material-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -14,
+        "token_count": -3,
+        "word_count": -3
+      },
+      "confident_variant_id": "v2-material-02--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-02--natural--incorrect--hedged",
+      "source_id": "v2-material-02",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N02"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-material-03--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-03--natural--correct--hedged",
+      "source_id": "v2-material-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -8,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-material-03--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-03--natural--incorrect--hedged",
+      "source_id": "v2-material-03",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N03"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-material-04--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-04--natural--correct--hedged",
+      "source_id": "v2-material-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -21,
+        "token_count": -5,
+        "word_count": -4
+      },
+      "confident_variant_id": "v2-material-04--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-04--natural--incorrect--hedged",
+      "source_id": "v2-material-04",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N04"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-material-05--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-05--natural--correct--hedged",
+      "source_id": "v2-material-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": true,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": -2,
+        "token_count": -1,
+        "word_count": -1
+      },
+      "confident_variant_id": "v2-material-05--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-05--natural--incorrect--hedged",
+      "source_id": "v2-material-05",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N05"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-material-06--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-06--natural--correct--hedged",
+      "source_id": "v2-material-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": false,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": true,
+      "confident_minus_hedged": {
+        "char_count": 0,
+        "token_count": 0,
+        "word_count": 0
+      },
+      "confident_variant_id": "v2-material-06--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-06--natural--incorrect--hedged",
+      "source_id": "v2-material-06",
+      "token_length_matched": true,
+      "word_length_matched": true,
+      "wording_id": "N06"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-material-07--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-07--natural--correct--hedged",
+      "source_id": "v2-material-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 28,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-material-07--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-07--natural--incorrect--hedged",
+      "source_id": "v2-material-07",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N07"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-material-08--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-08--natural--correct--hedged",
+      "source_id": "v2-material-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 33,
+        "token_count": 8,
+        "word_count": 7
+      },
+      "confident_variant_id": "v2-material-08--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-08--natural--incorrect--hedged",
+      "source_id": "v2-material-08",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N08"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-material-09--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-09--natural--correct--hedged",
+      "source_id": "v2-material-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 25,
+        "token_count": 7,
+        "word_count": 6
+      },
+      "confident_variant_id": "v2-material-09--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-09--natural--incorrect--hedged",
+      "source_id": "v2-material-09",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N09"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-material-10--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-10--natural--correct--hedged",
+      "source_id": "v2-material-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 13,
+        "token_count": 5,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-material-10--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-10--natural--incorrect--hedged",
+      "source_id": "v2-material-10",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N10"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-material-11--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-11--natural--correct--hedged",
+      "source_id": "v2-material-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 41,
+        "token_count": 9,
+        "word_count": 8
+      },
+      "confident_variant_id": "v2-material-11--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-11--natural--incorrect--hedged",
+      "source_id": "v2-material-11",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N11"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-material-12--natural--correct--confident",
+      "correctness": "correct",
+      "hedged_variant_id": "v2-material-12--natural--correct--hedged",
+      "source_id": "v2-material-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    },
+    {
+      "assertion_longer_all_lengths": true,
+      "assertion_shorter_all_lengths": false,
+      "char_length_matched": false,
+      "confident_minus_hedged": {
+        "char_count": 27,
+        "token_count": 6,
+        "word_count": 4
+      },
+      "confident_variant_id": "v2-material-12--natural--incorrect--confident",
+      "correctness": "incorrect",
+      "hedged_variant_id": "v2-material-12--natural--incorrect--hedged",
+      "source_id": "v2-material-12",
+      "token_length_matched": false,
+      "word_length_matched": false,
+      "wording_id": "N12"
+    }
+  ],
+  "neutral_comparison_count_per_format": {
+    "document": 48,
+    "qa": 48
+  },
+  "neutral_evidence_checks": [
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "1627e329043ef0b91ce214dab4514a89f1c8ca56146e1729f7e69d4eeb58437f",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "1627e329043ef0b91ce214dab4514a89f1c8ca56146e1729f7e69d4eeb58437f",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "81378dac3826040b4a9316ab34a705839559639af8f4906aeef5b6c95356ece1",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "81378dac3826040b4a9316ab34a705839559639af8f4906aeef5b6c95356ece1",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "244d0454574a8c4f4b64cd6095a784863b4c811e1383f7db55f3c8d8f8f0c421",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "244d0454574a8c4f4b64cd6095a784863b4c811e1383f7db55f3c8d8f8f0c421",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "f549343bd441b6def9c9780f3b9928b5d35ffd1442ab9d6b1828d25e2360f6ec",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "f549343bd441b6def9c9780f3b9928b5d35ffd1442ab9d6b1828d25e2360f6ec",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "9b03125a29a17c02e4439a72fd122e6e9815246ad3c8f5634f26232e1057ae83",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "9b03125a29a17c02e4439a72fd122e6e9815246ad3c8f5634f26232e1057ae83",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "381794451f2a431cf559c6a7379b8fb755b7be8663257935c09b7ed62ec73a6a",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "381794451f2a431cf559c6a7379b8fb755b7be8663257935c09b7ed62ec73a6a",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "0d74d52362095d30d9ba243ea06878506536cc39aab0d7f665529d0689c4b261",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "0d74d52362095d30d9ba243ea06878506536cc39aab0d7f665529d0689c4b261",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "9e73b9caa7ac39710ba70fa7ab7fa77a941902ed16bee2cd4cfdc0fe6bfcdd98",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "9e73b9caa7ac39710ba70fa7ab7fa77a941902ed16bee2cd4cfdc0fe6bfcdd98",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "305f2b6da49ee4ce5c8f5711112e4382d72ac9d70ecfe7a064643141d08a7775",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "305f2b6da49ee4ce5c8f5711112e4382d72ac9d70ecfe7a064643141d08a7775",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "a6d2b910f8ab76d2c0cf052eaa61d997949b17998cf97cd7971401b18ac16ee6",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "a6d2b910f8ab76d2c0cf052eaa61d997949b17998cf97cd7971401b18ac16ee6",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "210146570a869b907d704e51147e07591fde36ac23f91b3965a1ccca912c8835",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "210146570a869b907d704e51147e07591fde36ac23f91b3965a1ccca912c8835",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "310d5ba5aaed045f088453abbc091793913b82f16a9bc259b45d3afcbf9752e5",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "310d5ba5aaed045f088453abbc091793913b82f16a9bc259b45d3afcbf9752e5",
+      "response_text_identical": true,
+      "source_id": "v2-access_code-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 55,
+        "omitted": 55,
+        "supported": 55
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "e025cf1ecdd4c49bcfc9df860dd571a0c1ce1b389bba56fcc7bfc9170a5bb375",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 60,
+        "omitted": 60,
+        "supported": 60
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "e025cf1ecdd4c49bcfc9df860dd571a0c1ce1b389bba56fcc7bfc9170a5bb375",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 56,
+        "omitted": 56,
+        "supported": 56
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "aee5e7647313bd1d70cecf12991c7f4e7cf50f3946ed25c4c84dc7bd12f330c2",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "aee5e7647313bd1d70cecf12991c7f4e7cf50f3946ed25c4c84dc7bd12f330c2",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 56,
+        "omitted": 56,
+        "supported": 56
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "8e047803f104fc4cd316737ce4713777f9a350b8ce7a7285b9ceebd961234444",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "8e047803f104fc4cd316737ce4713777f9a350b8ce7a7285b9ceebd961234444",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 56,
+        "omitted": 56,
+        "supported": 56
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "cbbd6b7c1c780c7adf037484de2884638895505f99ba43d4f6498ab23364ef5c",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "cbbd6b7c1c780c7adf037484de2884638895505f99ba43d4f6498ab23364ef5c",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 57,
+        "omitted": 57,
+        "supported": 57
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3c0f2fe7e4836a16f83b7667895661beb1a5a6b5f4e50a161b4d0d4455e76f66",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 62,
+        "omitted": 62,
+        "supported": 62
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3c0f2fe7e4836a16f83b7667895661beb1a5a6b5f4e50a161b4d0d4455e76f66",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 55,
+        "omitted": 55,
+        "supported": 55
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3ef4da9c61685ed84a4062fcf0feca5f270a966fae22887a42a611146d60550a",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 60,
+        "omitted": 60,
+        "supported": 60
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3ef4da9c61685ed84a4062fcf0feca5f270a966fae22887a42a611146d60550a",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 56,
+        "omitted": 56,
+        "supported": 56
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "455b9c13831d9c75790c1edae538db3ad9fa9a9bd460b5cb779626028b39f6a1",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "455b9c13831d9c75790c1edae538db3ad9fa9a9bd460b5cb779626028b39f6a1",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 56,
+        "omitted": 56,
+        "supported": 56
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "103c1ac9b89f4ba451d3039415c78325fa0bd7f199d812b2f9fa69ad6d0123f9",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "103c1ac9b89f4ba451d3039415c78325fa0bd7f199d812b2f9fa69ad6d0123f9",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "36a4874890849ac18adaa5da26d935c056a66b5e8a773f4f3f3385c987fed95d",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 64,
+        "omitted": 64,
+        "supported": 64
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "36a4874890849ac18adaa5da26d935c056a66b5e8a773f4f3f3385c987fed95d",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 56,
+        "omitted": 56,
+        "supported": 56
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "5e3fbc4ffa709247916806f3040b7bc0cb99c69c1ff7e31ffbdd597565575e2a",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "5e3fbc4ffa709247916806f3040b7bc0cb99c69c1ff7e31ffbdd597565575e2a",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 55,
+        "omitted": 55,
+        "supported": 55
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "eaa8b25d9e442aa93cd1d42a1fac6300449c5c488f7689a214bd8be2d7f028aa",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 60,
+        "omitted": 60,
+        "supported": 60
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "eaa8b25d9e442aa93cd1d42a1fac6300449c5c488f7689a214bd8be2d7f028aa",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 55,
+        "omitted": 55,
+        "supported": 55
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "7aa798645880eb5020af9be47810d25d845a674747c53260da9379c3f628d8ce",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 60,
+        "omitted": 60,
+        "supported": 60
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "7aa798645880eb5020af9be47810d25d845a674747c53260da9379c3f628d8ce",
+      "response_text_identical": true,
+      "source_id": "v2-room_assignment-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "53366cef30c8d9e164c9009bd41be6db1d8a555acef862755e513ea0bbf6c979",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "53366cef30c8d9e164c9009bd41be6db1d8a555acef862755e513ea0bbf6c979",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "d028d1222067aa9af2f5a7391a7dd5b255a2cb34f074e27bee381fefca5078a2",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "d028d1222067aa9af2f5a7391a7dd5b255a2cb34f074e27bee381fefca5078a2",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "5226d8e863d17218708e2394824a15377441d862f5687ae90ee6047371ae0abf",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "5226d8e863d17218708e2394824a15377441d862f5687ae90ee6047371ae0abf",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "d02f76eae72184bddbd6dc204d9f4e61a9408ffa5acb096fc924d4dbdf536088",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "d02f76eae72184bddbd6dc204d9f4e61a9408ffa5acb096fc924d4dbdf536088",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "6835eb596408f099c7b9b5669ae3ca6e631b6113db46b792f25a5630d96e0410",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "6835eb596408f099c7b9b5669ae3ca6e631b6113db46b792f25a5630d96e0410",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "a3f6846a62216ebb964aec48bace85e4bdd905329a9a0d839ccc564f57e5f10d",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "a3f6846a62216ebb964aec48bace85e4bdd905329a9a0d839ccc564f57e5f10d",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "8468e0003df756e20e663b7bc8ee07ddab8a16b8a035688404904d3c4e4f97b3",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "8468e0003df756e20e663b7bc8ee07ddab8a16b8a035688404904d3c4e4f97b3",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "48330a061ca543120d8bbd3dbdc05b74f9ceca65ecf36736b9a986d184c4f678",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "48330a061ca543120d8bbd3dbdc05b74f9ceca65ecf36736b9a986d184c4f678",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "92f0c73e455065bdfa04c4828cbdf4f398b29b35c65e1a5e8a67c6e8397448fc",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "92f0c73e455065bdfa04c4828cbdf4f398b29b35c65e1a5e8a67c6e8397448fc",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "4ff21c2606a34026277d5e33d203386781a08eeb731e7d6e32d8b6821d9c7aef",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "4ff21c2606a34026277d5e33d203386781a08eeb731e7d6e32d8b6821d9c7aef",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "5e14156b0fc5338ee1f98fdf0f682f7db9539680bdf745dd869f01461e109d22",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "5e14156b0fc5338ee1f98fdf0f682f7db9539680bdf745dd869f01461e109d22",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 61,
+        "omitted": 61,
+        "supported": 61
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "34a522a204aabb4f1f2fcb1ea6d40175023be914e83afafbe02c3423c55569bc",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 66,
+        "omitted": 66,
+        "supported": 66
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "34a522a204aabb4f1f2fcb1ea6d40175023be914e83afafbe02c3423c55569bc",
+      "response_text_identical": true,
+      "source_id": "v2-release_year-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3c6361338f971d008cd7dff412e3831c60cb54c2633e96b7cfceb1566da1281b",
+      "response_text_identical": true,
+      "source_id": "v2-material-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3c6361338f971d008cd7dff412e3831c60cb54c2633e96b7cfceb1566da1281b",
+      "response_text_identical": true,
+      "source_id": "v2-material-01"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "0705f75aa3a6119fec0cecd9018c8acf2dec08726ec8a282eba5289fce8b399e",
+      "response_text_identical": true,
+      "source_id": "v2-material-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "0705f75aa3a6119fec0cecd9018c8acf2dec08726ec8a282eba5289fce8b399e",
+      "response_text_identical": true,
+      "source_id": "v2-material-02"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "449dc6101522cc85e0975b9eae72df8c97086ce7f9c63eea738435451a9e5d71",
+      "response_text_identical": true,
+      "source_id": "v2-material-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "449dc6101522cc85e0975b9eae72df8c97086ce7f9c63eea738435451a9e5d71",
+      "response_text_identical": true,
+      "source_id": "v2-material-03"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "16a3786d5ceea092608c966ca9eb4bd2e40c46795674550d3dae7a7e69aa5bd7",
+      "response_text_identical": true,
+      "source_id": "v2-material-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "16a3786d5ceea092608c966ca9eb4bd2e40c46795674550d3dae7a7e69aa5bd7",
+      "response_text_identical": true,
+      "source_id": "v2-material-04"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "584a61fe7d9275654ff05aa31c7b491d46478439b63206aa62c4cbcf49cb6de0",
+      "response_text_identical": true,
+      "source_id": "v2-material-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "584a61fe7d9275654ff05aa31c7b491d46478439b63206aa62c4cbcf49cb6de0",
+      "response_text_identical": true,
+      "source_id": "v2-material-05"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "c5c19d6108130858056d99de7dda4f52a0957739e3985b94c4d0b077b1930541",
+      "response_text_identical": true,
+      "source_id": "v2-material-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "c5c19d6108130858056d99de7dda4f52a0957739e3985b94c4d0b077b1930541",
+      "response_text_identical": true,
+      "source_id": "v2-material-06"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "4e831bd0d200dc4c7d45a4aef1f9768eff51f3c44cb9995d04f6efd78d1d8a0b",
+      "response_text_identical": true,
+      "source_id": "v2-material-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "4e831bd0d200dc4c7d45a4aef1f9768eff51f3c44cb9995d04f6efd78d1d8a0b",
+      "response_text_identical": true,
+      "source_id": "v2-material-07"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "6032a67ab2acd3b493f058bb813f73ead18eac51c8cdf2742f89451cd49db65c",
+      "response_text_identical": true,
+      "source_id": "v2-material-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "6032a67ab2acd3b493f058bb813f73ead18eac51c8cdf2742f89451cd49db65c",
+      "response_text_identical": true,
+      "source_id": "v2-material-08"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "2437d2cdf7e67211203f44f73be3609371b506a4c8a0e3fe7cf4bad2de93da05",
+      "response_text_identical": true,
+      "source_id": "v2-material-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "2437d2cdf7e67211203f44f73be3609371b506a4c8a0e3fe7cf4bad2de93da05",
+      "response_text_identical": true,
+      "source_id": "v2-material-09"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "b2c34f210c5195cd9f9b640fc80cbdb083ddd0c6d90e0776891aa98e5f7b9570",
+      "response_text_identical": true,
+      "source_id": "v2-material-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "b2c34f210c5195cd9f9b640fc80cbdb083ddd0c6d90e0776891aa98e5f7b9570",
+      "response_text_identical": true,
+      "source_id": "v2-material-10"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "586638fd22b295d405b799be96c0ad8d3aac21f7f3b038b1483986737a87cfee",
+      "response_text_identical": true,
+      "source_id": "v2-material-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "586638fd22b295d405b799be96c0ad8d3aac21f7f3b038b1483986737a87cfee",
+      "response_text_identical": true,
+      "source_id": "v2-material-11"
+    },
+    {
+      "conditions_complete": true,
+      "format": "qa",
+      "prompt_token_counts": {
+        "conflicting": 54,
+        "omitted": 54,
+        "supported": 54
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3af7fd5bb264fcd0f885edd112ae627354f3ad68b1b2596e8f262c88e492a92b",
+      "response_text_identical": true,
+      "source_id": "v2-material-12"
+    },
+    {
+      "conditions_complete": true,
+      "format": "document",
+      "prompt_token_counts": {
+        "conflicting": 59,
+        "omitted": 59,
+        "supported": 59
+      },
+      "prompt_token_counts_equal": true,
+      "response_ids_identical": true,
+      "response_ids_sha256": "3af7fd5bb264fcd0f885edd112ae627354f3ad68b1b2596e8f262c88e492a92b",
+      "response_text_identical": true,
+      "source_id": "v2-material-12"
+    }
+  ],
+  "omitted_true_value_present": true,
+  "passed": true,
+  "seed": 20261008,
+  "source_count": 48,
+  "source_freshness": {
+    "all_keys_new": true,
+    "construction_prevents_real_world_reference_answers": true,
+    "v1_catalog_path": "data/paired_confidence/source_items.jsonl",
+    "v1_source_count": 120,
+    "v2_entity_overlap": [],
+    "v2_source_id_overlap": []
+  },
+  "target_line_order_counts": {
+    "first": 24,
+    "second": 24
+  },
+  "template_pairs": [
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "I think that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "think adds epistemic reservation to the same declarative claim",
+      "single_same_proposition": true,
+      "wording_id": "N01"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "It seems that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "seems adds epistemic reservation to the same declarative claim",
+      "single_same_proposition": true,
+      "wording_id": "N02"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "Perhaps {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "perhaps qualifies only the same declarative claim",
+      "single_same_proposition": true,
+      "wording_id": "N03"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "{claim} I could be mistaken.",
+      "quote_free": true,
+      "scoreless_review": "could be mistaken qualifies only the same preceding claim",
+      "single_same_proposition": true,
+      "wording_id": "N04"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "My answer is that {lower_claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "It seems to me that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "seems to me qualifies the same answer proposition",
+      "single_same_proposition": true,
+      "wording_id": "N05"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim} That is my response.",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "{claim} I could be mistaken.",
+      "quote_free": true,
+      "scoreless_review": "same-word-count suffixes contrast an answer declaration with fallibility",
+      "single_same_proposition": true,
+      "wording_id": "N06"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim} That is the answer I give for this item.",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "I think that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "answer-declaration suffix adds no evidence; think qualifies the same claim",
+      "single_same_proposition": true,
+      "wording_id": "N07"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim} This is the answer I would give for this item.",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "It seems that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "answer-declaration suffix adds no evidence; seems qualifies the same claim",
+      "single_same_proposition": true,
+      "wording_id": "N08"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "For this item, my answer is that {lower_claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "Perhaps {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "answer framing adds no evidence; perhaps qualifies the same claim",
+      "single_same_proposition": true,
+      "wording_id": "N09"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim} I give this as my answer for the item.",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "My working answer is that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "answer-declaration suffix adds no evidence; working answer qualifies the same claim",
+      "single_same_proposition": true,
+      "wording_id": "N10"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "{claim} This is my answer to the question for this item.",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "I think {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "answer-declaration suffix adds no evidence; think qualifies the same claim",
+      "single_same_proposition": true,
+      "wording_id": "N11"
+    },
+    {
+      "additional_answer": false,
+      "additional_evidence": false,
+      "assigned_fact_types": [
+        "access_code",
+        "material",
+        "release_year",
+        "room_assignment"
+      ],
+      "assigned_source_count": 4,
+      "confident_template": "For this item, I give the following answer: {lower_claim}",
+      "excluded_v1_words_absent": true,
+      "hedged_template": "It might be that {lower_claim}",
+      "quote_free": true,
+      "scoreless_review": "answer framing adds no evidence; might qualifies the same claim",
+      "single_same_proposition": true,
+      "wording_id": "N12"
+    }
+  ],
+  "truth_definition": "World correctness is fixed by the fictional key for every evidence condition.",
+  "value_order_balanced_per_condition": {
+    "conflicting": {
+      "false_first": 24,
+      "true_first": 24
+    },
+    "omitted": {
+      "false_first": 24,
+      "true_first": 24
+    },
+    "supported": {
+      "false_first": 24,
+      "true_first": 24
+    }
+  },
+  "variant_count": 480,
+  "version": "paired-confidence-transfer-v2"
+}
