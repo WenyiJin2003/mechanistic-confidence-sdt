@@ -1,0 +1,39 @@
+phase: b
+runtime:
+  shared_repo: ../semantic-entropy-probes-stage0
+  device_preference: [mps, cuda, cpu]
+  dtype: bfloat16
+  cpu_fallback: true
+model:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  snapshot: cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  attention: eager
+  max_tokens: 1024
+  system_prompt: You are a helpful assistant.
+  layers: [14, 23]
+  boundary_token: <|im_end|>
+  boundary_token_id: 151645
+  positions: [boundary, final_content, response_mean, prompt]
+  prompt_control_atol: 0.000001
+data:
+  source_items: data/paired_confidence/source_items.jsonl
+  variants: data/paired_confidence/variants.jsonl
+dataset:
+  families: [A, B, C]
+  sources_per_domain: 40
+  split_sizes: {train: 72, validation: 24, test: 24}
+  data_preservation_min: 0.95
+analysis:
+  seed: 20261007
+  bootstrap_samples: 2000
+  bootstrap_seed: 161803
+  null_repetitions: 200
+  random_directions: 200
+  logistic_c: 1.0
+  max_iter: 2000
+  primary_test_accuracy_min: 0.65
+output:
+  results_dir: results/paired_confidence_phase_b
+  cache_dir: cache/paired_confidence
+  plot: plots/paired_confidence_pairwise_results.png
