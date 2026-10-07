@@ -1,11 +1,13 @@
-# Confidence Readouts Before Synthetic-Document Training
+# Measurement Studies Before an Internal SDT Loss
 
 **Transfer v2 is complete: the frozen readout transfers to new certainty wording
 and shows a pooled association with supplied evidence, but fails its registered
 fact-type robustness gate. The boundary readout is not ready for an SDT loss.**
 
-The primary direction was unchanged from paired pilot v1. V2 tested 48 fresh
+The primary direction was unchanged from Paired Confidence v1. V2 tested 48 fresh
 fictional facts, with identical neutral answer tokens across evidence conditions.
+This is the v1 **post-response expressed-certainty direction**, not the Stage 0
+prompt-state semantic-uncertainty probe.
 
 | Required endpoint | Ordering | Source-bootstrap 95% interval |
 |---|---:|---:|
@@ -41,14 +43,19 @@ calibration, causal-control, or training-loss claim is established.
 ## Research sequence
 
 Stage 0 and Stage 0B are this project's measurement-stage names, not stages
-defined by the original paper. These studies use distinct targets and endpoints.
+defined by the original paper. These studies do not use one interchangeable
+“confidence probe”; their targets and token positions differ.
 
-| Study | Question | Conclusion |
-|---|---|---|
-| [Stage 0](RESULTS_STAGE0.md) | Do pre-answer states predict sampled semantic uncertainty? | Reproducible association and direction; no improvement over answer likelihood. |
-| [Stage 0B](RESULTS_STAGE0.md#stage-0b--post-answer-hidden-state-diagnostic) | Does a post-answer probe add information beyond the same answer's likelihood? | No reliable incremental gain. |
-| [Paired pilot v1](PAIRED_CONFIDENCE_RESULTS_V1.md) | Can a readout order expressed certainty with answer content fixed? | Candidate on controlled rewrites; shared phrasing shifts and broad nulls limit interpretation. |
-| [Frozen transfer v2](CONFIDENCE_TRANSFER_RESULTS_V2.md) | Does that unchanged readout transfer to wording and supplied evidence? | Pooled transfer association; required fact-type gate fails. |
+| Canonical name | Primary token position | Target / comparison | Conclusion |
+|---|---|---|---|
+| [Stage 0 — Prompt-State Semantic-Uncertainty Probe](RESULTS_STAGE0.md#outcome) | Final rendered prompt token, before the answer | Semantic entropy of sampled future answers | Reproducible association; no improvement over answer likelihood. |
+| [Stage 0B — Answer-State Semantic-Uncertainty Diagnostic](RESULTS_STAGE0.md#stage-0b--post-answer-hidden-state-diagnostic) | Final ordinary token of one observed answer | Semantic entropy of nine alternative answers | No reliable incremental gain over the same answer's likelihood. |
+| [Paired Confidence v1 — Answer-End Expressed-Certainty Readout](PAIRED_CONFIDENCE_RESULTS_V1.md) | Post-response `<\|im_end\|>` token | Confident versus hedged wording with answer content fixed | Candidate expressed-certainty direction; shared phrasing shifts and broad nulls limit interpretation. |
+| [Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test](CONFIDENCE_TRANSFER_RESULTS_V2.md) | Same post-response `<\|im_end\|>` token | Frozen v1 ordering on new wording and identical answers under different evidence | Pooled transfer association; required fact-type gate fails. |
+
+Only v1 → v2 reuses the same fitted direction. The
+[experiment map](EXPERIMENT_MAP.md) gives the precise naming, data and equations,
+including a short explanation of how Paired Confidence v1 was calculated.
 
 ```mermaid
 flowchart LR
@@ -60,6 +67,7 @@ flowchart LR
 ## Evidence and reproduction
 
 - [Current status](STATUS.md) — completed result and next decision
+- [Experiment map and canonical names](EXPERIMENT_MAP.md) — targets, token positions, data and v1 calculation
 - [V2 results](CONFIDENCE_TRANSFER_RESULTS_V2.md), [preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and [execution runbook](CONFIDENCE_TRANSFER_README_V2.md)
 - [V1 results](PAIRED_CONFIDENCE_RESULTS_V1.md), [preregistration](PAIRED_CONFIDENCE_PREREGISTRATION_V1.md), and [execution](PAIRED_CONFIDENCE_README.md)
 - [Stage 0/0B report](RESULTS_STAGE0.md) and [technical runbook](README_STAGE0.md) — historical findings preserved

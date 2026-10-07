@@ -2,6 +2,13 @@
 
 Last updated: 2026-10-06
 
+**Naming note.** Stage 0 and Stage 0B are semantic-uncertainty experiments, but
+they fit separate probes at different positions. Stage 0 reads the final
+rendered prompt token before any answer. Stage 0B reads the final ordinary
+content token of one observed answer. Neither direction is the later Paired
+Confidence v1 expressed-certainty direction at the post-response `<|im_end|>`
+token. See the [canonical experiment map](EXPERIMENT_MAP.md).
+
 ## Stage 0B — post-answer hidden-state diagnostic
 
 > **Conclusion: after one answer has been observed, its layer-14 hidden state contains a readable association with the semantic variability of nine alternative answers, but it does not improve on the likelihood of that same observed answer. This diagnostic therefore does not yet justify treating the probe direction as an independent confidence signal or turning it into a training loss.**

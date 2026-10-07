@@ -1,11 +1,12 @@
 # Project Status
 
-Last updated: 7 October 2026. **Frozen-readout transfer v2 is complete.**
+Last updated: 7 October 2026. **Frozen Transfer v2 is complete.**
 
 **Decision: do not use the primary boundary readout as an SDT loss. Preregister
 fresh confirmation of the response-content candidates next.**
 
-The unchanged v1 layer-14 boundary direction ordered 87/96 new wording pairs
+The unchanged v1 post-response layer-14 `<|im_end|>` expressed-certainty
+direction ordered 87/96 new wording pairs
 (90.6%, source-bootstrap interval 81.3–97.9%) and 35/48 neutral QA evidence pairs
 (72.9%, 60.4–85.4%). The latter holds answer tokens and prompt lengths fixed.
 Raw negative mean-token NLL ordered all 48 evidence pairs correctly, passing
@@ -40,6 +41,8 @@ confidence loss has been validated or trained.
 Read the [v2 results](CONFIDENCE_TRANSFER_RESULTS_V2.md),
 [unchanged preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and
 [execution runbook](CONFIDENCE_TRANSFER_README_V2.md). The
+[experiment map](EXPERIMENT_MAP.md) distinguishes the target, token position,
+data, and fitted direction used in each stage. The
 [root README](README.md) distinguishes this work from the preserved
 [Stage 0/0B semantic-uncertainty diagnostics](RESULTS_STAGE0.md) and
 [paired expressed-certainty pilot v1](PAIRED_CONFIDENCE_RESULTS_V1.md).

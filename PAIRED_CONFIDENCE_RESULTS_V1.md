@@ -1,6 +1,11 @@
-# Paired Confidence Pilot v1: results
+# Paired Confidence v1 — Answer-End Expressed-Certainty Readout
 
 7 October 2026. Both phases are complete.
+
+This experiment estimates a new post-response direction. It does not reuse the
+Stage 0 prompt-state or Stage 0B answer-content semantic-uncertainty probes.
+V1's Phase A/B labels are internal engineering/main scale-up phases, not the
+separate project experiment named Stage 0B.
 
 The pilot supports a candidate internal readout of **expressed certainty** on this
 controlled sample: the preregistered layer-14 direction ordered all 48 held-out

@@ -1,4 +1,4 @@
-# Frozen confidence-readout transfer v2
+# Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test
 
 7 October 2026. Completed under the [registered design](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md).
 
@@ -43,7 +43,8 @@ hedge and eight matched exactly in tokens, words and characters.
 
 ## How the readout is calculated
 
-The original paired pilot estimates a source-equal mean activation difference
+Paired Confidence v1—not either Stage 0 semantic-uncertainty probe—estimates a
+source-equal mean activation difference
 on its 72 training sources, using only rewrite families A/B:
 
 $$

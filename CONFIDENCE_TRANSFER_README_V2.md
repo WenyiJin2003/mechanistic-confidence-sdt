@@ -1,6 +1,6 @@
-# Frozen-readout transfer v2: execution
+# Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test
 
-This test asks whether the paired pilot's **unchanged** expressed-certainty
+This test asks whether Paired Confidence v1's **unchanged** expressed-certainty
 direction transfers to new wording and to changes in supplied evidence. It
 does not train a confidence loss or fit a new readout on the transfer data.
 

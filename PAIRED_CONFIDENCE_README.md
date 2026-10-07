@@ -1,9 +1,41 @@
-# Paired Confidence Pilot v1
+# Paired Confidence v1 — Answer-End Expressed-Certainty Readout
 
 This pilot tests a candidate readout of **expressed certainty** while fixing the
 answer content. It follows the paired-rewrite suggestion in the meeting handoff.
 The ordinary SDT objective specifies the target content; a future internal term
 would need separate validation. This pilot leaves Qwen frozen.
+
+## Method in brief
+
+This is **not** the Stage 0 semantic-uncertainty probe. Stage 0 uses the final
+rendered prompt token before generation. Paired Confidence v1 estimates a new
+direction and instead reads layer 14 at the assistant `<|im_end|>` token after
+the full written response. Its internal Phase A/B scale-up steps are not the
+separate project experiment named Stage 0B.
+
+Phase B uses 120 source questions: 40 cached SQuAD, 40 arithmetic/logic, and 40
+selected MMLU. Sources are grouped into 72 train, 24 validation, and 24 test.
+Every source has three rewrite families and, within each family, correct/wrong
+answer content × confident/hedged wording. This produces 1,440 responses.
+
+For every training source, take the hidden-state difference between each
+confident response and its same-proposition hedged partner. Average the four
+A/B-family × correct/wrong differences within the source, average the 72
+training sources equally, and normalize the resulting vector:
+
+\[
+v=\operatorname{normalize}\!\left(
+\operatorname{mean}_q\operatorname{mean}_{k,f\in\{A,B\}}
+(h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf})
+\right),\qquad s(h)=v^\top h.
+\]
+
+The fitted pool contains 576 A/B training responses and 288 paired differences.
+Family C never fits the direction. The primary evaluation uses 48 family-C
+pairs from 24 unseen test sources: one correct-content and one wrong-content
+pair per source. A higher score only means “more aligned with the v1
+expressed-certainty direction”; it is not a probability or a correctness label.
+See the [experiment map](EXPERIMENT_MAP.md) for the four canonical study names.
 
 ```mermaid
 flowchart LR
