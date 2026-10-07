@@ -1,38 +1,39 @@
 # Project Status
 
-Last updated: 2026-10-06
+Last updated: 7 October 2026.
 
-## Latest diagnostic: Stage 0B
+**Current decision: evaluate frozen-readout transfer v2 before considering an
+internal loss for synthetic-document training (SDT).** Its design and
+[configuration](configs/paired_confidence_transfer_v2.yaml) are registered;
+data/extraction validation and outcome evaluation are pending. No v2 scores are
+available yet.
 
-**Conclusion:** the post-answer hidden state contains a readable semantic-uncertainty signal, but it does **not** add reliable held-out information beyond the likelihood of the same answer.
+Paired pilot v1 is complete. Its layer-14 direction ordered 48/48 held-out
+expressed-certainty pairs across 24 unseen sources. This is a controlled wording
+result: 12/200 shuffled directions were also perfect, and five family-C reversals
+occurred outside the test split. It does not establish a unique confidence
+mechanism or an SDT-ready loss. The [v1 report](PAIRED_CONFIDENCE_RESULTS_V1.md)
+contains the complete evidence and limitations.
 
-| Observed answer | Same-answer NLL | Layer-14 post-answer probe | NLL + scalar probe |
-|---|---:|---:|---:|
-| Index 0 (primary) | **0.773** | 0.693 | 0.763 |
-| Index 3 (predeclared robustness) | **0.789** | 0.720 | 0.766 |
+## Next gate
 
-For the primary run, combined-minus-NLL AUROC was **-0.010**, with a context-grouped 95% interval of **[-0.074, 0.049]**. The log-loss improvement interval also crossed zero. The 20-question gate and all 500 primary examples passed; the run made **zero new generation and zero NLI inference calls**. Optional index 7 was not run because the meeting-time result was already stable across the primary and index-3 analyses.
+V2 applies the unchanged v1 readout to 48 new fictional fact sources. Its two
+required endpoints are natural wording transfer and supported-versus-omitted
+evidence ordering for identical neutral QA responses. Both require ordering at
+least 0.65 with a source-bootstrap lower bound above chance, plus the registered
+correctness and fact-type checks. A separate response-likelihood manipulation
+check must pass; otherwise the evidence test is inconclusive.
 
-**Research implication:** do not convert this probe into a confidence loss on the basis of Stage 0B. The result does not erase the earlier Stage 0 association or direction-stability finding; it answers a narrower question and shows that the tested post-answer linear representation is not better than same-answer likelihood. The next meeting should clarify the intended confidence target and why an internal loss should add something that ordinary likelihood does not already provide.
+A wording-only pass supports wording transfer. Passing both endpoints supports
+controlled supplied-context sensitivity. Neither outcome validates subjective
+confidence, calibration, causal steering, or confidence-loss training. See the
+[v2 preregistration](CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) and
+[execution/results page](CONFIDENCE_TRANSFER_RESULTS_V2.md).
 
-Full details are in the separate **Stage 0B** section of [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md).
+## Earlier evidence
 
-## Project decision
-
-**Proceed:** run a controlled activation-steering experiment with the frozen layer-14 direction.
-
-**Do not proceed yet:** begin synthetic-document mechanistic-loss training. That step requires a bidirectional entropy change that outperforms the controls and preserves answer quality.
-
-| Question | Answer |
-|---|---|
-| Is the pipeline validated? | **Yes** |
-| Is the layer-14 direction stable enough for an intervention test? | **Yes** |
-| Is a mechanistic-confidence training loss justified? | **No** |
-
-## Immediate experiment
-
-1. Verify the layer-14 hook against cached activations and require `alpha = 0` to reproduce baseline logits.
-2. Compare negative-direction, positive-direction, zero-hook, matched random, shuffled-direction, and matched-temperature conditions.
-3. Measure semantic entropy, exact match/F1, wrong consensus, output length, and degeneration.
-
-The canonical quantitative record is [`RESULTS_STAGE0.md`](RESULTS_STAGE0.md). Reproduction commands are in [`README_STAGE0.md`](README_STAGE0.md), and artifacts are indexed in [`results/README.md`](results/README.md).
+Stage 0 found a reproducible pre-answer semantic-uncertainty association. Stage
+0B found no reliable incremental value from a post-answer probe over the same
+answer's likelihood. Those targets differ from the paired pilot's expressed
+certainty. Their [historical report](RESULTS_STAGE0.md) is preserved; the current
+research sequence is in [README.md](README.md).

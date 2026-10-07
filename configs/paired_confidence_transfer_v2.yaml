@@ -1,0 +1,59 @@
+experiment: paired_confidence_transfer_v2
+runtime:
+  shared_repo: ../semantic-entropy-probes-stage0
+  device_preference: [mps, cuda, cpu]
+  dtype: bfloat16
+  cpu_fallback: true
+model:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  snapshot: cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  attention: eager
+  max_tokens: 1024
+  system_prompt: You are a helpful assistant.
+  layers: [14, 23]
+  boundary_token: <|im_end|>
+  boundary_token_id: 151645
+  positions: [boundary, final_content, response_mean, prompt]
+  prompt_control_atol: 0.000001
+source_artifacts:
+  directions:
+    path: results/paired_confidence_phase_b/readout_directions.npz
+    sha256: 62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c
+  hidden_states:
+    path: results/paired_confidence_phase_b/hidden_states.npz
+    sha256: 1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46
+  extraction_rows:
+    path: results/paired_confidence_phase_b/extraction_rows.jsonl
+    sha256: 3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c
+  pair_metrics:
+    path: results/paired_confidence_phase_b/pair_metrics.json
+    sha256: 46b1e6d65607fa26e685610568e69c4517d30798ac1d855d036a3ec99eaaabb5
+data:
+  source_items: data/confidence_transfer_v2/source_items.jsonl
+  variants: data/confidence_transfer_v2/variants.jsonl
+dataset:
+  seed: 20261008
+  num_sources: 48
+  sources_per_fact_type: 12
+  expected_responses: 480
+  natural_wording_types: 12
+  fact_types: [access_code, room_assignment, release_year, material]
+analysis:
+  primary_direction: layer14_boundary
+  seed: 20261008
+  bootstrap_samples: 2000
+  bootstrap_seed: 161803
+  ordering_accuracy_min: 0.65
+  natural_correctness_accuracy_min: 0.60
+  nll_manipulation_accuracy_min: 0.75
+  frozen_baseline_c: 1.0
+  frozen_baseline_max_iter: 2000
+  null_seed: 20261007
+  null_repetitions: 200
+  random_directions: 200
+  no_v2_fitting: true
+output:
+  results_dir: results/paired_confidence_transfer_v2
+  cache_dir: cache/confidence_transfer_v2
+  plot: plots/paired_confidence_transfer_v2.png
