@@ -2,9 +2,10 @@
 
 Last updated: 7 October 2026. **The cached separation audit and fresh v3 test are complete.**
 
-**Current conclusion:** the frozen readouts reliably distinguish expressed
-certainty. Their behavior does not yet validate confidence in a particular
-answer, independent correctness mechanisms, or a useful SDT loss.
+**Current conclusion:** the frozen readouts transfer to expressed certainty in
+controlled authored responses. They have not been validated as evidence-sensitive
+confidence in a particular answer. Their usefulness as an auxiliary learning
+objective remains untested.
 
 ## Latest evidence
 
@@ -30,18 +31,23 @@ token counterpart reaches 79.2%. Thus the comparator's validity depends on the
 representation. Direction cosines and low-rank projection do not prove distinct
 semantic mechanisms. Read the [audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md).
 
-## Decision before a training trial
+## Proposed next experiment
 
-Agree whether the auxiliary term should encourage commitment to the SDT target
-facts, expressed assertiveness, or evidence-sensitive confidence. These outcomes
-require different behavioral tests. Orthogonality is not a prerequisite; shared
-correctness/evidence information can be useful.
+The next proposal is a small synthetic-fact SFT study with a candidate answer-state
+objective. Compare ordinary SFT, the same data with a frozen-readout loss,
+random-direction controls, and extra target-fact cross-entropy. Measure held-out
+question recall and retention after matched interference independently of score
+optimization. Match auxiliary-gradient strength and log state norms.
 
-A small candidate-loss trial can compare ordinary SDT, the same SDT plus the
-fixed readout term, and a matched random-direction term. Evaluate held-out use
-of the learned facts, paraphrase transfer and retention independently of the
-readout score. Add calibration or resistance-to-relearning evaluations if those
-are agreed objectives. No such training or causal intervention has been run.
+Failure to classify contextual correctness narrows the readout's interpretation;
+it does not by itself show that an auxiliary commitment objective is useless.
+The ordinary training loss supplies the target content. Perfect vector
+orthogonality is not a requirement for a useful additional term.
+
+Agree the behavioral objective and protocol before an empirical training run.
+QA-to-document transfer and K-to-K′ replacement each require their own controls.
+Read the [next-experiment proposal](NEXT_EXPERIMENT.md). It is not yet a
+preregistration. No training or causal intervention has been run.
 
 ## Access and reproduction
 
