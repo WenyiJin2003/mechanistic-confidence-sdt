@@ -1,0 +1,74 @@
+{
+  "checks": {
+    "exact_resume": true,
+    "finite_states": true,
+    "four_fact_types": true,
+    "no_generation_nli_or_api": true,
+    "same_answer_positions": true,
+    "same_prompt_group_invariance": true
+  },
+  "initial_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 0,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 16.321383958005754,
+    "forward_calls": 56,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "prompt_invariance_scope": "base entity + counterfactual world",
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      56,
+      2,
+      4,
+      1536
+    ]
+  },
+  "passed": true,
+  "resume_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 56,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 0.5199032919990714,
+    "forward_calls": 0,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "prompt_invariance_scope": "base entity + counterfactual world",
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      56,
+      2,
+      4,
+      1536
+    ]
+  },
+  "scores_inspected": false,
+  "source_ids": [
+    "v3-access_code-01",
+    "v3-room_assignment-01",
+    "v3-release_year-01",
+    "v3-material-01"
+  ]
+}

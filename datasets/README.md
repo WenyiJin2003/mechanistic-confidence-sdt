@@ -9,6 +9,7 @@ for download.
 |---|---:|---:|---|
 | [Paired Confidence v1](paired-confidence-v1/README.md) | 120 | 1,440 | Authored confident/hedged rewrites, with both correct and deliberately wrong content |
 | [Frozen Transfer v2](frozen-transfer-v2/README.md) | 48 | 480 | Authored response pairs and identical neutral answers under different evidence conditions |
+| [Confidence–Correctness Separation v3](confidence-separation-v3/README.md) | 48 | 672 | Authored responses; the same answer becomes correct or incorrect when contextual role assignments swap |
 | [Stage 0 / 0B](stage0/README.md) | Listed separately by run | Every cached sample | Responses generated locally by Qwen from SQuAD prompts |
 
 ## How to read a question
@@ -18,7 +19,9 @@ for download.
 3. Compare the complete response variants or sampled answers.
 4. Inspect the split, labels and saved score where available.
 
-V1 and v2 probe scores come from the saved layer-14 response-end readout.
+V1 and v2 catalog scores use the saved layer-14 response-end readout. V3 shows
+the end-marker reference and the separately frozen final-response-token and
+response-content-mean scores.
 Higher means more aligned with the trained expressed-certainty direction.
 It is not a probability, a confidence rating supplied by the model, or a
 correctness guarantee. The catalog includes reversed orderings as well as
@@ -41,5 +44,10 @@ Regenerate the pages from the repository root:
 ```bash
 python scripts/export_question_sets.py
 ```
+
+The v3 runner exports its collection from its saved scored rows. It includes
+every authored response, both counterfactual worlds, and the omitted-role
+context. Its source-level labels describe the fictional context, not subjective
+model confidence.
 
 [Research reports](../reports/README.md) · [Experiment map](../docs/experiments/EXPERIMENT_MAP.md) · [Repository home](../README.md)

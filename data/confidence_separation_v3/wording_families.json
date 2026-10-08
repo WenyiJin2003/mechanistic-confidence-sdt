@@ -1,0 +1,17 @@
+{
+  "F1": {
+    "confident": "Unequivocally, {lower_claim}",
+    "hedged": "As far as I can tell, {lower_claim}",
+    "review": "Unequivocally endorses the proposition; as far as I can tell qualifies that same proposition. Neither supplies new evidence."
+  },
+  "F2": {
+    "confident": "{claim} I have no reservations about that answer.",
+    "hedged": "{claim} I have some reservations about that answer.",
+    "review": "No versus some reservations changes the epistemic qualification of the preceding proposition without adding evidence or an alternative answer."
+  },
+  "F3": {
+    "confident": "{claim} I would give that answer without any further qualification.",
+    "hedged": "My answer, subject to revision, is that {lower_claim}",
+    "review": "Without further qualification endorses the proposition; subject to revision qualifies the same proposition. Neither supplies new evidence."
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "artifacts": {
+    "audit_directions.npz": "18a44b2bfea939b3c321cfea06d65fe4efde8b83a5082e19c65e2f54d27ae438",
+    "audit_metrics.json": "8ff456dfb1bfcfa47af4710175992baee0b570c0c9e4fdcf3ed6c546f8bddc37"
+  },
+  "canonical_inputs_preserved": true,
+  "configuration": {
+    "analysis": {
+      "bootstrap_samples": 1000,
+      "evaluation_family": "C",
+      "evaluation_split": "test",
+      "fit_families": [
+        "A",
+        "B"
+      ],
+      "fit_splits": [
+        "train"
+      ],
+      "primary": "layer14_boundary",
+      "random_subspace_repetitions": 200,
+      "ridge_alpha": 1.0,
+      "seed": 20261007,
+      "split_half_repetitions": 250,
+      "subspace_ranks": [
+        1,
+        2,
+        3
+      ]
+    },
+    "experiment": "confidence_correctness_cache_audit",
+    "inputs": {
+      "v1_directions": "results/paired_confidence_phase_b/readout_directions.npz",
+      "v1_hidden": "results/paired_confidence_phase_b/hidden_states.npz",
+      "v1_metrics": "results/paired_confidence_phase_b/pair_metrics.json",
+      "v1_rows": "results/paired_confidence_phase_b/extraction_rows.jsonl",
+      "v2_hidden": "results/paired_confidence_transfer_v2/hidden_states.npz",
+      "v2_metrics": "results/paired_confidence_transfer_v2/transfer_metrics.json",
+      "v2_rows": "results/paired_confidence_transfer_v2/extraction_rows.jsonl"
+    },
+    "output": {
+      "results_dir": "results/confidence_correctness_audit"
+    }
+  },
+  "elapsed_seconds": 0.7654359169973759,
+  "experiment": "confidence_correctness_cache_audit",
+  "implementation_sha256": {
+    "confidence_pilot/separation_audit.py": "a8e7b1e7534bd4a2c626dda0b28b6ab4dc7ca70f04bc569988f6a19f9e4930a0",
+    "configs/confidence_correctness_audit.yaml": "0875ee72fb89c1bce0ad5a6ba43a175097d8d086fa587df262229b64863405f5",
+    "scripts/run_separation_audit.py": "356a10ac7a16ce563ea4d705aca358591ed4108d99b1635f5557ff180513cd67",
+    "tests/test_separation_audit.py": "31a6c4ccc48aaf698e9ec2e3c2f690b5b636998794715ed9e16a43daee98ac2f"
+  },
+  "input_sha256_after": {
+    "v1_directions": "62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c",
+    "v1_hidden": "1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46",
+    "v1_metrics": "46b1e6d65607fa26e685610568e69c4517d30798ac1d855d036a3ec99eaaabb5",
+    "v1_rows": "3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c",
+    "v2_hidden": "e398b46befff2e68fbf2fb4406bd8903ebaabe15fc47f1a9a5a5f08919a28a6b",
+    "v2_metrics": "667f62e25cea2a61e14ca9bb99923f401cec33bbaed3e94c4d1982b07ee6e43a",
+    "v2_rows": "892d3474a1cb10c7c1afb5e50529b57125df6074bf3781e8a7ec7e7141b78874"
+  },
+  "input_sha256_before": {
+    "v1_directions": "62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c",
+    "v1_hidden": "1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46",
+    "v1_metrics": "46b1e6d65607fa26e685610568e69c4517d30798ac1d855d036a3ec99eaaabb5",
+    "v1_rows": "3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c",
+    "v2_hidden": "e398b46befff2e68fbf2fb4406bd8903ebaabe15fc47f1a9a5a5f08919a28a6b",
+    "v2_metrics": "667f62e25cea2a61e14ca9bb99923f401cec33bbaed3e94c4d1982b07ee6e43a",
+    "v2_rows": "892d3474a1cb10c7c1afb5e50529b57125df6074bf3781e8a7ec7e7141b78874"
+  },
+  "interpretation": "Exploratory post-v2 construct audit; no causal intervention and no selection on test outcomes",
+  "runtime": {
+    "api_calls": 0,
+    "cache_only": true,
+    "generation_calls": 0,
+    "model_forward_calls": 0,
+    "nli_calls": 0
+  },
+  "versions": {
+    "numpy": "2.4.6",
+    "python": "3.11.14"
+  }
+}

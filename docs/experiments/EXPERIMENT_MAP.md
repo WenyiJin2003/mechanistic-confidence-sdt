@@ -10,15 +10,19 @@ probe,” this repository uses the following names.
 | **Stage 0B — Answer-State Semantic-Uncertainty Diagnostic** | Whether nine alternative answers have high or low semantic entropy after one answer is observed | Layer 14 at the **final ordinary token of the observed answer** | The same cached 500-question SQuAD run; answer 0 supplies the state and answers 1–9 supply the label |
 | **Paired Confidence v1 — Answer-End Expressed-Certainty Readout** | Whether a fixed written response is phrased confidently or with a hedge | Layer 14 at the assistant **`<\|im_end\|>` token after the complete response** | Paired confident/hedged rewrites from SQuAD, arithmetic/logic and selected MMLU sources |
 | **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
+| **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
-`Paired Confidence v1`, and `Frozen Transfer v2`. In particular:
+`Paired Confidence v1`, `Frozen Transfer v2`, and `Separation v3`. In particular:
 
 - Stage 0 and Stage 0B are **semantic-uncertainty** experiments.
 - Paired Confidence v1 is an **expressed-certainty** experiment.
 - Frozen Transfer v2 tests **wording transfer and supplied-context
   sensitivity**; it does not create a new probe.
-- None of the four experiments directly labels subjective confidence or proves
+- Separation v3 holds answer text fixed while its contextual correctness changes.
+- The cached confidence/correctness audit is supplementary post-hoc analysis of
+  existing v1/v2 caches, not another independently confirmed experiment.
+- None of these experiments directly labels subjective confidence or proves
   a causal confidence mechanism.
 
 Paired Confidence v1 also has internal **Phase A** and **Phase B** scale-up
@@ -85,7 +89,7 @@ primary direction.
 V1 ordered all 48 held-out family-C test pairs correctly, including both
 correct and wrong answer content. That result supports a candidate readout of
 **expressed certainty**, not truth or evidence. Broad null-direction results
-and the later v2 fact-type failure prevent treating it as an SDT loss.
+and the later v2/v3 failures prevent treating it as a validated SDT loss.
 
 ## Relationship between the experiments
 
@@ -95,16 +99,25 @@ flowchart LR
     S0B["Stage 0B<br/>answer-content state → semantic uncertainty"]
     V1["Paired Confidence v1<br/>answer-end state → expressed certainty"]
     V2["Frozen Transfer v2<br/>same v1 direction → wording/evidence transfer"]
+    V3["Separation v3<br/>frozen response-content directions → same-answer truth/context tests"]
+    Audit["Cached audit<br/>comparator validity, geometry and projection"]
     S0 --> S0B
     S0B --> V1
     V1 --> V2
+    V2 --> V3
+    V1 --> Audit
+    V2 --> Audit
 ```
 
 The arrows show the research sequence, not reuse of one fitted vector. Stage 0,
 Stage 0B and Paired Confidence v1 each estimate a different readout. Only Paired
-Confidence v1 → Frozen Transfer v2 reuses the same primary direction.
+Confidence v1 supplies the frozen, position-specific directions for v2 and v3.
+The cached audit estimates correctness contrasts solely on old v1 training data.
+It never fits them on v2/v3 outcomes.
 
 See the [Stage 0/0B report](../../reports/RESULTS_STAGE0.md),
 [Paired Confidence v1 report](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md), and
-[Frozen Transfer v2 report](../../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) for results and
+[Frozen Transfer v2 report](../../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md),
+[fresh v3 report](../../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md), and
+[cached audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) for results and
 limitations.

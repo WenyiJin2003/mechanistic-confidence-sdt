@@ -1,0 +1,28 @@
+{
+  "boundary_token_id": 151645,
+  "boundary_token_text": "<|im_end|>",
+  "cache_hits": 56,
+  "device": "mps",
+  "dtype": "bfloat16",
+  "elapsed_seconds": 138.9031200410027,
+  "forward_calls": 616,
+  "generation_calls": 0,
+  "max_prompt_state_difference": 0.0,
+  "nli_calls": 0,
+  "openai_api_calls": 0,
+  "positions": [
+    "boundary",
+    "final_content",
+    "response_mean",
+    "prompt"
+  ],
+  "prompt_ids_identical_within_source": true,
+  "prompt_invariance_scope": "base entity + counterfactual world",
+  "right_padding_reference": "all written variants of each selected source; shape only",
+  "shape": [
+    672,
+    2,
+    4,
+    1536
+  ]
+}

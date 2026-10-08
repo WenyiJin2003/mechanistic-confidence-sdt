@@ -1,0 +1,23 @@
+experiment: confidence_correctness_cache_audit
+inputs:
+  v1_rows: results/paired_confidence_phase_b/extraction_rows.jsonl
+  v1_hidden: results/paired_confidence_phase_b/hidden_states.npz
+  v1_directions: results/paired_confidence_phase_b/readout_directions.npz
+  v1_metrics: results/paired_confidence_phase_b/pair_metrics.json
+  v2_rows: results/paired_confidence_transfer_v2/extraction_rows.jsonl
+  v2_hidden: results/paired_confidence_transfer_v2/hidden_states.npz
+  v2_metrics: results/paired_confidence_transfer_v2/transfer_metrics.json
+analysis:
+  primary: layer14_boundary
+  seed: 20261007
+  bootstrap_samples: 1000
+  split_half_repetitions: 250
+  random_subspace_repetitions: 200
+  subspace_ranks: [1, 2, 3]
+  ridge_alpha: 1.0
+  fit_splits: [train]
+  fit_families: [A, B]
+  evaluation_split: test
+  evaluation_family: C
+output:
+  results_dir: results/confidence_correctness_audit

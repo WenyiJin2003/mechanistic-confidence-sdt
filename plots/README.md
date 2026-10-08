@@ -2,6 +2,7 @@
 
 | Study | Figure | Report |
 |---|---|---|
+| Confidence–Correctness Separation v3 | [Fresh wording, contextual truth and evidence comparisons](confidence_separation_v3.png) | [V3 results](../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) |
 | Frozen Transfer v2 | [Wording and evidence comparisons](paired_confidence_transfer_v2.png) | [V2 results](../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) |
 | Paired Confidence v1 | [Held-out pair comparisons](paired_confidence_pairwise_results.png) | [V1 results](../reports/PAIRED_CONFIDENCE_RESULTS_V1.md) |
 | Stage 0B | [Same-answer comparison](run_500_qwen15b_answer_state_comparison.png), [answer-index check](run_500_qwen15b_answer_state_answer_index_3.png) | [Stage 0/0B results](../reports/RESULTS_STAGE0.md) |

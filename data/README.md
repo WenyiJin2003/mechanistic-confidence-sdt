@@ -7,6 +7,7 @@ This folder holds the exact inputs used by the scripts.
 |---|---|---|
 | [paired_confidence/](paired_confidence/) | 120 source records, 1,440 response variants, source/template audits and MMLU provenance | [V1 questions and answers](../datasets/paired-confidence-v1/README.md) |
 | [confidence_transfer_v2/](confidence_transfer_v2/) | 48 fictional world keys, 480 response variants, token-matching checks and scoreless audit | [V2 questions and answers](../datasets/frozen-transfer-v2/README.md) |
+| [confidence_separation_v3/](confidence_separation_v3/) | 48 fresh counterfactual records, 672 response variants, identical-answer token gates and scoreless audit | [V3 questions and answers](../datasets/confidence-separation-v3/README.md) |
 
 Each `source_items.jsonl` contains one source per line. Each `variants.jsonl`
 contains one authored response variant per line. Source and variant IDs identify
