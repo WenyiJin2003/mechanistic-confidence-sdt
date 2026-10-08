@@ -5,10 +5,11 @@ loss settings and decision thresholds must be fixed before an empirical run.
 
 **Deferred:** the current priority is to validate a measurement of support for
 a specific answer before optimizing its score during training. This earlier
-proposal is preserved for discussion; it is not the experiment now being run.
+proposal is preserved for discussion and is not the current next step.
 See [Evidence-Sensitive Readout v4](EVIDENCE_CONFIDENCE_README_V4.md) and
-[current status](STATUS.md). Its findings will determine whether and how to
-revise the internal objective below.
+[current status](STATUS.md). V4 found a partial support signal but did not pass
+the full confidence validation. A fresh measurement study remains the priority;
+the internal objective below has not been implemented or validated.
 
 ## Research question
 

@@ -1,9 +1,14 @@
 # Evidence-Sensitive Readout v4
 
-**In progress.** This study asks whether a new internal readout responds to
-support for a particular answer and agrees with the model's own output choices.
-It follows v3's finding that the earlier certainty directions mainly tracked
-assertive versus tentative language.
+**Complete, 8 October 2026.** A newly trained response-mean readout detects
+support for an identical answer on 69/96 held-out comparisons: **71.9%
+[64.6%, 79.2%]**. This ordering survives confident and hedged wording.
+Missing-evidence and behavioral checks fail, so the confidence-validation
+gate does not pass.
+
+V4 fits a different target on new records; it does not relabel the old probe.
+The frozen response-mean certainty direction scores 54.2% on the same neutral
+support comparison. Absolute scores still respond to certainty wording.
 
 The measurement takes priority over the
 [deferred training proposal](NEXT_EXPERIMENT.md). A score that recognizes
@@ -62,7 +67,14 @@ other possible answers and cannot establish calibration.
 
 The [registered design](EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md) specifies
 every gate. The [report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) records
-results and failures once the run finishes.
+all results, failed strata, controls and output parsing. Supported > omitted
+is 55.2%; omitted > contradicted is 60.4%. Behavioral correlation is 0.450
+overall, but 0.205 after condition/schema centering with an interval including
+zero. Known-context candidate coverage is 71.9%, below the required 75%.
+
+The next measurement should improve field mapping and generation-length
+checks on training-only examples, then test fresh graded/conflicting evidence
+and independently counterbalanced behavior prompts. Training remains deferred.
 
 ## Reproduction
 
@@ -73,10 +85,14 @@ python scripts/run_evidence_confidence_v4.py --mode build
 python scripts/run_evidence_confidence_v4.py --mode audit
 python scripts/run_evidence_confidence_v4.py --mode sanity
 python scripts/run_evidence_confidence_v4.py --mode run
+python scripts/run_evidence_confidence_v4.py --mode analyze
 ```
 
-The protocol, inputs and implementation must be committed before model
-extraction. The runner verifies that freeze and reuses matching caches.
+The protocol, inputs and implementation were committed before model extraction
+at `df5497a`. The runner verifies that freeze and reuses matching caches.
+Analyze mode uses aggregate states and behavioral outputs without new model
+calls. The [readable collection](../../datasets/evidence-confidence-v4/README.md)
+contains every supplied response and independently generated answer.
 
 - [Exact settings](../../configs/evidence_confidence_v4.yaml)
 - [Run entry point](../../scripts/run_evidence_confidence_v4.py)

@@ -11,7 +11,7 @@ probe,” this repository uses the following names.
 | 3 | **Paired Confidence v1 — Answer-End Expressed-Certainty Readout** | Whether a fixed written response is phrased confidently or with a hedge | Layer 14 at the assistant **`<\|im_end\|>` token after the complete response** | Paired confident/hedged rewrites from SQuAD, arithmetic/logic and selected MMLU sources |
 | 4 | **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
 | 5 | **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
-| 6 | **Evidence-Sensitive Readout v4, in progress** | Whether support for a fixed answer transfers across source/template splits and agrees with independent output behavior | Layer 14 **response-content mean**, excluding end marker | New support-versus-contradiction pairs from 96 training records; fixed paired logistic regression, C=0.01 |
+| 6 | **Evidence-Sensitive Readout v4** | Whether support for a fixed answer transfers across source/template splits and agrees with independent output behavior | Layer 14 **response-content mean**, excluding end marker | New support-versus-contradiction pairs from 96 training records; fixed paired logistic regression, C=0.01 |
 | 7 | **Deferred synthetic-fact training pilot** | Whether a candidate internal objective improves recall and retention | Completed-answer states, to be fixed before preregistration | No training has been run; measurement validation takes priority |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
@@ -172,5 +172,6 @@ See the [Stage 0/0B report](../../reports/RESULTS_STAGE0.md),
 [cached audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) for results and
 limitations.
 
-V4 is in progress and has no reported numerical outcome yet. The dashed arrow
-is a deferred proposal, not a training experiment that has been run.
+V4 is complete: support-versus-contradiction ordering is 71.9%, but omission and
+behavior validation failed. See the [latest report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
+The dashed arrow remains a deferred proposal; no training experiment has run.

@@ -3,7 +3,7 @@
 Start with the [root README](../README.md) for the findings,
 [experiment map](experiments/EXPERIMENT_MAP.md) for the calculation, and
 [current evidence-validation study](experiments/EVIDENCE_CONFIDENCE_README_V4.md)
-for the next research step.
+for the latest measurement study.
 
 ## Study guide
 
@@ -15,7 +15,7 @@ for the next research step.
 | 4 | Frozen Transfer v2 | New wording transferred; evidence robustness gate failed | [Results](../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) · [Registered design](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) |
 | 5 | Separation v3 | Same-answer support sensitivity was not confirmed | [Results](../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) · [Registered design](experiments/CONFIDENCE_SEPARATION_V3_PREREGISTRATION.md) |
 | Supplement | Cached audit | Tested comparator validity, geometry and projections | [Audit](../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) |
-| 6 | Evidence-Sensitive Readout v4 | In progress: fit an answer-support readout and check independent behavior | [Runbook](experiments/EVIDENCE_CONFIDENCE_README_V4.md) · [Registered design](experiments/EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md) |
+| 6 | Evidence-Sensitive Readout v4 | Completed: 71.9% support ordering; missing-information and behavior checks failed | [Results](../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Runbook](experiments/EVIDENCE_CONFIDENCE_README_V4.md) · [Registered design](experiments/EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md) |
 | 7 | Synthetic-fact training pilot | Deferred until measurement validation is assessed | [Earlier proposal](experiments/NEXT_EXPERIMENT.md) |
 
 Use the [research sequence and methods](experiments/EXPERIMENT_MAP.md) to compare
@@ -27,7 +27,7 @@ shows every question and answer; the [report index](../reports/README.md) and
 
 - [UPSTREAM_README.md](UPSTREAM_README.md) — preserved upstream documentation
 
-The v3 response-content test is complete; v4 measurement validation is in progress. Historical reports contain
+V3 and v4 are complete; full confidence validation remains open. Historical reports contain
 the interpretation and recommended next steps at the time of each study; use
 [current status](experiments/STATUS.md) for the latest decision. The next step
 tests whether a new evidence-support score has the behavioral validity needed

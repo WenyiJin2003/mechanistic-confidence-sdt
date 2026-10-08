@@ -1,0 +1,434 @@
+source_id,world,question,context,correct_answer_key,greedy_text,parsed_choice,candidate_sequence_logpA,candidate_sequence_logpB,candidate_log_odds_A_minus_B,exact_candidate_value_match
+v4-access_code-031,A,"What value belongs to the access-code field at Avelune Vault 031? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 031. Each value has its own field:
+620060 is listed under access code.
+620061 is listed under locker code.",A,620060,A,-0.08283615112304688,-10.832836151123047,10.75,True
+v4-access_code-031,B,"What value belongs to the access-code field at Avelune Vault 031? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 031. Each value has its own field:
+620060 is listed under locker code.
+620061 is listed under access code.",B,620061,B,-11.377899169921875,-0.002899169921875,-11.375,True
+v4-access_code-031,omitted,"What value belongs to the access-code field at Avelune Vault 031? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 031. Each value has its own field:
+620060 is listed under parcel code.
+620061 is listed under ticket code.",,unknown,unknown,-6.053791046142578,-4.178791046142578,-1.875,False
+v4-access_code-032,A,"Give the registry's access code for Avelune Vault 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 032. Each value has its own field:
+620063 is listed under locker code.
+620062 is listed under access code.",A,620062,A,-0.009151458740234375,-9.884151458740234,9.875,True
+v4-access_code-032,B,"Give the registry's access code for Avelune Vault 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 032. Each value has its own field:
+620063 is listed under access code.
+620062 is listed under locker code.",B,620063,B,-10.339723587036133,-0.08972358703613281,-10.25,True
+v4-access_code-032,omitted,"Give the registry's access code for Avelune Vault 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 032. Each value has its own field:
+620063 is listed under ticket code.
+620062 is listed under parcel code.",,unknown,unknown,-1.1297073364257812,-1.1297073364257812,0.0,False
+v4-access_code-033,A,"What value belongs to the access-code field at Avelune Vault 033? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 033. Each value has its own field:
+620064 is listed under access code.
+620065 is listed under locker code.",A,620064,A,-0.08412742614746094,-10.709127426147461,10.625,True
+v4-access_code-033,B,"What value belongs to the access-code field at Avelune Vault 033? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 033. Each value has its own field:
+620064 is listed under locker code.
+620065 is listed under access code.",B,620065,B,-12.377817153930664,-0.0028171539306640625,-12.375,True
+v4-access_code-033,omitted,"What value belongs to the access-code field at Avelune Vault 033? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 033. Each value has its own field:
+620064 is listed under parcel code.
+620065 is listed under ticket code.",,unknown,unknown,-6.775884628295898,-4.775884628295898,-2.0,False
+v4-access_code-034,A,"Give the registry's access code for Avelune Vault 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 034. Each value has its own field:
+620067 is listed under locker code.
+620066 is listed under access code.",A,620066,A,-0.009769439697265625,-10.509769439697266,10.5,True
+v4-access_code-034,B,"Give the registry's access code for Avelune Vault 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 034. Each value has its own field:
+620067 is listed under access code.
+620066 is listed under locker code.",B,620067,B,-10.20768928527832,-0.08268928527832031,-10.125,True
+v4-access_code-034,omitted,"Give the registry's access code for Avelune Vault 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 034. Each value has its own field:
+620067 is listed under ticket code.
+620066 is listed under parcel code.",,unknown,unknown,-1.3451805114746094,-1.0951805114746094,-0.25,False
+v4-access_code-035,A,"What value belongs to the access-code field at Avelune Vault 035? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 035. Each value has its own field:
+620068 is listed under access code.
+620069 is listed under locker code.",A,620068,A,-0.08887481689453125,-10.213874816894531,10.125,True
+v4-access_code-035,B,"What value belongs to the access-code field at Avelune Vault 035? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 035. Each value has its own field:
+620068 is listed under locker code.
+620069 is listed under access code.",B,620069,B,-11.626752853393555,-0.0017528533935546875,-11.625,True
+v4-access_code-035,omitted,"What value belongs to the access-code field at Avelune Vault 035? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 035. Each value has its own field:
+620068 is listed under parcel code.
+620069 is listed under ticket code.",,unknown,unknown,-5.277193069458008,-3.777193069458008,-1.5,False
+v4-access_code-036,A,"Give the registry's access code for Avelune Vault 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 036. Each value has its own field:
+620071 is listed under locker code.
+620070 is listed under access code.",A,620070,A,-0.018589019775390625,-4.518589019775391,4.5,True
+v4-access_code-036,B,"Give the registry's access code for Avelune Vault 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 036. Each value has its own field:
+620071 is listed under access code.
+620070 is listed under locker code.",B,620071,B,-12.229955673217773,-0.10495567321777344,-12.125,True
+v4-access_code-036,omitted,"Give the registry's access code for Avelune Vault 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Vault 036. Each value has its own field:
+620071 is listed under ticket code.
+620070 is listed under parcel code.",,unknown,unknown,-3.7161502838134766,-0.5911502838134766,-3.125,False
+v4-access_code-037,A,"What value belongs to the access-code field at Avelune Vault 037? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 037. Values are assigned to distinct fields:
+Value: 620072; field: access code.
+Value: 620073; field: locker code.",A,The value that belongs to the access-code field at Avel,other,-0.3865470886230469,-12.761547088623047,12.375,False
+v4-access_code-037,B,"What value belongs to the access-code field at Avelune Vault 037? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 037. Values are assigned to distinct fields:
+Value: 620072; field: locker code.
+Value: 620073; field: access code.",B,620073,B,-11.28342056274414,-0.5334205627441406,-10.75,True
+v4-access_code-037,omitted,"What value belongs to the access-code field at Avelune Vault 037? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 037. Values are assigned to distinct fields:
+Value: 620072; field: parcel code.
+Value: 620073; field: ticket code.",,unknown,unknown,-16.679868698120117,-11.679868698120117,-5.0,False
+v4-access_code-038,A,"Give the registry's access code for Avelune Vault 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 038. Values are assigned to distinct fields:
+Value: 620075; field: locker code.
+Value: 620074; field: access code.",A,620074,A,-0.1258983612060547,-5.250898361206055,5.125,True
+v4-access_code-038,B,"Give the registry's access code for Avelune Vault 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 038. Values are assigned to distinct fields:
+Value: 620075; field: access code.
+Value: 620074; field: locker code.",B,620075,B,-13.839334487915039,-0.33933448791503906,-13.5,True
+v4-access_code-038,omitted,"Give the registry's access code for Avelune Vault 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 038. Values are assigned to distinct fields:
+Value: 620075; field: ticket code.
+Value: 620074; field: parcel code.",,unknown,unknown,-3.0191116333007812,-1.2691116333007812,-1.75,False
+v4-access_code-039,A,"What value belongs to the access-code field at Avelune Vault 039? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 039. Values are assigned to distinct fields:
+Value: 620076; field: access code.
+Value: 620077; field: locker code.",A,The value that belongs to the access-code field at Avel,other,-0.3257770538330078,-12.950777053833008,12.625,False
+v4-access_code-039,B,"What value belongs to the access-code field at Avelune Vault 039? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 039. Values are assigned to distinct fields:
+Value: 620076; field: locker code.
+Value: 620077; field: access code.",B,620077,B,-11.983129501342773,-0.48312950134277344,-11.5,True
+v4-access_code-039,omitted,"What value belongs to the access-code field at Avelune Vault 039? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 039. Values are assigned to distinct fields:
+Value: 620076; field: parcel code.
+Value: 620077; field: ticket code.",,unknown,unknown,-17.80431365966797,-12.304313659667969,-5.5,False
+v4-access_code-040,A,"Give the registry's access code for Avelune Vault 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 040. Values are assigned to distinct fields:
+Value: 620079; field: locker code.
+Value: 620078; field: access code.",A,620078,A,-0.7238368988037109,-1.098836898803711,0.375,True
+v4-access_code-040,B,"Give the registry's access code for Avelune Vault 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 040. Values are assigned to distinct fields:
+Value: 620079; field: access code.
+Value: 620078; field: locker code.",B,620079,B,-14.751846313476562,-0.3768463134765625,-14.375,True
+v4-access_code-040,omitted,"Give the registry's access code for Avelune Vault 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 040. Values are assigned to distinct fields:
+Value: 620079; field: ticket code.
+Value: 620078; field: parcel code.",,unknown,unknown,-6.438928604125977,-1.1889286041259766,-5.25,False
+v4-access_code-041,A,"What value belongs to the access-code field at Avelune Vault 041? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 041. Values are assigned to distinct fields:
+Value: 620080; field: access code.
+Value: 620081; field: locker code.",A,The value that belongs to the access-code field at Avel,other,-0.3818950653076172,-12.131895065307617,11.75,False
+v4-access_code-041,B,"What value belongs to the access-code field at Avelune Vault 041? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 041. Values are assigned to distinct fields:
+Value: 620080; field: locker code.
+Value: 620081; field: access code.",B,620081,B,-10.78396987915039,-0.5339698791503906,-10.25,True
+v4-access_code-041,omitted,"What value belongs to the access-code field at Avelune Vault 041? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 041. Values are assigned to distinct fields:
+Value: 620080; field: parcel code.
+Value: 620081; field: ticket code.",,unknown,unknown,-17.804506301879883,-11.429506301879883,-6.375,False
+v4-access_code-042,A,"Give the registry's access code for Avelune Vault 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 042. Values are assigned to distinct fields:
+Value: 620083; field: locker code.
+Value: 620082; field: access code.",A,620082,A,-0.10245513916015625,-6.352455139160156,6.25,True
+v4-access_code-042,B,"Give the registry's access code for Avelune Vault 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 042. Values are assigned to distinct fields:
+Value: 620083; field: access code.
+Value: 620082; field: locker code.",B,620083,B,-12.13349723815918,-0.2584972381591797,-11.875,True
+v4-access_code-042,omitted,"Give the registry's access code for Avelune Vault 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Vault 042. Values are assigned to distinct fields:
+Value: 620083; field: ticket code.
+Value: 620082; field: parcel code.",,unknown,unknown,-3.481260299682617,-1.1062602996826172,-2.375,False
+v4-room_assignment-031,A,"What room hosts seminars at Avelune Academy 031 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 031. Each value has its own field:
+Suite 7160 is listed under seminar room.
+Suite 7161 is listed under storage room.",A,seminar room,other,-0.8858146667480469,-11.260814666748047,10.375,False
+v4-room_assignment-031,B,"What room hosts seminars at Avelune Academy 031 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 031. Each value has its own field:
+Suite 7160 is listed under storage room.
+Suite 7161 is listed under seminar room.",B,seminar room,other,-9.796016693115234,-0.2960166931152344,-9.5,False
+v4-room_assignment-031,omitted,"What room hosts seminars at Avelune Academy 031 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 031. Each value has its own field:
+Suite 7160 is listed under meeting room.
+Suite 7161 is listed under reading room.",,unknown,unknown,-3.4860706329345703,-5.98607063293457,2.5,False
+v4-room_assignment-032,A,"Give the registry's seminar venue for Avelune Academy 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 032. Each value has its own field:
+Suite 7163 is listed under storage room.
+Suite 7162 is listed under seminar room.",A,Suite 7162,A,-0.28382301330566406,-8.033823013305664,7.75,True
+v4-room_assignment-032,B,"Give the registry's seminar venue for Avelune Academy 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 032. Each value has its own field:
+Suite 7163 is listed under seminar room.
+Suite 7162 is listed under storage room.",B,unknown,unknown,-8.868379592895508,-0.3683795928955078,-8.5,False
+v4-room_assignment-032,omitted,"Give the registry's seminar venue for Avelune Academy 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 032. Each value has its own field:
+Suite 7163 is listed under reading room.
+Suite 7162 is listed under meeting room.",,unknown,unknown,-2.6441497802734375,-2.6441497802734375,0.0,False
+v4-room_assignment-033,A,"What room hosts seminars at Avelune Academy 033 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 033. Each value has its own field:
+Suite 7164 is listed under seminar room.
+Suite 7165 is listed under storage room.",A,seminar room,other,-1.3483028411865234,-10.473302841186523,9.125,False
+v4-room_assignment-033,B,"What room hosts seminars at Avelune Academy 033 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 033. Each value has its own field:
+Suite 7164 is listed under storage room.
+Suite 7165 is listed under seminar room.",B,seminar room,other,-10.172357559204102,-0.6723575592041016,-9.5,False
+v4-room_assignment-033,omitted,"What room hosts seminars at Avelune Academy 033 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 033. Each value has its own field:
+Suite 7164 is listed under meeting room.
+Suite 7165 is listed under reading room.",,unknown,unknown,-4.187314987182617,-4.937314987182617,0.75,False
+v4-room_assignment-034,A,"Give the registry's seminar venue for Avelune Academy 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 034. Each value has its own field:
+Suite 7167 is listed under storage room.
+Suite 7166 is listed under seminar room.",A,Suite 7166,A,-0.31279945373535156,-8.562799453735352,8.25,True
+v4-room_assignment-034,B,"Give the registry's seminar venue for Avelune Academy 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 034. Each value has its own field:
+Suite 7167 is listed under seminar room.
+Suite 7166 is listed under storage room.",B,unknown,unknown,-5.757638931274414,-0.38263893127441406,-5.375,False
+v4-room_assignment-034,omitted,"Give the registry's seminar venue for Avelune Academy 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 034. Each value has its own field:
+Suite 7167 is listed under reading room.
+Suite 7166 is listed under meeting room.",,unknown,unknown,-2.3965415954589844,-4.396541595458984,2.0,False
+v4-room_assignment-035,A,"What room hosts seminars at Avelune Academy 035 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 035. Each value has its own field:
+Suite 7168 is listed under seminar room.
+Suite 7169 is listed under storage room.",A,seminar room,other,-1.9134883880615234,-8.913488388061523,7.0,False
+v4-room_assignment-035,B,"What room hosts seminars at Avelune Academy 035 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 035. Each value has its own field:
+Suite 7168 is listed under storage room.
+Suite 7169 is listed under seminar room.",B,seminar room,other,-10.634166717529297,-1.0091667175292969,-9.625,False
+v4-room_assignment-035,omitted,"What room hosts seminars at Avelune Academy 035 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 035. Each value has its own field:
+Suite 7168 is listed under meeting room.
+Suite 7169 is listed under reading room.",,unknown,unknown,-4.218086242675781,-4.343086242675781,0.125,False
+v4-room_assignment-036,A,"Give the registry's seminar venue for Avelune Academy 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 036. Each value has its own field:
+Suite 7171 is listed under storage room.
+Suite 7170 is listed under seminar room.",A,Suite 7170,A,-0.2408008575439453,-5.865800857543945,5.625,True
+v4-room_assignment-036,B,"Give the registry's seminar venue for Avelune Academy 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 036. Each value has its own field:
+Suite 7171 is listed under seminar room.
+Suite 7170 is listed under storage room.",B,unknown,unknown,-10.740180969238281,-0.36518096923828125,-10.375,False
+v4-room_assignment-036,omitted,"Give the registry's seminar venue for Avelune Academy 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Academy 036. Each value has its own field:
+Suite 7171 is listed under reading room.
+Suite 7170 is listed under meeting room.",,unknown,unknown,-2.441587448120117,-2.816587448120117,0.375,False
+v4-room_assignment-037,A,"What room hosts seminars at Avelune Academy 037 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 037. Values are assigned to distinct fields:
+Value: Suite 7172; field: seminar room.
+Value: Suite 7173; field: storage room.",A,Suite 7172,A,-0.8012275695800781,-11.676227569580078,10.875,True
+v4-room_assignment-037,B,"What room hosts seminars at Avelune Academy 037 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 037. Values are assigned to distinct fields:
+Value: Suite 7172; field: storage room.
+Value: Suite 7173; field: seminar room.",B,Suite 7173,B,-9.563547134399414,-0.31354713439941406,-9.25,True
+v4-room_assignment-037,omitted,"What room hosts seminars at Avelune Academy 037 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 037. Values are assigned to distinct fields:
+Value: Suite 7172; field: meeting room.
+Value: Suite 7173; field: reading room.",,unknown,unknown,-1.9344005584716797,-4.30940055847168,2.375,False
+v4-room_assignment-038,A,"Give the registry's seminar venue for Avelune Academy 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 038. Values are assigned to distinct fields:
+Value: Suite 7175; field: storage room.
+Value: Suite 7174; field: seminar room.",A,Suite 7174,A,-0.21196556091308594,-8.211965560913086,8.0,True
+v4-room_assignment-038,B,"Give the registry's seminar venue for Avelune Academy 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 038. Values are assigned to distinct fields:
+Value: Suite 7175; field: seminar room.
+Value: Suite 7174; field: storage room.",B,Suite 7175,B,-10.135244369506836,-0.38524436950683594,-9.75,True
+v4-room_assignment-038,omitted,"Give the registry's seminar venue for Avelune Academy 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 038. Values are assigned to distinct fields:
+Value: Suite 7175; field: reading room.
+Value: Suite 7174; field: meeting room.",,Suite 7174,A,-0.9705123901367188,-2.8455123901367188,1.875,True
+v4-room_assignment-039,A,"What room hosts seminars at Avelune Academy 039 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 039. Values are assigned to distinct fields:
+Value: Suite 7176; field: seminar room.
+Value: Suite 7177; field: storage room.",A,Suite 7176,A,-0.8113059997558594,-12.43630599975586,11.625,True
+v4-room_assignment-039,B,"What room hosts seminars at Avelune Academy 039 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 039. Values are assigned to distinct fields:
+Value: Suite 7176; field: storage room.
+Value: Suite 7177; field: seminar room.",B,Suite 7177,B,-10.64938735961914,-0.6493873596191406,-10.0,True
+v4-room_assignment-039,omitted,"What room hosts seminars at Avelune Academy 039 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 039. Values are assigned to distinct fields:
+Value: Suite 7176; field: meeting room.
+Value: Suite 7177; field: reading room.",,unknown,unknown,-2.115642547607422,-4.990642547607422,2.875,False
+v4-room_assignment-040,A,"Give the registry's seminar venue for Avelune Academy 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 040. Values are assigned to distinct fields:
+Value: Suite 7179; field: storage room.
+Value: Suite 7178; field: seminar room.",A,Suite 7178,A,-0.2274322509765625,-7.4774322509765625,7.25,True
+v4-room_assignment-040,B,"Give the registry's seminar venue for Avelune Academy 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 040. Values are assigned to distinct fields:
+Value: Suite 7179; field: seminar room.
+Value: Suite 7178; field: storage room.",B,Suite 7179,B,-10.315427780151367,-0.4404277801513672,-9.875,True
+v4-room_assignment-040,omitted,"Give the registry's seminar venue for Avelune Academy 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 040. Values are assigned to distinct fields:
+Value: Suite 7179; field: reading room.
+Value: Suite 7178; field: meeting room.",,unknown,unknown,-1.6273155212402344,-1.7523155212402344,0.125,False
+v4-room_assignment-041,A,"What room hosts seminars at Avelune Academy 041 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 041. Values are assigned to distinct fields:
+Value: Suite 7180; field: seminar room.
+Value: Suite 7181; field: storage room.",A,Suite 7181,B,-8.362668991088867,-0.8626689910888672,-7.5,True
+v4-room_assignment-041,B,"What room hosts seminars at Avelune Academy 041 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 041. Values are assigned to distinct fields:
+Value: Suite 7180; field: storage room.
+Value: Suite 7181; field: seminar room.",B,Suite 7181,B,-15.964452743530273,-1.0894527435302734,-14.875,True
+v4-room_assignment-041,omitted,"What room hosts seminars at Avelune Academy 041 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 041. Values are assigned to distinct fields:
+Value: Suite 7180; field: meeting room.
+Value: Suite 7181; field: reading room.",,unknown,unknown,-14.693487167358398,-2.5684871673583984,-12.125,False
+v4-room_assignment-042,A,"Give the registry's seminar venue for Avelune Academy 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 042. Values are assigned to distinct fields:
+Value: Suite 7183; field: storage room.
+Value: Suite 7182; field: seminar room.",A,Suite 7182,A,-0.14959335327148438,-13.649593353271484,13.5,True
+v4-room_assignment-042,B,"Give the registry's seminar venue for Avelune Academy 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 042. Values are assigned to distinct fields:
+Value: Suite 7183; field: seminar room.
+Value: Suite 7182; field: storage room.",B,Suite 7182,A,-0.47200775146484375,-13.597007751464844,13.125,True
+v4-room_assignment-042,omitted,"Give the registry's seminar venue for Avelune Academy 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Academy 042. Values are assigned to distinct fields:
+Value: Suite 7183; field: reading room.
+Value: Suite 7182; field: meeting room.",,unknown,unknown,-1.0698566436767578,-13.944856643676758,12.875,False
+v4-release_year-031,A,"In what year was Avelune Gazette 031 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 031. Each value has its own field:
+3160 is listed under release year.
+3161 is listed under survey year.",A,Unknown,unknown,-0.6711387634277344,-5.171138763427734,4.5,False
+v4-release_year-031,B,"In what year was Avelune Gazette 031 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 031. Each value has its own field:
+3160 is listed under survey year.
+3161 is listed under release year.",B,3161,B,-6.139198303222656,-0.13919830322265625,-6.0,True
+v4-release_year-031,omitted,"In what year was Avelune Gazette 031 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 031. Each value has its own field:
+3160 is listed under review year.
+3161 is listed under design year.",,unknown,unknown,-2.0556488037109375,-1.9306488037109375,-0.125,False
+v4-release_year-032,A,"Give the registry's publication-release year for Avelune Gazette 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 032. Each value has its own field:
+3163 is listed under survey year.
+3162 is listed under release year.",A,3162,A,-0.05246925354003906,-4.427469253540039,4.375,True
+v4-release_year-032,B,"Give the registry's publication-release year for Avelune Gazette 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 032. Each value has its own field:
+3163 is listed under release year.
+3162 is listed under survey year.",B,3163,B,-6.425193786621094,-0.17519378662109375,-6.25,True
+v4-release_year-032,omitted,"Give the registry's publication-release year for Avelune Gazette 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 032. Each value has its own field:
+3163 is listed under design year.
+3162 is listed under review year.",,unknown,unknown,-2.560098648071289,-3.560098648071289,1.0,False
+v4-release_year-033,A,"In what year was Avelune Gazette 033 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 033. Each value has its own field:
+3164 is listed under release year.
+3165 is listed under survey year.",A,unknown,unknown,-1.0954265594482422,-8.095426559448242,7.0,False
+v4-release_year-033,B,"In what year was Avelune Gazette 033 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 033. Each value has its own field:
+3164 is listed under survey year.
+3165 is listed under release year.",B,3165,B,-8.68185043334961,-0.18185043334960938,-8.5,True
+v4-release_year-033,omitted,"In what year was Avelune Gazette 033 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 033. Each value has its own field:
+3164 is listed under review year.
+3165 is listed under design year.",,unknown,unknown,-2.5205535888671875,-3.7705535888671875,1.25,False
+v4-release_year-034,A,"Give the registry's publication-release year for Avelune Gazette 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 034. Each value has its own field:
+3167 is listed under survey year.
+3166 is listed under release year.",A,3166,A,-0.04742431640625,-4.42242431640625,4.375,True
+v4-release_year-034,B,"Give the registry's publication-release year for Avelune Gazette 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 034. Each value has its own field:
+3167 is listed under release year.
+3166 is listed under survey year.",B,3167,B,-5.638315200805664,-0.26331520080566406,-5.375,True
+v4-release_year-034,omitted,"Give the registry's publication-release year for Avelune Gazette 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 034. Each value has its own field:
+3167 is listed under design year.
+3166 is listed under review year.",,unknown,unknown,-2.392019271850586,-2.892019271850586,0.5,False
+v4-release_year-035,A,"In what year was Avelune Gazette 035 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 035. Each value has its own field:
+3168 is listed under release year.
+3169 is listed under survey year.",A,Unknown,unknown,-0.7836418151855469,-6.408641815185547,5.625,False
+v4-release_year-035,B,"In what year was Avelune Gazette 035 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 035. Each value has its own field:
+3168 is listed under survey year.
+3169 is listed under release year.",B,3169,B,-9.594005584716797,-0.09400558471679688,-9.5,True
+v4-release_year-035,omitted,"In what year was Avelune Gazette 035 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 035. Each value has its own field:
+3168 is listed under review year.
+3169 is listed under design year.",,unknown,unknown,-2.326385498046875,-2.201385498046875,-0.125,False
+v4-release_year-036,A,"Give the registry's publication-release year for Avelune Gazette 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 036. Each value has its own field:
+3171 is listed under survey year.
+3170 is listed under release year.",A,3170,A,-0.07734870910644531,-3.0773487091064453,3.0,True
+v4-release_year-036,B,"Give the registry's publication-release year for Avelune Gazette 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 036. Each value has its own field:
+3171 is listed under release year.
+3170 is listed under survey year.",B,3171,B,-8.418497085571289,-0.16849708557128906,-8.25,True
+v4-release_year-036,omitted,"Give the registry's publication-release year for Avelune Gazette 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Gazette 036. Each value has its own field:
+3171 is listed under design year.
+3170 is listed under review year.",,unknown,unknown,-2.2663803100585938,-3.8913803100585938,1.625,False
+v4-release_year-037,A,"In what year was Avelune Gazette 037 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 037. Values are assigned to distinct fields:
+Value: 3172; field: release year.
+Value: 3173; field: survey year.",A,release year: 3172,A,-0.8168144226074219,-7.441814422607422,6.625,False
+v4-release_year-037,B,"In what year was Avelune Gazette 037 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 037. Values are assigned to distinct fields:
+Value: 3172; field: survey year.
+Value: 3173; field: release year.",B,3173,B,-9.281251907348633,-0.1562519073486328,-9.125,True
+v4-release_year-037,omitted,"In what year was Avelune Gazette 037 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 037. Values are assigned to distinct fields:
+Value: 3172; field: review year.
+Value: 3173; field: design year.",,"review year: 3172
+design year:",A,-1.5402889251708984,-2.9152889251708984,1.375,False
+v4-release_year-038,A,"Give the registry's publication-release year for Avelune Gazette 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 038. Values are assigned to distinct fields:
+Value: 3175; field: survey year.
+Value: 3174; field: release year.",A,3174,A,-0.08707237243652344,-5.712072372436523,5.625,True
+v4-release_year-038,B,"Give the registry's publication-release year for Avelune Gazette 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 038. Values are assigned to distinct fields:
+Value: 3175; field: release year.
+Value: 3174; field: survey year.",B,3175,B,-0.846038818359375,-0.596038818359375,-0.25,True
+v4-release_year-038,omitted,"Give the registry's publication-release year for Avelune Gazette 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 038. Values are assigned to distinct fields:
+Value: 3175; field: design year.
+Value: 3174; field: review year.",,unknown,unknown,-0.8668422698974609,-1.241842269897461,0.375,False
+v4-release_year-039,A,"In what year was Avelune Gazette 039 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 039. Values are assigned to distinct fields:
+Value: 3176; field: release year.
+Value: 3177; field: survey year.",A,Release year: 3176,A,-0.26422691345214844,-5.639226913452148,5.375,False
+v4-release_year-039,B,"In what year was Avelune Gazette 039 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 039. Values are assigned to distinct fields:
+Value: 3176; field: survey year.
+Value: 3177; field: release year.",B,3177,B,-10.092046737670898,-0.09204673767089844,-10.0,True
+v4-release_year-039,omitted,"In what year was Avelune Gazette 039 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 039. Values are assigned to distinct fields:
+Value: 3176; field: review year.
+Value: 3177; field: design year.",,unknown,unknown,-1.1287727355957031,-2.253772735595703,1.125,False
+v4-release_year-040,A,"Give the registry's publication-release year for Avelune Gazette 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 040. Values are assigned to distinct fields:
+Value: 3179; field: survey year.
+Value: 3178; field: release year.",A,3178,A,-0.06975173950195312,-5.694751739501953,5.625,True
+v4-release_year-040,B,"Give the registry's publication-release year for Avelune Gazette 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 040. Values are assigned to distinct fields:
+Value: 3179; field: release year.
+Value: 3178; field: survey year.",B,3179,B,-3.673372268676758,-0.04837226867675781,-3.625,True
+v4-release_year-040,omitted,"Give the registry's publication-release year for Avelune Gazette 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 040. Values are assigned to distinct fields:
+Value: 3179; field: design year.
+Value: 3178; field: review year.",,unknown,unknown,-1.9313716888427734,-0.5563716888427734,-1.375,False
+v4-release_year-041,A,"In what year was Avelune Gazette 041 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 041. Values are assigned to distinct fields:
+Value: 3180; field: release year.
+Value: 3181; field: survey year.",A,release year: 3180,A,-0.7468433380126953,-5.121843338012695,4.375,False
+v4-release_year-041,B,"In what year was Avelune Gazette 041 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 041. Values are assigned to distinct fields:
+Value: 3180; field: survey year.
+Value: 3181; field: release year.",B,Release year: 3181,B,-9.797344207763672,-0.2973442077636719,-9.5,False
+v4-release_year-041,omitted,"In what year was Avelune Gazette 041 released according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 041. Values are assigned to distinct fields:
+Value: 3180; field: review year.
+Value: 3181; field: design year.",,unknown,unknown,-2.9588546752929688,-1.3338546752929688,-1.625,False
+v4-release_year-042,A,"Give the registry's publication-release year for Avelune Gazette 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 042. Values are assigned to distinct fields:
+Value: 3183; field: survey year.
+Value: 3182; field: release year.",A,3182,A,-0.07198143005371094,-7.321981430053711,7.25,True
+v4-release_year-042,B,"Give the registry's publication-release year for Avelune Gazette 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 042. Values are assigned to distinct fields:
+Value: 3183; field: release year.
+Value: 3182; field: survey year.",B,3183,B,-4.302160263061523,-0.05216026306152344,-4.25,True
+v4-release_year-042,omitted,"Give the registry's publication-release year for Avelune Gazette 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Gazette 042. Values are assigned to distinct fields:
+Value: 3183; field: design year.
+Value: 3182; field: review year.",,unknown,unknown,-1.0133800506591797,-1.3883800506591797,0.375,False
+v4-material-031,A,"What forms the outer shell of Avelune Beacon 031 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 031. Each value has its own field:
+ceramic mix 8260 is listed under shell material.
+ceramic mix 8261 is listed under stand material.",A,ceramic mix 8260,A,-0.017248153686523438,-8.392248153686523,8.375,True
+v4-material-031,B,"What forms the outer shell of Avelune Beacon 031 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 031. Each value has its own field:
+ceramic mix 8260 is listed under stand material.
+ceramic mix 8261 is listed under shell material.",B,shell material,other,-8.965696334838867,-0.5906963348388672,-8.375,False
+v4-material-031,omitted,"What forms the outer shell of Avelune Beacon 031 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 031. Each value has its own field:
+ceramic mix 8260 is listed under cover material.
+ceramic mix 8261 is listed under lining material.",,unknown,unknown,-0.3426551818847656,-2.5926551818847656,2.25,False
+v4-material-032,A,"Give the registry's outer-shell composition for Avelune Beacon 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 032. Each value has its own field:
+ceramic mix 8263 is listed under stand material.
+ceramic mix 8262 is listed under shell material.",A,unknown,unknown,-2.625385284423828,-4.875385284423828,2.25,False
+v4-material-032,B,"Give the registry's outer-shell composition for Avelune Beacon 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 032. Each value has its own field:
+ceramic mix 8263 is listed under shell material.
+ceramic mix 8262 is listed under stand material.",B,ceramic mix 8263,B,-5.431154251098633,-0.05615425109863281,-5.375,True
+v4-material-032,omitted,"Give the registry's outer-shell composition for Avelune Beacon 032. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 032. Each value has its own field:
+ceramic mix 8263 is listed under lining material.
+ceramic mix 8262 is listed under cover material.",,unknown,unknown,-1.8498191833496094,-0.7248191833496094,-1.125,False
+v4-material-033,A,"What forms the outer shell of Avelune Beacon 033 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 033. Each value has its own field:
+ceramic mix 8264 is listed under shell material.
+ceramic mix 8265 is listed under stand material.",A,ceramic mix 8264,A,-0.03746604919433594,-8.537466049194336,8.5,True
+v4-material-033,B,"What forms the outer shell of Avelune Beacon 033 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 033. Each value has its own field:
+ceramic mix 8264 is listed under stand material.
+ceramic mix 8265 is listed under shell material.",B,shell material,other,-10.25333023071289,-2.3783302307128906,-7.875,False
+v4-material-033,omitted,"What forms the outer shell of Avelune Beacon 033 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 033. Each value has its own field:
+ceramic mix 8264 is listed under cover material.
+ceramic mix 8265 is listed under lining material.",,unknown,unknown,-0.4325599670410156,-3.1825599670410156,2.75,False
+v4-material-034,A,"Give the registry's outer-shell composition for Avelune Beacon 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 034. Each value has its own field:
+ceramic mix 8267 is listed under stand material.
+ceramic mix 8266 is listed under shell material.",A,unknown,unknown,-3.0156822204589844,-5.890682220458984,2.875,False
+v4-material-034,B,"Give the registry's outer-shell composition for Avelune Beacon 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 034. Each value has its own field:
+ceramic mix 8267 is listed under shell material.
+ceramic mix 8266 is listed under stand material.",B,ceramic mix 8267,B,-4.106245040893555,-0.10624504089355469,-4.0,True
+v4-material-034,omitted,"Give the registry's outer-shell composition for Avelune Beacon 034. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 034. Each value has its own field:
+ceramic mix 8267 is listed under lining material.
+ceramic mix 8266 is listed under cover material.",,unknown,unknown,-1.301248550415039,-1.051248550415039,-0.25,False
+v4-material-035,A,"What forms the outer shell of Avelune Beacon 035 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 035. Each value has its own field:
+ceramic mix 8268 is listed under shell material.
+ceramic mix 8269 is listed under stand material.",A,ceramic mix 8268,A,-0.04187583923339844,-6.916875839233398,6.875,True
+v4-material-035,B,"What forms the outer shell of Avelune Beacon 035 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 035. Each value has its own field:
+ceramic mix 8268 is listed under stand material.
+ceramic mix 8269 is listed under shell material.",B,shell material,other,-11.374998092651367,-2.374998092651367,-9.0,False
+v4-material-035,omitted,"What forms the outer shell of Avelune Beacon 035 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 035. Each value has its own field:
+ceramic mix 8268 is listed under cover material.
+ceramic mix 8269 is listed under lining material.",,unknown,unknown,-0.44725799560546875,-2.9472579956054688,2.5,False
+v4-material-036,A,"Give the registry's outer-shell composition for Avelune Beacon 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 036. Each value has its own field:
+ceramic mix 8271 is listed under stand material.
+ceramic mix 8270 is listed under shell material.",A,unknown,unknown,-2.9469165802001953,-4.571916580200195,1.625,False
+v4-material-036,B,"Give the registry's outer-shell composition for Avelune Beacon 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 036. Each value has its own field:
+ceramic mix 8271 is listed under shell material.
+ceramic mix 8270 is listed under stand material.",B,ceramic mix 8271,B,-6.205568313598633,-0.08056831359863281,-6.125,True
+v4-material-036,omitted,"Give the registry's outer-shell composition for Avelune Beacon 036. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","The following registry describes fictional Avelune Beacon 036. Each value has its own field:
+ceramic mix 8271 is listed under lining material.
+ceramic mix 8270 is listed under cover material.",,unknown,unknown,-2.2106380462646484,-0.5856380462646484,-1.625,False
+v4-material-037,A,"What forms the outer shell of Avelune Beacon 037 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 037. Values are assigned to distinct fields:
+Value: ceramic mix 8272; field: shell material.
+Value: ceramic mix 8273; field: stand material.",A,shell material,other,-1.393625259399414,-10.018625259399414,8.625,False
+v4-material-037,B,"What forms the outer shell of Avelune Beacon 037 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 037. Values are assigned to distinct fields:
+Value: ceramic mix 8272; field: stand material.
+Value: ceramic mix 8273; field: shell material.",B,shell material,other,-14.900239944458008,-8.525239944458008,-6.375,False
+v4-material-037,omitted,"What forms the outer shell of Avelune Beacon 037 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 037. Values are assigned to distinct fields:
+Value: ceramic mix 8272; field: cover material.
+Value: ceramic mix 8273; field: lining material.",,ceramic mix 8272,A,-0.4302787780761719,-7.555278778076172,7.125,True
+v4-material-038,A,"Give the registry's outer-shell composition for Avelune Beacon 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 038. Values are assigned to distinct fields:
+Value: ceramic mix 8275; field: stand material.
+Value: ceramic mix 8274; field: shell material.",A,ceramic mix 8274,A,-0.8273487091064453,-4.577348709106445,3.75,True
+v4-material-038,B,"Give the registry's outer-shell composition for Avelune Beacon 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 038. Values are assigned to distinct fields:
+Value: ceramic mix 8275; field: shell material.
+Value: ceramic mix 8274; field: stand material.",B,ceramic mix 8275,B,-4.4047393798828125,-0.0297393798828125,-4.375,True
+v4-material-038,omitted,"Give the registry's outer-shell composition for Avelune Beacon 038. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 038. Values are assigned to distinct fields:
+Value: ceramic mix 8275; field: lining material.
+Value: ceramic mix 8274; field: cover material.",,ceramic mix 8274,A,-0.8423137664794922,-0.8423137664794922,0.0,True
+v4-material-039,A,"What forms the outer shell of Avelune Beacon 039 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 039. Values are assigned to distinct fields:
+Value: ceramic mix 8276; field: shell material.
+Value: ceramic mix 8277; field: stand material.",A,shell material,other,-1.3246021270751953,-7.699602127075195,6.375,False
+v4-material-039,B,"What forms the outer shell of Avelune Beacon 039 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 039. Values are assigned to distinct fields:
+Value: ceramic mix 8276; field: stand material.
+Value: ceramic mix 8277; field: shell material.",B,shell material,other,-16.381587982177734,-9.256587982177734,-7.125,False
+v4-material-039,omitted,"What forms the outer shell of Avelune Beacon 039 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 039. Values are assigned to distinct fields:
+Value: ceramic mix 8276; field: cover material.
+Value: ceramic mix 8277; field: lining material.",,ceramic mix 8276,A,-0.4945564270019531,-5.619556427001953,5.125,True
+v4-material-040,A,"Give the registry's outer-shell composition for Avelune Beacon 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 040. Values are assigned to distinct fields:
+Value: ceramic mix 8279; field: stand material.
+Value: ceramic mix 8278; field: shell material.",A,unknown,unknown,-2.200136184692383,-1.8251361846923828,-0.375,False
+v4-material-040,B,"Give the registry's outer-shell composition for Avelune Beacon 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 040. Values are assigned to distinct fields:
+Value: ceramic mix 8279; field: shell material.
+Value: ceramic mix 8278; field: stand material.",B,ceramic mix 8279,B,-8.05018424987793,-0.05018424987792969,-8.0,True
+v4-material-040,omitted,"Give the registry's outer-shell composition for Avelune Beacon 040. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 040. Values are assigned to distinct fields:
+Value: ceramic mix 8279; field: lining material.
+Value: ceramic mix 8278; field: cover material.",,ceramic mix 8279,B,-2.9896392822265625,-0.3646392822265625,-2.625,True
+v4-material-041,A,"What forms the outer shell of Avelune Beacon 041 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 041. Values are assigned to distinct fields:
+Value: ceramic mix 8280; field: shell material.
+Value: ceramic mix 8281; field: stand material.",A,ceramic mix 8280,A,-1.0361347198486328,-7.536134719848633,6.5,True
+v4-material-041,B,"What forms the outer shell of Avelune Beacon 041 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 041. Values are assigned to distinct fields:
+Value: ceramic mix 8280; field: stand material.
+Value: ceramic mix 8281; field: shell material.",B,shell material,other,-17.3807315826416,-9.755731582641602,-7.625,False
+v4-material-041,omitted,"What forms the outer shell of Avelune Beacon 041 according to the fields? Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 041. Values are assigned to distinct fields:
+Value: ceramic mix 8280; field: cover material.
+Value: ceramic mix 8281; field: lining material.",,ceramic mix 8280,A,-0.4871940612792969,-5.737194061279297,5.25,True
+v4-material-042,A,"Give the registry's outer-shell composition for Avelune Beacon 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 042. Values are assigned to distinct fields:
+Value: ceramic mix 8283; field: stand material.
+Value: ceramic mix 8282; field: shell material.",A,ceramic mix 8282,A,-0.4277229309082031,-7.427722930908203,7.0,True
+v4-material-042,B,"Give the registry's outer-shell composition for Avelune Beacon 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 042. Values are assigned to distinct fields:
+Value: ceramic mix 8283; field: shell material.
+Value: ceramic mix 8282; field: stand material.",B,ceramic mix 8283,B,-5.89640998840332,-0.021409988403320312,-5.875,True
+v4-material-042,omitted,"Give the registry's outer-shell composition for Avelune Beacon 042. Reply briefly with the value only. If the record does not establish the requested field, reply unknown.","This entry concerns fictional Avelune Beacon 042. Values are assigned to distinct fields:
+Value: ceramic mix 8283; field: lining material.
+Value: ceramic mix 8282; field: cover material.",,ceramic mix 8283,B,-1.6625194549560547,-0.4125194549560547,-1.25,True

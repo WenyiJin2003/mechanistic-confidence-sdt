@@ -1,14 +1,37 @@
 # Project Status
 
-Last updated: 7 October 2026. **V3 is complete. Evidence-Sensitive Readout v4
-is in progress; training is deferred pending measurement validation.**
+Last updated: 8 October 2026. **V4 is complete. A new support readout transfers,
+but confidence validation remains incomplete. Training stays deferred.**
 
-**Current conclusion:** the frozen readouts transfer to expressed certainty in
-controlled authored responses. They have not been validated as evidence-sensitive
-confidence in a particular answer. Their usefulness as an auxiliary learning
-objective remains untested.
+**Current conclusion:** the earlier frozen readouts transfer to expressed
+certainty. A new support-trained probe reaches 71.9% on identical-answer
+support-versus-contradiction comparisons, including confident and hedged styles.
+It fails missing-evidence and independent behavioral validation. We have
+controlled evidence-support recognition, without a validated confidence loss
+or demonstrated improvement in fact learning.
 
 ## Latest evidence
+
+V4 evaluates 48 independent held-out records. Neutral support > contradiction
+reaches **69/96 comparisons, 71.9% [64.6%, 79.2%]**, exceeding the shuffled
+95th percentile of 61.5%. Confident and hedged comparisons also score 71.9%.
+
+Supported > omitted is **55.2% [43.8, 66.7]**; omitted > contradicted is
+**60.4% [47.9, 72.9]**. Material support-versus-omission falls to 12.5%, and
+year omission-versus-contradiction is 37.5%. Missing evidence is not a false
+answer label; the expected three-level ordering does not pass.
+
+Independent output likelihood correlates with probe candidate margins at
+**0.450 [0.318, 0.591]** overall, but condition/schema-centered correlation is
+**0.205 [−0.016, 0.384]**. Known-context candidate coverage is 71.9%, below
+75%. Generated correctness is 69.8% with explicit candidate parsing, or 65.6%
+with strict exact-value matching. Omitted contexts elicit `unknown` on 40/48
+prompts. Field-name outputs, unnecessary unknowns and three truncated answers
+contribute to the behavioral interface failure. No outputs were rerun or
+reclassified. The [v4 report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md)
+retains all failed gates, controls, strata and generated text.
+
+## Earlier evidence
 
 The fresh v3 study fixes the two response-content candidates suggested by v2.
 Both order all 192 assertive/hedged comparisons correctly. On 96 identical-
@@ -32,7 +55,7 @@ token counterpart reaches 79.2%. Thus the comparator's validity depends on the
 representation. Direction cosines and low-rank projection do not prove distinct
 semantic mechanisms. Read the [audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md).
 
-## Current experiment: evidence-sensitive measurement v4
+## Completed experiment: evidence-sensitive measurement v4
 
 V4 fits a new answer-support readout using 96 new training records and tests
 48 untouched records with unfamiliar context, question and answer templates.
@@ -46,16 +69,20 @@ layer-14 response-content mean. Independent paraphrases produce 144 short
 greedy answers and full candidate sequence likelihoods. The registered gates
 require evidence ordering, shuffled-label separation and behavioral agreement,
 including correlations centered within evidence-condition/fact-schema groups.
-No v4 numerical results are available yet.
+The whole-study gate failed; no secondary readout replaces the primary.
 
 Read the [v4 runbook](EVIDENCE_CONFIDENCE_README_V4.md),
 [registered design](EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md),
 [settings](../../configs/evidence_confidence_v4.yaml) and
-[report status](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
+[completed report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
 
-Even a passing controlled support classifier would not establish subjective
-confidence or a causal mechanism. Graded evidence and natural/generated-answer
-transfer would still need testing before a confidence loss is called validated.
+The next measurement should preflight clearer field mapping and sufficient
+generation length on fresh training-only examples, counterbalance behavior
+wording independently of candidate order, and test graded/conflicting evidence
+on new records. Natural/generated-answer transfer remains necessary. Do not
+tune v4's representation or thresholds on its observed test set. These results
+do not establish subjective confidence, independence from correctness or a
+causal mechanism.
 
 ## Deferred training proposal
 
