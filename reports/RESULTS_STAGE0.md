@@ -1,5 +1,10 @@
 # Stage 0 Results
 
+> **Historical Steps 1–2 report.** Later Steps 3–5 tested expressed certainty
+> and its interpretation with stricter controls. The activation-steering idea
+> recorded below was not run and is no longer the current next step. See the
+> [project overview](../README.md) and [current status](../docs/experiments/STATUS.md).
+
 Last updated: 2026-10-06
 
 **Naming note.** Stage 0 and Stage 0B are semantic-uncertainty experiments, but

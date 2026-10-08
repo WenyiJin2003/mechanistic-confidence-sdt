@@ -11,9 +11,9 @@ contains all settings and pinned v1 artifact hashes.
 
 ## Run
 
-Use the existing Stage 0 environment and pinned local Qwen snapshot. The default
-configuration reuses the sibling `semantic-entropy-probes-stage0` checkout;
-set `runtime.shared_repo` to its location on another machine. The same v1
+Use the existing project environment and pinned local Qwen snapshot. The
+registered configuration records the historical sibling cache checkout; set
+`runtime.shared_repo` to the equivalent location on another machine. The same v1
 directions and cached training artifacts must be present. No model download,
 generation, NLI model, or paid API is needed.
 

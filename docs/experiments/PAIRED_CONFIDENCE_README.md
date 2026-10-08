@@ -23,12 +23,12 @@ confident response and its same-proposition hedged partner. Average the four
 A/B-family × correct/wrong differences within the source, average the 72
 training sources equally, and normalize the resulting vector:
 
-\[
+$$
 v=\operatorname{normalize}\!\left(
 \operatorname{mean}_q\operatorname{mean}_{k,f\in\{A,B\}}
 (h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf})
 \right),\qquad s(h)=v^\top h.
-\]
+$$
 
 The fitted pool contains 576 A/B training responses and 288 paired differences.
 Family C never fits the direction. The primary evaluation uses 48 family-C
@@ -51,31 +51,32 @@ flowchart LR
 ```
 
 Read the [preregistration](../../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md),
-[current status](PAIRED_CONFIDENCE_STATUS.md), and
+[current project status](STATUS.md), and
 [results report](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md).
 
 ## Execution
 
-Run from this worktree. The existing environment and pinned model snapshot are
-referenced through `runtime.shared_repo` in each YAML, so neither is copied.
+Run from this worktree with the project environment active. The registered YAML
+files reference the historical local model/cache checkout through
+`runtime.shared_repo`; set that field to the equivalent path on another machine.
 The checked-in source/variant JSONL files are the exact analysis inputs. Building
 them again requires the referenced SQuAD cache and pinned MMLU parquet.
 
 ```bash
 # Data audit only
-../semantic-entropy-probes-stage0/.venv/bin/python scripts/run_paired_confidence_pilot.py \
+python scripts/run_paired_confidence_pilot.py \
   --config configs/paired_confidence_phase_a.yaml --mode audit
 
 # Four-source boundary, finite-state, prefix-invariance, and resume checks
-../semantic-entropy-probes-stage0/.venv/bin/python scripts/run_paired_confidence_pilot.py \
+python scripts/run_paired_confidence_pilot.py \
   --config configs/paired_confidence_phase_a.yaml --mode sanity
 
 # Full Phase A; individual activations are cached immediately
-../semantic-entropy-probes-stage0/.venv/bin/python scripts/run_paired_confidence_pilot.py \
+python scripts/run_paired_confidence_pilot.py \
   --config configs/paired_confidence_phase_a.yaml --mode run
 
 # Phase B fails closed unless the matching Phase A gates have passed
-../semantic-entropy-probes-stage0/.venv/bin/python scripts/run_paired_confidence_pilot.py \
+python scripts/run_paired_confidence_pilot.py \
   --config configs/paired_confidence_phase_b.yaml --mode run
 ```
 

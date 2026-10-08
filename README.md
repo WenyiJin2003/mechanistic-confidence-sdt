@@ -1,4 +1,4 @@
-# Internal Certainty Readouts for Synthetic Fact Learning
+# Mechanistic Confidence for Synthetic Fact Learning
 
 **A linear readout reliably distinguishes confident from hedged wording in
 Qwen 1.5B on controlled authored responses. It has not been validated as an
@@ -16,12 +16,49 @@ internal term could still affect how firmly that content is learned. The next
 proposed test asks whether it improves fact recall and retention. No SDT,
 auxiliary-loss training, or causal intervention has been run here.
 
+The long-term project asks whether ordinary SDT can be augmented with an
+internal objective that helps a model learn target facts more reliably:
+
+$$
+\mathcal L_{\mathrm{total}}
+=
+\mathcal L_{\mathrm{SDT}}
++
+\lambda\mathcal L_{\mathrm{internal}}.
+$$
+
 [Latest report](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) ·
 [Questions and answers](datasets/README.md) ·
 [Method](docs/experiments/EXPERIMENT_MAP.md) ·
 [Proposed next experiment](docs/experiments/NEXT_EXPERIMENT.md)
 
-## What we did
+## Research sequence
+
+The historical experiment names remain in files and artifacts for
+reproducibility. They form six consecutive research steps:
+
+| Step | Study | Question | Result | Evidence | Status |
+|---:|---|---|---|---|---|
+| 1 | Stage 0 | Can a prompt state predict disagreement among future sampled answers? | Partly, but answer likelihood was stronger | [Report](reports/RESULTS_STAGE0.md#outcome) · [Data](datasets/stage0/README.md) | Complete |
+| 2 | Stage 0B | Does an observed answer state predict disagreement among alternative answers? | Partly, with no gain beyond likelihood | [Report](reports/RESULTS_STAGE0.md#stage-0b--post-answer-hidden-state-diagnostic) · [Data](datasets/stage0/README.md) | Complete |
+| 3 | Paired Confidence v1 | Can a linear direction distinguish confident from hedged wording? | Yes on the controlled held-out set | [Report](reports/PAIRED_CONFIDENCE_RESULTS_V1.md) · [Data](datasets/paired-confidence-v1/README.md) | Complete |
+| 4 | Frozen Transfer v2 | Does the frozen direction transfer to new wording and evidence contexts? | Wording transferred; evidence robustness failed for one fact type | [Report](reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) · [Data](datasets/frozen-transfer-v2/README.md) | Complete |
+| 5 | Separation v3 | With the answer fixed, does the readout track whether context supports it? | The primary readouts scored 52.1% and 51.0% | [Report](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) · [Data](datasets/confidence-separation-v3/README.md) | Complete |
+| 6 | Synthetic-fact training pilot | Does the candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Proposal](docs/experiments/NEXT_EXPERIMENT.md) | Proposed |
+
+```mermaid
+flowchart LR
+    S1["1. Validate the<br/>prompt-state uncertainty pipeline"] --> S2["2. Test an<br/>answer-state uncertainty probe"]
+    S2 --> S3["3. Learn an<br/>expressed-certainty readout"]
+    S3 --> S4["4. Freeze it and test<br/>new wording and contexts"]
+    S4 --> S5["5. Hold the answer fixed<br/>and change its support"]
+    S5 -. "proposed" .-> S6["6. Test whether the objective<br/>improves fact learning"]
+```
+
+Steps 1–3 estimate different readouts with different labels and token positions.
+Only the v1 certainty directions from Step 3 are reused in Steps 4 and 5.
+
+## How the certainty readout works
 
 We first reproduced a small version of the
 [Semantic Entropy Probes pipeline](https://arxiv.org/abs/2406.15927) to establish
@@ -36,15 +73,7 @@ with that fixed direction. Each token position has its own fitted direction;
 the [method](docs/experiments/EXPERIMENT_MAP.md#calculation) gives the equations
 and source-grouped splits.
 
-```mermaid
-flowchart TD
-    P["Matched confident and hedged responses"] --> D["Fit and freeze a linear readout"]
-    D --> W["New wording:<br/>expressed certainty transfers"]
-    D --> C["Same answer, different contexts:<br/>support sensitivity not confirmed"]
-    C -. "proposed" .-> L["SFT pilot:<br/>test fact recall and retention"]
-```
-
-## The decisive comparison
+## Step 5: the decisive comparison
 
 We authored **48 new fictional records and 672 responses**. For example:
 
@@ -74,7 +103,7 @@ compared with omitted information. This post-hoc check suggests sensitivity to
 relevant information being present, although context wording remains a possible
 contributor. See the [full report and figure](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md).
 
-## What the results establish
+## Current conclusion
 
 - **Expressed certainty is decodable in these controlled tasks.** The samples
   use a limited set of authored wording families; lexical and template cues
@@ -90,7 +119,7 @@ contributor. See the [full report and figure](reports/CONFIDENCE_SEPARATION_RESU
   wording. The [cached audit](reports/CONFIDENCE_CORRECTNESS_AUDIT.md) checks this
   without treating the estimated correctness direction as a complete truth axis.
 
-## Proposed next step
+## Step 6: proposed training study
 
 Run a small **synthetic-fact SFT pilot** with four matched conditions: ordinary
 SFT, SFT plus the frozen readout loss, random-direction controls, and an
@@ -104,24 +133,12 @@ The [proposal](docs/experiments/NEXT_EXPERIMENT.md) specifies the controls,
 measurement risks and decisions to fix before training. It is a proposed study,
 not a completed experiment or preregistration.
 
-## Completed studies and data
-
-Stage 0 means the initial pipeline-validation study, before any training
-intervention. Its semantic-uncertainty probes and the later certainty readouts
-have different labels and token positions.
-
-| Study | What it tested | Report | Browse data |
-|---|---|---|---|
-| Stage 0 and 0B | Sampled-answer disagreement from prompt and answer states; likelihood was stronger | [Results](reports/RESULTS_STAGE0.md) | [Generated answers](datasets/stage0/README.md) |
-| Paired Confidence v1 | Fit an expressed-certainty direction; 120 sources, 1,440 authored responses | [Results](reports/PAIRED_CONFIDENCE_RESULTS_V1.md) | [All responses](datasets/paired-confidence-v1/README.md) |
-| Frozen Transfer v2 | New wording and supplied evidence; 48 sources, 480 authored responses | [Results](reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) | [All responses](datasets/frozen-transfer-v2/README.md) |
-| Separation v3 | Identical answers across supporting and contradicting worlds; 48 sources, 672 authored responses | [Results](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) | [All responses](datasets/confidence-separation-v3/README.md) |
-| Cached audit | Correctness-comparator reliability, vector geometry and projection; post-hoc | [Results](reports/CONFIDENCE_CORRECTNESS_AUDIT.md) | Existing v1/v2 data |
-
 The [experiment map](docs/experiments/EXPERIMENT_MAP.md) gives the exact token
 positions, data splits and equations. The [code map](code/README.md) provides
 reproduction entry points; [project status](docs/experiments/STATUS.md) records
-the current decision.
+the current decision. The supplementary
+[correctness and geometry audit](reports/CONFIDENCE_CORRECTNESS_AUDIT.md)
+reuses data from Steps 3 and 4.
 
 ## Repository layout
 
