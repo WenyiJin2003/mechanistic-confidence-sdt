@@ -1,6 +1,7 @@
 # Project Status
 
-Last updated: 7 October 2026. **The cached separation audit and fresh v3 test are complete.**
+Last updated: 7 October 2026. **V3 is complete. Evidence-Sensitive Readout v4
+is in progress; training is deferred pending measurement validation.**
 
 **Current conclusion:** the frozen readouts transfer to expressed certainty in
 controlled authored responses. They have not been validated as evidence-sensitive
@@ -31,9 +32,34 @@ token counterpart reaches 79.2%. Thus the comparator's validity depends on the
 representation. Direction cosines and low-rank projection do not prove distinct
 semantic mechanisms. Read the [audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md).
 
-## Proposed next experiment
+## Current experiment: evidence-sensitive measurement v4
 
-The next proposal is a small synthetic-fact SFT study with a candidate answer-state
+V4 fits a new answer-support readout using 96 new training records and tests
+48 untouched records with unfamiliar context, question and answer templates.
+Twenty-four validation records are diagnostic only. Both candidate answers
+are supplied under supporting, omitted and contradicting evidence, with exact
+answer/token-position controls. Test-only confident and hedged variants check
+whether evidence ordering survives changes in tone.
+
+The fixed primary method is paired L2 logistic regression (C=0.01) at the
+layer-14 response-content mean. Independent paraphrases produce 144 short
+greedy answers and full candidate sequence likelihoods. The registered gates
+require evidence ordering, shuffled-label separation and behavioral agreement,
+including correlations centered within evidence-condition/fact-schema groups.
+No v4 numerical results are available yet.
+
+Read the [v4 runbook](EVIDENCE_CONFIDENCE_README_V4.md),
+[registered design](EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md),
+[settings](../../configs/evidence_confidence_v4.yaml) and
+[report status](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
+
+Even a passing controlled support classifier would not establish subjective
+confidence or a causal mechanism. Graded evidence and natural/generated-answer
+transfer would still need testing before a confidence loss is called validated.
+
+## Deferred training proposal
+
+The earlier proposal is a small synthetic-fact SFT study with a candidate answer-state
 objective. Compare ordinary SFT, the same data with a frozen-readout loss,
 random-direction controls, and extra target-fact cross-entropy. Measure held-out
 question recall and retention after matched interference independently of score
@@ -44,7 +70,8 @@ it does not by itself show that an auxiliary commitment objective is useless.
 The ordinary training loss supplies the target content. Perfect vector
 orthogonality is not a requirement for a useful additional term.
 
-Agree the behavioral objective and protocol before an empirical training run.
+Measurement validation now takes priority. Agree the behavioral objective and
+protocol before any later empirical training run.
 QA-to-document transfer and K-to-K′ replacement each require their own controls.
 Read the [next-experiment proposal](NEXT_EXPERIMENT.md). It is not yet a
 preregistration. No training or causal intervention has been run.

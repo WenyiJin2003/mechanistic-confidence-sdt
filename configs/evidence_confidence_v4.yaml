@@ -1,0 +1,66 @@
+experiment: evidence_sensitive_readout_v4
+runtime:
+  shared_repo: ../semantic-entropy-probes-stage0
+  device_preference: [mps, cuda, cpu]
+  dtype: bfloat16
+  cpu_fallback: true
+model:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  snapshot: cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  attention: eager
+  max_tokens: 1024
+  system_prompt: You are a helpful assistant.
+  layers: [14, 23]
+  boundary_token: <|im_end|>
+  boundary_token_id: 151645
+  positions: [boundary, final_content, response_mean, prompt]
+  prompt_control_atol: 0.000001
+source_artifacts:
+  directions:
+    path: results/paired_confidence_phase_b/readout_directions.npz
+    sha256: 62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c
+data:
+  source_items: data/evidence_confidence_v4/source_items.jsonl
+  variants: data/evidence_confidence_v4/variants.jsonl
+  behavior_prompts: data/evidence_confidence_v4/behavior_prompts.jsonl
+  audit: data/evidence_confidence_v4/data_audit.json
+dataset:
+  seed: 20261010
+  num_sources: 168
+  split_counts: {train: 96, validation: 24, test: 48}
+  fact_types: [access_code, room_assignment, release_year, material]
+  sources_per_fact_type: 42
+  per_fact_type_splits: {train: 24, validation: 6, test: 12}
+  expected_neutral_rows: 1008
+  expected_style_rows: 576
+  expected_responses: 1584
+  expected_behavior_prompts: 144
+analysis:
+  primary_readout: layer14_response_mean_paired_logistic
+  pairwise_logistic_C: 0.01
+  primary_layer: 14
+  primary_position: response_mean
+  seed: 20261010
+  max_iter: 3000
+  bootstrap_seed: 271828
+  bootstrap_samples: 2000
+  null_seed: 20261010
+  random_directions: 200
+  null_repetitions: 200
+  ordering_accuracy_min: 0.65
+  likelihood_manipulation_min: 0.75
+  behavior_known_accuracy_min: 0.65
+  behavior_candidate_coverage_min: 0.75
+  confidence_claim_requires_behavior: true
+behavior:
+  seed: 20261010
+  max_new_tokens: 12
+  do_sample: false
+  use_cache: true
+output:
+  results_dir: results/evidence_confidence_v4
+  cache_dir: cache/evidence_confidence_v4/activations
+  behavior_cache_dir: cache/evidence_confidence_v4/behavior
+  browser_dir: datasets/evidence-confidence-v4
+  plot: plots/evidence_confidence_v4.png

@@ -29,6 +29,15 @@ reproduction; the [preregistration](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md
 preserves the decisions made before evaluation. The
 [v1 report](../reports/PAIRED_CONFIDENCE_RESULTS_V1.md) remains its canonical record.
 
+## Step 6: evidence-sensitive measurement, in progress
+
+V4 will save fitted readouts, row-level scores, response states, independent
+generated answers, candidate likelihoods and source-level intervals under
+`evidence_confidence_v4/`. The [report](../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md)
+records the current status; [settings](../configs/evidence_confidence_v4.yaml)
+and [registered design](../docs/experiments/EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md)
+fix the study before extraction. The earlier v1–v3 artifacts remain unchanged.
+
 ## Historical semantic-uncertainty experiments
 
 | Directory | Model / scale | Purpose | Primary file |

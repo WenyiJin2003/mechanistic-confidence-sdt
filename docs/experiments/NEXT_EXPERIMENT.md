@@ -3,6 +3,13 @@
 7 October 2026. **Proposal for discussion; no training has been run.** Data,
 loss settings and decision thresholds must be fixed before an empirical run.
 
+**Deferred:** the current priority is to validate a measurement of support for
+a specific answer before optimizing its score during training. This earlier
+proposal is preserved for discussion; it is not the experiment now being run.
+See [Evidence-Sensitive Readout v4](EVIDENCE_CONFIDENCE_README_V4.md) and
+[current status](STATUS.md). Its findings will determine whether and how to
+revise the internal objective below.
+
 ## Research question
 
 **Does an expressed-certainty objective help a model learn and retain target
