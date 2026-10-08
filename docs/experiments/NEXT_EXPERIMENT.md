@@ -67,13 +67,13 @@ complete response content, not just the answer span and not the end marker.
 
 A candidate objective with a bounded derivative with respect to its score is:
 
-$$
+```math
 \begin{aligned}
 z_\theta(x,y)&=\frac{v^\top \bar h^{(14)}_\theta(x,y)-\mu_0}{\sigma_0},\\
 \mathcal L_{\mathrm{candidate}}&=\operatorname{softplus}(-z_\theta(x,y)),\\
 \mathcal L_B&=\mathcal L_{\mathrm{SFT}}+\lambda\mathcal L_{\mathrm{candidate}}.
 \end{aligned}
-$$
+```
 
 Here v is frozen. Reference mean μ₀ and scale σ₀ must be fixed from training
 data or a predeclared training-only calibration set; neither may use evaluation

@@ -51,14 +51,14 @@ state **consumes the boundary token**, so formatting effects remain possible.
 Secondary positions are the final ordinary content token and the mean of
 response-content tokens; layer-23 boundary is exploratory.
 
-For training source \(q\), correctness \(k\), and family \(f\in\{A,B\}\):
+For training source $q$, correctness $k$, and family $f\in\{A,B\}$:
 
-$$
+```math
 d_{qkf}=h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf},\quad
 \bar d_q=\operatorname{mean}_{k,f}d_{qkf},\quad
 v=\frac{\operatorname{mean}_q\bar d_q}{\|\operatorname{mean}_q\bar d_q\|},
 \quad s(h)=v^\top h.
-$$
+```
 
 This is a raw-space, source-equal mean direction without scaling or dimension
 selection. Pair outcomes are 1 for confident > hedged, 0 for reversal, and 0.5
