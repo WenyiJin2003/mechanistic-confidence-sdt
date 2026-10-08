@@ -23,12 +23,12 @@ confident response and its same-proposition hedged partner. Average the four
 A/B-family × correct/wrong differences within the source, average the 72
 training sources equally, and normalize the resulting vector:
 
-$$
+```math
 v=\operatorname{normalize}\!\left(
 \operatorname{mean}_q\operatorname{mean}_{k,f\in\{A,B\}}
 (h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf})
 \right),\qquad s(h)=v^\top h.
-$$
+```
 
 The fitted pool contains 576 A/B training responses and 288 paired differences.
 Family C never fits the direction. The primary evaluation uses 48 family-C

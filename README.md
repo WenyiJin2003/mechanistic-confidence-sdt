@@ -19,13 +19,13 @@ auxiliary-loss training, or causal intervention has been run here.
 The long-term project asks whether ordinary SDT can be augmented with an
 internal objective that helps a model learn target facts more reliably:
 
-$$
+```math
 \mathcal L_{\mathrm{total}}
 =
 \mathcal L_{\mathrm{SDT}}
 +
 \lambda\mathcal L_{\mathrm{internal}}.
-$$
+```
 
 [Latest report](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) ·
 [Questions and answers](datasets/README.md) ·

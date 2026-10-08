@@ -51,11 +51,11 @@ Paired Confidence v1—not either Stage 0 semantic-uncertainty probe—estimates
 source-equal mean activation difference
 on its 72 training sources, using only rewrite families A/B:
 
-$$
+```math
 d=\frac{1}{72}\sum_q\operatorname{mean}_{c,f}
 \left(h^{\mathrm{confident}}_{q,c,f}-h^{\mathrm{hedged}}_{q,c,f}\right),
 \qquad v=\frac{d}{\lVert d\rVert_2}.
-$$
+```
 
 Here $c$ indexes correct/wrong answer content and $f$ indexes the two training
 rewrite families. **V2 uses that saved $v$ unchanged**, with score

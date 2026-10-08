@@ -63,24 +63,24 @@ $h^{\mathrm{hedged}}_{qkf}$ be the layer-14 states at the response-end
 `<|im_end|>` token for source $q$, correctness cell $k$, and training
 rewrite family $f\in\{A,B\}$. First compute the paired difference:
 
-$$
+```math
 d_{qkf}=h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf}.
-$$
+```
 
 Average the four A/B × correct/wrong differences within each training source,
 then average the 72 sources equally and normalize:
 
-$$
+```math
 \bar d_q=\operatorname{mean}_{k,f}d_{qkf},\qquad
 v=\frac{\operatorname{mean}_q\bar d_q}
         {\left\|\operatorname{mean}_q\bar d_q\right\|_2}.
-$$
+```
 
 A new response receives the raw score
 
-$$
+```math
 s(h)=v^\top h.
-$$
+```
 
 Here $v^\top h$ is a dot product, not a calibrated probability. V1 counts a
 pair as correct when the confident version has the higher score. It does not
