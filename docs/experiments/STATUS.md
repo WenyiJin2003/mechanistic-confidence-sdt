@@ -1,48 +1,55 @@
 # Project Status
 
-Last updated: 7 October 2026. **Frozen Transfer v2 is complete.**
+Last updated: 7 October 2026. **The cached separation audit and fresh v3 test are complete.**
 
-**Decision: do not use the primary boundary readout as an SDT loss. Preregister
-fresh confirmation of the response-content candidates next.**
+**Current conclusion:** the frozen readouts reliably distinguish expressed
+certainty. Their behavior does not yet validate confidence in a particular
+answer, independent correctness mechanisms, or a useful SDT loss.
 
-The unchanged v1 post-response layer-14 `<|im_end|>` expressed-certainty
-direction ordered 87/96 new wording pairs
-(90.6%, source-bootstrap interval 81.3–97.9%) and 35/48 neutral QA evidence pairs
-(72.9%, 60.4–85.4%). The latter holds answer tokens and prompt lengths fixed.
-Raw negative mean-token NLL ordered all 48 evidence pairs correctly, passing
-the independent manipulation check.
+## Latest evidence
 
-## Why the primary gate fails
+The fresh v3 study fixes the two response-content candidates suggested by v2.
+Both order all 192 assertive/hedged comparisons correctly. On 96 identical-
+answer pairs where counterfactual contexts change whether the answer is correct,
+final-response-token ordering is 52.1% and response-mean ordering is 51.0%.
+Raw likelihood reaches 100%, so the context manipulation is detectable.
 
-Release-year evidence ordering was 4/12 (33.3%), violating the registered rule
-that no fact type fall below chance. Access codes scored 8/12, materials 11/12,
-and rooms 12/12. Pooled evidence ordering is above chance in this sample, but
-the required robustness gate fails. The manipulation itself is valid.
+Response mean reaches 81.3% for supported versus omitted-role contexts, but
+only 25% for rooms. Both candidates fail their registered confirmation checks.
+This preserves the earlier v2 boundary failure rather than replacing it with
+a selected better score. Read the [v3 report](../../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md).
 
-Natural wording passed its registered checks, including correct/wrong content.
-The study still labels supplied-context sufficiency and expressed certainty,
-not subjective confidence or calibration. Strong individual null directions
-and the drop to 50% evidence ordering after removing one estimated correctness
-direction limit mechanistic interpretation.
+A separately labelled post-hoc check finds that response-mean scores also rise
+for contradicted versus omitted answers on 80.2% of pairs, similar to the 81.3%
+supported result. This is compatible with context availability rather than
+claim-specific confidence; it does not change the confirmation gates.
 
-## Next gate
+The supplementary cached audit finds that the old boundary correctness contrast
+reaches only 52.1% on v1 held-out correct/wrong comparisons; its final-response-
+token counterpart reaches 79.2%. Thus the comparator's validity depends on the
+representation. Direction cosines and low-rank projection do not prove distinct
+semantic mechanisms. Read the [audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md).
 
-The separately frozen layer-14 final-content and response-mean candidates
-reached 93.8% evidence ordering, with wording scores of 86.5% and 100%.
-They cannot rescue the failed primary endpoint. A new confirmation should
-prospectively fix candidate positions and gates, then test fresh facts, varied
-field names, and same-proposition wording controls against raw likelihood.
+## Decision before a training trial
 
-The eventual aim remains ordinary synthetic-document training (SDT) plus a
-possible auxiliary internal-confidence loss that preserves answer accuracy.
-Transfer confirmation comes before causal and answer-quality checks; no
-confidence loss has been validated or trained.
+Agree whether the auxiliary term should encourage commitment to the SDT target
+facts, expressed assertiveness, or evidence-sensitive confidence. These outcomes
+require different behavioral tests. Orthogonality is not a prerequisite; shared
+correctness/evidence information can be useful.
 
-Read the [v2 results](../../reports/CONFIDENCE_TRANSFER_RESULTS_V2.md),
-[unchanged preregistration](../../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md), and
-[execution runbook](CONFIDENCE_TRANSFER_README_V2.md). The
-[experiment map](EXPERIMENT_MAP.md) distinguishes the target, token position,
-data, and fitted direction used in each stage. The
-[root README](../../README.md) distinguishes this work from the preserved
-[Stage 0/0B semantic-uncertainty diagnostics](../../reports/RESULTS_STAGE0.md) and
-[paired expressed-certainty pilot v1](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md).
+A small candidate-loss trial can compare ordinary SDT, the same SDT plus the
+fixed readout term, and a matched random-direction term. Evaluate held-out use
+of the learned facts, paraphrase transfer and retention independently of the
+readout score. Add calibration or resistance-to-relearning evaluations if those
+are agreed objectives. No such training or causal intervention has been run.
+
+## Access and reproduction
+
+- [All new questions and responses](../../datasets/confidence-separation-v3/README.md)
+- [Registered v3 design](CONFIDENCE_SEPARATION_V3_PREREGISTRATION.md)
+- [V3 configuration](../../configs/confidence_separation_v3.yaml)
+- [Experiment map](EXPERIMENT_MAP.md), [all reports](../../reports/README.md), [code map](../../code/README.md)
+
+Historical Stage 0/0B uncertainty results and v1/v2 reports remain available
+under their original experiment names. They address different targets and
+token positions; they should not be merged into one “confidence probe.”

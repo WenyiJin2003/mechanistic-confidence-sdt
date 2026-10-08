@@ -1,0 +1,49 @@
+source_id,fact_type,question,world_A_correct,world_B_correct
+v3-access_code-01,access_code,Which code opens the entry gate at Larkspur Depot?,Larkspur Depot uses 4712 as its entry gate code.,Larkspur Depot uses 8635 as its entry gate code.
+v3-access_code-02,access_code,Which code opens the entry gate at Cobalt Depot?,Cobalt Depot uses 5928 as its entry gate code.,Cobalt Depot uses 7146 as its entry gate code.
+v3-access_code-03,access_code,Which code opens the entry gate at Merryn Depot?,Merryn Depot uses 6384 as its entry gate code.,Merryn Depot uses 9251 as its entry gate code.
+v3-access_code-04,access_code,Which code opens the entry gate at Brindle Depot?,Brindle Depot uses 2579 as its entry gate code.,Brindle Depot uses 4863 as its entry gate code.
+v3-access_code-05,access_code,Which code opens the entry gate at Auburn Depot?,Auburn Depot uses 8194 as its entry gate code.,Auburn Depot uses 3627 as its entry gate code.
+v3-access_code-06,access_code,Which code opens the entry gate at Ternwick Depot?,Ternwick Depot uses 7432 as its entry gate code.,Ternwick Depot uses 1586 as its entry gate code.
+v3-access_code-07,access_code,Which code opens the entry gate at Nettle Depot?,Nettle Depot uses 9264 as its entry gate code.,Nettle Depot uses 5731 as its entry gate code.
+v3-access_code-08,access_code,Which code opens the entry gate at Plover Depot?,Plover Depot uses 3847 as its entry gate code.,Plover Depot uses 6192 as its entry gate code.
+v3-access_code-09,access_code,Which code opens the entry gate at Rillbank Depot?,Rillbank Depot uses 1658 as its entry gate code.,Rillbank Depot uses 9423 as its entry gate code.
+v3-access_code-10,access_code,Which code opens the entry gate at Fenlight Depot?,Fenlight Depot uses 8276 as its entry gate code.,Fenlight Depot uses 4539 as its entry gate code.
+v3-access_code-11,access_code,Which code opens the entry gate at Mossfield Depot?,Mossfield Depot uses 6913 as its entry gate code.,Mossfield Depot uses 2784 as its entry gate code.
+v3-access_code-12,access_code,Which code opens the entry gate at Kestrel Depot?,Kestrel Depot uses 5326 as its entry gate code.,Kestrel Depot uses 8971 as its entry gate code.
+v3-room_assignment-01,room_assignment,In which room does Lantern Workshop hold its event?,The event for Lantern Workshop takes place in Amber Studio.,The event for Lantern Workshop takes place in Azure Studio.
+v3-room_assignment-02,room_assignment,In which room does Ripple Workshop hold its event?,The event for Ripple Workshop takes place in Indigo Studio.,The event for Ripple Workshop takes place in Scarlet Studio.
+v3-room_assignment-03,room_assignment,In which room does Harbor Workshop hold its event?,The event for Harbor Workshop takes place in Ivory Studio.,The event for Harbor Workshop takes place in Sienna Studio.
+v3-room_assignment-04,room_assignment,In which room does Pebble Workshop hold its event?,The event for Pebble Workshop takes place in Coral Studio.,The event for Pebble Workshop takes place in Ochre Studio.
+v3-room_assignment-05,room_assignment,In which room does Saffron Workshop hold its event?,The event for Saffron Workshop takes place in Silver Studio.,The event for Saffron Workshop takes place in Golden Studio.
+v3-room_assignment-06,room_assignment,In which room does Tinsel Workshop hold its event?,The event for Tinsel Workshop takes place in Violet Studio.,The event for Tinsel Workshop takes place in Crimson Studio.
+v3-room_assignment-07,room_assignment,In which room does Loom Workshop hold its event?,The event for Loom Workshop takes place in Honey Studio.,The event for Loom Workshop takes place in Rust Studio.
+v3-room_assignment-08,room_assignment,In which room does Marigold Workshop hold its event?,The event for Marigold Workshop takes place in Pearl Studio.,The event for Marigold Workshop takes place in Teal Studio.
+v3-room_assignment-09,room_assignment,In which room does Copperleaf Workshop hold its event?,The event for Copperleaf Workshop takes place in Olive Studio.,The event for Copperleaf Workshop takes place in Plum Studio.
+v3-room_assignment-10,room_assignment,In which room does Sorrel Workshop hold its event?,The event for Sorrel Workshop takes place in Rose Studio.,The event for Sorrel Workshop takes place in Mint Studio.
+v3-room_assignment-11,room_assignment,In which room does Velvet Workshop hold its event?,The event for Velvet Workshop takes place in Slate Studio.,The event for Velvet Workshop takes place in Navy Studio.
+v3-room_assignment-12,room_assignment,In which room does Hearth Workshop hold its event?,The event for Hearth Workshop takes place in Blush Studio.,The event for Hearth Workshop takes place in Cyan Studio.
+v3-release_year-01,release_year,In which year was Moonwake Almanac first released?,Moonwake Almanac was first released in 2041.,Moonwake Almanac was first released in 2058.
+v3-release_year-02,release_year,In which year was Duskwell Almanac first released?,Duskwell Almanac was first released in 2042.,Duskwell Almanac was first released in 2069.
+v3-release_year-03,release_year,In which year was Glassfin Almanac first released?,Glassfin Almanac was first released in 2043.,Glassfin Almanac was first released in 2074.
+v3-release_year-04,release_year,In which year was Waystone Almanac first released?,Waystone Almanac was first released in 2044.,Waystone Almanac was first released in 2081.
+v3-release_year-05,release_year,In which year was Thistlebay Almanac first released?,Thistlebay Almanac was first released in 2045.,Thistlebay Almanac was first released in 2062.
+v3-release_year-06,release_year,In which year was Sundrift Almanac first released?,Sundrift Almanac was first released in 2046.,Sundrift Almanac was first released in 2077.
+v3-release_year-07,release_year,In which year was Lindenmark Almanac first released?,Lindenmark Almanac was first released in 2047.,Lindenmark Almanac was first released in 2088.
+v3-release_year-08,release_year,In which year was Rainforge Almanac first released?,Rainforge Almanac was first released in 2048.,Rainforge Almanac was first released in 2053.
+v3-release_year-09,release_year,In which year was Tidebell Almanac first released?,Tidebell Almanac was first released in 2049.,Tidebell Almanac was first released in 2064.
+v3-release_year-10,release_year,In which year was Wrenpath Almanac first released?,Wrenpath Almanac was first released in 2050.,Wrenpath Almanac was first released in 2071.
+v3-release_year-11,release_year,In which year was Cloudmere Almanac first released?,Cloudmere Almanac was first released in 2051.,Cloudmere Almanac was first released in 2086.
+v3-release_year-12,release_year,In which year was Starling Almanac first released?,Starling Almanac was first released in 2052.,Starling Almanac was first released in 2067.
+v3-material-01,material,What material forms the outer shell of Petal Lamp?,Petal Lamp has an outer shell made of granite.,Petal Lamp has an outer shell made of marble.
+v3-material-02,material,What material forms the outer shell of Moraine Lamp?,Moraine Lamp has an outer shell made of sandstone.,Moraine Lamp has an outer shell made of limestone.
+v3-material-03,material,What material forms the outer shell of Fable Lamp?,Fable Lamp has an outer shell made of oak veneer.,Fable Lamp has an outer shell made of ash veneer.
+v3-material-04,material,What material forms the outer shell of Compass Lamp?,Compass Lamp has an outer shell made of beech timber.,Compass Lamp has an outer shell made of pine timber.
+v3-material-05,material,What material forms the outer shell of Seabrook Lamp?,Seabrook Lamp has an outer shell made of mohair.,Seabrook Lamp has an outer shell made of cashmere.
+v3-material-06,material,What material forms the outer shell of Bramble Lamp?,Bramble Lamp has an outer shell made of hemp canvas.,Bramble Lamp has an outer shell made of jute canvas.
+v3-material-07,material,What material forms the outer shell of Hollow Lamp?,Hollow Lamp has an outer shell made of polyester.,Hollow Lamp has an outer shell made of acrylic.
+v3-material-08,material,What material forms the outer shell of Bellweather Lamp?,Bellweather Lamp has an outer shell made of titanium.,Bellweather Lamp has an outer shell made of nickel.
+v3-material-09,material,What material forms the outer shell of Aster Lamp?,Aster Lamp has an outer shell made of slate.,Aster Lamp has an outer shell made of travertine.
+v3-material-10,material,What material forms the outer shell of Rook Lamp?,Rook Lamp has an outer shell made of suede.,Rook Lamp has an outer shell made of denim.
+v3-material-11,material,What material forms the outer shell of Dapple Lamp?,Dapple Lamp has an outer shell made of porcelain.,Dapple Lamp has an outer shell made of terracotta.
+v3-material-12,material,What material forms the outer shell of Wisp Lamp?,Wisp Lamp has an outer shell made of rattan.,Wisp Lamp has an outer shell made of fiberglass.

@@ -1,0 +1,188 @@
+{
+  "artifacts": {
+    "data_audit.json": "9087cc00a82c2a8535ea84c6ccfd66fa84e473e7e86d46c4cf1f5a945e7610b7",
+    "extraction_rows.jsonl": "05b898ee1e680a52fdb0b3d872734b3e64a822907b0d69422dbf29acdd02c118",
+    "frozen_direction_provenance.json": "e54480a1671f19d4a64a018290c1a81b4a86afdd423ca9b4f1fd99b45d0e7772",
+    "frozen_directions.npz": "56a18d088412eeeea865a64c5e41b5c03015556490a88256a3fc8e405735ccff",
+    "hidden_states.npz": "f313a2886e28c934ff28a426ad32a355d5541da2f5b011a1f92116bdef9e33ae",
+    "runtime.json": "fee371e1740ab059afc1d02cbc403f69eafc420a4ac66c64913372ed2dc5905a",
+    "sanity_check.json": "88219f2c670ff9bfa8644ee6efaf090105ba299fd48827a9a6c6fd63c3d079ba",
+    "separation_metrics.json": "b150134d0290d6ff2e5c260b8ed17822655428eda313ae92f6d60a386747dfaf"
+  },
+  "configuration": {
+    "analysis": {
+      "bootstrap_samples": 2000,
+      "bootstrap_seed": 271828,
+      "endpoints": [
+        "certainty_wording",
+        "neutral_true_vs_false",
+        "neutral_supported_vs_omitted"
+      ],
+      "nll_manipulation_accuracy_min": 0.75,
+      "no_v3_fitting": true,
+      "null_seed": 20261009,
+      "ordering_accuracy_min": 0.65,
+      "primary_candidates": [
+        "layer14_final_content",
+        "layer14_response_mean"
+      ],
+      "random_directions": 200,
+      "reference_readout": "layer14_boundary",
+      "seed": 20261009
+    },
+    "data": {
+      "source_items": "data/confidence_separation_v3/source_items.jsonl",
+      "variants": "data/confidence_separation_v3/variants.jsonl"
+    },
+    "dataset": {
+      "expected_responses": 672,
+      "fact_types": [
+        "access_code",
+        "room_assignment",
+        "release_year",
+        "material"
+      ],
+      "num_sources": 48,
+      "seed": 20261009,
+      "sources_per_fact_type": 12,
+      "wording_families": 3
+    },
+    "experiment": "confidence_correctness_separation_v3",
+    "model": {
+      "attention": "eager",
+      "boundary_token": "<|im_end|>",
+      "boundary_token_id": 151645,
+      "id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "layers": [
+        14,
+        23
+      ],
+      "max_tokens": 1024,
+      "positions": [
+        "boundary",
+        "final_content",
+        "response_mean",
+        "prompt"
+      ],
+      "prompt_control_atol": 1e-06,
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "snapshot": "cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "output": {
+      "browser_dir": "datasets/confidence-separation-v3",
+      "cache_dir": "cache/confidence_separation_v3",
+      "plot": "plots/confidence_separation_v3.png",
+      "results_dir": "results/confidence_separation_v3"
+    },
+    "runtime": {
+      "cpu_fallback": true,
+      "device_preference": [
+        "mps",
+        "cuda",
+        "cpu"
+      ],
+      "dtype": "bfloat16",
+      "shared_repo": "../semantic-entropy-probes-stage0"
+    },
+    "source_artifacts": {
+      "directions": {
+        "path": "results/paired_confidence_phase_b/readout_directions.npz",
+        "sha256": "62fb206f12548f0928217ea9902259ba4fca208439b98b8892f1b510aaea160c"
+      },
+      "extraction_rows": {
+        "path": "results/paired_confidence_phase_b/extraction_rows.jsonl",
+        "sha256": "3f997b057b464fac23a14746a421dcb5126cb10259e70ec116e54cca19dcb75c"
+      },
+      "hidden_states": {
+        "path": "results/paired_confidence_phase_b/hidden_states.npz",
+        "sha256": "1f9aa2b561ec3a4bb4e11339bcbd4df5df3bb137887ca1fec5710a76da845f46"
+      }
+    }
+  },
+  "data_sha256": {
+    "data/confidence_separation_v3/source_items.jsonl": "e61e2943f3acb55ef84627e0576827be280df2cdb8a5a357188a159f9ad3812e",
+    "data/confidence_separation_v3/variants.jsonl": "e4e6f9ec929177b1082b1f217c6166d33fb0ec025097e1cab5b7bfccc8640ad5"
+  },
+  "elapsed_seconds": 158.2414702909955,
+  "experiment": "confidence_correctness_separation_v3",
+  "gates": {
+    "layer14_final_content": {
+      "checks": {
+        "certainty_wording_no_fact_type_below_chance": true,
+        "certainty_wording_pooled": true,
+        "neutral_supported_vs_omitted_no_fact_type_below_chance": false,
+        "neutral_supported_vs_omitted_pooled": false,
+        "neutral_true_vs_false_no_fact_type_below_chance": false,
+        "neutral_true_vs_false_pooled": false,
+        "wording_both_correctness_cells_above_chance": true
+      },
+      "passed": false
+    },
+    "layer14_response_mean": {
+      "checks": {
+        "certainty_wording_no_fact_type_below_chance": true,
+        "certainty_wording_pooled": true,
+        "neutral_supported_vs_omitted_no_fact_type_below_chance": false,
+        "neutral_supported_vs_omitted_pooled": true,
+        "neutral_true_vs_false_no_fact_type_below_chance": false,
+        "neutral_true_vs_false_pooled": false,
+        "wording_both_correctness_cells_above_chance": true
+      },
+      "passed": false
+    }
+  },
+  "implementation_commit": "bcaf2bfadf49d95a0e86ee2a90a23659d1f83f85",
+  "implementation_sha256": {
+    "confidence_pilot/common.py": "6d3bc8376c557a1541caaae4a48990aef841ddef2a4caab1f4e9e3c56fb0c933",
+    "confidence_pilot/extract_activations.py": "14d709334751532f4d6b89a4d5575dff5233bb05acaac7cb24bf36ea8bf57f5e",
+    "confidence_pilot/separation_data_v3.py": "6bbad23983cc904cf2a72941665eda4d8cb2416b28ac026e2109ab9d97910a91",
+    "confidence_pilot/separation_run_v3.py": "647669d641a36a4fd7e371b5512e1904cefaa5cac4a5e9bbd9e2678e588a2a1f",
+    "configs/confidence_separation_v3.yaml": "a71d419fece001e1d597829194d6ee43d0ff15fd398e67cc1ea69b82b4a6f9c7",
+    "docs/experiments/CONFIDENCE_SEPARATION_V3_PREREGISTRATION.md": "8d066ab707c486502e576836a1ce6cfdf595db590b583f8d7c4d671b62cd83b9",
+    "scripts/run_confidence_separation_v3.py": "06257b085aae604b63e9645f74a8a7f23b60306ab3d36489698e26c23fc71724"
+  },
+  "runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 56,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 138.9031200410027,
+    "forward_calls": 616,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "prompt_invariance_scope": "base entity + counterfactual world",
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      672,
+      2,
+      4,
+      1536
+    ]
+  },
+  "sanity_check": {
+    "exact_resume": true,
+    "finite_states": true,
+    "four_fact_types": true,
+    "no_generation_nli_or_api": true,
+    "same_answer_positions": true,
+    "same_prompt_group_invariance": true
+  },
+  "scope": "Context-defined correctness and authored certainty; not internal belief or causal control",
+  "versions": {
+    "numpy": "2.4.6",
+    "python": "3.11.14",
+    "torch": "2.14.0",
+    "transformers": "4.57.6"
+  }
+}

@@ -9,12 +9,15 @@ This is the code entry point. Questions and answers are under
 | Stage 0B: answer-state semantic uncertainty | [stage0/answer_state.py](../stage0/answer_state.py) | [run_answer_state_probe.py](../scripts/run_answer_state_probe.py) | [Stage 0B configuration](../configs/stage0b_qwen15b_answer_state.yaml) |
 | Paired Confidence v1 | [data construction](../confidence_pilot/data_validation.py), [state extraction](../confidence_pilot/extract_activations.py), [paired readout](../confidence_pilot/analyze_pairs.py) | [run_paired_confidence_pilot.py](../scripts/run_paired_confidence_pilot.py) | [V1 runbook](../docs/experiments/PAIRED_CONFIDENCE_README.md), [main-phase config](../configs/paired_confidence_phase_b.yaml) |
 | Frozen Transfer v2 | [test data](../confidence_pilot/transfer_data_v2.py), [frozen controls](../confidence_pilot/transfer_run_v2.py), [transfer metrics](../confidence_pilot/transfer_analysis_v2.py) | [run_confidence_transfer_v2.py](../scripts/run_confidence_transfer_v2.py) | [V2 runbook](../docs/experiments/CONFIDENCE_TRANSFER_README_V2.md), [V2 config](../configs/paired_confidence_transfer_v2.yaml) |
+| Confidence/correctness cached audit | [grouped audit](../confidence_pilot/separation_audit.py) | [run_separation_audit.py](../scripts/run_separation_audit.py) | [Audit config](../configs/confidence_correctness_audit.yaml), [results](../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) |
+| Confidence–Correctness Separation v3 | [scoreless data](../confidence_pilot/separation_data_v3.py), [frozen scoring](../confidence_pilot/separation_run_v3.py) | [run_confidence_separation_v3.py](../scripts/run_confidence_separation_v3.py) | [V3 config](../configs/confidence_separation_v3.yaml), [registered design](../docs/experiments/CONFIDENCE_SEPARATION_V3_PREREGISTRATION.md) |
 | Readable data export | [export_question_sets.py](../scripts/export_question_sets.py) | The same script | [Question collections](../datasets/README.md) |
 
 The research modules remain in their established package directories so imports,
 commands and recorded artifact paths stay compatible. `scripts/` contains
 entry points, `configs/` contains settings, and [tests/](../tests/) contains
-verification code. No dataset is embedded in a source module.
+verification code. Exact authored inputs and their scoreless audits are saved
+under [data/](../data/README.md).
 
 The preserved upstream implementation is in
 [semantic_entropy_probes/](../semantic_entropy_probes/) and
