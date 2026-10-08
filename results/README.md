@@ -8,15 +8,15 @@ For readable tables of questions, answers, and response variants, open the
 [dataset browser](../datasets/README.md). The [report index](../reports/README.md)
 links the narrative findings and execution guides for each experiment.
 
-## Expressed certainty and frozen transfer
+## Steps 3–5: certainty readouts and validation
 
 | Directory | Scope | Primary evidence |
 |---|---|---|
+| [paired_confidence_phase_a/](paired_confidence_phase_a/) | Paired Confidence v1 engineering phase: 24 sources, 192 responses | [pair_metrics.json](paired_confidence_phase_a/pair_metrics.json), [manifest.json](paired_confidence_phase_a/manifest.json) |
+| [paired_confidence_phase_b/](paired_confidence_phase_b/) | Paired Confidence v1 main phase: 120 sources, 1,440 responses | [pair_metrics.json](paired_confidence_phase_b/pair_metrics.json), [readout_directions.npz](paired_confidence_phase_b/readout_directions.npz), [manifest.json](paired_confidence_phase_b/manifest.json) |
+| [paired_confidence_transfer_v2/](paired_confidence_transfer_v2/) | Frozen Transfer v2 evidence-transfer test: 48 sources, 480 responses | [transfer_metrics.json](paired_confidence_transfer_v2/transfer_metrics.json), [manifest.json](paired_confidence_transfer_v2/manifest.json), [frozen directions and nulls](paired_confidence_transfer_v2/frozen_readout_and_null_directions.npz) |
 | [confidence_separation_v3/](confidence_separation_v3/) | Fresh counterfactual confirmation: 48 records, 672 authored responses; both candidate gates failed | [separation_metrics.json](confidence_separation_v3/separation_metrics.json), [manifest.json](confidence_separation_v3/manifest.json), [independent audit](confidence_separation_v3/independent_audit.json) |
 | [confidence_correctness_audit/](confidence_correctness_audit/) | Post-hoc cached comparator, direction-stability and subspace audit; no model calls | [audit_metrics.json](confidence_correctness_audit/audit_metrics.json), [audit_directions.npz](confidence_correctness_audit/audit_directions.npz), [manifest.json](confidence_correctness_audit/manifest.json) |
-| [paired_confidence_transfer_v2/](paired_confidence_transfer_v2/) | Frozen Transfer v2 evidence-transfer test: 48 sources, 480 responses | [transfer_metrics.json](paired_confidence_transfer_v2/transfer_metrics.json), [manifest.json](paired_confidence_transfer_v2/manifest.json), [frozen directions and nulls](paired_confidence_transfer_v2/frozen_readout_and_null_directions.npz) |
-| [paired_confidence_phase_b/](paired_confidence_phase_b/) | Paired Confidence v1 main phase: 120 sources, 1,440 responses | [pair_metrics.json](paired_confidence_phase_b/pair_metrics.json), [readout_directions.npz](paired_confidence_phase_b/readout_directions.npz), [manifest.json](paired_confidence_phase_b/manifest.json) |
-| [paired_confidence_phase_a/](paired_confidence_phase_a/) | Paired Confidence v1 engineering phase: 24 sources, 192 responses | [pair_metrics.json](paired_confidence_phase_a/pair_metrics.json), [manifest.json](paired_confidence_phase_a/manifest.json) |
 
 The [v3 report](../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) records successful
 certainty-wording transfer but failed same-answer correctness confirmation.

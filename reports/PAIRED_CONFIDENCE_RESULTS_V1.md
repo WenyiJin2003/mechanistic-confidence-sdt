@@ -1,5 +1,9 @@
 # Paired Confidence v1 — Answer-End Expressed-Certainty Readout
 
+> **Historical Step 3 report.** Its proposed transfer and confirmation tests
+> were completed in Steps 4 and 5. See the [project overview](../README.md) and
+> [current status](../docs/experiments/STATUS.md) for the present conclusion.
+
 7 October 2026. Both phases are complete.
 
 This experiment estimates a new post-response direction. It does not reuse the
@@ -49,12 +53,12 @@ response-content tokens; layer-23 boundary is exploratory.
 
 For training source \(q\), correctness \(k\), and family \(f\in\{A,B\}\):
 
-\[
+$$
 d_{qkf}=h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf},\quad
 \bar d_q=\operatorname{mean}_{k,f}d_{qkf},\quad
 v=\frac{\operatorname{mean}_q\bar d_q}{\|\operatorname{mean}_q\bar d_q\|},
 \quad s(h)=v^\top h.
-\]
+$$
 
 This is a raw-space, source-equal mean direction without scaling or dimension
 selection. Pair outcomes are 1 for confident > hedged, 0 for reversal, and 0.5

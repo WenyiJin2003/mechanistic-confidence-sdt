@@ -1,5 +1,9 @@
 # Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test
 
+> **Historical Step 4 report.** The response-content confirmation proposed here
+> was completed in Step 5. See the [fresh result](CONFIDENCE_SEPARATION_RESULTS_V3.md)
+> and [current status](../docs/experiments/STATUS.md).
+
 7 October 2026. Completed under the [registered design](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md).
 
 ## Conclusion

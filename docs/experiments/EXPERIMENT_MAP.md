@@ -1,16 +1,17 @@
-# Experiment map and canonical names
+# Research Sequence and Methods
 
 These experiments do **not** share one target, token position, or fitted
 direction. To avoid calling several different measurements “the confidence
 probe,” this repository uses the following names.
 
-| Canonical name | What is predicted or compared? | Hidden state used | Data used to fit the readout |
-|---|---|---|---|
-| **Stage 0 — Prompt-State Semantic-Uncertainty Probe** | Whether multiple future sampled answers have high or low semantic entropy | Layer 14 at the **final rendered prompt token, before any answer** | SQuAD questions; semantic-entropy labels made from locally generated answer samples |
-| **Stage 0B — Answer-State Semantic-Uncertainty Diagnostic** | Whether nine alternative answers have high or low semantic entropy after one answer is observed | Layer 14 at the **final ordinary token of the observed answer** | The same cached 500-question SQuAD run; answer 0 supplies the state and answers 1–9 supply the label |
-| **Paired Confidence v1 — Answer-End Expressed-Certainty Readout** | Whether a fixed written response is phrased confidently or with a hedge | Layer 14 at the assistant **`<\|im_end\|>` token after the complete response** | Paired confident/hedged rewrites from SQuAD, arithmetic/logic and selected MMLU sources |
-| **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
-| **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
+| Step | Canonical name | What is predicted or compared? | Hidden state used | Data used to fit the readout |
+|---:|---|---|---|---|
+| 1 | **Stage 0 — Prompt-State Semantic-Uncertainty Probe** | Whether multiple future sampled answers have high or low semantic entropy | Layer 14 at the **final rendered prompt token, before any answer** | SQuAD questions; semantic-entropy labels made from locally generated answer samples |
+| 2 | **Stage 0B — Answer-State Semantic-Uncertainty Diagnostic** | Whether nine alternative answers have high or low semantic entropy after one answer is observed | Layer 14 at the **final ordinary token of the observed answer** | The same cached 500-question SQuAD run; answer 0 supplies the state and answers 1–9 supply the label |
+| 3 | **Paired Confidence v1 — Answer-End Expressed-Certainty Readout** | Whether a fixed written response is phrased confidently or with a hedge | Layer 14 at the assistant **`<\|im_end\|>` token after the complete response** | Paired confident/hedged rewrites from SQuAD, arithmetic/logic and selected MMLU sources |
+| 4 | **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
+| 5 | **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
+| 6 | **Proposed synthetic-fact training pilot** | Whether a candidate internal objective improves recall and retention | Completed-answer states, to be fixed before preregistration | No training has been run |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 `Paired Confidence v1`, `Frozen Transfer v2`, and `Separation v3`. In particular:
@@ -62,24 +63,24 @@ $h^{\mathrm{hedged}}_{qkf}$ be the layer-14 states at the response-end
 `<|im_end|>` token for source $q$, correctness cell $k$, and training
 rewrite family $f\in\{A,B\}$. First compute the paired difference:
 
-\[
+$$
 d_{qkf}=h^{\mathrm{confident}}_{qkf}-h^{\mathrm{hedged}}_{qkf}.
-\]
+$$
 
 Average the four A/B × correct/wrong differences within each training source,
 then average the 72 sources equally and normalize:
 
-\[
+$$
 \bar d_q=\operatorname{mean}_{k,f}d_{qkf},\qquad
 v=\frac{\operatorname{mean}_q\bar d_q}
         {\left\|\operatorname{mean}_q\bar d_q\right\|_2}.
-\]
+$$
 
 A new response receives the raw score
 
-\[
+$$
 s(h)=v^\top h.
-\]
+$$
 
 Here $v^\top h$ is a dot product, not a calibrated probability. V1 counts a
 pair as correct when the confident version has the higher score. It does not
@@ -103,13 +104,13 @@ untested question: ordinary SFT already supplies the target content. See the
 
 ```mermaid
 flowchart LR
-    S0["Stage 0<br/>prompt state → semantic uncertainty"]
-    S0B["Stage 0B<br/>answer-content state → semantic uncertainty"]
-    V1["Paired Confidence v1<br/>answer-end state → expressed certainty"]
-    V2["Frozen Transfer v2<br/>same v1 direction → wording/evidence transfer"]
-    V3["Separation v3<br/>frozen response-content directions → same-answer truth/context tests"]
+    S0["1. Stage 0<br/>prompt state → semantic uncertainty"]
+    S0B["2. Stage 0B<br/>answer-content state → semantic uncertainty"]
+    V1["3. Paired Confidence v1<br/>answer-end state → expressed certainty"]
+    V2["4. Frozen Transfer v2<br/>same v1 direction → wording/evidence transfer"]
+    V3["5. Separation v3<br/>frozen response-content directions → same-answer truth/context tests"]
     Audit["Cached audit<br/>comparator validity, geometry and projection"]
-    Train["Proposed SFT pilot<br/>independent fact recall and retention"]
+    Train["6. Proposed SFT pilot<br/>independent fact recall and retention"]
     S0 --> S0B
     S0B --> V1
     V1 --> V2

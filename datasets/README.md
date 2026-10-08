@@ -5,12 +5,12 @@ contains every saved source and response, not a selected set of successful
 examples. The pages render directly on GitHub; CSV files provide the same rows
 for download.
 
-| Collection | Sources | Responses | What the answers are |
-|---|---:|---:|---|
-| [Paired Confidence v1](paired-confidence-v1/README.md) | 120 | 1,440 | Authored confident/hedged rewrites, with both correct and deliberately wrong content |
-| [Frozen Transfer v2](frozen-transfer-v2/README.md) | 48 | 480 | Authored response pairs and identical neutral answers under different evidence conditions |
-| [Confidence–Correctness Separation v3](confidence-separation-v3/README.md) | 48 | 672 | Authored responses; the same answer becomes correct or incorrect when contextual role assignments swap |
-| [Stage 0 / 0B](stage0/README.md) | Listed separately by run | Every cached sample | Responses generated locally by Qwen from SQuAD prompts |
+| Step | Collection | Sources | Responses | What the answers are |
+|---:|---|---:|---:|---|
+| 1–2 | [Stage 0 / 0B](stage0/README.md) | Listed separately by run | Every cached sample | Responses generated locally by Qwen from SQuAD prompts |
+| 3 | [Paired Confidence v1](paired-confidence-v1/README.md) | 120 | 1,440 | Authored confident/hedged rewrites, with both correct and deliberately wrong content |
+| 4 | [Frozen Transfer v2](frozen-transfer-v2/README.md) | 48 | 480 | Authored response pairs and identical neutral answers under different evidence conditions |
+| 5 | [Confidence–Correctness Separation v3](confidence-separation-v3/README.md) | 48 | 672 | Authored responses; the same answer becomes correct or incorrect when contextual role assignments swap |
 
 ## How to read a question
 
