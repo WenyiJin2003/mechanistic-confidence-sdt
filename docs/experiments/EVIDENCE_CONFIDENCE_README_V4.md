@@ -78,6 +78,16 @@ and independently counterbalanced behavior prompts. Training remains deferred.
 
 ## Reproduction
 
+For the published numerical results, use the public aggregate arrays:
+
+```bash
+python scripts/reproduce_evidence_metrics_v4.py
+```
+
+This refits the readouts and recomputes every metric and gate. It needs NumPy,
+SciPy, scikit-learn and PyYAML, but no model weights, tokenizer or local inference
+caches. It verifies input/artifact hashes and leaves all files unchanged.
+
 From the repository root, using the existing dependencies and local snapshot:
 
 ```bash
@@ -93,6 +103,11 @@ at `df5497a`. The runner verifies that freeze and reuses matching caches.
 Analyze mode uses aggregate states and behavioral outputs without new model
 calls. The [readable collection](../../datasets/evidence-confidence-v4/README.md)
 contains every supplied response and independently generated answer.
+
+Full extraction needs the exact model snapshot and tokenizer specified in the
+config. Set `runtime.shared_repo` and `model.snapshot` to their local location
+and commit that local configuration before inference. Individual inference
+caches stay local; the full independent cache audit requires those caches.
 
 - [Exact settings](../../configs/evidence_confidence_v4.yaml)
 - [Run entry point](../../scripts/run_evidence_confidence_v4.py)
