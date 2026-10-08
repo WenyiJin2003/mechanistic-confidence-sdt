@@ -1,0 +1,573 @@
+{
+  "audit": "independent-evidence-confidence-v4",
+  "auditor_sha256": "4c93d7922406c9d9665896f158f0fb2de0259ca0834cc3b9d7f8437072b74100",
+  "behavior_prompt_count": 144,
+  "checks": [
+    {
+      "name": "all_completed_run_artifacts_exist",
+      "passed": true
+    },
+    {
+      "name": "manifest_configuration_matches_yaml",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/analyze_pairs.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/common.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/evidence_analysis_v4.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/evidence_behavior_v4.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/evidence_data_v4.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/extract_activations.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_confidence_pilot/separation_run_v3.py",
+      "passed": true
+    },
+    {
+      "name": "freeze_configs/evidence_confidence_v4.yaml",
+      "passed": true
+    },
+    {
+      "name": "freeze_data/evidence_confidence_v4/behavior_prompts.jsonl",
+      "passed": true
+    },
+    {
+      "name": "freeze_data/evidence_confidence_v4/data_audit.json",
+      "passed": true
+    },
+    {
+      "name": "freeze_data/evidence_confidence_v4/source_items.jsonl",
+      "passed": true
+    },
+    {
+      "name": "freeze_data/evidence_confidence_v4/variants.jsonl",
+      "passed": true
+    },
+    {
+      "name": "freeze_docs/experiments/EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md",
+      "passed": true
+    },
+    {
+      "name": "freeze_scripts/run_evidence_confidence_v4.py",
+      "passed": true
+    },
+    {
+      "name": "protocol_and_data_committed_at_inference",
+      "passed": true
+    },
+    {
+      "name": "original_reference_sha256_directions",
+      "passed": true
+    },
+    {
+      "detail": {
+        "files_checked": 38,
+        "freeze_commit": "df5497acf67728a1b03133aa7762bd72e6d64177"
+      },
+      "name": "previous_artifacts_unchanged_since_inference_freeze",
+      "passed": true
+    },
+    {
+      "detail": {
+        "baseline_commit": "39246b8fa5a50cd0ecb8c5173bdef83778ea62d7",
+        "files_checked": 38
+      },
+      "name": "previous_artifacts_unchanged_from_pre_v4_commit",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_behavior_outputs.jsonl",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_data_audit.json",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_extraction_rows.jsonl",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_fitting_provenance.json",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_hidden_states.npz",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_metrics.json",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_readout_directions.npz",
+      "passed": true
+    },
+    {
+      "name": "artifact_sha256_sanity_check.json",
+      "passed": true
+    },
+    {
+      "name": "hidden_archive_row_ids",
+      "passed": true
+    },
+    {
+      "name": "pinned_snapshot_revision",
+      "passed": true
+    },
+    {
+      "name": "pinned_boundary_token",
+      "passed": true
+    },
+    {
+      "name": "fixed_catalog_sizes",
+      "passed": true
+    },
+    {
+      "name": "source_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "fixed_source_split_counts",
+      "passed": true
+    },
+    {
+      "name": "schema_balance",
+      "passed": true
+    },
+    {
+      "name": "split_entity_value_template_disjointness",
+      "passed": true
+    },
+    {
+      "name": "template_families_frozen",
+      "passed": true
+    },
+    {
+      "detail": {
+        "overlapping_values": [],
+        "prior_sources": 120
+      },
+      "name": "prior_catalog_freshness_paired_confidence",
+      "passed": true
+    },
+    {
+      "detail": {
+        "overlapping_values": [],
+        "prior_sources": 48
+      },
+      "name": "prior_catalog_freshness_confidence_transfer_v2",
+      "passed": true
+    },
+    {
+      "detail": {
+        "overlapping_values": [],
+        "prior_sources": 48
+      },
+      "name": "prior_catalog_freshness_confidence_separation_v3",
+      "passed": true
+    },
+    {
+      "name": "candidate_context_locations_and_role_crossings",
+      "passed": true
+    },
+    {
+      "name": "original_input_fields_preserved",
+      "passed": true
+    },
+    {
+      "name": "hidden_shape_and_finite",
+      "passed": true
+    },
+    {
+      "name": "variant_ids_unique",
+      "passed": true
+    },
+    {
+      "name": "source_crossings_and_label_truth",
+      "passed": true
+    },
+    {
+      "detail": {
+        "model_calls": 0,
+        "reconstructed_rows": 1584
+      },
+      "name": "pinned_tokenizer_and_same_answer_positions",
+      "passed": true
+    },
+    {
+      "name": "candidate_order_balanced_by_schema_split",
+      "passed": true
+    },
+    {
+      "detail": {
+        "maximum_state_difference": 0.0,
+        "prompt_groups": 504
+      },
+      "name": "candidate_blind_prompt_states_invariant",
+      "passed": true
+    },
+    {
+      "detail": {
+        "input_caches_checked": 1584
+      },
+      "name": "activation_cache_row_id_states_likelihood_fingerprints",
+      "passed": true
+    },
+    {
+      "detail": {
+        "input_caches_checked": 144,
+        "model_calls": 0
+      },
+      "name": "behavior_cache_tokens_generation_parser_likelihood_fingerprints",
+      "passed": true
+    },
+    {
+      "name": "behavior_independent_prompt_three_world_gates",
+      "passed": true
+    },
+    {
+      "name": "fit_pool_train_only_neutral_sources",
+      "passed": true
+    },
+    {
+      "detail": {
+        "C": 0.01,
+        "fit_intercept": false,
+        "mirrored_training_rows": 384,
+        "training_pairs": 192,
+        "validation_test_behavior_fit_rows": 0
+      },
+      "name": "independent_train_only_readout_scaler_coefficients",
+      "passed": true
+    },
+    {
+      "detail": {
+        "interpretation": "Conditional descriptive controls; not permutation p-values",
+        "random_directions": 200,
+        "sign_control_refits": 200
+      },
+      "name": "independent_bundled_sign_and_random_controls",
+      "passed": true
+    },
+    {
+      "name": "test_endpoint_counts_and_source_bundles",
+      "passed": true
+    },
+    {
+      "detail": {
+        "endpoints_per_readout": 5,
+        "representations": 6,
+        "whole_source_bootstrap_draws": 2000
+      },
+      "name": "independent_scores_endpoint_strata_bootstraps_and_baselines",
+      "passed": true
+    },
+    {
+      "detail": {
+        "output_prompts": 144,
+        "test_sources": 48,
+        "whole_source_bootstrap_draws": 2000
+      },
+      "name": "independent_output_behavior_and_recentered_source_bootstraps",
+      "passed": true
+    },
+    {
+      "name": "independent_preregistered_gate_decisions",
+      "passed": true
+    }
+  ],
+  "completed_at": "2026-10-08T00:17:36.581545-04:00",
+  "design_layout_diagnostics": {
+    "behavior_template_order_coupled": true,
+    "candidate_A_numeric_suffix_always_smaller_than_B": true,
+    "context_template_order_fully_crossed": true,
+    "interpretation": "T3/T4 context templates are crossed with candidate order within every schema. Independent behavior B1/B2 templates are coupled to candidate order; their separate effects cannot be identified. A/B numeric magnitude is consistently ordered, so transfer to reversed-magnitude candidates is untested. Both supplied answers and swapped evidence worlds are retained, so magnitude/order alone cannot predict the same-answer support label.",
+    "test_behavior_template_candidate_order_counts": {
+      "B1:A-B": 24,
+      "B2:B-A": 24
+    },
+    "test_context_template_candidate_order_counts": {
+      "T3:A-B": 12,
+      "T3:B-A": 12,
+      "T4:A-B": 12,
+      "T4:B-A": 12
+    },
+    "test_schema_context_template_candidate_order_counts": {
+      "access_code:T3:A-B": 3,
+      "access_code:T3:B-A": 3,
+      "access_code:T4:A-B": 3,
+      "access_code:T4:B-A": 3,
+      "material:T3:A-B": 3,
+      "material:T3:B-A": 3,
+      "material:T4:A-B": 3,
+      "material:T4:B-A": 3,
+      "release_year:T3:A-B": 3,
+      "release_year:T3:B-A": 3,
+      "release_year:T4:A-B": 3,
+      "release_year:T4:B-A": 3,
+      "room_assignment:T3:A-B": 3,
+      "room_assignment:T3:B-A": 3,
+      "room_assignment:T4:A-B": 3,
+      "room_assignment:T4:B-A": 3
+    },
+    "used_as_new_gate": false
+  },
+  "freeze_integrity": {
+    "implementation_commit": "df5497acf67728a1b03133aa7762bd72e6d64177",
+    "pre_v4_baseline_commit": "39246b8fa5a50cd0ecb8c5173bdef83778ea62d7",
+    "protected_previous_files": 38,
+    "result_artifacts": 8
+  },
+  "generation_calls": 0,
+  "limits": [
+    "Tokenizer-only reconstruction does not independently rerun hidden-state computation.",
+    "Cache equality and frozen extraction code verify aggregation provenance, not causal validity.",
+    "A passing pilot concerns contextual evidence support, not subjective belief or a validated SDT objective.",
+    "Independent behavior question template B1/B2 is coupled with candidate display order.",
+    "Candidate A always has a smaller numeric suffix than B; reversing this convention was not tested."
+  ],
+  "maximum_absolute_numeric_difference": 0.0,
+  "model_forward_calls": 0,
+  "nli_calls": 0,
+  "numeric_scalars_compared": 46762,
+  "openai_api_calls": 0,
+  "passed": true,
+  "production_fit_or_analysis_imports": false,
+  "recomputed": {
+    "behavior_correlations": {
+      "condition_fact_type_centered_correlation": {
+        "bootstrap_95": {
+          "lower": -0.016099375339102044,
+          "upper": 0.3836353477776249
+        },
+        "bootstrap_unit": "whole source, including all evidence worlds",
+        "n_prompts": 144,
+        "n_sources": 48,
+        "requested_bootstrap_draws": 2000,
+        "spearman": 0.2048340942969338,
+        "valid_bootstrap_draws": 2000
+      },
+      "global_candidate_likelihood_correlation": {
+        "bootstrap_95": {
+          "lower": 0.318036440696613,
+          "upper": 0.5911874235147433
+        },
+        "bootstrap_unit": "whole source, including all evidence worlds",
+        "n_prompts": 144,
+        "n_sources": 48,
+        "requested_bootstrap_draws": 2000,
+        "spearman": 0.4504473917255521,
+        "valid_bootstrap_draws": 2000
+      }
+    },
+    "behavior_parsing": {
+      "all_prompts": 144,
+      "known_prompts": 96,
+      "mention_parser_risk": "An explicit candidate mention alone does not prove affirmation; all strict disagreements are listed.",
+      "parsed_known_world_correctness": {
+        "accuracy": 0.6979166666666666,
+        "bootstrap_95": {
+          "lower": 0.6041666666666666,
+          "upper": 0.7916666666666666
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "source_mean_maximum": 1.0,
+        "source_mean_minimum": 0.0
+      },
+      "parsed_minus_strict_accuracy": 0.04166666666666663,
+      "parsing_difference_count": 5,
+      "parsing_differences": [
+        {
+          "behavior_id": "v4-release_year-037--behavior-A",
+          "greedy_text": "release year: 3172",
+          "parsed_choice": "A",
+          "strict_candidate_choice": "other",
+          "world": "A"
+        },
+        {
+          "behavior_id": "v4-release_year-037--behavior-omitted",
+          "greedy_text": "review year: 3172\ndesign year:",
+          "parsed_choice": "A",
+          "strict_candidate_choice": "other",
+          "world": "omitted"
+        },
+        {
+          "behavior_id": "v4-release_year-039--behavior-A",
+          "greedy_text": "Release year: 3176",
+          "parsed_choice": "A",
+          "strict_candidate_choice": "other",
+          "world": "A"
+        },
+        {
+          "behavior_id": "v4-release_year-041--behavior-A",
+          "greedy_text": "release year: 3180",
+          "parsed_choice": "A",
+          "strict_candidate_choice": "other",
+          "world": "A"
+        },
+        {
+          "behavior_id": "v4-release_year-041--behavior-B",
+          "greedy_text": "Release year: 3181",
+          "parsed_choice": "B",
+          "strict_candidate_choice": "other",
+          "world": "B"
+        }
+      ],
+      "strict_exact_known_world_candidate_coverage": {
+        "accuracy": 0.6770833333333334,
+        "bootstrap_95": {
+          "lower": 0.5833333333333334,
+          "upper": 0.7708333333333334
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "source_mean_maximum": 1.0,
+        "source_mean_minimum": 0.0
+      },
+      "strict_exact_known_world_correctness": {
+        "accuracy": 0.65625,
+        "bootstrap_95": {
+          "lower": 0.5625,
+          "upper": 0.75
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "source_mean_maximum": 1.0,
+        "source_mean_minimum": 0.0
+      },
+      "strict_rule": "strip whitespace and trailing period; otherwise require complete candidate value"
+    },
+    "gates": {
+      "evidence_support_generalization": {
+        "passed": false
+      },
+      "independent_behavior_alignment": {
+        "checks": {
+          "centered_correlation_lower_gt_zero": false,
+          "global_correlation_lower_gt_zero": true,
+          "known_world_accuracy_ge_065_and_lower_gt_05": true,
+          "known_world_candidate_coverage_ge_075": false
+        },
+        "passed": false
+      },
+      "neutral_evidence_ordering": {
+        "checks": {
+          "neutral_omitted_vs_contradicted": {
+            "accuracy_ge_065": false,
+            "no_fact_type_below_05": false,
+            "source_bootstrap_lower_gt_05": false
+          },
+          "neutral_supported_vs_contradicted": {
+            "accuracy_ge_065": true,
+            "no_fact_type_below_05": true,
+            "source_bootstrap_lower_gt_05": true
+          },
+          "neutral_supported_vs_omitted": {
+            "accuracy_ge_065": false,
+            "no_fact_type_below_05": false,
+            "source_bootstrap_lower_gt_05": false
+          }
+        },
+        "passed": false
+      },
+      "pilot_construct_validation": {
+        "passed": false
+      },
+      "same_response_likelihood_manipulation": {
+        "checks": {
+          "accuracy_ge_075": true,
+          "source_bootstrap_lower_gt_05": true
+        },
+        "passed": true
+      },
+      "shuffled_control": {
+        "passed": true
+      },
+      "style_stress": {
+        "checks": {
+          "confident_supported_vs_contradicted": {
+            "accuracy_ge_065": true,
+            "source_bootstrap_lower_gt_05": true
+          },
+          "hedged_supported_vs_contradicted": {
+            "accuracy_ge_065": true,
+            "source_bootstrap_lower_gt_05": true
+          }
+        },
+        "passed": true
+      }
+    },
+    "primary": {
+      "confident_supported_vs_contradicted": {
+        "accuracy": 0.71875,
+        "bootstrap_95": {
+          "lower": 0.6458333333333334,
+          "upper": 0.78125
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "tie_fraction": 0.0
+      },
+      "hedged_supported_vs_contradicted": {
+        "accuracy": 0.71875,
+        "bootstrap_95": {
+          "lower": 0.6458333333333334,
+          "upper": 0.7916666666666666
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "tie_fraction": 0.0
+      },
+      "neutral_omitted_vs_contradicted": {
+        "accuracy": 0.6041666666666666,
+        "bootstrap_95": {
+          "lower": 0.4791666666666667,
+          "upper": 0.7291666666666666
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "tie_fraction": 0.0
+      },
+      "neutral_supported_vs_contradicted": {
+        "accuracy": 0.71875,
+        "bootstrap_95": {
+          "lower": 0.6458333333333334,
+          "upper": 0.7916666666666666
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "tie_fraction": 0.0
+      },
+      "neutral_supported_vs_omitted": {
+        "accuracy": 0.5520833333333334,
+        "bootstrap_95": {
+          "lower": 0.4375,
+          "upper": 0.6666666666666666
+        },
+        "n_pairs": 96,
+        "n_sources": 48,
+        "tie_fraction": 0.0
+      }
+    }
+  },
+  "response_count": 1584,
+  "source_count": 168
+}

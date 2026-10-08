@@ -11,7 +11,8 @@ probe,” this repository uses the following names.
 | 3 | **Paired Confidence v1 — Answer-End Expressed-Certainty Readout** | Whether a fixed written response is phrased confidently or with a hedge | Layer 14 at the assistant **`<\|im_end\|>` token after the complete response** | Paired confident/hedged rewrites from SQuAD, arithmetic/logic and selected MMLU sources |
 | 4 | **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
 | 5 | **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
-| 6 | **Proposed synthetic-fact training pilot** | Whether a candidate internal objective improves recall and retention | Completed-answer states, to be fixed before preregistration | No training has been run |
+| 6 | **Evidence-Sensitive Readout v4** | Whether support for a fixed answer transfers across source/template splits and agrees with independent output behavior | Layer 14 **response-content mean**, excluding end marker | New support-versus-contradiction pairs from 96 training records; fixed paired logistic regression, C=0.01 |
+| 7 | **Deferred synthetic-fact training pilot** | Whether a candidate internal objective improves recall and retention | Completed-answer states, to be fixed before preregistration | No training has been run; measurement validation takes priority |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 `Paired Confidence v1`, `Frozen Transfer v2`, and `Separation v3`. In particular:
@@ -21,6 +22,8 @@ Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 - Frozen Transfer v2 tests **wording transfer and supplied-context
   sensitivity**; it does not create a new probe.
 - Separation v3 holds answer text fixed while its contextual correctness changes.
+- Evidence-Sensitive Readout v4 fits contextual support on fresh training data;
+  it is a different readout, with independent output-behavior validation.
 - The cached confidence/correctness audit is supplementary post-hoc analysis of
   existing v1/v2 caches, not another independently confirmed experiment.
 - None of these experiments directly labels subjective confidence or proves
@@ -96,9 +99,43 @@ records all checks, including content review by research agents and rules rather
 than human annotation.
 
 V3 constrains the interpretation as evidence-sensitive factual confidence.
-Whether the readout is a useful additional training objective is a separate,
-untested question: ordinary SFT already supplies the target content. See the
-[proposed functional comparison](NEXT_EXPERIMENT.md).
+V4 therefore tests a new measurement before the
+[deferred functional comparison](NEXT_EXPERIMENT.md).
+
+## How Evidence-Sensitive Readout v4 is fitted
+
+V4 has 96 training, 24 validation and 48 test records. Context, question and
+neutral-response templates are disjoint by split, as are entity names and
+candidate values. Each training record supplies both candidate answers under
+supporting and contradicting evidence, using identical neutral response text.
+
+For each source q and candidate a, form the layer-14 response-mean difference:
+
+```math
+\Delta h_{q,a}=h_{q,a}^{\mathrm{supported}}-h_{q,a}^{\mathrm{contradicted}}.
+```
+
+Fit logistic regression to these differences and their sign-reversed copies,
+with balanced labels, no intercept, L2 regularization C=0.01 and scaling fitted
+only on that training pool. Convert coefficients back to raw-state coordinates
+and unit-normalize. The score of a new state is:
+
+```math
+s(h)=v^\top h.
+```
+
+The sigmoid is not the model's probability of being correct. Test omissions
+and certainty styles never fit the direction. Validation does not tune a
+layer, sign or regularization value. The
+[v4 design](EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md) requires neutral evidence
+ordering, style robustness and comparison with shuffled-label controls.
+
+Independent question paraphrases yield 144 greedy answers and candidate
+sequence likelihoods. The probe's candidate margin must correlate with these
+output preferences overall and after centering by evidence condition and fact
+schema. This avoids accepting a correlation explained only by those broad
+groups. Passing remains controlled convergent evidence, with ambiguity and
+natural-answer transfer still to test.
 
 ## Relationship between the experiments
 
@@ -110,14 +147,16 @@ flowchart LR
     V2["4. Frozen Transfer v2<br/>same v1 direction → wording/evidence transfer"]
     V3["5. Separation v3<br/>frozen response-content directions → same-answer truth/context tests"]
     Audit["Cached audit<br/>comparator validity, geometry and projection"]
-    Train["6. Proposed SFT pilot<br/>independent fact recall and retention"]
+    V4["6. Evidence-Sensitive Readout v4<br/>new support labels → behavior validation"]
+    Train["7. Deferred SFT pilot<br/>independent fact recall and retention"]
     S0 --> S0B
     S0B --> V1
     V1 --> V2
     V2 --> V3
     V1 --> Audit
     V2 --> Audit
-    V3 -. "functional test proposed" .-> Train
+    V3 --> V4
+    V4 -. "pending measurement" .-> Train
 ```
 
 The arrows show the research sequence, not reuse of one fitted vector. Stage 0,
@@ -133,4 +172,6 @@ See the [Stage 0/0B report](../../reports/RESULTS_STAGE0.md),
 [cached audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) for results and
 limitations.
 
-The dashed arrow is a proposal, not an experiment that has been run.
+V4 is complete: support-versus-contradiction ordering is 71.9%, but omission and
+behavior validation failed. See the [latest report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
+The dashed arrow remains a deferred proposal; no training experiment has run.

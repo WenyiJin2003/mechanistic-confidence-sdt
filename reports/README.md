@@ -1,9 +1,10 @@
 # Research Reports
 
-**Start with the [fresh v3 result](CONFIDENCE_SEPARATION_RESULTS_V3.md):** expressed
-certainty transfers, but same-answer support ordering is near chance. The
-[proposed next study](../docs/experiments/NEXT_EXPERIMENT.md) asks whether the
-candidate readout nevertheless helps fact learning as an auxiliary objective.
+**Start with the [v4 result](EVIDENCE_CONFIDENCE_RESULTS_V4.md):** a new probe
+detects contextual support at 71.9% on unseen facts and wording, but does not
+pass missing-information and behavior validation. The
+[v3 result](CONFIDENCE_SEPARATION_RESULTS_V3.md) explains why the old certainty
+directions needed a different measurement. Training remains deferred.
 
 These reports interpret the completed experiments. The [dataset browser](../datasets/README.md)
 shows the questions, supplied answers, response variants, and row-level results;
@@ -16,15 +17,17 @@ the [artifact index](../results/README.md) links the original saved outputs.
 | 4 | Frozen Transfer v2 | [Results](CONFIDENCE_TRANSFER_RESULTS_V2.md) | [480 responses](../datasets/frozen-transfer-v2/README.md) | [Runbook](../docs/experiments/CONFIDENCE_TRANSFER_README_V2.md) |
 | 5 | Confidence–Correctness Separation v3 | [Results](CONFIDENCE_SEPARATION_RESULTS_V3.md) | [672 responses](../datasets/confidence-separation-v3/README.md) | [Registered design](../docs/experiments/CONFIDENCE_SEPARATION_V3_PREREGISTRATION.md) |
 | Supplement | Cached geometry and comparator audit | [Results](CONFIDENCE_CORRECTNESS_AUDIT.md) | Reuses Steps 3 and 4 | [Configuration](../configs/confidence_correctness_audit.yaml) |
-| 6 | Proposed synthetic-fact training study | [Design](../docs/experiments/NEXT_EXPERIMENT.md) | To be fixed | Not yet preregistered |
+| 6 | Evidence-Sensitive Readout v4 | [Results](EVIDENCE_CONFIDENCE_RESULTS_V4.md) | [168 records, supplied responses and actual answers](../datasets/evidence-confidence-v4/README.md) | [Runbook](../docs/experiments/EVIDENCE_CONFIDENCE_README_V4.md) |
+| 7 | Deferred synthetic-fact training study | [Earlier proposal](../docs/experiments/NEXT_EXPERIMENT.md) | To be fixed | Deferred pending measurement |
 
 The [experiment map](../docs/experiments/EXPERIMENT_MAP.md) distinguishes the targets,
 token positions, and calculations. The [current status](../docs/experiments/STATUS.md)
 records the completed confirmation result and next decision.
 
 Earlier reports retain their contemporary conclusions. Their suggested next
-measurement studies have now been completed in v3; the current proposal is a
-functional training comparison, not another relabelling of the old results.
+measurement studies were completed in v3. V4 now fits a different target on
+fresh training records; it does not replace or relabel the earlier failures.
+The functional training proposal remains available but is deferred.
 
 The original [v1 preregistration](../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md) and
 [v2 preregistration](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) remain at their

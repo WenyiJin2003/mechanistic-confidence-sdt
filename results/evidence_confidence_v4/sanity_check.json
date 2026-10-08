@@ -1,0 +1,72 @@
+{
+  "checks": {
+    "exact_resume": true,
+    "finite_states": true,
+    "four_training_records": true,
+    "same_prompt_group": true
+  },
+  "initial_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 0,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 10.57693508300872,
+    "forward_calls": 24,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "prompt_invariance_scope": "base entity + counterfactual world",
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      24,
+      2,
+      4,
+      1536
+    ]
+  },
+  "passed": true,
+  "resume_runtime": {
+    "boundary_token_id": 151645,
+    "boundary_token_text": "<|im_end|>",
+    "cache_hits": 24,
+    "device": "mps",
+    "dtype": "bfloat16",
+    "elapsed_seconds": 0.81015941700025,
+    "forward_calls": 0,
+    "generation_calls": 0,
+    "max_prompt_state_difference": 0.0,
+    "nli_calls": 0,
+    "openai_api_calls": 0,
+    "positions": [
+      "boundary",
+      "final_content",
+      "response_mean",
+      "prompt"
+    ],
+    "prompt_ids_identical_within_source": true,
+    "prompt_invariance_scope": "base entity + counterfactual world",
+    "right_padding_reference": "all written variants of each selected source; shape only",
+    "shape": [
+      24,
+      2,
+      4,
+      1536
+    ]
+  },
+  "scores_inspected": false,
+  "source_ids": [
+    "v4-access_code-001",
+    "v4-room_assignment-001",
+    "v4-release_year-001",
+    "v4-material-001"
+  ]
+}

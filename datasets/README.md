@@ -11,6 +11,13 @@ for download.
 | 3 | [Paired Confidence v1](paired-confidence-v1/README.md) | 120 | 1,440 | Authored confident/hedged rewrites, with both correct and deliberately wrong content |
 | 4 | [Frozen Transfer v2](frozen-transfer-v2/README.md) | 48 | 480 | Authored response pairs and identical neutral answers under different evidence conditions |
 | 5 | [Confidence–Correctness Separation v3](confidence-separation-v3/README.md) | 48 | 672 | Authored responses; the same answer becomes correct or incorrect when contextual role assignments swap |
+| 6 | [Evidence-Sensitive Readout v4](evidence-confidence-v4/README.md) | 168 | 1,584 supplied responses; 144 actual model answers | New source/template splits; fixed answers under three evidence conditions; separate output questions |
+
+The v4 collection includes every training, validation and test record, all
+three contexts, supplied response styles, scores and independent generated answers.
+Its [runbook](../docs/experiments/EVIDENCE_CONFIDENCE_README_V4.md) and
+[results](../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) describe the
+completed study, including the failed confidence-validation checks.
 
 ## How to read a question
 
