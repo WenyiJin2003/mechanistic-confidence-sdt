@@ -1,5 +1,10 @@
 # Research Reports
 
+**Start with the [fresh v3 result](CONFIDENCE_SEPARATION_RESULTS_V3.md):** expressed
+certainty transfers, but same-answer support ordering is near chance. The
+[proposed next study](../docs/experiments/NEXT_EXPERIMENT.md) asks whether the
+candidate readout nevertheless helps fact learning as an auxiliary objective.
+
 These reports interpret the completed experiments. The [dataset browser](../datasets/README.md)
 shows the questions, supplied answers, response variants, and row-level results;
 the [artifact index](../results/README.md) links the original saved outputs.
@@ -15,6 +20,10 @@ the [artifact index](../results/README.md) links the original saved outputs.
 The [experiment map](../docs/experiments/EXPERIMENT_MAP.md) distinguishes the targets,
 token positions, and calculations. The [current status](../docs/experiments/STATUS.md)
 records the completed confirmation result and next decision.
+
+Earlier reports retain their contemporary conclusions. Their suggested next
+measurement studies have now been completed in v3; the current proposal is a
+functional training comparison, not another relabelling of the old results.
 
 The original [v1 preregistration](../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md) and
 [v2 preregistration](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) remain at their

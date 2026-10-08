@@ -87,9 +87,17 @@ fit a threshold, scaler, logistic regression, or dimension selector for this
 primary direction.
 
 V1 ordered all 48 held-out family-C test pairs correctly, including both
-correct and wrong answer content. That result supports a candidate readout of
-**expressed certainty**, not truth or evidence. Broad null-direction results
-and the later v2/v3 failures prevent treating it as a validated SDT loss.
+correct and wrong answer content. The measured target is **expressed certainty**.
+Twelve of 200 source-sign-shuffled directions also reached 100%, and the TF-IDF
+control tied on 42 of 48 pairs. Those controls do not establish a unique direction
+or removal of lexical cues. The [v1 report](../../reports/PAIRED_CONFIDENCE_RESULTS_V1.md)
+records all checks, including content review by research agents and rules rather
+than human annotation.
+
+V3 constrains the interpretation as evidence-sensitive factual confidence.
+Whether the readout is a useful additional training objective is a separate,
+untested question: ordinary SFT already supplies the target content. See the
+[proposed functional comparison](NEXT_EXPERIMENT.md).
 
 ## Relationship between the experiments
 
@@ -101,12 +109,14 @@ flowchart LR
     V2["Frozen Transfer v2<br/>same v1 direction → wording/evidence transfer"]
     V3["Separation v3<br/>frozen response-content directions → same-answer truth/context tests"]
     Audit["Cached audit<br/>comparator validity, geometry and projection"]
+    Train["Proposed SFT pilot<br/>independent fact recall and retention"]
     S0 --> S0B
     S0B --> V1
     V1 --> V2
     V2 --> V3
     V1 --> Audit
     V2 --> Audit
+    V3 -. "functional test proposed" .-> Train
 ```
 
 The arrows show the research sequence, not reuse of one fitted vector. Stage 0,
@@ -121,3 +131,5 @@ See the [Stage 0/0B report](../../reports/RESULTS_STAGE0.md),
 [fresh v3 report](../../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md), and
 [cached audit](../../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) for results and
 limitations.
+
+The dashed arrow is a proposal, not an experiment that has been run.

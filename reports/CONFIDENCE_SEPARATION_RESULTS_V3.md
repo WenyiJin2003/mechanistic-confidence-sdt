@@ -125,12 +125,20 @@ or confidence that tracks evidence. These are different outcomes. Shared
 correctness/confidence features may be useful; perfect orthogonality is not
 a requirement for a helpful training term.
 
-For target-fact learning, compare ordinary SDT, the same SDT plus the fixed
-candidate loss, and a matched random-direction loss. Assess held-out paraphrased
-questions, use of the learned facts, and retention separately from the optimized
-readout score. If calibration or resistance to relearning is part of the agreed
-objective, evaluate it directly. These measurement studies have not run that
-training comparison.
+The failure of contextual-truth ordering does not by itself rule out an auxiliary
+commitment objective: ordinary training supplies the target content. It does
+limit the factual-confidence interpretation of this particular readout. Its
+functional benefit remains an empirical question.
+
+The proposed first trial is synthetic-fact SFT using answer states: ordinary
+SFT, the same data plus the fixed candidate loss, random-direction controls,
+and extra cross-entropy on target-answer tokens. Match data and update budgets,
+measure auxiliary-gradient strength, and monitor hidden-state norms. Evaluate
+the trained facts through new question phrasings and retention after the same
+interference step, independently of the optimized score. A later study would
+test transfer to full-document SDT or replacement from a common learned-fact
+checkpoint. The [proposal](../docs/experiments/NEXT_EXPERIMENT.md) is not yet run
+or preregistered.
 
 ## Reproduction and limitations
 

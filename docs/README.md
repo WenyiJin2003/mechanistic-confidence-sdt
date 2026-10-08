@@ -1,10 +1,12 @@
 # Documentation Index
 
-Current conclusions and the research sequence are in the [root README](../README.md);
-the next decision gate is in [project status](experiments/STATUS.md).
+Start with the [root README](../README.md) for the findings,
+[experiment map](experiments/EXPERIMENT_MAP.md) for the calculation, and
+[next-experiment proposal](experiments/NEXT_EXPERIMENT.md) for the research decision.
 
 ## Current research
 
+- [Proposed synthetic-fact SFT pilot](experiments/NEXT_EXPERIMENT.md) — four matched training conditions; independent recall and retention outcomes; not yet run or preregistered
 - [Experiment map and canonical names](experiments/EXPERIMENT_MAP.md) — separates semantic uncertainty, expressed certainty, and same-answer contextual correctness
 - [Confidence–Correctness Separation v3](../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md), [registered design](experiments/CONFIDENCE_SEPARATION_V3_PREREGISTRATION.md), and [configuration](../configs/confidence_separation_v3.yaml) — complete; wording transfers, both response-content candidates fail confirmation
 - [Cached confidence/correctness audit](../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) — comparator validity, geometric stability, projection and small subspaces; post-hoc, no new model calls
@@ -20,10 +22,11 @@ the next decision gate is in [project status](experiments/STATUS.md).
 - [archive/INITIAL_PLAN_STAGE0.md](archive/INITIAL_PLAN_STAGE0.md) — original Stage 0 execution plan
 - [archive/MACHINE_ASSESSMENT.md](archive/MACHINE_ASSESSMENT.md) — historical execution-environment note
 
-Historical reports, preregistrations, plans, and execution-environment notes are
-preserved. Fresh response-content confirmation is complete. The next decision
-is the intended behavior for a candidate SDT auxiliary term; no loss has been
-validated by these measurement studies.
+Fresh response-content confirmation is complete. Historical reports contain
+the interpretation and recommended next steps at the time of each study; use
+[current status](experiments/STATUS.md) for the latest decision. The next proposed
+study tests whether the candidate term helps fact learning, while preserving the
+limits of its expressed-certainty interpretation.
 
 Experiment runbooks, status notes, and the experiment map are under `experiments/`.
 Narrative reports are under `reports/` at the repository root. Both immutable
