@@ -1,0 +1,15 @@
+{
+  "review_revision": 3,
+  "pairs": 50,
+  "initial_agent_keep": 40,
+  "initial_agent_revise": 10,
+  "initial_agent_reject": 0,
+  "targeted_corrections": 10,
+  "final_agent_accepted": 50,
+  "final_agent_rejected_or_pending": 0,
+  "human_review": "pending",
+  "same_model_family_as_rewriter": true,
+  "agent_qa_is_human_review": false,
+  "review_packet_sha256": "d89f8cc18775d1a4eaa325b997ed19bf3944f327e93826a117de102ff49ae258",
+  "private_text_published": false
+}

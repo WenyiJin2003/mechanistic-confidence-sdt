@@ -8,6 +8,14 @@ For readable tables of questions, answers, and response variants, open the
 [dataset browser](../datasets/README.md). The [report index](../reports/README.md)
 links the narrative findings and execution guides for each experiment.
 
+## Current diverse-pair development diagnostic
+
+The active study keeps its aggregate artifacts beside its isolated code and
+protocol: [metrics](../experiments/diverse_pairs_multilayer_v1/results/DEVELOPMENT_DIAGNOSTIC.json),
+[layer figure](../experiments/diverse_pairs_multilayer_v1/results/DEVELOPMENT_LAYER_COMPARISON.png),
+and [interpretation](../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md).
+Private source and rewritten text is intentionally excluded from Git.
+
 ## Steps 3–5: certainty readouts and validation
 
 | Directory | Scope | Primary evidence |

@@ -45,14 +45,14 @@ The source transfer is approximately 11.3 MB for original HelpSteer2 plus bounde
 WildChat parquet range reads, not a full million-conversation download. Actual
 WildChat network byte totals are not available and should not be invented.
 
-The final 50-pair packet contains 100 responses, approximately 26,090 response
+The Revision 3 50-pair packet contains 100 responses, approximately 26,375 response
 tokens under Qwen's tokenizer; the 50 source responses contain approximately
 13,420 tokens under that same tokenizer. These exclude prompts, tools, reasoning,
 coordination and discarded drafts and cannot be used as a billable total.
 
-The first packet remains human_review=pending. Subsequent expansion depends on
-the user's content audit and a fresh usage estimate, rather than a claim that
-lower-cost rewriting has already met the study's quality requirements.
+All revisions remain human_review=pending. The development diagnostic found that
+the present recipe is easily separated by text, NLL and length controls, so no
+larger rewrite expansion is recommended before a counterbalanced challenge set.
 
 ## User-requested stronger-hedge revision
 
@@ -69,6 +69,15 @@ Protected-string and length checks are engineering screens, not a guarantee
 that each edit preserves meaning. Repeated phrasing remains an audit item;
 clearer hesitation alone does not validate the eventual confidence readout.
 All revised pairs still require actual human review.
+
+## Agent-assisted QA and targeted Revision 3
+
+Three fresh low-context audit passes kept 40 pairs and requested targeted edits
+for 10. Separate cross-audits accepted all corrected pairs after two bounded copy
+repairs. This work used the same configured model family as the rewriter, so it
+reduces obvious content errors but is not independent human certification. Full
+audit text and rejected attempts stay in ignored private_data; the public
+manifest contains aggregate counts only.
 
 ## Official references checked for this choice
 

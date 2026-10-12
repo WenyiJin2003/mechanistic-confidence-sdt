@@ -4,7 +4,7 @@ seed: 20261011
 data:
   pairs: private_data/PAIRED_RESPONSES_50.jsonl
   phase: train_development_engineering_only
-  required_review_for_scientific_fit: passed
+  required_review_for_scientific_fit: agent_qa_passed_human_pending
   final_source_split: not_frozen
   final_recipe_family: not_frozen
 model:

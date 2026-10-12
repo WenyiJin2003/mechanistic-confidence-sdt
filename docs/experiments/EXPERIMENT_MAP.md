@@ -12,6 +12,7 @@ probe,” this repository uses the following names.
 | 4 | **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
 | 5 | **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
 | 6 | **Evidence-Sensitive Readout v4** | Whether support for a fixed answer transfers across source/template splits and agrees with independent output behavior | Layer 14 **response-content mean**, excluding end marker | New support-versus-contradiction pairs from 96 training records; fixed paired logistic regression, C=0.01 |
+| Current follow-up | **Diverse Paired Certainty + Multi-Layer Development Diagnostic** | Whether same-content certainty wording transfers across diverse source content, and whether all-layer averaging beats layer 14 | Mean of ordinary assistant-response tokens at each of 28 layers; last response token is secondary | 50 real-source development pairs; five source-disjoint folds; paired logistic readouts fitted within each fold |
 | 7 | **Deferred synthetic-fact training pilot** | Whether a candidate internal objective improves recall and retention | Completed-answer states, to be fixed before preregistration | No training has been run; measurement validation takes priority |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
@@ -24,6 +25,10 @@ Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 - Separation v3 holds answer text fixed while its contextual correctness changes.
 - Evidence-Sensitive Readout v4 fits contextual support on fresh training data;
   it is a different readout, with independent output-behavior validation.
+- The diverse-pair follow-up fits new response-mean readouts across all 28 layers.
+  Its 50/50 ceiling is shared by character TF-IDF and strong length/NLL controls,
+  so it validates separability and implementation rather than an abstract
+  confidence mechanism.
 - The cached confidence/correctness audit is supplementary post-hoc analysis of
   existing v1/v2 caches, not another independently confirmed experiment.
 - None of these experiments directly labels subjective confidence or proves

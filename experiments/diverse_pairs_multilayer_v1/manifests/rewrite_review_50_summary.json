@@ -29,31 +29,34 @@
     "nvidia/HelpSteer2": 12
   },
   "source_response_token_proxy": 13420,
-  "rewrite_response_token_proxy": 26362,
+  "rewrite_response_token_proxy": 26375,
   "token_proxy_model": "Qwen2.5 tokenizer; not OpenAI billable tokens",
-  "packet_sha256": "7605c5c5b2f84ec2dcff2ea374c68f0d7fbda813255cabd7922d3656a478ae4e",
+  "packet_sha256": "d89f8cc18775d1a4eaa325b997ed19bf3944f327e93826a117de102ff49ae258",
   "confidence_readout_fitted": false,
   "representation_forward_calls": 0,
   "text_published": false,
-  "review_revision": 2,
+  "review_revision": 3,
   "confident_responses_unchanged": true,
   "initial_review_preserved": true,
+  "agent_assisted_qa": true,
+  "agent_qa_is_human_review": false,
+  "targeted_agent_qa_corrections": 10,
   "most_common_hedged_openings": [
     [
       "i m not fully certain",
-      10
-    ],
-    [
-      "i m not entirely certain",
-      4
+      12
     ],
     [
       "i am not fully certain",
-      2
+      4
     ],
     [
       "i may not have the",
-      2
+      3
+    ],
+    [
+      "i m not entirely certain",
+      3
     ],
     [
       "i can t be certain",

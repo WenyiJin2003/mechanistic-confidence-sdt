@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from build_review_packet import apply_hedge_revisions, render_html, screen
+from build_review_packet import apply_hedge_revisions, apply_targeted_corrections, render_html, screen
 
 
 class ReviewPacketTests(unittest.TestCase):
@@ -57,6 +57,28 @@ class ReviewPacketTests(unittest.TestCase):
         new = [{"review_id": "P001", "source_id": "s", "original_response_sha256": "different", "hedged_response": "changed"}]
         with self.assertRaises(ValueError):
             apply_hedge_revisions(old, new)
+
+    def test_targeted_correction_changes_only_predeclared_hedges(self):
+        ids = ["P009", "P017", "P022", "P039", "P041", "P042", "P044", "P045", "P047", "P049"]
+        drafts = [{"review_id": rid, "source_id": "source-" + rid,
+                   "original_response_sha256": "hash-" + rid,
+                   "confident_response": "same confident " + rid,
+                   "hedged_response": "old hedge " + rid} for rid in ids]
+        drafts.append({"review_id": "P001", "source_id": "source-P001",
+                       "original_response_sha256": "hash-P001",
+                       "confident_response": "same confident P001", "hedged_response": "untouched hedge"})
+        corrections = [{"review_id": rid, "source_id": "source-" + rid,
+                        "original_response_sha256": "hash-" + rid,
+                        "hedged_response": "new hedge " + rid, "correction_reason": "test",
+                        "rewriter_model_requested": "gpt-6-luna", "reasoning_effort": "low"} for rid in ids]
+        result = apply_targeted_corrections(drafts, corrections)
+        self.assertEqual([r["confident_response"] for r in result], [r["confident_response"] for r in drafts])
+        self.assertEqual(result[-1], drafts[-1])
+        self.assertTrue(all(r["hedge_revision"] == 3 for r in result[:-1]))
+
+    def test_targeted_correction_refuses_unexpected_ids(self):
+        with self.assertRaises(ValueError):
+            apply_targeted_corrections([], [])
 
 
 if __name__ == "__main__":

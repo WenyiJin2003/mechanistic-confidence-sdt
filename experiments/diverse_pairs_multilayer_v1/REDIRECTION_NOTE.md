@@ -1,6 +1,8 @@
 # Research direction update
 
-11 October 2026. Preparation only; no new scientific results.
+11 October 2026. This note records the priority change that preceded the current
+development diagnostic. For completed results and the updated decision, see
+[reports/DEVELOPMENT_DIAGNOSTIC.md](reports/DEVELOPMENT_DIAGNOSTIC.md).
 
 The next primary study is **Diverse Paired Certainty + Multi-Layer Readout**.
 It asks whether content-preserving confident/hedged rewrites of diverse existing
@@ -34,8 +36,10 @@ the original certainty-trained readout.
 - Pool ordinary assistant response tokens; cache a final-content-token diagnostic.
   Check the actual last-layer normalization and API indexing before extraction.
 
-These choices are proposed implementation decisions, not completed experiments.
-The protocol and final eligible sources must be frozen before test scoring.
+The 50-pair development version of this comparison is now complete. It reached a
+ceiling shared by text, NLL and length controls, so the original 1,000-pair scale
+target is deferred. The protocol and final eligible sources still must be frozen
+before any final-test scoring.
 
 ## Resource and quality boundaries
 

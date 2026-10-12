@@ -1,17 +1,26 @@
 # Mechanistic Confidence for Synthetic Fact Learning
 
-**Research direction update, 11 October 2026:** the next primary study uses
-diverse, content-preserving confident/hedged response pairs and compares layer 14
-with a multi-layer ensemble on the same data and labels. Correctness, evidence
-support and semantic entropy remain separate diagnostics. The historical v4
-findings below are retained; they do not set this study's training target or its
-data-construction prerequisites. See the [new preparation status](experiments/diverse_pairs_multilayer_v1/STATUS.md).
+## Current finding
 
-**Current stage:** 50 real-source confident/hedged pairs are drafted and awaiting
-individual content review. A 20-pair check validates the new 28-layer extraction
-pipeline, including exact cache replay. Layer-14 versus ensemble performance has
-not been measured yet. See the [active study](experiments/diverse_pairs_multilayer_v1/README.md)
-and [protocol](experiments/diverse_pairs_multilayer_v1/PROTOCOL.md).
+**In a 50-pair diverse-response development test, layer 14 and an equal 28-layer
+ensemble both ranked all confident versions above their hesitant counterparts.
+The ensemble did not improve on layer 14.**
+
+This is not yet a validated internal confidence measure. A character-only TF-IDF
+baseline also ranked 50/50 pairs correctly, negative mean NLL ranked 49/50, and
+response length ranked 47/50. Every hidden-state layer reached the same ceiling.
+The result shows that expressed certainty in this rewrite set is easy to decode,
+but it cannot separate an abstract representation from wording and length cues.
+
+**Next decision:** do not scale this recipe or train an SDT confidence loss yet.
+Build a small independent challenge set with held-out certainty expressions,
+counterbalanced length and blinded content review. Correctness, evidence support
+and semantic entropy remain separate diagnostics.
+
+[Active-study summary](experiments/diverse_pairs_multilayer_v1/README.md) ·
+[Development result](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
+[Exact protocol](experiments/diverse_pairs_multilayer_v1/PROTOCOL.md) ·
+[Next challenge](experiments/diverse_pairs_multilayer_v1/NEXT_CHALLENGE.md)
 
 ## Historical diagnostic findings
 
@@ -62,6 +71,7 @@ reproducibility. They form seven consecutive research steps:
 | 4 | Frozen Transfer v2 | Does the frozen direction transfer to new wording and evidence contexts? | Wording transferred; evidence robustness failed for one fact type | [Report](reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) · [Data](datasets/frozen-transfer-v2/README.md) | Complete |
 | 5 | Separation v3 | With the answer fixed, does the readout track whether context supports it? | The primary readouts scored 52.1% and 51.0% | [Report](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) · [Data](datasets/confidence-separation-v3/README.md) | Complete |
 | 6 | Evidence-Sensitive Readout v4 | Can a new support readout transfer across facts and wording, and agree with model behavior? | 71.9% support ordering; missing-information and behavior checks failed | [Report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Data](datasets/evidence-confidence-v4/README.md) | Complete |
+| Current | Diverse Paired Certainty + Multi-Layer | Does expressed-certainty decoding transfer across diverse content, and does an all-layer ensemble beat layer 14? | Both 50/50, but text also 50/50 and length 47/50; challenge set required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
 | 7 | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Proposal](docs/experiments/NEXT_EXPERIMENT.md) | Deferred pending measurement |
 
 ```mermaid
@@ -69,7 +79,10 @@ flowchart LR
     U["Stage 0 / 0B<br/>Semantic uncertainty"] --> C["v1 / v2<br/>Expressed certainty"]
     C --> S["v3<br/>Fixed-answer validation"]
     S --> E["v4<br/>Partial evidence support"]
-    E -. "further measurement needed" .-> T["Training loss<br/>deferred"]
+    C --> D["Current<br/>Diverse paired certainty"]
+    D --> H["Cue/recipe-holdout<br/>challenge needed"]
+    E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
+    H -. "only after validation" .-> T
 ```
 
 Steps 1–3 estimate different readouts with different labels and token positions.

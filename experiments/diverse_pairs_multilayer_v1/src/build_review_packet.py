@@ -99,8 +99,10 @@ document.getElementById('prev').onclick=()=>show(current-1);document.getElementB
 document.getElementById('export').onclick=()=>{const payload={packet_sha256:packetHash,reviewer:'user',exported_at:new Date().toISOString(),reviews:mapping.map(m=>({...m,...(reviews[m.review_id]||{}),human_review:(reviews[m.review_id]?.content_preserved&&reviews[m.review_id]?.more_certain&&reviews[m.review_id]?.other_confound)?'annotated':'pending'}))};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='human_review_50.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 show(0);progress();
 </script></body></html>'''
-    if revision > 1:
+    if revision == 2:
         output = output.replace("<h1>50 对坚定／犹豫改写：人工审核</h1>", f"<h1>50 对坚定／犹豫改写：人工审核 · V{revision}</h1><p>新版根据你的反馈加强了犹豫语气。坚定版和来源原文保持不变。A/B 仍随机排列，并非每条 B 都是犹豫版；请对新版重新审核。</p>")
+    elif revision == 3:
+        output = output.replace("<h1>50 对坚定／犹豫改写：人工审核</h1>", "<h1>50 对坚定／犹豫改写：人工审核 · V3</h1><p>本版根据 agent-assisted QA 定向修正了 10 条内容或文风问题；坚定版和来源原文保持不变。该 QA 不是人工审核。A/B 仍随机排列，并非每条 B 都是犹豫版；如需正式人工确认，请审核本版。</p>")
     return output
 
 
@@ -128,6 +130,32 @@ def apply_hedge_revisions(written, revisions):
     return result
 
 
+def apply_targeted_corrections(written, corrections):
+    """Apply the predeclared agent-QA correction set without touching other rows."""
+    expected = {"P009", "P017", "P022", "P039", "P041", "P042", "P044", "P045", "P047", "P049"}
+    by_id = {r["review_id"]: r for r in corrections}
+    if len(corrections) != len(by_id) or set(by_id) != expected:
+        raise ValueError("Incomplete, duplicate or unexpected agent-QA corrections")
+    result = []
+    for draft in written:
+        if draft["review_id"] not in by_id:
+            result.append(draft)
+            continue
+        corrected = by_id[draft["review_id"]]
+        if (corrected["source_id"] != draft["source_id"] or
+                corrected["original_response_sha256"] != draft["original_response_sha256"]):
+            raise ValueError("Agent-QA correction changes source identity")
+        if not corrected["hedged_response"].strip():
+            raise ValueError("Empty agent-QA hedge correction")
+        result.append({**draft, "revision_2_hedged_sha256": sha(draft["hedged_response"]),
+                       "hedged_response": corrected["hedged_response"], "hedge_revision": 3,
+                       "agent_qa_correction_reason": corrected["correction_reason"],
+                       "agent_qa_model_requested": corrected["rewriter_model_requested"],
+                       "agent_qa_reasoning_effort": corrected["reasoning_effort"],
+                       "human_review": "pending"})
+    return result
+
+
 def main():
     originals = read_rows(PRIVATE / "review_sources_50.jsonl")
     written = []
@@ -151,6 +179,20 @@ def main():
             old = original_by_id[row["review_id"]]
             if row["confident_response"] != old["confident_response"]:
                 raise ValueError("Confident response changed in hedge-only revision")
+    correction_files = [PRIVATE / f"agent_qa_correction_output_batch_{i}.jsonl" for i in range(1, 4)]
+    if any(p.exists() for p in correction_files):
+        if not all(p.exists() for p in correction_files):
+            raise ValueError("Agent-QA correction batches are incomplete; retaining revision 2")
+        archive = PRIVATE / "review_revision_2_before_agent_qa" / "PAIRED_RESPONSES_50.jsonl"
+        if not archive.exists():
+            raise ValueError("Revision 2 archive is required before targeted corrections")
+        revision_2 = read_rows(archive)
+        revision_2_by_id = {r["review_id"]: r for r in revision_2}
+        written = apply_targeted_corrections(written, [r for p in correction_files for r in read_rows(p)])
+        revision = 3
+        for row in written:
+            if row["confident_response"] != revision_2_by_id[row["review_id"]]["confident_response"]:
+                raise ValueError("Confident response changed in agent-QA correction")
     by_id = {r["source_id"]: r for r in written}
     if len(written) != 50 or len(by_id) != 50 or set(by_id) != {r["source_id"] for r in originals}:
         raise ValueError("Missing or duplicate writer records; refusing incomplete packet")
@@ -184,7 +226,7 @@ def main():
     page_html = render_html(assembled, packet_hash, revision)
     html_file.write_text(page_html, encoding="utf-8")
     if revision > 1:
-        (PRIVATE / "REVIEW_50_PAIRS_V2.html").write_text(page_html, encoding="utf-8")
+        (PRIVATE / f"REVIEW_50_PAIRS_V{revision}.html").write_text(page_html, encoding="utf-8")
     aggregate = {"pairs": 50, "rewritten_responses": 100, "rewriter_model": "gpt-6-luna", "invocation": "current_codex_session_subagent",
                  "human_review": "pending", "independent_paid_api_calls": 0, "model_revision": None,
                  "automatic_flags_count": sum(bool(r["automatic_flags"]) for r in assembled),
@@ -195,8 +237,10 @@ def main():
                  "rewrite_response_token_proxy": sum(v["response_tokens"] for r in assembled for v in r["token_stats"].values()),
                  "token_proxy_model": "Qwen2.5 tokenizer; not OpenAI billable tokens", "packet_sha256": packet_hash,
                  "confidence_readout_fitted": False, "representation_forward_calls": 0, "text_published": False}
-    aggregate.update(review_revision=revision, confident_responses_unchanged=(revision == 2),
-                     initial_review_preserved=(revision == 2),
+    aggregate.update(review_revision=revision, confident_responses_unchanged=(revision >= 2),
+                     initial_review_preserved=(revision >= 2),
+                     agent_assisted_qa=(revision >= 3), agent_qa_is_human_review=False,
+                     targeted_agent_qa_corrections=(10 if revision >= 3 else 0),
                      most_common_hedged_openings=Counter(" ".join(re.findall(r"\w+", r["hedged_response"].lower())[:5]) for r in assembled).most_common(5))
     (BASE / "manifests" / "rewrite_review_50_summary.json").write_text(json.dumps(aggregate, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(aggregate))

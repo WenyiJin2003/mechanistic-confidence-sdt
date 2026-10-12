@@ -4,13 +4,14 @@
 content-preserving confident/hedged response pairs and a same-data comparison
 of layer 14 and multi-layer readouts. The earlier evidence-support results are
 diagnostics, not prerequisites for constructing the new paired dataset.
-Preparation is local. The first 50 development pairs have been drafted with
-GPT-6 Luna and revised for clearer hesitation; human content review remains
-pending. The separate 28-layer extraction pipeline passed a 20-pair engineering
-benchmark and exact cache replay; no research readout comparison has been scored.
-No language-model training or steering is authorized.
-See the [redirection note](../../experiments/diverse_pairs_multilayer_v1/REDIRECTION_NOTE.md)
-and [current preparation status](../../experiments/diverse_pairs_multilayer_v1/STATUS.md).
+The first 50 development pairs have now passed agent-assisted QA and the
+development comparison is complete; human review remains pending. Layer 14 and
+the equal 28-layer ensemble both ordered 50/50 pairs, but character TF-IDF also
+ordered 50/50 and length ordered 47/50. The dataset is therefore too easy to
+support scale-up or a confidence-loss experiment. No language-model training or
+steering is authorized. See the
+[development result](../../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md)
+and [active status](../../experiments/diverse_pairs_multilayer_v1/STATUS.md).
 
 ## Historical v4 status
 

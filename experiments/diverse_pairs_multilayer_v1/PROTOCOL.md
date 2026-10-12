@@ -1,8 +1,8 @@
 # Diverse paired certainty: measurement plan
 
-Version 0.1, 11 October 2026. Extraction and primary readout choices are specified
-before research scoring. **The final source split and held-out rewrite recipe
-are not frozen yet. No held-out performance has been measured.**
+Version 0.2, 11 October 2026. Extraction and primary readout choices were specified
+before the 50-pair development diagnostic. **The final source split and held-out
+rewrite recipe are not frozen. No final-test performance has been measured.**
 
 ## What we are testing
 
@@ -32,10 +32,13 @@ Source authors, the GPT-6 Luna rewriter and the frozen Qwen representation model
 have different roles. Qwen reads other models' text; these are not the source
 authors' original activations.
 
-Revision 2 changes only hesitant responses after the user's tone feedback.
-The first packet is archived. All 50 remain pending individual content review;
-general tone approval does not certify each pair. Automatic rules cannot replace
-semantic review. Known errors in source answers are recorded, not silently fixed.
+Revision 2 changed only hesitant responses after the user's tone feedback.
+An agent audit then kept 40 pairs and flagged 10 for targeted correction.
+Revision 3 incorporates those corrections; a separate agent pass accepted all
+50. The same configured model family performed rewriting and QA, so shared style
+artifacts remain possible. **This is agent-assisted QA, not human review.** All
+50 remain pending individual human review, and known source-answer errors are
+recorded rather than silently fixed.
 
 Actual exports from the local review page can be imported with
 `src/import_reviews.py`. It checks the packet and response hashes and randomized
@@ -45,12 +48,12 @@ The proposed pilot quality thresholds are 95% content preservation and 90%
 clear certainty ordering after all 50 have been annotated. Passing them does not
 automatically authorize a larger rewrite budget.
 
-The planned main dataset is about 1,000 independent source groups, roughly
-700/150/150 train/validation/test. All pilot sources and their derivatives stay
-outside final test. Conversation, prompt and near-duplicate groups stay together.
-New test content and a development-held-out rewrite recipe are required; their
-identities and actual recipe text must be frozen before final scores are exposed.
-With only one rewriter, recipe holdout is not cross-rewriter generalization.
+The earlier scale target was about 1,000 independent source groups. The completed
+development diagnostic does **not** justify that expansion: the current rewrite
+recipe is separable by cheap text, NLL and length controls. The next dataset is
+instead a small independent challenge set. All pilot sources and derivatives stay
+outside it; source groups, certainty-cue families and the actual held-out recipe
+must be frozen before its scores are exposed.
 
 ## Exactly which hidden states
 
@@ -100,18 +103,23 @@ layer scores, standardized using training-score means and standard deviations.
 Near-zero score standard deviations contribute zero under the predeclared rule;
 the denominator remains 28. Raw hidden vectors are not averaged across layers.
 
-The implemented lightweight secondary baseline is a mean confident-minus-hedged
-direction after training-feature scaling. It is not the frozen historical v1
-direction. Source-grouped out-of-fold stacking is planned, not implemented;
-in-sample stacking is not an acceptable substitute.
+The implemented secondary baselines are mean confident-minus-hedged direction,
+character TF-IDF, fixed negative mean response NLL and fixed negative response
+length. The mean direction is not the frozen historical v1 direction.
 
-Main evaluation will use group-averaged pair ordering (`score(conf)>score(hedged)`,
-ties 0.5), source-group bootstrap intervals and same-group differences between
-M1/M2. The same train sources and locked natural test pairs will underpin the
-template-versus-diverse 2×2 comparison. Learning curves and lexical, length,
-NLL, shuffled-label and random-direction controls remain planned. Training-only
-scaling and bootstrap utilities are tested on synthetic arrays now; the main
-evaluation runner and final data have not been executed.
+The development diagnostic used five task-stratified folds with one independent
+source pair per group. Pair ordering is `score(conf)>score(hedged)`, with ties
+counted as 0.5. Feature scaling, readout fitting, TF-IDF vocabulary and ensemble
+score scaling are fold-train-only. No test sign selection occurs. Bootstrap
+intervals resample source groups but do not refit the readout.
+
+Layer 14, the equal ensemble, every individual layer and character TF-IDF each
+ordered 50/50 held-out development pairs correctly. Negative mean NLL ordered
+49/50 and negative length 47/50. The ensemble-minus-layer-14 difference was zero.
+These ceiling results establish separability on this selected set but cannot
+identify a preferred layer or information beyond surface cues. Twenty shuffled
+orientation runs were descriptive only and inconclusive for the ensemble.
+See [the development report](reports/DEVELOPMENT_DIAGNOSTIC.md).
 
 ## Bounded engineering check
 
@@ -126,6 +134,15 @@ score final test, or certify the rewrites. Budget: 20 pairs, 20 minutes, batch 1
 caches and writes a failure record; it does not silently change precision or
 device. Runtime estimates exclude rewriting, review and additional baselines.
 
-After human review, the next decision is whether the content-preserving rewrite
-protocol merits a separately budgeted expansion. Readout generalization and
-eventual SDT usefulness remain separate, untested questions.
+## Locked next decision
+
+Do not expand the present recipe or begin SDT loss training. First construct
+approximately 50 new challenge pairs with unseen source groups and cue families.
+Counterbalance which response is longer, vary cue position and composition, and
+obtain blinded content/tone review. Freeze layer 14, the equal ensemble and the
+same surface controls before scoring. Only performance beyond the obvious
+shortcuts would motivate a larger paired dataset.
+
+Even a successful challenge set would validate transferable expressed certainty,
+not evidence-sensitive confidence, correctness, causal control or usefulness as
+an SDT objective. Those remain separate later tests.

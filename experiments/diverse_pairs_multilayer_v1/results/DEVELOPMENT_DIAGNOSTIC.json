@@ -1,0 +1,577 @@
+{
+  "agent_qa": {
+    "accepted": 50,
+    "human_review": "pending",
+    "initial_agent_revisions": 10,
+    "rejected_or_pending": 0,
+    "same_model_family_audit_limitation": true
+  },
+  "all_final_test_sources_scored": false,
+  "ensemble_minus_layer14": {
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "estimate": 0.0
+  },
+  "equal_28_layer_ensemble": {
+    "ci95": [
+      1.0,
+      1.0
+    ],
+    "estimate": 1.0,
+    "groups": 50,
+    "losses": 0,
+    "ties": 0,
+    "wins": 50
+  },
+  "extraction": {
+    "cache_hits": 100,
+    "device": "mps",
+    "dtype": "float16",
+    "elapsed_seconds": 4.318088833009824,
+    "forward_calls": 0
+  },
+  "folds": 5,
+  "layer14": {
+    "ci95": [
+      1.0,
+      1.0
+    ],
+    "estimate": 1.0,
+    "groups": 50,
+    "losses": 0,
+    "ties": 0,
+    "wins": 50
+  },
+  "layers": [
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 1,
+      "losses": 0,
+      "mean_pair_margin": 1.3117462116613083,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 2,
+      "losses": 0,
+      "mean_pair_margin": 1.3764375709157102,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 3,
+      "losses": 0,
+      "mean_pair_margin": 1.4909593417141673,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 4,
+      "losses": 0,
+      "mean_pair_margin": 1.50979862297389,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 5,
+      "losses": 0,
+      "mean_pair_margin": 1.3344626408239129,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 6,
+      "losses": 0,
+      "mean_pair_margin": 1.2904363217458863,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 7,
+      "losses": 0,
+      "mean_pair_margin": 1.3716472064805663,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 8,
+      "losses": 0,
+      "mean_pair_margin": 1.315393515846233,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 9,
+      "losses": 0,
+      "mean_pair_margin": 1.3194054416769376,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 10,
+      "losses": 0,
+      "mean_pair_margin": 1.4163245339567663,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 11,
+      "losses": 0,
+      "mean_pair_margin": 1.3927286779734291,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 12,
+      "losses": 0,
+      "mean_pair_margin": 1.4777531924544105,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 13,
+      "losses": 0,
+      "mean_pair_margin": 1.56557882824284,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 14,
+      "losses": 0,
+      "mean_pair_margin": 1.4985390625177815,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 15,
+      "losses": 0,
+      "mean_pair_margin": 1.4976065030578045,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 16,
+      "losses": 0,
+      "mean_pair_margin": 1.5248592925284046,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 17,
+      "losses": 0,
+      "mean_pair_margin": 1.7585611342148622,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 18,
+      "losses": 0,
+      "mean_pair_margin": 1.9628156356998796,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 19,
+      "losses": 0,
+      "mean_pair_margin": 1.891076809725341,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 20,
+      "losses": 0,
+      "mean_pair_margin": 1.78814243904266,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 21,
+      "losses": 0,
+      "mean_pair_margin": 1.528520783681947,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 22,
+      "losses": 0,
+      "mean_pair_margin": 1.5951997582917752,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 23,
+      "losses": 0,
+      "mean_pair_margin": 1.5073297983374405,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 24,
+      "losses": 0,
+      "mean_pair_margin": 1.4296432510678247,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 25,
+      "losses": 0,
+      "mean_pair_margin": 1.463579699798304,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 26,
+      "losses": 0,
+      "mean_pair_margin": 1.4945155067258096,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 27,
+      "losses": 0,
+      "mean_pair_margin": 1.5727906637582485,
+      "ties": 0,
+      "wins": 50
+    },
+    {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "layer": 28,
+      "losses": 0,
+      "mean_pair_margin": 1.7725718908071622,
+      "ties": 0,
+      "wins": 50
+    }
+  ],
+  "leakage_controls": {
+    "feature_scaling_train_only": true,
+    "group_disjoint_folds": true,
+    "score_scaling_train_only": true,
+    "test_model_selection": false,
+    "test_sign_selection": false
+  },
+  "pair_construction_diagnostics": {
+    "confident_response_equals_source_verbatim": 25,
+    "hedged_contains_confident_verbatim": 6,
+    "hedged_response_longer": 47,
+    "median_hedged_minus_confident_characters": 71.5
+  },
+  "pairs": 50,
+  "response_pooling": "mean ordinary assistant-response tokens",
+  "scientific_status": "not_final_test_evidence",
+  "secondary": {
+    "char_tfidf": {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "losses": 0,
+      "ties": 0,
+      "wins": 50
+    },
+    "constant_tie": {
+      "ci95": [
+        0.5,
+        0.5
+      ],
+      "estimate": 0.5
+    },
+    "fixed_negative_mean_nll": {
+      "ci95": [
+        0.94,
+        1.0
+      ],
+      "estimate": 0.98,
+      "groups": 50,
+      "losses": 1,
+      "ties": 0,
+      "wins": 49
+    },
+    "fixed_negative_response_length": {
+      "ci95": [
+        0.86,
+        1.0
+      ],
+      "estimate": 0.94,
+      "groups": 50,
+      "losses": 3,
+      "ties": 0,
+      "wins": 47
+    },
+    "last_response_token_equal_ensemble": {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "losses": 0,
+      "ties": 0,
+      "wins": 50
+    },
+    "last_response_token_layer14": {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "losses": 0,
+      "ties": 0,
+      "wins": 50
+    },
+    "mean_difference_equal_ensemble": {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "losses": 0,
+      "ties": 0,
+      "wins": 50
+    },
+    "mean_difference_layer14": {
+      "ci95": [
+        1.0,
+        1.0
+      ],
+      "estimate": 1.0,
+      "groups": 50,
+      "losses": 0,
+      "ties": 0,
+      "wins": 50
+    },
+    "prompt_max_abs_pair_difference": 0.0
+  },
+  "shuffled_pair_labels": {
+    "descriptive_not_formal_p_value": true,
+    "equal_ensemble": {
+      "count_at_least_learned": 2,
+      "mean": 0.6050000000000001,
+      "q95": 1.0,
+      "values": [
+        0.46,
+        0.92,
+        0.52,
+        1.0,
+        1.0,
+        0.18,
+        0.06,
+        0.76,
+        0.74,
+        0.98,
+        0.5,
+        0.36,
+        0.46,
+        0.98,
+        0.88,
+        0.3,
+        0.64,
+        0.9,
+        0.06,
+        0.4
+      ]
+    },
+    "layer14": {
+      "count_at_least_learned": 0,
+      "mean": 0.5869999999999999,
+      "q95": 0.98,
+      "values": [
+        0.42,
+        0.9,
+        0.46,
+        0.98,
+        0.98,
+        0.18,
+        0.06,
+        0.66,
+        0.68,
+        0.98,
+        0.56,
+        0.36,
+        0.36,
+        0.98,
+        0.88,
+        0.44,
+        0.7,
+        0.86,
+        0.02,
+        0.28
+      ]
+    },
+    "repeats": 20
+  },
+  "status": "development_diagnostic_complete",
+  "supervision": "agent-assisted QA; same configured model family as rewriter; not human review",
+  "wall_seconds": 32.164265708008315
+}
