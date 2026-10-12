@@ -364,6 +364,12 @@ def _load_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def require_fresh_result_path(path: Path) -> None:
+    """Preserve the one-shot challenge result once it has been written."""
+    if Path(path).exists():
+        raise FileExistsError(f"Challenge result already exists; refusing overwrite: {path}")
+
+
 def _grouped_interval(scores: Any, groups: Any, readouts: Any, seed: int, draws: int) -> dict:
     result = readouts.grouped_bootstrap_accuracy(scores, groups, n_boot=draws, seed=seed)
     delta = scores[:, 0] - scores[:, 1]
@@ -585,6 +591,8 @@ def run(config_path: Path = DEFAULT_CONFIG) -> dict:
     frozen_protocol = validate_frozen_protocol_config(eval_config)
     source_datasets = _validated_source_datasets(eval_config["challenge"].get("source_datasets"))
     base = config_path.parent.parent
+    output = (base / eval_config["output"]["public_results"]).resolve()
+    require_fresh_result_path(output)
     ref_path = (config_path.parent / eval_config["reference_config"]).resolve()
     ref_hash = _sha256_bytes(ref_path.read_bytes())
     if ref_hash != eval_config["reference_config_sha256"]:
@@ -691,7 +699,6 @@ def run(config_path: Path = DEFAULT_CONFIG) -> dict:
         "metrics": metrics,
         "runtime": {"wall_seconds": time.monotonic() - started},
     }
-    output = (base / eval_config["output"]["public_results"]).resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     write_json(output, result)
     return result

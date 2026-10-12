@@ -2,6 +2,7 @@ import copy
 import hashlib
 import json
 import sys
+import tempfile
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -88,6 +89,14 @@ def dev_rows():
 
 
 class ChallengeEvaluationGateTests(unittest.TestCase):
+    def test_completed_challenge_result_cannot_be_overwritten(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "challenge_evaluation.json"
+            evaluator.require_fresh_result_path(output)
+            output.write_text("{}\n", encoding="utf-8")
+            with self.assertRaisesRegex(FileExistsError, "refusing overwrite"):
+                evaluator.require_fresh_result_path(output)
+
     def test_score_affecting_protocol_settings_are_frozen(self):
         import yaml
 
