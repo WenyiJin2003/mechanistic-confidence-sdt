@@ -128,6 +128,51 @@ special. The ensemble's two-point advantage over layer 14 has a paired interval
 of 0–6 points and does not justify preferring the more complex readout for the
 next matched data-scale comparison.
 
+The complete frozen per-layer results are:
+
+| Transformer layer | Correct pairs | Ordering rate | 95% source interval |
+|---:|---:|---:|---:|
+| 1 | 36/50 | 72% | 60–84% |
+| 2 | 38/50 | 76% | 64–88% |
+| 3 | 34/50 | 68% | 54–80% |
+| 4 | 39/50 | 78% | 66–88% |
+| 5 | 38/50 | 76% | 64–88% |
+| 6 | 34/50 | 68% | 54–80% |
+| 7 | 34/50 | 68% | 54–80% |
+| 8 | 41/50 | 82% | 70–92% |
+| 9 | 40/50 | 80% | 68–90% |
+| 10 | 46/50 | 92% | 84–98% |
+| 11 | 47/50 | 94% | 86–100% |
+| 12 | 48/50 | 96% | 90–100% |
+| 13 | 47/50 | 94% | 86–100% |
+| **14 (prespecified primary)** | **47/50** | **94%** | **86–100%** |
+| 15 | 47/50 | 94% | 86–100% |
+| 16 | 46/50 | 92% | 84–98% |
+| 17 | 45/50 | 90% | 82–98% |
+| 18 | 47/50 | 94% | 86–100% |
+| 19 | 48/50 | 96% | 90–100% |
+| 20 | 47/50 | 94% | 86–100% |
+| 21 | 48/50 | 96% | 90–100% |
+| 22 | 48/50 | 96% | 90–100% |
+| 23 | 48/50 | 96% | 90–100% |
+| 24 | 48/50 | 96% | 90–100% |
+| 25 | 46/50 | 92% | 84–98% |
+| 26 | 44/50 | 88% | 78–96% |
+| 27 | 43/50 | 86% | 76–94% |
+| 28 | 44/50 | 88% | 78–96% |
+
+These are the 28 Transformer-block outputs. The embedding state returned before
+the first block is not counted as a Transformer layer. For each layer, the
+ordering rate is
+
+$$
+\frac{\text{pairs where }s_\ell(h_+)>s_\ell(h_-)
+      +0.5\times\text{ties}}
+     {50}.
+$$
+
+There were no ties in this challenge.
+
 Descriptive subgroup results were consistent but small:
 
 - layer 14 achieved 100% on factual explanation and math/logic, and 90% on
