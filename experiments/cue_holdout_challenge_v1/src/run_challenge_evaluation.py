@@ -29,6 +29,8 @@ FROZEN_CUE_FAMILIES = (
     "discourse_level_calibration", "contrastive_commitment",
 )
 FROZEN_DATASETS = ("nvidia/HelpSteer2", "allenai/WildChat-1M")
+FROZEN_REFERENCE_CONFIG = "../../diverse_pairs_multilayer_v1/configs/diverse_pairs_multilayer_v1.yaml"
+FROZEN_REFERENCE_CONFIG_SHA256 = "1c8f857b2ba62d236e3eec55c7647285bc5aa673935ab824b97bc57f835fae9a"
 FROZEN_TFIDF = {
     "analyzer": "char_wb", "ngram_range": [3, 5], "min_df": 2,
     "max_features": 20000, "sublinear_tf": True,
@@ -45,6 +47,9 @@ def validate_frozen_protocol_config(config: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("Unexpected challenge experiment or protocol version")
     if config.get("seed") != 20261012:
         raise ValueError("Challenge evaluation seed differs from the frozen protocol")
+    if (config.get("reference_config") != FROZEN_REFERENCE_CONFIG
+            or config.get("reference_config_sha256") != FROZEN_REFERENCE_CONFIG_SHA256):
+        raise ValueError("Reference readout configuration differs from the frozen protocol")
     challenge = config.get("challenge")
     readout = config.get("readout")
     if not isinstance(challenge, dict) or not isinstance(readout, dict):

@@ -107,6 +107,7 @@ class ChallengeEvaluationGateTests(unittest.TestCase):
         self.assertEqual(frozen["layers"], list(range(1, 29)))
         for section, key, value in (
             (None, "seed", 7),
+            (None, "reference_config_sha256", "0" * 64),
             ("readout", "primary_layer", 13),
             ("readout", "ensemble", "best_challenge_layer"),
             ("readout", "layer_selection_on_challenge", True),
