@@ -53,13 +53,20 @@ def fixture():
 class AssembleValidatedRewritesTests(unittest.TestCase):
     def test_expected_writer_provenance_fields_are_preserved(self):
         sources, writers, audits = fixture()
-        for row in writers:
+        for source, row in zip(sources, writers):
             row.update({"rewriter_model_requested": "gpt-6.1-sol",
                         "reasoning_effort": "medium", "writer_notes": "checked",
-                        "issues": []})
+                        "issues": [], "dataset": source["dataset"]})
         result = assembler.assemble(sources, writers, audits)
         self.assertEqual(result[0]["rewriter_model_requested"], "gpt-6.1-sol")
         self.assertEqual(result[0]["issues"], [])
+        self.assertEqual(result[0]["dataset"], sources[0]["dataset"])
+
+    def test_writer_dataset_must_match_frozen_source_when_present(self):
+        sources, writers, audits = fixture()
+        writers[0]["dataset"] = DATASETS[1] if sources[0]["dataset"] == DATASETS[0] else DATASETS[0]
+        with self.assertRaisesRegex(ValueError, "dataset mismatch"):
+            assembler.assemble(sources, writers, audits)
 
     def test_exact_complete_assembly_preserves_source_and_writer_text(self):
         sources, writers, audits = fixture()

@@ -18,7 +18,7 @@ PRIVATE = BASE / "private_data"
 IDENTITY = ("source_id", "task", "cue_family", "length_direction", "original_response_sha256")
 TEXTS = ("confident_response", "hedged_response")
 WRITER_FIELDS = set(IDENTITY) | set(TEXTS) | {
-    "pair_id", "rewriter_model_requested", "reasoning_effort",
+    "pair_id", "dataset", "rewriter_model_requested", "reasoning_effort",
     "writer_notes", "issues",
 }
 
@@ -79,6 +79,8 @@ def assemble(source_rows: list[dict[str, Any]], writer_rows: list[dict[str, Any]
             raise ValueError(f"Writer notes must be a string for {source_id}")
         if source.get("dataset") not in selector.DATASETS:
             raise ValueError(f"Frozen source has unsupported dataset for {source_id}")
+        if "dataset" in writer and writer.get("dataset") != source.get("dataset"):
+            raise ValueError(f"dataset mismatch for {source_id}")
         if not isinstance(source.get("prompt"), str) or not source["prompt"].strip():
             raise ValueError(f"Frozen source prompt missing: {source_id}")
         if not isinstance(source.get("group_id"), str) or not source["group_id"]:
