@@ -1,25 +1,28 @@
 # Proposed Synthetic Fact Learning Pilot
 
-7 October 2026. **Proposal for discussion; no training has been run.** Data,
-loss settings and decision thresholds must be fixed before an empirical run.
+12 October 2026. **Design starting point; no training has been run.** The
+[cue-holdout challenge](../../experiments/cue_holdout_challenge_v1/RESULTS.md)
+supports advancing the expressed-certainty line to a small controlled pilot:
+the frozen layer-14 readout reached 47/50 on new sources and cue constructions,
+above character TF-IDF (34/50), answer likelihood (30/50) and length (25/50).
 
-**Deferred:** the current priority is to validate a measurement of support for
-a specific answer before optimizing its score during training. This earlier
-proposal is preserved for discussion and is not the current next step.
-See [Evidence-Sensitive Readout v4](EVIDENCE_CONFIDENCE_README_V4.md) and
-[current status](STATUS.md). V4 found a partial support signal but did not pass
-the full confidence validation. A fresh measurement study remains the priority;
-the internal objective below has not been implemented or validated.
+The challenge is still `agent_reviewed_development_only`. A human blind audit
+of its already locked text must precede design freeze, and the pilot requires a
+separate preregistration. The challenge must not be rewritten or used to tune
+the loss. This result supports the measurement's transfer; it does not show
+that optimizing it improves learning. Data, loss settings and decision
+thresholds therefore remain to be fixed before an empirical run.
 
 ## Research question
 
 **Does an expressed-certainty objective help a model learn and retain target
 facts beyond ordinary supervised training and simple additional supervision?**
 
-The [fresh counterfactual study](../../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md)
-did not validate the current readout as evidence-sensitive factual confidence.
-That result leaves its value as a training objective untested. The ordinary
-loss specifies the content; the candidate internal term might influence its
+The [earlier counterfactual study](../../reports/CONFIDENCE_SEPARATION_RESULTS_V3.md)
+did not validate the old v1 readout as evidence-sensitive factual confidence.
+The current readout must therefore retain the narrower expressed-certainty
+name. Its value as a training objective remains untested. The ordinary loss
+specifies the content; the candidate internal term might influence its
 learning. Any benefit must appear in independently measured behavior.
 
 The first study would be **synthetic-fact supervised fine-tuning (SFT) on QA**,
@@ -63,10 +66,12 @@ The simpler new-fact study can validate training mechanics before that extension
 
 ## Candidate objective and extraction
 
-Use one frozen v1 direction and its original representation. A reasonable
-starting candidate is the layer-14 mean over ordinary response-content states;
-its expressed-certainty interpretation is known, and its factual-confidence
-interpretation remains unvalidated. Fix this choice before training.
+Use the layer-14 paired logistic readout fitted on the diverse-pair development
+set and frozen before the challenge evaluation. Its representation is the mean
+over ordinary response-content states, excluding chat-template boundary tokens.
+The cue-holdout result supports an expressed-certainty interpretation; it does
+not validate factual correctness, evidence sensitivity or subjective belief.
+Fix the exact checkpoint and frozen readout artifact before training.
 
 The supplied response should state the target fact neutrally. Do not add
 certainty phrases solely to give the internal-loss condition an easier target.
@@ -77,17 +82,25 @@ A candidate objective with a bounded derivative with respect to its score is:
 
 ```math
 \begin{aligned}
-z_\theta(x,y)&=\frac{v^\top \bar h^{(14)}_\theta(x,y)-\mu_0}{\sigma_0},\\
+\bar h^{(14)}_\theta(x,y)
+&=\operatorname{mean}_{t\in T_y}H^{(14)}_{\theta,t}(x,y),\\
+s_\theta(x,y)
+&=w_{14}^{\top}
+\operatorname{scale}_{\mathrm{dev}}\!\left(\bar h^{(14)}_\theta(x,y)\right),\\
+z_\theta(x,y)
+&=\frac{s_\theta(x,y)-m_{14,\mathrm{dev}}}
+        {r_{14,\mathrm{dev}}},\\
 \mathcal L_{\mathrm{candidate}}&=\operatorname{softplus}(-z_\theta(x,y)),\\
 \mathcal L_B&=\mathcal L_{\mathrm{SFT}}+\lambda\mathcal L_{\mathrm{candidate}}.
 \end{aligned}
 ```
 
-Here v is frozen. Reference mean μ₀ and scale σ₀ must be fixed from training
-data or a predeclared training-only calibration set; neither may use evaluation
-outcomes. Require σ₀ > 0 using a predeclared positive floor. This is a candidate
-design, not a loss specified by Casper or already
-implemented here. Softplus limits the derivative with respect to z, but the
+Here $w_{14}$, the feature scaler, and the development-score mean
+$m_{14,\mathrm{dev}}$ and standard deviation $r_{14,\mathrm{dev}}$ are frozen
+from the 50 development pairs. None may use challenge or training-evaluation
+outcomes. Require $r_{14,\mathrm{dev}}>0$ using a prespecified positive floor.
+This is a candidate design, not a loss specified by Casper or already
+implemented here. Softplus bounds the derivative with respect to $z$, but the
 resulting parameter gradients still depend on the model and normalization.
 
 Freeze the reference statistics and report hidden-state norms and score
