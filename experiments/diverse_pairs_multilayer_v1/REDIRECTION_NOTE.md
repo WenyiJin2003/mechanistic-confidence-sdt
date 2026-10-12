@@ -1,8 +1,12 @@
 # Research direction update
 
 11 October 2026. This note records the priority change that preceded the current
-development diagnostic. For completed results and the updated decision, see
-[reports/DEVELOPMENT_DIAGNOSTIC.md](reports/DEVELOPMENT_DIAGNOSTIC.md).
+development diagnostic. The original handoff remains local because it contains
+private research-communication metadata; this is its public-safe research
+summary. For completed results and the updated decision, see the
+[development diagnostic](reports/DEVELOPMENT_DIAGNOSTIC.md),
+[cue-holdout result](../cue_holdout_challenge_v1/RESULTS.md), and
+[next decision](NEXT_DECISION.md).
 
 The next primary study is **Diverse Paired Certainty + Multi-Layer Readout**.
 It asks whether content-preserving confident/hedged rewrites of diverse existing
@@ -36,10 +40,12 @@ the original certainty-trained readout.
 - Pool ordinary assistant response tokens; cache a final-content-token diagnostic.
   Check the actual last-layer normalization and API indexing before extraction.
 
-The 50-pair development version of this comparison is now complete. It reached a
-ceiling shared by text, NLL and length controls, so the original 1,000-pair scale
-target is deferred. The protocol and final eligible sources still must be frozen
-before any final-test scoring.
+The 50-pair development comparison reached a ceiling shared by text, NLL and
+length controls. Its separate 50-pair cue/recipe-holdout challenge is also
+complete: layer 14 reached 47/50, compared with 34/50 for character TF-IDF,
+30/50 for answer likelihood and 25/50 for length. This supports resuming the
+quality-gated source expansion, but does not complete the planned
+diverse-versus-template comparison or learning curves.
 
 ## Resource and quality boundaries
 
@@ -56,7 +62,8 @@ Until that happens, human_review is pending. Agent review is not human review.
 Templates are an explicit baseline, never a substitute for the main rewrites.
 
 No old generation is rerun, and no language-model training, SDT loss, activation
-steering, paid rewriting or full 1,000-source inference is authorized by this
-preparation stage. The immediate computational stage is a bounded precheck.
+steering or paid rewriting is authorized here. Expansion toward the grouped
+1,000-source target must retain the stated quality and resource gates; it is not
+permission to substitute fixed templates for diverse rewriting.
 
 See [local resources](LOCAL_RESOURCE_ASSESSMENT.md) and [status](STATUS.md).

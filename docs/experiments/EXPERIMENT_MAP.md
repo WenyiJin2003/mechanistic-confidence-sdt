@@ -14,7 +14,8 @@ probe,” this repository uses the following names.
 | 6 | **Evidence-Sensitive Readout v4** | Whether support for a fixed answer transfers across source/template splits and agrees with independent output behavior | Layer 14 **response-content mean**, excluding end marker | New support-versus-contradiction pairs from 96 training records; fixed paired logistic regression, C=0.01 |
 | 7a | **Diverse Paired Certainty + Multi-Layer Development Diagnostic** | Whether same-content certainty wording is decodable across diverse source content, and whether all-layer averaging beats layer 14 | Mean of ordinary assistant-response tokens at each of 28 layers; last response token is secondary | 50 real-source development pairs; five source-disjoint folds; paired logistic readouts fitted within each fold |
 | Current | **Cue/Recipe-Holdout Transfer Challenge** | Whether the frozen development readouts order new same-content pairs built from held-out cue families, beyond text, likelihood and length controls | The same response-token means at layer 14 and all 28 layers | **No challenge fitting.** Development-only scalers and readouts are frozen and applied once to 50 locked pairs |
-| Next | **Controlled synthetic-fact training pilot** | Whether the frozen layer-14 objective improves recall and retention beyond matched controls | Completed-answer states, to be fixed before preregistration | No language-model training has run; human challenge review precedes design freeze |
+| Next | **Matched Diverse-vs-Template Scale Study** | Whether diverse rewriting improves transfer over a fixed-template baseline, and how performance changes with 100/300/700 training sources | The same response-token means at layer 14 and all 28 layers | Not yet run; human review, grouped source expansion and one locked natural test set come first |
+| Later | **Controlled synthetic-fact training pilot** | Whether the frozen layer-14 objective improves recall and retention beyond matched controls | Completed-answer states, to be fixed in a separate preregistration | No language-model training has run; it requires a new decision after the diverse-pair handoff |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 `Paired Confidence v1`, `Frozen Transfer v2`, and `Separation v3`. In particular:
@@ -221,7 +222,8 @@ flowchart LR
     V4["6. Evidence-Sensitive Readout v4<br/>new support labels → behavior validation"]
     D["7a. Diverse paired certainty<br/>development readouts"]
     H["Cue/recipe-holdout challenge<br/>frozen transfer"]
-    Train["Next. Controlled SFT pilot<br/>independent fact recall and retention"]
+    X["Next. Matched diversity/scale study<br/>template control + learning curves"]
+    Train["Later. Controlled SFT pilot<br/>independent fact recall and retention"]
     S0 --> S0B
     S0B --> V1
     V1 --> V2
@@ -231,7 +233,8 @@ flowchart LR
     V3 --> V4
     V1 --> D
     D --> H
-    H -. "human audit + preregistration" .-> Train
+    H --> X
+    X -. "separate decision + preregistration" .-> Train
     V4 -. "separate diagnostic" .-> Train
 ```
 
@@ -251,7 +254,9 @@ limitations.
 V4 is complete: support-versus-contradiction ordering is 71.9%, but omission and
 behavior validation failed. See the [v4 report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
 The cue-holdout challenge is complete: layer 14 reached 94% and the frozen
-ensemble 96%, while the registered text, likelihood and length controls reached
+ensemble 96%, while the prespecified text, likelihood and length controls reached
 68%, 60% and 50%. See the
 [challenge result](../../experiments/cue_holdout_challenge_v1/RESULTS.md).
+The immediate next study is the matched diversity/scale comparison documented
+in the [next decision](../../experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md).
 The dashed arrows remain a proposal boundary; no training experiment has run.

@@ -4,8 +4,8 @@
 the frozen layer-14 readout ordered 47/50 new content-matched certainty pairs,
 compared with 34/50 for character TF-IDF, 30/50 for answer likelihood and
 25/50 for counterbalanced response length. The fixed all-layer ensemble reached
-48/50, but its two-point gain does not justify the added complexity for a first
-training pilot.
+48/50, but its two-point gain does not justify added complexity in the next
+data-scale comparison.
 
 This supports a transferable hidden-state signal for **expressed certainty
 about preserved answer content**. It does not establish subjective belief,
@@ -32,7 +32,8 @@ the [artifact index](../results/README.md) links the original saved outputs.
 | Supplement | Cached geometry and comparator audit | [Results](CONFIDENCE_CORRECTNESS_AUDIT.md) | Reuses Steps 3 and 4 | [Configuration](../configs/confidence_correctness_audit.yaml) |
 | 6 | Evidence-Sensitive Readout v4 | [Results](EVIDENCE_CONFIDENCE_RESULTS_V4.md) | [168 records, supplied responses and actual answers](../datasets/evidence-confidence-v4/README.md) | [Runbook](../docs/experiments/EVIDENCE_CONFIDENCE_README_V4.md) |
 | 7a | Diverse Paired Certainty + Multi-Layer | [Development diagnostic](../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Private development text; aggregate results public | [Study guide](../experiments/diverse_pairs_multilayer_v1/README.md) |
-| Next | Controlled synthetic-fact training pilot | [Design starting point](../docs/experiments/NEXT_EXPERIMENT.md) | To be preregistered after human audit | Not yet run |
+| **Next** | **Matched diversity/scale completion** | **[Decision](../experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | Human review, matched template baseline and scale expansion | Not yet run |
+| Later | Controlled synthetic-fact training pilot | [Downstream proposal](../docs/experiments/NEXT_EXPERIMENT.md) | Separate future dataset | Not authorized or run |
 
 The [experiment map](../docs/experiments/EXPERIMENT_MAP.md) distinguishes the targets,
 token positions, and calculations. The [current status](../docs/experiments/STATUS.md)
@@ -42,8 +43,8 @@ Earlier reports retain their contemporary conclusions. Their suggested next
 measurement studies were completed in v3. V4 now fits a different target on
 fresh training records; it does not replace or relabel the earlier failures.
 The functional training proposal remains untested. The current recommendation
-is to human-audit the locked challenge, then preregister a small four-arm pilot
-whose outcomes are judged independently of the optimized certainty score.
+is to human-audit the locked challenge and complete the handoff's matched
+diversity/scale comparison before deciding whether to preregister that pilot.
 
 The original [v1 preregistration](../PAIRED_CONFIDENCE_PREREGISTRATION_V1.md) and
 [v2 preregistration](../CONFIDENCE_TRANSFER_PREREGISTRATION_V2.md) remain at their

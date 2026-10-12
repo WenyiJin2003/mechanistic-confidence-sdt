@@ -4,7 +4,8 @@
 > **47/50 at layer 14 and 48/50 with the fixed ensemble**, versus 34/50 for
 > character TF-IDF, 30/50 for answer likelihood and 25/50 for length. Read the
 > [current result](../cue_holdout_challenge_v1/RESULTS.md). The development
-> findings below are retained as the reason that challenge was necessary.
+> findings below are retained as the reason that challenge was necessary. The
+> [next decision](NEXT_DECISION.md) records the unfinished handoff scope.
 
 ## Conclusion first
 
@@ -80,7 +81,8 @@ perfect performance on future data.
 | Result and interpretation | [reports/DEVELOPMENT_DIAGNOSTIC.md](reports/DEVELOPMENT_DIAGNOSTIC.md) |
 | Research definition and exact method | [PROTOCOL.md](PROTOCOL.md) |
 | Current progress and next action | [STATUS.md](STATUS.md) |
-| Frozen next challenge | [NEXT_CHALLENGE.md](NEXT_CHALLENGE.md) |
+| Completed challenge design | [NEXT_CHALLENGE.md](NEXT_CHALLENGE.md) |
+| Current next decision | [NEXT_DECISION.md](NEXT_DECISION.md) |
 | Rewriter contract / resource record | [REWRITE_SPEC.md](REWRITE_SPEC.md) / [REWRITE_BUDGET.md](REWRITE_BUDGET.md) |
 | Pinned source identities, coverage and draft checks | [manifests/](manifests/) |
 | All-layer configuration | [configs/diverse_pairs_multilayer_v1.yaml](configs/diverse_pairs_multilayer_v1.yaml) |
@@ -98,12 +100,13 @@ negative diagnostics remain unchanged elsewhere in the repository.
 
 ## Next step
 
-Build about 50 new challenge pairs from unseen source groups and rewrite recipes.
-Counterbalance which response is longer, hold out certainty-cue families, add
-compositional cue cases, and obtain blinded content/tone review. Freeze layer 14,
-the ensemble and all surface baselines before scoring. Passing that test would
-justify expansion; it would still not by itself validate evidence-sensitive
-confidence or authorize SDT training.
+The independent 50-pair challenge is complete and now score-exposed. Do not
+rewrite it or tune against it. Obtain human blind review, then complete the
+handoff's matched diverse-versus-template comparison and 100/300/700-source
+learning curves on one separately locked natural test set. Layer 14 remains the
+primary readout and the equal 28-layer score the prespecified ensemble. See
+[NEXT_DECISION.md](NEXT_DECISION.md). This expansion does not authorize SDT
+training.
 
 ## Reproduce locally
 

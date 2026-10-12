@@ -13,16 +13,19 @@ Character TF-IDF reached 68%, answer likelihood 60% and response length 50%.
 Unlike the original development diagnostic, the hidden-state result therefore
 cannot be explained by those controls alone.
 
-**Research decision:** the project can continue to a small, controlled training
-pilot after human review of the locked challenge. Use the simpler frozen
-layer-14 readout and keep the target name narrow: **expressed certainty about
-preserved answer content**. This result does not establish subjective belief,
-correctness, evidence-sensitive confidence, causality or training benefit.
+**Research decision:** this bounded 50-development / 50-challenge pilot supports
+continuing the diverse-pair study, but it does not complete the full handoff.
+The immediate next step is human review followed by the matched
+diverse-versus-template comparison and 100/300/700-source learning curves. Use
+layer 14 as the simple primary readout and keep the target name narrow:
+**expressed certainty about preserved answer content**. Loss training remains a
+downstream proposal, not the next experiment.
 
 [Current result](experiments/cue_holdout_challenge_v1/RESULTS.md) ·
 [Layer plot](experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png) ·
 [Challenge protocol](experiments/cue_holdout_challenge_v1/README.md) ·
-[Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md)
+[Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
+[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)
 
 ## Historical diagnostic findings
 
@@ -75,7 +78,8 @@ reproducibility. The research sequence is:
 | 6 | Evidence-Sensitive Readout v4 | Can a new support readout transfer across facts and wording, and agree with model behavior? | 71.9% support ordering; missing-information and behavior checks failed | [Report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Data](datasets/evidence-confidence-v4/README.md) | Complete |
 | 7a | Diverse Paired Certainty + Multi-Layer | Is expressed certainty decodable across diverse content? | Hidden states reached 50/50, but text also reached 50/50; an independent challenge was required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
 | **Current** | **Cue/recipe-holdout transfer** | **Does the frozen certainty readout transfer to new sources and cue constructions beyond text, likelihood and length controls?** | **Layer 14: 47/50; ensemble: 48/50; TF-IDF: 34/50; likelihood: 30/50; length: 25/50** | **[Result](experiments/cue_holdout_challenge_v1/RESULTS.md)** | **Development-only evaluation complete** |
-| Next | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Design starting point](docs/experiments/NEXT_EXPERIMENT.md) | Human audit and preregistration first |
+| **Next** | **Matched diversity/scale completion** | **Does diverse rewriting beat a matched template baseline, and how does transfer change from 100 to 300 to 700 training sources?** | **Not yet tested** | **[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **Human audit and data expansion first** |
+| Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
 
 ```mermaid
 flowchart LR
@@ -85,8 +89,8 @@ flowchart LR
     C --> D["Diverse paired certainty<br/>development diagnostic"]
     D --> H["Cue/recipe-holdout<br/>94% at layer 14"]
     E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
-    H --> P["Human audit + controlled<br/>small training pilot"]
-    P -. "training benefit untested" .-> T
+    H --> X["Human audit + matched<br/>diversity/scale study"]
+    X -. "only after a new decision" .-> T
 ```
 
 Steps 1–3 estimate different readouts with different labels and token positions.
@@ -207,7 +211,7 @@ clearer output task, graded or conflicting evidence, and fully crossed behavior
 wording and candidate positions. It must test fresh records and model behavior
 before treating that readout as a confidence loss.
 
-## Step 7: deferred training study
+## Downstream proposal: training study
 
 Run a small **synthetic-fact SFT pilot** with four matched conditions: ordinary
 SFT, SFT plus the frozen readout loss, random-direction controls, and an
@@ -217,10 +221,11 @@ groups. Judge improvement independently of the optimized readout score.
 
 This first pilot would use completed-answer states, matching the current
 readout. Transfer to ordinary document training would need separate testing.
-The [earlier proposal](docs/experiments/NEXT_EXPERIMENT.md) preserves the
-controls and decisions to fix before training. The cue-holdout result now
-supports designing this pilot, but human review and preregistration should
-precede execution. It remains a proposal rather than a completed experiment.
+The [downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) preserves the
+controls and decisions to fix before training. The cue-holdout result supports
+retaining this option, but the [matched diversity/scale study](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)
+and a new execution decision come first. It remains a proposal rather than a
+completed experiment.
 
 The [experiment map](docs/experiments/EXPERIMENT_MAP.md) gives the exact token
 positions, data splits and equations. The [code map](code/README.md) provides

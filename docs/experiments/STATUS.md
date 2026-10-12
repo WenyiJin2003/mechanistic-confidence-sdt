@@ -11,9 +11,11 @@ the hidden-state result.
 
 The result remains development-only: the challenge was reviewed by two blinded
 agents, not humans, and it does not establish subjective belief, correctness,
-evidence-sensitive confidence, causality or training benefit. The next research
-step is human audit followed by design and preregistration of a small matched
-training pilot. No language-model training or steering has been run. See the
+evidence-sensitive confidence, causality or training benefit. It completes a
+bounded 50-development / 50-challenge pilot, not the full diverse-pair handoff.
+The next research step is human audit followed by the matched
+diverse-versus-template comparison and 100/300/700-source learning curves. No
+language-model training or steering has been run. See the
 [current result](../../experiments/cue_holdout_challenge_v1/RESULTS.md) and
 [frozen challenge](../../experiments/cue_holdout_challenge_v1/README.md).
 
@@ -117,9 +119,9 @@ The ordinary training loss supplies the target content. Perfect vector
 orthogonality is not a requirement for a useful additional term.
 
 For the separate evidence-sensitive target, measurement refinement still takes
-priority. For the expressed-certainty target, the cue-holdout transfer result
-now supports designing a controlled pilot after human review. In either case,
-agree the behavioral objective and freeze the protocol before training.
+priority. For the expressed-certainty target, complete the handoff's data and
+scale comparison before considering this functional proposal. In either case,
+agree the behavioral objective and freeze a new protocol before training.
 QA-to-document transfer and K-to-K′ replacement each require their own controls.
 Read the [next-experiment proposal](NEXT_EXPERIMENT.md). It is not yet a
 preregistration. No training or causal intervention has been run.

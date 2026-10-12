@@ -115,5 +115,5 @@ had been inspected when the set was locked.
 The frozen one-shot evaluation is now complete. Layer 14 passed the prespecified
 criterion with 94% ordering accuracy and an 86% lower bootstrap bound. The
 ensemble reached 96%; its two-point advantage over layer 14 does not justify
-the added complexity for a first training pilot. Full controls, limitations and
-next-step recommendations are in [RESULTS.md](RESULTS.md).
+the added complexity for the next matched data-scale comparison. Full controls,
+limitations and next-step recommendations are in [RESULTS.md](RESULTS.md).

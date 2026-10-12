@@ -5,9 +5,9 @@ Start with the [root README](../README.md) for the findings,
 [cue-holdout result](../experiments/cue_holdout_challenge_v1/RESULTS.md)
 for the latest measurement. The frozen layer-14 readout reached 47/50 on new
 sources and cue constructions, compared with 34/50 for character TF-IDF,
-30/50 for answer likelihood and 25/50 for counterbalanced length. Human review
-of the locked challenge is the remaining validation step before a small,
-preregistered training pilot.
+30/50 for answer likelihood and 25/50 for counterbalanced length. This completes
+a bounded pilot, not the full diverse-pair handoff. Human review and a matched
+diverse-versus-template scale study come before any loss-training experiment.
 
 ## Study guide
 
@@ -22,7 +22,8 @@ preregistered training pilot.
 | Supplement | Cached audit | Tested comparator validity, geometry and projections | [Audit](../reports/CONFIDENCE_CORRECTNESS_AUDIT.md) |
 | 6 | Evidence-Sensitive Readout v4 | Completed: 71.9% support ordering; missing-information and behavior checks failed | [Results](../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Runbook](experiments/EVIDENCE_CONFIDENCE_README_V4.md) · [Registered design](experiments/EVIDENCE_CONFIDENCE_V4_PREREGISTRATION.md) |
 | 7a | Diverse Paired Certainty + Multi-Layer | Development readout was separable, but text and length shortcuts required an independent challenge | [Development result](../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) · [Protocol](../experiments/diverse_pairs_multilayer_v1/PROTOCOL.md) |
-| Next | Synthetic-fact training pilot | Human audit, design and preregistration remain; no training has run | [Design starting point](experiments/NEXT_EXPERIMENT.md) |
+| **Next** | **Matched diversity/scale completion** | **Human review, diverse-vs-template comparison and 100/300/700-source learning curves remain** | **[Next decision](../experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** |
+| Later | Synthetic-fact training pilot | Downstream proposal only; no training has run | [Proposal](experiments/NEXT_EXPERIMENT.md) |
 
 Use the [research sequence and methods](experiments/EXPERIMENT_MAP.md) to compare
 the labels, token positions and equations. The [dataset browser](../datasets/README.md)
@@ -35,9 +36,9 @@ shows every question and answer; the [report index](../reports/README.md) and
 
 V3 and v4 are complete; full confidence validation remains open. Historical reports contain
 the interpretation and recommended next steps at the time of each study; use
-[active status](experiments/STATUS.md) for the latest decision. The transfer test
-is complete; the next step is human audit followed by a controlled training
-pilot whose recall and retention outcomes are independent of the optimized score.
+[active status](experiments/STATUS.md) for the latest decision. The bounded
+transfer test is complete; the next step is human audit and completion of the
+handoff's matched diversity/scale study. Loss training remains downstream.
 
 Experiment runbooks, current status, and the experiment map are under `experiments/`.
 Narrative reports are under `reports/` at the repository root. Both immutable

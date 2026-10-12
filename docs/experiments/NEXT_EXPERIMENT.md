@@ -1,6 +1,7 @@
-# Proposed Synthetic Fact Learning Pilot
+# Downstream Proposal: Synthetic Fact Learning Pilot
 
-12 October 2026. **Design starting point; no training has been run.** The
+12 October 2026. **Downstream proposal; it is not the current next experiment,
+and no training has been run.** The
 [cue-holdout challenge](../../experiments/cue_holdout_challenge_v1/RESULTS.md)
 supports advancing the expressed-certainty line to a small controlled pilot:
 the frozen layer-14 readout reached 47/50 on new sources and cue constructions,
@@ -8,10 +9,13 @@ above character TF-IDF (34/50), answer likelihood (30/50) and length (25/50).
 
 The challenge is still `agent_reviewed_development_only`. A human blind audit
 of its already locked text must precede design freeze, and the pilot requires a
-separate preregistration. The challenge must not be rewritten or used to tune
-the loss. This result supports the measurement's transfer; it does not show
-that optimizing it improves learning. Data, loss settings and decision
-thresholds therefore remain to be fixed before an empirical run.
+separate preregistration. Before that decision, complete the handoff's matched
+diverse-versus-template comparison and 100/300/700-source learning curves; see
+the [current decision](../../experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md).
+The challenge must not be rewritten or used to tune the loss. Its result
+supports measurement transfer; it does not show that optimizing the score
+improves learning. Data, loss settings and decision thresholds therefore remain
+to be fixed before any empirical training run.
 
 ## Research question
 

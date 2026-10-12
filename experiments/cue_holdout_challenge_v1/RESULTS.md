@@ -125,8 +125,8 @@ layer 10 and stayed between 90% and 96% through layer 25 before falling to
 86–88% in the final two layers. Layer 14 was fixed in advance; several other
 layers reached 96%, so the result does not make layer 14 mechanistically
 special. The ensemble's two-point advantage over layer 14 has a paired interval
-of 0–6 points and does not justify preferring the more complex readout for a
-small training pilot.
+of 0–6 points and does not justify preferring the more complex readout for the
+next matched data-scale comparison.
 
 Descriptive subgroup results were consistent but small:
 
@@ -165,23 +165,24 @@ Important limits remain:
 ## Research decision
 
 **Continue, using layer 14 as the simplest frozen readout, but keep the target
-name narrow and do not claim a validated general-confidence mechanism.** The
-next step should be a very small, preregistered synthetic-fact training pilot
-after a human blind audit of this already locked challenge. The challenge must
-not be rewritten or used for hyperparameter selection.
+name narrow and do not claim a validated general-confidence mechanism.** This
+50-development / 50-challenge result is a bounded pilot, not completion of the
+full diverse-pair handoff.
 
-The pilot should compare:
+The immediate next experiment is **not loss training**. First:
 
-1. ordinary synthetic-document training;
-2. the same training plus a frozen layer-14 score loss;
-3. a matched random-direction loss;
-4. an output-only confidence or answer-token-weighting control.
+1. obtain human blind review of the already locked challenge;
+2. build the matched diverse-rewrite and fixed-template conditions on identical
+   source groups;
+3. run the prespecified 100/300/700-source learning curves against one locked
+   natural test set;
+4. compare layer 14 with the equal all-layer ensemble using paired intervals.
 
-The main outcomes should be fact recall on new question phrasings, retention
-after matched interference, ordinary likelihood/calibration, and unchanged
-performance on unrelated material. Improvement must be judged independently of
-the score being optimized. Activation steering and larger-scale training remain
-out of scope until that controlled pilot is designed.
+The challenge must not be rewritten or used for hyperparameter selection. A
+four-arm synthetic-fact pilot remains a downstream proposal only. If later
+authorized, it must judge recall and retention independently of the optimized
+score and include ordinary training, random-direction and output-only controls.
+Activation steering and language-model training remain out of scope here.
 
 ## Reproduction and provenance
 
