@@ -1,0 +1,106 @@
+{
+  "agent_review_is_human_review": false,
+  "challenge_pairs_sha256": "88a74c411667aac33b9c6a6467e2a962e3b8ed3b02ca3a856683dd9908b83165",
+  "counts": {
+    "cue_families": {
+      "compositional_polarity": 10,
+      "contrastive_commitment": 10,
+      "discourse_level_calibration": 10,
+      "embedded_stance_predicate": 10,
+      "modal_force_scope": 10
+    },
+    "datasets": {
+      "allenai/WildChat-1M": 15,
+      "nvidia/HelpSteer2": 35
+    },
+    "length_directions": {
+      "confident_longer": 25,
+      "hedged_longer": 25
+    },
+    "pairs": 50,
+    "task_family_cells": {
+      "comparison_analysis|compositional_polarity": 2,
+      "comparison_analysis|contrastive_commitment": 2,
+      "comparison_analysis|discourse_level_calibration": 2,
+      "comparison_analysis|embedded_stance_predicate": 2,
+      "comparison_analysis|modal_force_scope": 2,
+      "factual_explanation|compositional_polarity": 2,
+      "factual_explanation|contrastive_commitment": 2,
+      "factual_explanation|discourse_level_calibration": 2,
+      "factual_explanation|embedded_stance_predicate": 2,
+      "factual_explanation|modal_force_scope": 2,
+      "math_logic|compositional_polarity": 2,
+      "math_logic|contrastive_commitment": 2,
+      "math_logic|discourse_level_calibration": 2,
+      "math_logic|embedded_stance_predicate": 2,
+      "math_logic|modal_force_scope": 2,
+      "programming|compositional_polarity": 2,
+      "programming|contrastive_commitment": 2,
+      "programming|discourse_level_calibration": 2,
+      "programming|embedded_stance_predicate": 2,
+      "programming|modal_force_scope": 2,
+      "summary_judgment|compositional_polarity": 2,
+      "summary_judgment|contrastive_commitment": 2,
+      "summary_judgment|discourse_level_calibration": 2,
+      "summary_judgment|embedded_stance_predicate": 2,
+      "summary_judgment|modal_force_scope": 2
+    },
+    "tasks": {
+      "comparison_analysis": 10,
+      "factual_explanation": 10,
+      "math_logic": 10,
+      "programming": 10,
+      "summary_judgment": 10
+    }
+  },
+  "hashes": {
+    "blind_mapping_sha256": "817f535a1cb2db9c06fafe5b2eaff51dced120d0bcfb297061ddfd6280e1068b",
+    "blind_packet_sha256": "1deb0a6d3a503f6b77a049bf729b62677440651131a5ae734cad5b67f32ec857",
+    "locked_pairs_sha256": "88a74c411667aac33b9c6a6467e2a962e3b8ed3b02ca3a856683dd9908b83165",
+    "reviewer_decisions_sha256": [
+      {
+        "sha256": "82fd883a4e102a2d36964a2ccbc01aba078e9f84cac338c29086cecb032143eb",
+        "type": "agent"
+      },
+      {
+        "sha256": "d0616d54476725c922d21da73724030d81a589fb1fa3341fd1e95c448fabffe6",
+        "type": "agent"
+      }
+    ],
+    "rewrite_inputs_sha256": [
+      "143289241b072f413ccc58856b074151b0ac4b5a70620d114b141fbe7e848939"
+    ]
+  },
+  "human_review": "pending",
+  "independent_reviewer_count": 2,
+  "independent_reviews_complete": true,
+  "locked": true,
+  "pair_count": 50,
+  "review_status": "agent_reviewed_development_only",
+  "reviewer_files": 2,
+  "reviewer_type_counts": {
+    "agent": 2
+  },
+  "reviewer_types": [
+    "agent",
+    "agent"
+  ],
+  "reviewers": [
+    {
+      "blinded": true,
+      "review_status": "passed",
+      "reviewer_id": "reviewer-1-278a6a215a5d",
+      "reviewer_type": "agent"
+    },
+    {
+      "blinded": true,
+      "review_status": "passed",
+      "reviewer_id": "reviewer-2-569414488ec5",
+      "reviewer_type": "agent"
+    }
+  ],
+  "reviews_blinded": true,
+  "scientific_status": "development_only_not_human_validated",
+  "selection_manifest_sha256": "539c17b89573294be2495b132dd1374bf38a6a5ba2e3dd780744800d1e3a8b77",
+  "source_ids_sha256": "ea6e6af944e2e4bb65f6ce69f9d0613a239c9e0aee5107c9b7195d9731c028db"
+}

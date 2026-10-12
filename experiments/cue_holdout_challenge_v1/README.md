@@ -84,15 +84,17 @@ contain code, hashes, aggregate coverage and aggregate results only.
 
 ## Current status
 
-The 50-source inventory is frozen after score-free source curation and
-independent agent QA. The first factual-only rewrite preflight was rejected
-before scoring because it changed content and relied on conspicuous endorsement
-wrappers. Its drafts were discarded.
+The 50-pair challenge is frozen after score-free source curation, mechanical
+validation, cross-batch shortcut screening and two complete independent blind
+reviews. The final set has 10 pairs per task, 10 per cue family and one of each
+length direction in every task-by-family cell. Both reviewers found 50/50
+content preservation, 50/50 intended certainty ordering, no formatting
+failure and no material shortcut concern. Minor concerns remain descriptive
+and did not trigger the preregistered repair gate.
 
-The replacement cross-task preflight uses two sources per task, two per cue
-family and five per length direction. After one pre-scoring repair for a
-repeated contrastive construction, both fresh blinded agent reviewers found
-10/10 content preservation, 10/10 intended certainty ordering and no material
-shortcut or formatting failure. This is development-only agent QA, not human
-review. Rewriting and blind review of the remaining 40 pairs are in progress.
-No challenge activation has been inspected.
+The public lock manifest binds the exact source selection, validated rewrites,
+randomized A/B packet, mapping and two decision files by SHA-256. Review was
+performed by agents, so the set is explicitly marked
+`agent_reviewed_development_only`, not human validated. No challenge activation
+had been inspected when the set was locked. The next and only score-bearing
+step is the frozen one-shot evaluation.
