@@ -1,0 +1,14 @@
+{
+  "revision": 2,
+  "reason": "User requests a clearer hesitant tone; no probe scores were consulted",
+  "sources": 50,
+  "changed_field": "hedged_response",
+  "confident_responses": "frozen",
+  "source_content": "frozen",
+  "rewriter_model_requested": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "human_review": "pending",
+  "stage": "train_development",
+  "archived_revision": "private_data/review_revision_1",
+  "paid_api_calls": 0
+}

@@ -1,0 +1,541 @@
+{
+  "seed": 20261011,
+  "sources": 50,
+  "by_dataset": {
+    "nvidia/HelpSteer2": 12,
+    "allenai/WildChat-1M": 38
+  },
+  "by_task": {
+    "factual_explanation": 13,
+    "math_logic": 10,
+    "programming": 10,
+    "comparison_analysis": 9,
+    "summary_judgment": 8
+  },
+  "by_length": {
+    "long": 26,
+    "medium": 7,
+    "short": 17
+  },
+  "scanned": {
+    "helpsteer2": 1200,
+    "wildchat": 1500
+  },
+  "eligible_pool": 750,
+  "rejected_logged": 1191,
+  "wildchat_native_shards": [
+    "data/train-00010-of-00014.parquet",
+    "data/train-00001-of-00014.parquet",
+    "data/train-00006-of-00014.parquet"
+  ],
+  "wildchat_buffer": 128,
+  "sampling": "bounded mixed-shard buffer shuffle followed by deterministic quota selection; not uniform population sampling",
+  "grouping": "one first-turn response per conversation; exact normalized prompt/response dedup; response 5-gram Jaccard >=0.82 screened across sources",
+  "development_only": true,
+  "final_test_excluded": true,
+  "human_review": "pending",
+  "text_published": false,
+  "elapsed_seconds": 16.094553625007393,
+  "source_records": [
+    {
+      "source_id": "helpsteer2-train-row-12925",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-8b24eff9f2418d9d6f20164ab5267c180bb9fa12475fa7f51c84e6c32f382618",
+      "review_id": "P001",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "694690b75194ac9783b8a7f9d0c8f119ba829b33e117a8487093186beab60d24"
+    },
+    {
+      "source_id": "wildchat-1e8a72b5307eb852ad775ec2e966f391-turn-2020074",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-bfc96a72f3ead2840cce083ae6a92863cedb90aa1c1aa940719cddcfaabd7a48",
+      "review_id": "P002",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "c830a41d8990b557c6267739a7c9928a95485276e26044bb60f108c93c3d52e3"
+    },
+    {
+      "source_id": "wildchat-4f2b61c4f0bb069cd8bcaf2929cb8833-turn-2018958",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-f054fbca49fcef139fc97fe45d41b7d57e6eaf0d71e2befcefc9a5b3acc0fddc",
+      "review_id": "P003",
+      "task": "programming",
+      "length_bin": "long",
+      "original_response_sha256": "546f23dd3baab8cd6d8ebca8d5b53a05086913bae420385204da61349adcee06"
+    },
+    {
+      "source_id": "wildchat-9a34aaf51357deff05b6862b6c452159-turn-2021020",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-2d3f8a35dab0058bb2fc163f9449dd5765712e8eb10ef7abfb52f3290af49cb5",
+      "review_id": "P004",
+      "task": "comparison_analysis",
+      "length_bin": "medium",
+      "original_response_sha256": "bd16fb48a93c6bb3f62f65ac7f4434fafb14d2e5eadde97dd701745b749c92b1"
+    },
+    {
+      "source_id": "wildchat-8166fc066f53e111ea05d4d0f574b6a1-turn-2019848",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-597146935995fe059082ef392df5332ce9fac0dcb60cb7b5faa9c13263fd5d37",
+      "review_id": "P005",
+      "task": "summary_judgment",
+      "length_bin": "short",
+      "original_response_sha256": "fc2d9afd9f934bf273c4eda4ba969ea83b4881f84e1d722aac0b8537ee1976a8"
+    },
+    {
+      "source_id": "helpsteer2-train-row-10945",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-0f4c706aa086151510677f4c28f3b6489ce6d9d3cd20c57cae0b1a52179feea9",
+      "review_id": "P006",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "32fb6a7225ee03308d59670fae5b5de6f7f0b74095633397a37036dd7be2422a"
+    },
+    {
+      "source_id": "wildchat-c92e225772ce6bbe5d442fe1e2a5eefc-turn-2020695",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-7de3c37ea702c355c8dc01283d1c2d7d504b2de4e2cb68f221bdd7d4bac305ad",
+      "review_id": "P007",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "75605147189cc462943e2322b6e999b629ee5aa1f6f68d37947670847757e248"
+    },
+    {
+      "source_id": "wildchat-fc2697854937fbbedd196926846758aa-turn-2019244",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-18daddf9d00a703407d64f8de0321e4d0c180251edd77a15d17c53cc16be6cdf",
+      "review_id": "P008",
+      "task": "programming",
+      "length_bin": "long",
+      "original_response_sha256": "4f613258cd5fa95551ca8814727bbad84272ae8b7e2667c59ecf1de6c1db27cf"
+    },
+    {
+      "source_id": "wildchat-64a1b695be7fa0be354dd37d02b22b8f-turn-2018904",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-a9ff9b2cfd0ef8a80a0e2eeaf2fa498cf34bd6b052a14711afe864b56bd44c3f",
+      "review_id": "P009",
+      "task": "comparison_analysis",
+      "length_bin": "long",
+      "original_response_sha256": "49c0efd91eb8f65460ef84ebf1440dd4c8bb1ae11a670abd3d854ec6a9f52670"
+    },
+    {
+      "source_id": "helpsteer2-train-row-14676",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-79e661433569c9e83df2222c1a2b0cfe4985ae977e645cb6bfeeb654b46e3a3c",
+      "review_id": "P010",
+      "task": "summary_judgment",
+      "length_bin": "medium",
+      "original_response_sha256": "f2628103296e4ac84032a05acb613faadcdcfba257e124bb9b92dd088e75709e"
+    },
+    {
+      "source_id": "wildchat-f906e498ebcdc8d6169e7b1fc3e06c62-turn-2021478",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-46b1e6153bc13af93bc23bb41663c869985cae434754085455aef419147bc6ee",
+      "review_id": "P011",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "ccba046c3b46414dbb635f078021258f2108a8cd71f5b3aab1a42f96730e7fd3"
+    },
+    {
+      "source_id": "wildchat-c3998cac786dddbc5ce0d374d072c84c-turn-2021778",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-44f600b0a58bc526be9251b4608e89fdd4ebba3f64d37830d713085a6a164d16",
+      "review_id": "P012",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "d4865f8b44ab083551c5796e5c155ea86c76d8ef3dcf51b408d2c914e4175cd7"
+    },
+    {
+      "source_id": "wildchat-d8917a1ab91913923244ff315654a437-turn-2022400",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-c062ae44f5061716d6dcd3b537c3ad337fbcf5c96b57ca5483d33519c8f2aa60",
+      "review_id": "P013",
+      "task": "programming",
+      "length_bin": "long",
+      "original_response_sha256": "1cf2d5dd5ec486998c29fe745403b399563690e43241b39a2e220c248b4d9e48"
+    },
+    {
+      "source_id": "helpsteer2-train-row-6613",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-55810a227abcd8d5d9335e2bf92c0a6c6fd7a318add28d2ef443b448e40b4329",
+      "review_id": "P014",
+      "task": "comparison_analysis",
+      "length_bin": "medium",
+      "original_response_sha256": "7c3babda68d095c7f1d1cdb0cfde8110507f5c6e6a9b30e25e42ac6bb6389428"
+    },
+    {
+      "source_id": "wildchat-ed1eb46dca7bc0ac5e270484accc195f-turn-2022475",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-8afb7e98dc76345206b804b09d54780e26363d66a5c8763df03ac6baef5fe677",
+      "review_id": "P015",
+      "task": "summary_judgment",
+      "length_bin": "short",
+      "original_response_sha256": "a1f3d9d419a38938981f0da6af17a29229d98de564862c04dbfe1580c9435b39"
+    },
+    {
+      "source_id": "wildchat-1b5d28ece89f2461ba62d48d9c8034f9-turn-2017823",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-11ec708e553b5f14cde85cae02d4178fcab004c4fed6d5c35c693e9fea37758c",
+      "review_id": "P016",
+      "task": "factual_explanation",
+      "length_bin": "medium",
+      "original_response_sha256": "ecae16f65bbbdebd016540d3f37731c55f8755c2689ba9ed0e728a27be90eaa5"
+    },
+    {
+      "source_id": "wildchat-46377cc794557e29348e06dc112709f2-turn-2020625",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-e7bcd9ae75659750ddb8a4e7ca1ccd886f81c77715a1b8df5ebf9d0a03e0a207",
+      "review_id": "P017",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "aee62efa233689036cdcd8b8b7a3163a76ce0265ec426ed3aaa8707a357870f7"
+    },
+    {
+      "source_id": "helpsteer2-train-row-1808",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-bb57938ee9ba259820c2951f4446ab361da1f9ad6f9eddc89f40b2b82b3bc17b",
+      "review_id": "P018",
+      "task": "programming",
+      "length_bin": "short",
+      "original_response_sha256": "f6eae17d521e55b28f440e6a43a2efd61f64b8480f1d8c1d28fffd91d013ca61"
+    },
+    {
+      "source_id": "wildchat-626deb070cae1ec22a291b791b717c39-turn-2019466",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-9bae6efa1ada9bef0d7c4e0044d5d44d8cc4ddaa39bae81c22787f255f6c004c",
+      "review_id": "P019",
+      "task": "comparison_analysis",
+      "length_bin": "long",
+      "original_response_sha256": "88d4930a72e46ef9aff82944b4631700472a8f447139885ca659349c23adfa60"
+    },
+    {
+      "source_id": "wildchat-f4aa4e9480ca6ff8455434a5bed5a991-turn-2019282",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-6e8061c297dad1d7fa9c7b05bdee6294822192e2ab7677b9d8056080fe1b9ac5",
+      "review_id": "P020",
+      "task": "summary_judgment",
+      "length_bin": "long",
+      "original_response_sha256": "dae27c28c67630f112dc66b1040025a62e5be3183b7efda916b6b7112cdc102f"
+    },
+    {
+      "source_id": "wildchat-5bd90c45fcd19833b8ef87bac642f276-turn-2022139",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-d1f8fd19e8820acdce390c56dca5672e485d9b1ddef36001eb2d5bc49ef0ef06",
+      "review_id": "P021",
+      "task": "factual_explanation",
+      "length_bin": "short",
+      "original_response_sha256": "c335e7bf30247724c6a5d6d8fa5a7de477af07f674de46293d4a9552635b1549"
+    },
+    {
+      "source_id": "helpsteer2-train-row-15135",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-ea9b537226d8686517db26dd4f1f66b8d8ff66007e79b3787d61add0a0bacb67",
+      "review_id": "P022",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "a883f50eeecf29c86a881fdfc5d6bd4376c8d65b28d4f5feac36d6eb994c3bd7"
+    },
+    {
+      "source_id": "wildchat-348eb5ee88832751aef6e6ca804e99d9-turn-2018782",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-bfe9dd96c5c55f347cc838cf4a35ec174bd5243fc57a6c6c08f65bc267c4c284",
+      "review_id": "P023",
+      "task": "programming",
+      "length_bin": "short",
+      "original_response_sha256": "a6380388843ab22499cc67a5d4f5e4588d4a33313b8a3fd84f42ec98b28de1b6"
+    },
+    {
+      "source_id": "wildchat-c068d1a1215da76b62475ad4e1293e48-turn-2018558",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-c6c25eebe94d29b5cf2f82c5633c4b1dd79d3f65dc0b26952926f7f8349a0706",
+      "review_id": "P024",
+      "task": "comparison_analysis",
+      "length_bin": "short",
+      "original_response_sha256": "cfd6cfd43ae56808440f5d87c35ad74ddf8d5648e05b8948cdc4754c20a30974"
+    },
+    {
+      "source_id": "wildchat-b32817a1f159c4e5ffea19706bc4d6b2-turn-2019690",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-41769d5b00e270da10e734803f4a14a66e10a8a898b9141acc8f7269d0bca210",
+      "review_id": "P025",
+      "task": "summary_judgment",
+      "length_bin": "short",
+      "original_response_sha256": "1ff5ba24ae4fc9dd3cfd2f29972a57554650a7e480b03d81bc42b972d4bd4940"
+    },
+    {
+      "source_id": "helpsteer2-train-row-14634",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-6fb71be0720fabeae19f6e8e5a5399a532b7daf6e14ea081a8319fccba2d7364",
+      "review_id": "P026",
+      "task": "factual_explanation",
+      "length_bin": "short",
+      "original_response_sha256": "5485858327f3da8cf73b88d8d588ccb369c9d1f4ff504e961056bb83cf6f8487"
+    },
+    {
+      "source_id": "wildchat-2c13698dea486fdc4ed9a7e3a0f7c89f-turn-2020393",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-5cc4b1c34ce3a5edc8a7889a5115bc0d424cccec72930bfc887b8e0ae5fdd770",
+      "review_id": "P027",
+      "task": "math_logic",
+      "length_bin": "short",
+      "original_response_sha256": "a7d0c66e7198963a212d2c550ca64e3103f9f53c9bf8206afe49d2e86f0a0d03"
+    },
+    {
+      "source_id": "wildchat-53461597cf88b1db0e9bc5eab6e4d18f-turn-2018953",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-2a44af6469223f2e04809ba4b08a3cf7f2c6e31a28467ea164fc195d10ad93c2",
+      "review_id": "P028",
+      "task": "programming",
+      "length_bin": "long",
+      "original_response_sha256": "80c91f2c1d1a79be3e8cdbd0baac21d7ecf9c0c4ab07e9d5955b58b3612d12c6"
+    },
+    {
+      "source_id": "wildchat-07d29eabb95774bb72af6e99d4f80773-turn-2022352",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-b0507d90059e6d370bd9ef0dd9ed352f68a56bfdecba456ff7cefb0e64e91858",
+      "review_id": "P029",
+      "task": "comparison_analysis",
+      "length_bin": "short",
+      "original_response_sha256": "020dc9c60075b5362a1fb92a3ead6c72e1a08329a9fa807ea94e1e1346f8dbb2"
+    },
+    {
+      "source_id": "wildchat-7b01defeb0436747624dbc60da82140e-turn-2019262",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-16b1c729c0521b8ab01b0c47eda4f199f7d16e786198fa334917de64fe139fa2",
+      "review_id": "P030",
+      "task": "summary_judgment",
+      "length_bin": "short",
+      "original_response_sha256": "1469b56e4e1f3a925c0d66d998d0c7198e22d90d8287a962d0d20ca84282f522"
+    },
+    {
+      "source_id": "helpsteer2-train-row-187",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-6a46236b20282af26b748ba5254a58971dc05b6487a5397a176d33e37ae36da7",
+      "review_id": "P031",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "097433ebca56c12010503e096bf074018510a34f29a2866e30807508cda50b4d"
+    },
+    {
+      "source_id": "wildchat-ee408c9fd57dc4268f695096f38ae4f5-turn-2019258",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-13ae25a06ca99140377476eec8a7bf1214bffbbf65575bb51bf6333afb34b37a",
+      "review_id": "P032",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "ed72705261278ea570a19985e310ee5419e76d46c3da8a9df75cd5e4827fab30"
+    },
+    {
+      "source_id": "wildchat-4a60f5826a6a7983d1197993a092c457-turn-2019152",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-30762ef7eaef5666d75cd486ab2d9b7e80634a2a7a43d2c72618620b9528d130",
+      "review_id": "P033",
+      "task": "programming",
+      "length_bin": "long",
+      "original_response_sha256": "d9adf13670794b7c7a07dc6687dce0e7d34f5c99b1f0f138f49977a10998bfa4"
+    },
+    {
+      "source_id": "wildchat-a80bfcbbd4d5b52defb6cd4ddd5f71be-turn-2022863",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-c31e41dab22bef3c4d505e6eb3ddcf4b3f10b88acda57da0010ad3f65fe00898",
+      "review_id": "P034",
+      "task": "comparison_analysis",
+      "length_bin": "short",
+      "original_response_sha256": "82e1c6b510308c8474578b952b2c925031cdb6e255b39c857816918392be4b9f"
+    },
+    {
+      "source_id": "helpsteer2-train-row-7517",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-9601fce0af44ad228e258d83979e66eaabc0bc7148526f9b6419392205949800",
+      "review_id": "P035",
+      "task": "summary_judgment",
+      "length_bin": "long",
+      "original_response_sha256": "1a9db40a6a33080a6c288c950b5b42525f1ce7f49ee1ff317a00bfc0b4a707c2"
+    },
+    {
+      "source_id": "wildchat-fc9a85237006a5ed915452182ef8ae1b-turn-2018377",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-70f6170f1a5e3d0264cb0e15f4dca4eaaf5bb1bd0af108a4b200cc271e62d534",
+      "review_id": "P036",
+      "task": "factual_explanation",
+      "length_bin": "short",
+      "original_response_sha256": "06d77b6d00fe97fd136288b7242e3670e44e5958448b8b43fa73fbbefb5945f7"
+    },
+    {
+      "source_id": "wildchat-7856c9708276efd81c1702b2709718f7-turn-2020715",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-10ea06ea85ee978235e1994350b4725960ad81e7c0ec686e999478ad120e91e5",
+      "review_id": "P037",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "06e3b4c3ada64e0cadd52c105ff06cd9217baa991e52e1c20e943430a05ed71c"
+    },
+    {
+      "source_id": "wildchat-414fd5db34314b0fa7187d578538bfda-turn-2022187",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-4fa75f7abc691b990ee54fe66bb38bdc123ee251a1f44b87b5225d236e215cf1",
+      "review_id": "P038",
+      "task": "programming",
+      "length_bin": "medium",
+      "original_response_sha256": "4a2e8443f51e00fcf4475908ac486f9b85f543f38b9bdbe7eec1e68a31c7d21f"
+    },
+    {
+      "source_id": "helpsteer2-train-row-1501",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-3d47075f83c8945db6c56ca2efeccaa191f398cacc0bfb3ca15e4fef5c831460",
+      "review_id": "P039",
+      "task": "comparison_analysis",
+      "length_bin": "long",
+      "original_response_sha256": "126b5a78160fa53d9e141b7f8560c84f2ce75bf458d4c4ac9fad7e318ce2cf40"
+    },
+    {
+      "source_id": "wildchat-728f8a28fe8d41e3b3cbcf2fc25cb185-turn-2017940",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-2917dc9bbd41514e912c1f43e31f0ffa0bc6e3c189f6e13da264daf27a804f30",
+      "review_id": "P040",
+      "task": "summary_judgment",
+      "length_bin": "long",
+      "original_response_sha256": "32e6199075dad04e09fbf94319928c1d2d6664630b6c6d27bb08093bda748568"
+    },
+    {
+      "source_id": "wildchat-572bee433bfd07797b95bf7dffa9d614-turn-2021297",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-bb87bb4b884daddf6210ccff930474b76e61606d94dae06bebbba21f35e5790f",
+      "review_id": "P041",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "4dfa73ecf7b29b964803f791f6778d992835213edf5aa291c698ac7b76182ca6"
+    },
+    {
+      "source_id": "wildchat-9badb7940798c39e7b7fec9ec7350238-turn-2020212",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-30e30670c9aabb524b845793a6235ebae8f90d68f9605c691c4076a68a105dbb",
+      "review_id": "P042",
+      "task": "math_logic",
+      "length_bin": "long",
+      "original_response_sha256": "87545574ba29300c40f432468489e59b86f1d97712cc110c60cc17bad302c658"
+    },
+    {
+      "source_id": "helpsteer2-train-row-14979",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-213d45137b7ab9daabf01c1115aa255c0f9bc464cad05254ae17422f77161a11",
+      "review_id": "P043",
+      "task": "programming",
+      "length_bin": "short",
+      "original_response_sha256": "268d5cc023ddc36d3862d253f93a14b7e8d93953e01c548b3114f997c6a5a8f3"
+    },
+    {
+      "source_id": "helpsteer2-train-row-16784",
+      "dataset": "nvidia/HelpSteer2",
+      "dataset_revision": "990b2711a36180dd19d9c94b8627844866f8982a",
+      "group_id": "group-be3057a994ce1e23d6853efa64bb62f53029f097d8a207d8b666db347bda994a",
+      "review_id": "P044",
+      "task": "comparison_analysis",
+      "length_bin": "short",
+      "original_response_sha256": "8a44d8cdeecd195f2733afa01fc0b5eb08b9edd70d5461a007707950502fe51f"
+    },
+    {
+      "source_id": "wildchat-f26def60a94c6f15dbc6e9b6832d741c-turn-2023179",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-24bae2dbc14c1c039bce73fee2a209733b5fb589978add1028d3331c046972e6",
+      "review_id": "P045",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "a8ba016f7283fee2a12018ea8dc51879d10fa0cfbd3a59ce73c5db78e6c770b8"
+    },
+    {
+      "source_id": "wildchat-fa8cd5700c41d89354f0c4e5dd463d6a-turn-2020790",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-823094fafa2c13d803f1d5fca101ef3fb7e9eda58999fec9cc4d97b584422545",
+      "review_id": "P046",
+      "task": "factual_explanation",
+      "length_bin": "short",
+      "original_response_sha256": "2ba109d58ff6192bc26d7ecd84d5e43e7add8005c8e899abb2fa987380edb47d"
+    },
+    {
+      "source_id": "wildchat-3512ea4fa99b6d6bb81403736766a411-turn-2019497",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-e1b959a08c7da41f9aa8796dbdd4971ebdb94ee0407aea93570001b03afb8dc2",
+      "review_id": "P047",
+      "task": "math_logic",
+      "length_bin": "short",
+      "original_response_sha256": "2ef82eaf81ee0e5adb272f70ccf177148dc0ae58ca3716e6a9b991bece92a0fe"
+    },
+    {
+      "source_id": "wildchat-7970f8bc20dfaa800fd6a9ea9a5ccfbf-turn-2020562",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-ca7c86cd441dfc611cd81867a5851dc8d4a759ddcedc8669a837a0d11912e48e",
+      "review_id": "P048",
+      "task": "programming",
+      "length_bin": "medium",
+      "original_response_sha256": "b357e9767a19c9baf20ef93f0d9c83eb85f80f5299e78dd2de377711704ccdfe"
+    },
+    {
+      "source_id": "wildchat-25b3a6cd4c019c394c9cd7ce4154396e-turn-2021104",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-0b3a592b316141d11fa20e6d5d193a59da3bc8fea42c5dff7dac8a5c37d5f084",
+      "review_id": "P049",
+      "task": "factual_explanation",
+      "length_bin": "long",
+      "original_response_sha256": "3622a3d0daf8cdb64f8ca704b07ed7d9caeea0d0e1e7f26e651c104e653eecdc"
+    },
+    {
+      "source_id": "wildchat-309f203107e150b72ab8d07894f5abeb-turn-2019869",
+      "dataset": "allenai/WildChat-1M",
+      "dataset_revision": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+      "group_id": "group-71cf271787d35efdf42d51b463f7221a38f2fcd4f52a02df384f21b5303f9ddd",
+      "review_id": "P050",
+      "task": "factual_explanation",
+      "length_bin": "medium",
+      "original_response_sha256": "730985abdbde81c5d20d340e9e7abbbf5e661509ce51b661ea7c550056871479"
+    }
+  ]
+}

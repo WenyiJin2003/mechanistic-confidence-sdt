@@ -1,0 +1,445 @@
+{
+  "actual_token_range": [
+    94,
+    729
+  ],
+  "all_pooled_states_finite": true,
+  "cache_hits": 0,
+  "cache_resume": {
+    "cache_hits": 40,
+    "exact_arrays": true,
+    "forward_calls": 0,
+    "seconds": 2.4390291669988073
+  },
+  "device": "mps",
+  "dtype": "float16",
+  "elapsed_seconds": 28.895162792003248,
+  "final_test_scored": false,
+  "forward_calls": 41,
+  "forward_timings": [
+    {
+      "padded_tokens": 108,
+      "seconds": 0.47684262500843033,
+      "tokens": 94
+    },
+    {
+      "padded_tokens": 108,
+      "seconds": 0.19614054099656641,
+      "tokens": 108
+    },
+    {
+      "padded_tokens": 143,
+      "seconds": 0.2645360000024084,
+      "tokens": 125
+    },
+    {
+      "padded_tokens": 143,
+      "seconds": 0.24655104201519862,
+      "tokens": 143
+    },
+    {
+      "padded_tokens": 146,
+      "seconds": 0.25821374999941327,
+      "tokens": 130
+    },
+    {
+      "padded_tokens": 146,
+      "seconds": 0.25418045799597166,
+      "tokens": 146
+    },
+    {
+      "padded_tokens": 216,
+      "seconds": 0.32857874999172054,
+      "tokens": 204
+    },
+    {
+      "padded_tokens": 216,
+      "seconds": 0.34156062500551343,
+      "tokens": 216
+    },
+    {
+      "padded_tokens": 247,
+      "seconds": 0.358900041988818,
+      "tokens": 228
+    },
+    {
+      "padded_tokens": 247,
+      "seconds": 0.3474885420000646,
+      "tokens": 247
+    },
+    {
+      "padded_tokens": 277,
+      "seconds": 0.41530087499995716,
+      "tokens": 270
+    },
+    {
+      "padded_tokens": 277,
+      "seconds": 0.4186269999772776,
+      "tokens": 277
+    },
+    {
+      "padded_tokens": 306,
+      "seconds": 0.447666666994337,
+      "tokens": 283
+    },
+    {
+      "padded_tokens": 306,
+      "seconds": 0.444825792015763,
+      "tokens": 306
+    },
+    {
+      "padded_tokens": 335,
+      "seconds": 0.5557663329818752,
+      "tokens": 319
+    },
+    {
+      "padded_tokens": 335,
+      "seconds": 0.4987930830102414,
+      "tokens": 335
+    },
+    {
+      "padded_tokens": 368,
+      "seconds": 0.5343389170011505,
+      "tokens": 342
+    },
+    {
+      "padded_tokens": 368,
+      "seconds": 0.5255444590002298,
+      "tokens": 368
+    },
+    {
+      "padded_tokens": 380,
+      "seconds": 0.5659619589860085,
+      "tokens": 350
+    },
+    {
+      "padded_tokens": 380,
+      "seconds": 0.5864551249833312,
+      "tokens": 380
+    },
+    {
+      "padded_tokens": 403,
+      "seconds": 0.595781292009633,
+      "tokens": 403
+    },
+    {
+      "padded_tokens": 403,
+      "seconds": 0.5849392079981044,
+      "tokens": 344
+    },
+    {
+      "padded_tokens": 416,
+      "seconds": 0.5885875409876462,
+      "tokens": 403
+    },
+    {
+      "padded_tokens": 416,
+      "seconds": 0.5905814169964287,
+      "tokens": 416
+    },
+    {
+      "padded_tokens": 432,
+      "seconds": 0.6510393749922514,
+      "tokens": 432
+    },
+    {
+      "padded_tokens": 432,
+      "seconds": 0.6385815410176292,
+      "tokens": 414
+    },
+    {
+      "padded_tokens": 445,
+      "seconds": 0.6452417079999577,
+      "tokens": 428
+    },
+    {
+      "padded_tokens": 445,
+      "seconds": 0.6617021249840036,
+      "tokens": 445
+    },
+    {
+      "padded_tokens": 447,
+      "seconds": 0.6516419170075096,
+      "tokens": 438
+    },
+    {
+      "padded_tokens": 447,
+      "seconds": 0.6429183330037631,
+      "tokens": 447
+    },
+    {
+      "padded_tokens": 462,
+      "seconds": 0.7024111250066198,
+      "tokens": 462
+    },
+    {
+      "padded_tokens": 462,
+      "seconds": 0.679304166988004,
+      "tokens": 353
+    },
+    {
+      "padded_tokens": 564,
+      "seconds": 0.8539154159952886,
+      "tokens": 547
+    },
+    {
+      "padded_tokens": 564,
+      "seconds": 0.8424445000127889,
+      "tokens": 564
+    },
+    {
+      "padded_tokens": 593,
+      "seconds": 0.9191332919872366,
+      "tokens": 572
+    },
+    {
+      "padded_tokens": 593,
+      "seconds": 0.9016725420078728,
+      "tokens": 593
+    },
+    {
+      "padded_tokens": 633,
+      "seconds": 0.9611850420187693,
+      "tokens": 628
+    },
+    {
+      "padded_tokens": 633,
+      "seconds": 0.9390310000162572,
+      "tokens": 633
+    },
+    {
+      "padded_tokens": 729,
+      "seconds": 1.1113588330044877,
+      "tokens": 719
+    },
+    {
+      "padded_tokens": 729,
+      "seconds": 1.0937889159831684,
+      "tokens": 729
+    }
+  ],
+  "forward_tokens_per_second": 636.3647156440495,
+  "generation_calls": 0,
+  "human_review": "pending",
+  "layer_convention": {
+    "embedding_index": 0,
+    "implementation": "Transformers Qwen2 hidden_states API; no hooks replace extraction",
+    "indices_1_to_penultimate": "block outputs after blocks 1 through 27",
+    "last_index": 28,
+    "last_state": "final block output after model RMSNorm",
+    "selected_indices": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ]
+  },
+  "max_observed_mps_driver_bytes": 4472913920,
+  "max_prompt_state_difference": 0.0,
+  "new_input_tokens": 14841,
+  "original_packet_changed": false,
+  "padding_check": {
+    "extra_tokens": 7,
+    "max_abs_state_difference": 0.0,
+    "passed": true,
+    "performed": true,
+    "seconds": 0.21494220799650066,
+    "sequence_nll_difference": 0.0
+  },
+  "pairs": 20,
+  "peak_process_rss_bytes": 2915303424,
+  "phase": "engineering_only",
+  "pooled_uncompressed_bytes": 10321920,
+  "positions": [
+    "response_mean",
+    "final_response_token",
+    "final_prompt_token"
+  ],
+  "prompt_ids_identical_within_source": true,
+  "representation_frozen": true,
+  "response_token_range": [
+    71,
+    422
+  ],
+  "review_ids": [
+    "P045",
+    "P016",
+    "P039",
+    "P040",
+    "P010",
+    "P044",
+    "P021",
+    "P017",
+    "P033",
+    "P014",
+    "P028",
+    "P030",
+    "P020",
+    "P001",
+    "P037",
+    "P026",
+    "P007",
+    "P035",
+    "P023",
+    "P024"
+  ],
+  "rough_forward_budget": {
+    "limitations": "40 responses and SDPA timing do not capture all nonlinear length effects or memory pressure; benchmark is not population-random",
+    "scope": "2000 responses only; excludes template baseline, rewriting and review",
+    "token_linear_minutes_q25_to_q75": [
+      13.697595816331106,
+      23.820197695895107
+    ]
+  },
+  "rows": 40,
+  "scientific_probe_fitted": false,
+  "selection": "20 evenly spaced ranks of current full-input lengths; fixed before forward",
+  "settings": {
+    "cache_dtype": "float16",
+    "chat_template_sha256": "2e2d2512cfe46af53dc1eed45368ecaab26ac4461c480e6b69fe571cf0ceaa75",
+    "device": "mps",
+    "dtype": "float16",
+    "implementation_sha256": "cee9f9613cfcc1098dd21785c5f17052eea8bd1fe7860cd0df06d43c2932f4d5",
+    "layer_convention": {
+      "embedding_index": 0,
+      "implementation": "Transformers Qwen2 hidden_states API; no hooks replace extraction",
+      "indices_1_to_penultimate": "block outputs after blocks 1 through 27",
+      "last_index": 28,
+      "last_state": "final block output after model RMSNorm",
+      "selected_indices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ]
+    },
+    "model": {
+      "attention": "sdpa",
+      "auxiliary_pooling": "final_response_token",
+      "end_of_turn_token": "<|im_end|>",
+      "expected_hidden_size": 1536,
+      "expected_num_layers": 28,
+      "id": "Qwen/Qwen2.5-1.5B-Instruct",
+      "layers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "local_files_only": true,
+      "max_input_tokens": 1024,
+      "max_response_tokens": 512,
+      "negative_control": "final_prompt_token",
+      "primary_pooling": "response_mean",
+      "quantized": false,
+      "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+      "system_prompt": "You are a helpful assistant."
+    },
+    "model_config_sha256": "98d2ff8cc47488d08a2b0b3acf4eb99ef210779b42bd48605f6b8e36acdbf670",
+    "padding": "right; same padded length within each source",
+    "positions": [
+      "response_mean",
+      "final_response_token",
+      "final_prompt_token"
+    ],
+    "tokenizer_config_sha256": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+    "tokenizer_file_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "torch": "2.14.0",
+    "transformers": "4.57.6",
+    "version": 1,
+    "weight_sha256": "dd924a11b4c220f385b51ffa522daea7c9f3d850e31b162bb5661df483c6d3ee",
+    "weight_size_bytes": 3087467144
+  },
+  "settings_sha256": "636f0513795e9ed72f0c0b65f50d91e614bfb2c624d9e20ec13dd169146d5138",
+  "shape": [
+    40,
+    28,
+    3,
+    1536
+  ],
+  "source_coverage": {
+    "allenai/WildChat-1M": 16,
+    "nvidia/HelpSteer2": 4
+  },
+  "status": "passed",
+  "task_coverage": {
+    "comparison_analysis": 2,
+    "factual_explanation": 8,
+    "math_logic": 3,
+    "programming": 2,
+    "summary_judgment": 5
+  },
+  "total_elapsed_seconds": 31.62333766699885
+}

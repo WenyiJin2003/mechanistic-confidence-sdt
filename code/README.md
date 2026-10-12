@@ -5,6 +5,7 @@ This is the code entry point. Questions and answers are under
 
 | Step | Experiment | Implementation | Run entry point | Configuration / instructions |
 |---:|---|---|---|---|
+| Current | Diverse Paired Certainty + Multi-Layer | [extraction and readouts](../experiments/diverse_pairs_multilayer_v1/src/) | [run_development_diagnostic.py](../experiments/diverse_pairs_multilayer_v1/src/run_development_diagnostic.py) | [Study guide](../experiments/diverse_pairs_multilayer_v1/README.md), [config](../experiments/diverse_pairs_multilayer_v1/configs/diverse_pairs_multilayer_v1.yaml) |
 | 1 | Stage 0: prompt-state semantic uncertainty | [pipeline](../stage0/pipeline.py), [stability](../stage0/stability.py), [label sampling](../stage0/label_stability.py), [direction audit](../stage0/direction_stability.py) | [run_stage0.py](../scripts/run_stage0.py) | [Runbook](../docs/experiments/README_STAGE0.md), [configs](../configs/) |
 | 2 | Stage 0B: answer-state semantic uncertainty | [answer_state.py](../stage0/answer_state.py) | [run_answer_state_probe.py](../scripts/run_answer_state_probe.py) | [Configuration](../configs/stage0b_qwen15b_answer_state.yaml) |
 | 3 | Paired Confidence v1 | [data](../confidence_pilot/data_validation.py), [extraction](../confidence_pilot/extract_activations.py), [analysis](../confidence_pilot/analyze_pairs.py) | [run_paired_confidence_pilot.py](../scripts/run_paired_confidence_pilot.py) | [Runbook](../docs/experiments/PAIRED_CONFIDENCE_README.md), [config](../configs/paired_confidence_phase_b.yaml) |

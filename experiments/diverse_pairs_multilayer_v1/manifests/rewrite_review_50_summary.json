@@ -1,0 +1,66 @@
+{
+  "pairs": 50,
+  "rewritten_responses": 100,
+  "rewriter_model": "gpt-6-luna",
+  "invocation": "current_codex_session_subagent",
+  "human_review": "pending",
+  "independent_paid_api_calls": 0,
+  "model_revision": null,
+  "automatic_flags_count": 3,
+  "flagged_review_ids": [
+    "P002",
+    "P008",
+    "P022"
+  ],
+  "flags_by_type": {
+    "Source equations yield an intersection different from the stated graph point; retained the source's stated quantities and conclusion without correction.": 1,
+    "Source recommendations contain questionable tracker and identity-assignment logic; retained without substantive correction.": 1,
+    "Source contains internally conflicting claims about unrestricted capability and limitations; retained those claims as given.": 1
+  },
+  "tasks": {
+    "factual_explanation": 20,
+    "math_logic": 9,
+    "programming": 6,
+    "comparison_analysis": 6,
+    "summary_judgment": 9
+  },
+  "sources": {
+    "allenai/WildChat-1M": 38,
+    "nvidia/HelpSteer2": 12
+  },
+  "source_response_token_proxy": 13420,
+  "rewrite_response_token_proxy": 26375,
+  "token_proxy_model": "Qwen2.5 tokenizer; not OpenAI billable tokens",
+  "packet_sha256": "d89f8cc18775d1a4eaa325b997ed19bf3944f327e93826a117de102ff49ae258",
+  "confidence_readout_fitted": false,
+  "representation_forward_calls": 0,
+  "text_published": false,
+  "review_revision": 3,
+  "confident_responses_unchanged": true,
+  "initial_review_preserved": true,
+  "agent_assisted_qa": true,
+  "agent_qa_is_human_review": false,
+  "targeted_agent_qa_corrections": 10,
+  "most_common_hedged_openings": [
+    [
+      "i m not fully certain",
+      12
+    ],
+    [
+      "i am not fully certain",
+      4
+    ],
+    [
+      "i may not have the",
+      3
+    ],
+    [
+      "i m not entirely certain",
+      3
+    ],
+    [
+      "i can t be certain",
+      2
+    ]
+  ]
+}

@@ -1,8 +1,13 @@
 # Research Reports
 
-**Start with the [v4 result](EVIDENCE_CONFIDENCE_RESULTS_V4.md):** a new probe
-detects contextual support at 71.9% on unseen facts and wording, but does not
-pass missing-information and behavior validation. The
+**Start with the [active development result](../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md):**
+layer 14 and a 28-layer ensemble both ordered 50/50 diverse certainty pairs,
+but character TF-IDF also reached 50/50 and length reached 47/50. The current
+recipe is therefore not ready to scale or use as a training-loss target.
+
+The earlier [v4 result](EVIDENCE_CONFIDENCE_RESULTS_V4.md) found contextual
+support ordering at 71.9% on unseen facts and wording, but did not pass
+missing-information and behavior validation. The
 [v3 result](CONFIDENCE_SEPARATION_RESULTS_V3.md) explains why the old certainty
 directions needed a different measurement. Training remains deferred.
 
@@ -12,6 +17,7 @@ the [artifact index](../results/README.md) links the original saved outputs.
 
 | Step | Experiment | Report | Browse questions and answers | Execution guide |
 |---:|---|---|---|---|
+| Current | Diverse Paired Certainty + Multi-Layer | [Development result](../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Private development text; aggregate results public | [Active study](../experiments/diverse_pairs_multilayer_v1/README.md) |
 | 1–2 | Stage 0 and 0B semantic uncertainty | [Results](RESULTS_STAGE0.md) | [Generated answers](../datasets/stage0/README.md) | [Runbook](../docs/experiments/README_STAGE0.md) |
 | 3 | Paired Confidence v1 | [Results](PAIRED_CONFIDENCE_RESULTS_V1.md) | [1,440 response variants](../datasets/paired-confidence-v1/README.md) | [Runbook](../docs/experiments/PAIRED_CONFIDENCE_README.md) |
 | 4 | Frozen Transfer v2 | [Results](CONFIDENCE_TRANSFER_RESULTS_V2.md) | [480 responses](../datasets/frozen-transfer-v2/README.md) | [Runbook](../docs/experiments/CONFIDENCE_TRANSFER_README_V2.md) |
