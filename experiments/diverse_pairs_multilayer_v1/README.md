@@ -1,5 +1,11 @@
 # Diverse paired certainty and multi-layer readouts
 
+> **Follow-up completed:** the independent cue/recipe-holdout challenge reached
+> **47/50 at layer 14 and 48/50 with the fixed ensemble**, versus 34/50 for
+> character TF-IDF, 30/50 for answer likelihood and 25/50 for length. Read the
+> [current result](../cue_holdout_challenge_v1/RESULTS.md). The development
+> findings below are retained as the reason that challenge was necessary.
+
 ## Conclusion first
 
 **On the 50-pair development set, layer 14 and the equal 28-layer ensemble both
@@ -12,9 +18,10 @@ also scored 50/50, negative mean NLL scored 49/50, and response length scored
 pipeline, but are too easy to separate internal confidence from wording and
 length shortcuts.
 
-**Decision:** do not scale this recipe or train an SDT confidence loss. First
-build a small, independent, length-counterbalanced challenge set with held-out
-certainty wording. See the [development report](reports/DEVELOPMENT_DIAGNOSTIC.md).
+**Decision at this stage:** do not scale this recipe or train an SDT confidence
+loss before an independent, length-counterbalanced challenge. That follow-up is
+now complete; see the link above. This section records the earlier development
+decision and [development report](reports/DEVELOPMENT_DIAGNOSTIC.md).
 
 ## Research question and method
 

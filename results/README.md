@@ -8,9 +8,20 @@ For readable tables of questions, answers, and response variants, open the
 [dataset browser](../datasets/README.md). The [report index](../reports/README.md)
 links the narrative findings and execution guides for each experiment.
 
-## Current diverse-pair development diagnostic
+## Current cue-holdout transfer result
 
-The active study keeps its aggregate artifacts beside its isolated code and
+The frozen one-shot evaluation is saved with the isolated challenge protocol:
+[aggregate metrics](../experiments/cue_holdout_challenge_v1/results/challenge_evaluation.json),
+[layer figure](../experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png),
+[interpretation](../experiments/cue_holdout_challenge_v1/RESULTS.md), and
+[locked-set hashes](../experiments/cue_holdout_challenge_v1/manifests/locked_pairs_freeze_manifest.json).
+Layer 14 reached 47/50, the fixed ensemble 48/50, character TF-IDF 34/50,
+answer likelihood 30/50 and length 25/50. Private source text, rewrites,
+review packets and activation caches are intentionally excluded from Git.
+
+## Parent diverse-pair development diagnostic
+
+The preceding study keeps its aggregate artifacts beside its isolated code and
 protocol: [metrics](../experiments/diverse_pairs_multilayer_v1/results/DEVELOPMENT_DIAGNOSTIC.json),
 [layer figure](../experiments/diverse_pairs_multilayer_v1/results/DEVELOPMENT_LAYER_COMPARISON.png),
 and [interpretation](../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md).

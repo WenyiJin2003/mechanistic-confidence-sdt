@@ -1,17 +1,21 @@
 # Project Status
 
-**Research priority update, 11 October 2026:** primary work now targets diverse,
-content-preserving confident/hedged response pairs and a same-data comparison
-of layer 14 and multi-layer readouts. The earlier evidence-support results are
-diagnostics, not prerequisites for constructing the new paired dataset.
-The first 50 development pairs have now passed agent-assisted QA and the
-development comparison is complete; human review remains pending. Layer 14 and
-the equal 28-layer ensemble both ordered 50/50 pairs, but character TF-IDF also
-ordered 50/50 and length ordered 47/50. The dataset is therefore too easy to
-support scale-up or a confidence-loss experiment. No language-model training or
-steering is authorized. See the
-[development result](../../experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md)
-and [active status](../../experiments/diverse_pairs_multilayer_v1/STATUS.md).
+**Research priority update, 12 October 2026:** the independent cue-holdout
+challenge is complete. A frozen layer-14 readout trained on the first 50
+development pairs ordered **47/50 new pairs (94%)**; the fixed all-layer
+ensemble ordered **48/50 (96%)**. Character TF-IDF reached 68%, answer
+likelihood 60% and counterbalanced length 50%. This supports a transferable
+hidden-state signal for expressed certainty about preserved answer content and
+shows that the tested text, likelihood and length controls do not fully explain
+the hidden-state result.
+
+The result remains development-only: the challenge was reviewed by two blinded
+agents, not humans, and it does not establish subjective belief, correctness,
+evidence-sensitive confidence, causality or training benefit. The next research
+step is human audit followed by design and preregistration of a small matched
+training pilot. No language-model training or steering has been run. See the
+[current result](../../experiments/cue_holdout_challenge_v1/RESULTS.md) and
+[frozen challenge](../../experiments/cue_holdout_challenge_v1/README.md).
 
 ## Historical v4 status
 
@@ -112,8 +116,10 @@ it does not by itself show that an auxiliary commitment objective is useless.
 The ordinary training loss supplies the target content. Perfect vector
 orthogonality is not a requirement for a useful additional term.
 
-Measurement validation now takes priority. Agree the behavioral objective and
-protocol before any later empirical training run.
+For the separate evidence-sensitive target, measurement refinement still takes
+priority. For the expressed-certainty target, the cue-holdout transfer result
+now supports designing a controlled pilot after human review. In either case,
+agree the behavioral objective and freeze the protocol before training.
 QA-to-document transfer and K-to-K′ replacement each require their own controls.
 Read the [next-experiment proposal](NEXT_EXPERIMENT.md). It is not yet a
 preregistration. No training or causal intervention has been run.

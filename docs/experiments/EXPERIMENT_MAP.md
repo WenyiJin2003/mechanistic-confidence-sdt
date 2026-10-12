@@ -12,8 +12,9 @@ probe,” this repository uses the following names.
 | 4 | **Frozen Transfer v2 — Expressed-Certainty Evidence-Transfer Test** | Whether the unchanged v1 readout transfers to new wording and to identical answers with versus without target evidence | The same layer-14 **post-response `<\|im_end\|>` token** | **No v2 fitting.** The direction is frozen from Paired Confidence v1 |
 | 5 | **Confidence–Correctness Separation v3** | Whether identical answers score higher when correct under counterfactual contexts; wording and omitted-role controls | Frozen v1 layer-14 **final response-content token** and **response-content mean**; end marker as reference | **No v3 fitting.** Confidence vectors are unchanged; comparator contrasts use only old v1 train/A-B sources |
 | 6 | **Evidence-Sensitive Readout v4** | Whether support for a fixed answer transfers across source/template splits and agrees with independent output behavior | Layer 14 **response-content mean**, excluding end marker | New support-versus-contradiction pairs from 96 training records; fixed paired logistic regression, C=0.01 |
-| Current follow-up | **Diverse Paired Certainty + Multi-Layer Development Diagnostic** | Whether same-content certainty wording transfers across diverse source content, and whether all-layer averaging beats layer 14 | Mean of ordinary assistant-response tokens at each of 28 layers; last response token is secondary | 50 real-source development pairs; five source-disjoint folds; paired logistic readouts fitted within each fold |
-| 7 | **Deferred synthetic-fact training pilot** | Whether a candidate internal objective improves recall and retention | Completed-answer states, to be fixed before preregistration | No training has been run; measurement validation takes priority |
+| 7a | **Diverse Paired Certainty + Multi-Layer Development Diagnostic** | Whether same-content certainty wording is decodable across diverse source content, and whether all-layer averaging beats layer 14 | Mean of ordinary assistant-response tokens at each of 28 layers; last response token is secondary | 50 real-source development pairs; five source-disjoint folds; paired logistic readouts fitted within each fold |
+| Current | **Cue/Recipe-Holdout Transfer Challenge** | Whether the frozen development readouts order new same-content pairs built from held-out cue families, beyond text, likelihood and length controls | The same response-token means at layer 14 and all 28 layers | **No challenge fitting.** Development-only scalers and readouts are frozen and applied once to 50 locked pairs |
+| Next | **Controlled synthetic-fact training pilot** | Whether the frozen layer-14 objective improves recall and retention beyond matched controls | Completed-answer states, to be fixed before preregistration | No language-model training has run; human challenge review precedes design freeze |
 
 Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 `Paired Confidence v1`, `Frozen Transfer v2`, and `Separation v3`. In particular:
@@ -26,9 +27,13 @@ Use the full names at first mention. Short forms are `Stage 0`, `Stage 0B`,
 - Evidence-Sensitive Readout v4 fits contextual support on fresh training data;
   it is a different readout, with independent output-behavior validation.
 - The diverse-pair follow-up fits new response-mean readouts across all 28 layers.
-  Its 50/50 ceiling is shared by character TF-IDF and strong length/NLL controls,
-  so it validates separability and implementation rather than an abstract
-  confidence mechanism.
+  Its development ceiling was shared by character TF-IDF and strong length/NLL
+  controls, so it validated separability and implementation rather than an
+  abstract confidence mechanism.
+- The cue/recipe-holdout challenge freezes those development readouts and tests
+  50 new pairs. Layer 14 reached 47/50, versus 34/50 for character TF-IDF,
+  30/50 for answer likelihood and 25/50 for length. This supports transferable
+  expressed-certainty information, not subjective belief or correctness.
 - The cached confidence/correctness audit is supplementary post-hoc analysis of
   existing v1/v2 caches, not another independently confirmed experiment.
 - None of these experiments directly labels subjective confidence or proves
@@ -142,6 +147,67 @@ schema. This avoids accepting a correlation explained only by those broad
 groups. Passing remains controlled convergent evidence, with ambiguity and
 natural-answer transfer still to test.
 
+## How the current cue-holdout readout is fitted
+
+The current challenge uses a new development-trained readout, not the original
+v1 mean-difference vector. For response member $c\in\{+,-\}$ and layer $\ell$,
+ordinary assistant-response token states are averaged while chat-template
+boundary tokens are excluded:
+
+```math
+h_{i,c}^{(\ell)}
+=
+\frac{1}{|T_{i,c}|}
+\sum_{t\in T_{i,c}} H_{i,c,t}^{(\ell)}.
+```
+
+At each layer, a featurewise standardizer is fitted on both members of all 50
+development pairs and never refitted on the challenge:
+
+```math
+z_{i,c}^{(\ell)}
+=
+\operatorname{scale}_{\mathrm{dev}}\!\left(h_{i,c}^{(\ell)}\right),
+\qquad
+\Delta_i^{(\ell)}=z_{i,+}^{(\ell)}-z_{i,-}^{(\ell)}.
+```
+
+A no-intercept L2 logistic regression with $C=0.01$ is fitted to the symmetric
+development examples $(\Delta_i^{(\ell)},1)$ and
+$(-\Delta_i^{(\ell)},0)$. Its frozen response score is
+
+```math
+s_\ell(h)=w_\ell^\top\operatorname{scale}_{\mathrm{dev}}(h).
+```
+
+Layer 14 is the prespecified primary readout. For the fixed ensemble, each
+layer score is standardized using only its distribution across development
+responses, then all 28 standardized scores are averaged with equal weight:
+
+```math
+S(h)
+=
+\frac{1}{28}\sum_{\ell=1}^{28}
+\frac{s_\ell(h)-m_{\ell,\mathrm{dev}}}
+     {r_{\ell,\mathrm{dev}}}.
+```
+
+Pair-ordering accuracy is the fraction of the 50 locked challenge pairs for
+which the confident member receives the higher frozen score:
+
+```math
+\operatorname{accuracy}
+=
+\frac{1}{50}\sum_{i=1}^{50}
+\mathbf 1\!\left[s(h_{i,+})>s(h_{i,-})\right].
+```
+
+No challenge label, threshold, sign, layer or ensemble weight is fitted or
+selected. Character TF-IDF is separately fitted on development text only;
+answer likelihood and token length are direct controls. The
+[challenge result](../../experiments/cue_holdout_challenge_v1/RESULTS.md)
+reports the frozen comparison.
+
 ## Relationship between the experiments
 
 ```mermaid
@@ -153,7 +219,9 @@ flowchart LR
     V3["5. Separation v3<br/>frozen response-content directions → same-answer truth/context tests"]
     Audit["Cached audit<br/>comparator validity, geometry and projection"]
     V4["6. Evidence-Sensitive Readout v4<br/>new support labels → behavior validation"]
-    Train["7. Deferred SFT pilot<br/>independent fact recall and retention"]
+    D["7a. Diverse paired certainty<br/>development readouts"]
+    H["Cue/recipe-holdout challenge<br/>frozen transfer"]
+    Train["Next. Controlled SFT pilot<br/>independent fact recall and retention"]
     S0 --> S0B
     S0B --> V1
     V1 --> V2
@@ -161,7 +229,10 @@ flowchart LR
     V1 --> Audit
     V2 --> Audit
     V3 --> V4
-    V4 -. "pending measurement" .-> Train
+    V1 --> D
+    D --> H
+    H -. "human audit + preregistration" .-> Train
+    V4 -. "separate diagnostic" .-> Train
 ```
 
 The arrows show the research sequence, not reuse of one fitted vector. Stage 0,
@@ -178,5 +249,9 @@ See the [Stage 0/0B report](../../reports/RESULTS_STAGE0.md),
 limitations.
 
 V4 is complete: support-versus-contradiction ordering is 71.9%, but omission and
-behavior validation failed. See the [latest report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
-The dashed arrow remains a deferred proposal; no training experiment has run.
+behavior validation failed. See the [v4 report](../../reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md).
+The cue-holdout challenge is complete: layer 14 reached 94% and the frozen
+ensemble 96%, while the registered text, likelihood and length controls reached
+68%, 60% and 50%. See the
+[challenge result](../../experiments/cue_holdout_challenge_v1/RESULTS.md).
+The dashed arrows remain a proposal boundary; no training experiment has run.

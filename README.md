@@ -2,25 +2,27 @@
 
 ## Current finding
 
-**In a 50-pair diverse-response development test, layer 14 and an equal 28-layer
-ensemble both ranked all confident versions above their hesitant counterparts.
-The ensemble did not improve on layer 14.**
+**The independent cue-holdout challenge passed. A layer-14 linear readout trained
+on the original 50 development pairs ranked the confident response above its
+content-matched hesitant counterpart in 47/50 new pairs (94%; 95% interval
+86–100%). The frozen 28-layer ensemble ranked 48/50 (96%).**
 
-This is not yet a validated internal confidence measure. A character-only TF-IDF
-baseline also ranked 50/50 pairs correctly, negative mean NLL ranked 49/50, and
-response length ranked 47/50. Every hidden-state layer reached the same ceiling.
-The result shows that expressed certainty in this rewrite set is easy to decode,
-but it cannot separate an abstract representation from wording and length cues.
+The challenge used new source groups, five tasks, five held-out certainty cue
+families, exact 25/25 length counterbalancing and two complete blinded agent reviews.
+Character TF-IDF reached 68%, answer likelihood 60% and response length 50%.
+Unlike the original development diagnostic, the hidden-state result therefore
+cannot be explained by those controls alone.
 
-**Next decision:** do not scale this recipe or train an SDT confidence loss yet.
-Build a small independent challenge set with held-out certainty expressions,
-counterbalanced length and blinded content review. Correctness, evidence support
-and semantic entropy remain separate diagnostics.
+**Research decision:** the project can continue to a small, controlled training
+pilot after human review of the locked challenge. Use the simpler frozen
+layer-14 readout and keep the target name narrow: **expressed certainty about
+preserved answer content**. This result does not establish subjective belief,
+correctness, evidence-sensitive confidence, causality or training benefit.
 
-[Active-study summary](experiments/diverse_pairs_multilayer_v1/README.md) ·
-[Development result](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
-[Exact protocol](experiments/diverse_pairs_multilayer_v1/PROTOCOL.md) ·
-[Next challenge](experiments/diverse_pairs_multilayer_v1/NEXT_CHALLENGE.md)
+[Current result](experiments/cue_holdout_challenge_v1/RESULTS.md) ·
+[Layer plot](experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png) ·
+[Challenge protocol](experiments/cue_holdout_challenge_v1/README.md) ·
+[Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md)
 
 ## Historical diagnostic findings
 
@@ -28,7 +30,7 @@ and semantic entropy remain separate diagnostics.
 facts and wording: 71.9% paired ordering. The full confidence validation remains
 incomplete because missing information is not reliably distinguished.**
 
-The latest study kept Qwen 1.5B frozen and trained a new probe on neutral answers in 96 fictional records,
+The historical v4 study kept Qwen 1.5B frozen and trained a new probe on neutral answers in 96 fictional records,
 then tested 48 untouched records with different wording. It ranked the same
 answer higher under supporting than contradicting evidence in **69/96 pairs
 (71.9%; 95% interval 64.6–79.2%)**. This ordering remained 71.9% under both
@@ -61,7 +63,7 @@ internal objective that helps a model learn target facts more reliably:
 ## Research sequence
 
 The historical experiment names remain in files and artifacts for
-reproducibility. They form seven consecutive research steps:
+reproducibility. The research sequence is:
 
 | Step | Study | Question | Result | Evidence | Status |
 |---:|---|---|---|---|---|
@@ -71,18 +73,20 @@ reproducibility. They form seven consecutive research steps:
 | 4 | Frozen Transfer v2 | Does the frozen direction transfer to new wording and evidence contexts? | Wording transferred; evidence robustness failed for one fact type | [Report](reports/CONFIDENCE_TRANSFER_RESULTS_V2.md) · [Data](datasets/frozen-transfer-v2/README.md) | Complete |
 | 5 | Separation v3 | With the answer fixed, does the readout track whether context supports it? | The primary readouts scored 52.1% and 51.0% | [Report](reports/CONFIDENCE_SEPARATION_RESULTS_V3.md) · [Data](datasets/confidence-separation-v3/README.md) | Complete |
 | 6 | Evidence-Sensitive Readout v4 | Can a new support readout transfer across facts and wording, and agree with model behavior? | 71.9% support ordering; missing-information and behavior checks failed | [Report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Data](datasets/evidence-confidence-v4/README.md) | Complete |
-| Current | Diverse Paired Certainty + Multi-Layer | Does expressed-certainty decoding transfer across diverse content, and does an all-layer ensemble beat layer 14? | Both 50/50, but text also 50/50 and length 47/50; challenge set required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
-| 7 | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Proposal](docs/experiments/NEXT_EXPERIMENT.md) | Deferred pending measurement |
+| 7a | Diverse Paired Certainty + Multi-Layer | Is expressed certainty decodable across diverse content? | Hidden states reached 50/50, but text also reached 50/50; an independent challenge was required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
+| **Current** | **Cue/recipe-holdout transfer** | **Does the frozen certainty readout transfer to new sources and cue constructions beyond text, likelihood and length controls?** | **Layer 14: 47/50; ensemble: 48/50; TF-IDF: 34/50; likelihood: 30/50; length: 25/50** | **[Result](experiments/cue_holdout_challenge_v1/RESULTS.md)** | **Development-only evaluation complete** |
+| Next | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Design starting point](docs/experiments/NEXT_EXPERIMENT.md) | Human audit and preregistration first |
 
 ```mermaid
 flowchart LR
     U["Stage 0 / 0B<br/>Semantic uncertainty"] --> C["v1 / v2<br/>Expressed certainty"]
     C --> S["v3<br/>Fixed-answer validation"]
     S --> E["v4<br/>Partial evidence support"]
-    C --> D["Current<br/>Diverse paired certainty"]
-    D --> H["Cue/recipe-holdout<br/>challenge needed"]
+    C --> D["Diverse paired certainty<br/>development diagnostic"]
+    D --> H["Cue/recipe-holdout<br/>94% at layer 14"]
     E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
-    H -. "only after validation" .-> T
+    H --> P["Human audit + controlled<br/>small training pilot"]
+    P -. "training benefit untested" .-> T
 ```
 
 Steps 1–3 estimate different readouts with different labels and token positions.
@@ -97,11 +101,13 @@ studied a different target: expressed certainty in matched confident and hedged
 answers. All certainty studies used supplied responses that Qwen read through
 a forward pass; they did not label confidence in its own generated answers.
 
-The readout averages paired hidden-state differences on training sources,
-normalizes the resulting direction, and scores a new state by its dot product
-with that fixed direction. Each token position has its own fitted direction;
-the [method](docs/experiments/EXPERIMENT_MAP.md#calculation) gives the equations
-and source-grouped splits.
+The early v1 readout averaged paired hidden-state differences at the response
+end. The current challenge uses a stricter development-trained method: it
+averages ordinary answer-token states at each layer, standardizes features on
+the 50 development pairs, and fits a no-intercept paired logistic readout. The
+layer-14 readout and equal 28-layer ensemble are then frozen before the 50 new
+challenge pairs are scored. The [method](docs/experiments/EXPERIMENT_MAP.md)
+gives the exact equations and split boundary.
 
 ## Step 5: why a new measurement was needed
 
@@ -135,6 +141,11 @@ contributor. See the [full report and figure](reports/CONFIDENCE_SEPARATION_RESU
 
 ## Current conclusion
 
+- **The main wording/length shortcut concern now has a positive transfer test.**
+  On 50 new locked pairs, the frozen layer-14 readout reached 94%, compared
+  with 68% for character TF-IDF, 60% for answer likelihood and 50% for length.
+  This supports a transferable hidden-state signal for expressed certainty,
+  while stopping short of a general-confidence or causal claim.
 - **Evidence support is partly decodable across facts and wording.** V4's new
   probe reached 71.9% on fixed-answer supporting-versus-contradicting contexts,
   exceeding its shuffled-control criterion. Omission was never fitted as a
@@ -155,7 +166,7 @@ contributor. See the [full report and figure](reports/CONFIDENCE_SEPARATION_RESU
   wording. The [cached audit](reports/CONFIDENCE_CORRECTNESS_AUDIT.md) checks this
   without treating the estimated correctness direction as a complete truth axis.
 
-## Step 6: the latest evidence-support test
+## Historical Step 6: evidence-support test
 
 V4 used **168 new fictional records**, split into 96 training, 24 validation
 and 48 untouched test records. It supplied the same neutral answer under
@@ -191,9 +202,10 @@ fixed the controls and pass criteria before inference. The
 and limitation; the [independent audit](results/evidence_confidence_v4/independent_audit.json)
 reproduced 46,762 numerical values with zero discrepancies.
 
-The next measurement should use a clearer output task, graded or conflicting
-evidence, and fully crossed behavior wording and candidate positions. It must
-test fresh records and model behavior before reconsidering a confidence loss.
+For that separate evidence-support line, a future measurement should use a
+clearer output task, graded or conflicting evidence, and fully crossed behavior
+wording and candidate positions. It must test fresh records and model behavior
+before treating that readout as a confidence loss.
 
 ## Step 7: deferred training study
 
@@ -206,8 +218,9 @@ groups. Judge improvement independently of the optimized readout score.
 This first pilot would use completed-answer states, matching the current
 readout. Transfer to ordinary document training would need separate testing.
 The [earlier proposal](docs/experiments/NEXT_EXPERIMENT.md) preserves the
-controls and decisions to fix before training. It is deferred while v4 tests
-the measurement and remains a proposal rather than a completed experiment.
+controls and decisions to fix before training. The cue-holdout result now
+supports designing this pilot, but human review and preregistration should
+precede execution. It remains a proposal rather than a completed experiment.
 
 The [experiment map](docs/experiments/EXPERIMENT_MAP.md) gives the exact token
 positions, data splits and equations. The [code map](code/README.md) provides

@@ -1,8 +1,11 @@
 # Diverse paired certainty / multi-layer status
 
-Updated 11 October 2026. Revision 3 passed agent-assisted QA and the 50-pair
-development diagnostic is complete. Individual human review is still pending;
-no language-model training or causal intervention has been run.
+Updated 12 October 2026. Revision 3 passed agent-assisted QA and the 50-pair
+development diagnostic is complete. Its independent cue/recipe-holdout
+follow-up is also complete: layer 14 reached 47/50 and the fixed ensemble 48/50,
+above character TF-IDF (34/50), answer likelihood (30/50) and length (25/50).
+Human review is still pending; no language-model training or causal intervention
+has been run. See the [challenge result](../cue_holdout_challenge_v1/RESULTS.md).
 
 | Step | Status | Evidence / next action |
 |---|---|---|
@@ -21,8 +24,9 @@ no language-model training or causal intervention has been run.
 | Review-export validation and importer | completed | Exact packet/text hash and A/B checks; separate reviewed outputs; no actual export received |
 | Limited model-forward benchmark | completed | 20 pairs / 40 responses, all 28 layers; final implementation 31.6 seconds; exact cache replay with zero forwards |
 | Development layer-14 / ensemble comparison | completed | Both 50/50; no ensemble gain; surface controls also near-perfect |
-| Independent cue/recipe-holdout challenge | next | New source groups, length counterbalancing, unseen cue families, blinded review |
-| Final scientific evaluation protocol and split | planned | Freeze only after the challenge recipe is accepted |
+| Independent cue/recipe-holdout challenge | completed | 50 new source groups; 5 tasks and 5 cue families; 25/25 length direction; two blinded agent reviews |
+| Frozen one-shot challenge evaluation | completed | Layer 14 47/50; ensemble 48/50; no challenge fitting or selection |
+| Human challenge review | pending | Development-only result; locked texts must not be changed after scoring |
 | SDT training or activation steering | not authorized | Separate future decision |
 
 Revision 3 retains three warnings about the original source answers (P002, P008
@@ -60,7 +64,9 @@ certainty order and confounds, and return the downloaded JSON. The canonical
 REVIEW_50_PAIRS.html points to the same Revision 3 content. A/B positions are
 randomized and each revision has a distinct browser-storage key.
 
-Research action: preregister and construct approximately 50 new challenge pairs,
-not 1,000 replicas of the current recipe. Use unseen sources and cue families,
-counterbalance length direction, blind the content/tone review, then compare the
-already defined readouts with TF-IDF, length and NLL under the same frozen score.
+Research action: obtain human blind review of the already locked challenge, then
+design and preregister a small matched synthetic-fact training pilot. Use the
+simpler frozen layer-14 readout and compare ordinary training, the readout loss,
+a random-direction loss and an output-only control. Evaluate fact learning and
+retention independently of the optimized score. Do not rewrite or tune on the
+now score-exposed challenge.

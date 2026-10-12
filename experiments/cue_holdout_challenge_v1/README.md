@@ -1,5 +1,19 @@
 # Cue/recipe-holdout certainty challenge
 
+## Result
+
+**The frozen readout transferred.** Layer 14 correctly ordered **47/50 (94%)**
+new confident/hesitant pairs, and the fixed equal 28-layer ensemble ordered
+**48/50 (96%)**. Character TF-IDF reached 68%, answer likelihood 60% and
+counterbalanced response length 50%. The main shortcut concern from the
+development set is therefore substantially reduced, although lexical cues have
+not disappeared.
+
+This supports a transferable hidden-state representation of **expressed
+certainty about preserved answer content**. It does not validate subjective
+belief, correctness, evidence-sensitive confidence, causal mechanism or a
+training loss. See the [full result and research decision](RESULTS.md).
+
 ## Why this experiment exists
 
 The preceding 50-pair development study reached 50/50 at layer 14 and with an
@@ -42,7 +56,7 @@ development QA, not human validation.
 
 ```mermaid
 flowchart LR
-    A["Current 50 pairs"] --> B["Fit frozen L14 + ensemble"]
+    A["50 development pairs"] --> B["Fit frozen L14 + ensemble"]
     C["50 new sources"] --> D["Held-out cue families"]
     D --> E["Length- and format-balanced pairs"]
     E --> F["Blind review and freeze"]
@@ -90,11 +104,16 @@ reviews. The final set has 10 pairs per task, 10 per cue family and one of each
 length direction in every task-by-family cell. Both reviewers found 50/50
 content preservation, 50/50 intended certainty ordering, no formatting
 failure and no material shortcut concern. Minor concerns remain descriptive
-and did not trigger the preregistered repair gate.
+and did not trigger the prespecified repair gate.
 
 The public lock manifest binds the exact source selection, validated rewrites,
 randomized A/B packet, mapping and two decision files by SHA-256. Review was
 performed by agents, so the set is explicitly marked
 `agent_reviewed_development_only`, not human validated. No challenge activation
-had been inspected when the set was locked. The next and only score-bearing
-step is the frozen one-shot evaluation.
+had been inspected when the set was locked.
+
+The frozen one-shot evaluation is now complete. Layer 14 passed the prespecified
+criterion with 94% ordering accuracy and an 86% lower bootstrap bound. The
+ensemble reached 96%; its two-point advantage over layer 14 does not justify
+the added complexity for a first training pilot. Full controls, limitations and
+next-step recommendations are in [RESULTS.md](RESULTS.md).
