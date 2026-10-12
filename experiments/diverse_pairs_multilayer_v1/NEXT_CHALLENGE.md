@@ -52,21 +52,26 @@ threshold tuning or recipe repair is allowed after scoring.
 
 Use these rules before any test activations are inspected:
 
-1. **Data gate:** at least 48/50 pairs pass content preservation and at least
-   45/50 have the intended certainty order under blinded review. The longer
-   member is confident in exactly 25 pairs and hesitant in exactly 25.
-2. **Transfer gate:** layer 14 orders at least 35/50 pairs correctly, its 95%
-   source-bootstrap lower bound exceeds 50%, and it exceeds the 95th percentile
-   of the 200 shuffled-orientation scores.
-3. **Added-value gate:** layer 14 exceeds each of TF-IDF, NLL and length by at
-   least five pairs (10 percentage points), with the paired bootstrap interval
-   for each difference above zero. Otherwise retain it as a wording detector and
-   do not use it as an SDT loss target.
+1. **Data gate:** before inspecting activations, repair or replace every pair
+   that fails blinded content preservation or certainty ordering. Then freeze
+   exactly 50 valid independent pairs, with the longer member confident in 25
+   and hesitant in 25, preferably 5/5 within each task. Preserve task×family
+   cell counts during replacement.
+2. **Pilot transfer gate:** layer 14 orders at least 35/50 pairs correctly and
+   its 95% source-bootstrap lower bound exceeds 50%. The shuffled-training
+   distribution is descriptive and does not determine pass/fail.
+3. **Incremental-value analysis:** compare layer 14 separately with each of
+   TF-IDF, NLL and length. A gain of at least five pairs (10 percentage points)
+   with a paired interval above zero supports added predictive value over that
+   control. A tie or smaller gain means added value was not demonstrated; it
+   does not prove that the readout captures only superficial wording.
 4. **Ensemble gate:** prefer the ensemble only if it improves by at least three
    pairs and the paired interval is above zero. Otherwise prefer layer 14.
 
-If the transfer and added-value gates both pass, repeat on a larger independently
-written and human-reviewed set before any causal intervention.
+Any pilot transfer result must be repeated on a larger independently written and
+human-reviewed set. Readiness for an internal training loss is a separate
+decision: it also requires target-appropriate validation and a preregistered
+training comparison judged by learning and retention, not probe scores alone.
 
 Even a pass would validate transferable **expressed certainty**, not the truth of
 an answer, evidence-sensitive confidence, or improved fact learning. Those are

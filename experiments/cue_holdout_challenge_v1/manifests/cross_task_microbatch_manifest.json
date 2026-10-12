@@ -1,0 +1,178 @@
+{
+  "by_cue_family": {
+    "compositional_polarity": 2,
+    "contrastive_commitment": 2,
+    "discourse_level_calibration": 2,
+    "embedded_stance_predicate": 2,
+    "modal_force_scope": 2
+  },
+  "by_length_direction": {
+    "confident_longer": 5,
+    "hedged_longer": 5
+  },
+  "by_task": {
+    "comparison_analysis": 2,
+    "factual_explanation": 2,
+    "math_logic": 2,
+    "programming": 2,
+    "summary_judgment": 2
+  },
+  "cell_plan": [
+    {
+      "cue_family": "embedded_stance_predicate",
+      "length_direction": "confident_longer",
+      "task": "factual_explanation"
+    },
+    {
+      "cue_family": "modal_force_scope",
+      "length_direction": "hedged_longer",
+      "task": "factual_explanation"
+    },
+    {
+      "cue_family": "modal_force_scope",
+      "length_direction": "confident_longer",
+      "task": "math_logic"
+    },
+    {
+      "cue_family": "compositional_polarity",
+      "length_direction": "hedged_longer",
+      "task": "math_logic"
+    },
+    {
+      "cue_family": "compositional_polarity",
+      "length_direction": "confident_longer",
+      "task": "programming"
+    },
+    {
+      "cue_family": "discourse_level_calibration",
+      "length_direction": "hedged_longer",
+      "task": "programming"
+    },
+    {
+      "cue_family": "discourse_level_calibration",
+      "length_direction": "confident_longer",
+      "task": "comparison_analysis"
+    },
+    {
+      "cue_family": "contrastive_commitment",
+      "length_direction": "hedged_longer",
+      "task": "comparison_analysis"
+    },
+    {
+      "cue_family": "contrastive_commitment",
+      "length_direction": "confident_longer",
+      "task": "summary_judgment"
+    },
+    {
+      "cue_family": "embedded_stance_predicate",
+      "length_direction": "hedged_longer",
+      "task": "summary_judgment"
+    }
+  ],
+  "contains_source_text": false,
+  "frozen_source_count": 50,
+  "frozen_source_input_sha256": "9c5c6e3ff3a5317a548ff26743bab5930dba3a58d3f4199dde95e4188fa9a7b8",
+  "manifest_version": 1,
+  "model_inference_used": false,
+  "private_output_sha256": "4ee14c4d771d63307351f0b170c4448d39433f29bbf84f961a2b3b64fa13f409",
+  "rewrites_generated": false,
+  "score_or_activation_used": false,
+  "selection_manifest_sha256": "539c17b89573294be2495b132dd1374bf38a6a5ba2e3dd780744800d1e3a8b77",
+  "selection_method": "fixed score-free cross-task cell plan",
+  "source_count": 10,
+  "source_ids": [
+    "helpsteer2-train-row-9063",
+    "helpsteer2-train-row-9658",
+    "wildchat-da14c16de7c503520237eb02ed1dfcea-turn-2020850",
+    "helpsteer2-train-row-14743",
+    "helpsteer2-train-row-13090",
+    "wildchat-3d6adedfa066babd365769ac5ab4ef83-turn-2020322",
+    "helpsteer2-train-row-6606",
+    "helpsteer2-train-row-8772",
+    "helpsteer2-train-row-13692",
+    "helpsteer2-train-row-11779"
+  ],
+  "source_records": [
+    {
+      "cue_family": "embedded_stance_predicate",
+      "length_direction": "confident_longer",
+      "normalized_prompt_sha256": "9a28c7d5b661f44b87e2d3cffb1d4d0e8a3e158e74de87af889bef59670f117b",
+      "original_response_sha256": "8857b0c998c2fe0330fdac955f5d5bb3f373750aaf4f2bdbed983ede461c3795",
+      "source_id": "helpsteer2-train-row-9063",
+      "task": "factual_explanation"
+    },
+    {
+      "cue_family": "modal_force_scope",
+      "length_direction": "hedged_longer",
+      "normalized_prompt_sha256": "6c7114cc9f5acc04960c54b0ed8465b5bde02164d3f0649d27cb5ad5f06eb707",
+      "original_response_sha256": "050d6c980faa064da82e52147f870868eeb65c93ce876fb0f6401de8278eff91",
+      "source_id": "helpsteer2-train-row-9658",
+      "task": "factual_explanation"
+    },
+    {
+      "cue_family": "modal_force_scope",
+      "length_direction": "confident_longer",
+      "normalized_prompt_sha256": "e9838a451545be38c4e1996448bfe6d8e750c0eddb0b126b68c917f006c143e3",
+      "original_response_sha256": "f0abc866dc4538e25d0e4a1f38e60837382b55d1053cec1f1891035153c4c430",
+      "source_id": "wildchat-da14c16de7c503520237eb02ed1dfcea-turn-2020850",
+      "task": "math_logic"
+    },
+    {
+      "cue_family": "compositional_polarity",
+      "length_direction": "hedged_longer",
+      "normalized_prompt_sha256": "51a68a2c9ca2a2212bada310ba3bd39b83460ba1bf4366668a2942e3f00940ef",
+      "original_response_sha256": "99406399629fa8762d61169a254679b37262dd3dd525c0be2a4acfaac202ee30",
+      "source_id": "helpsteer2-train-row-14743",
+      "task": "math_logic"
+    },
+    {
+      "cue_family": "compositional_polarity",
+      "length_direction": "confident_longer",
+      "normalized_prompt_sha256": "f3d1eb82d656c76dbeeaf22b446077a15339289ddd4077d7c3ec378afdf7b88f",
+      "original_response_sha256": "8e9432937985e0de601d19eccc0e50977f68b90023d4997f095c4ecd02e25405",
+      "source_id": "helpsteer2-train-row-13090",
+      "task": "programming"
+    },
+    {
+      "cue_family": "discourse_level_calibration",
+      "length_direction": "hedged_longer",
+      "normalized_prompt_sha256": "22dc77221a1d45c3c66ea587ccf628224dfc33f642200f99357411cd12f41148",
+      "original_response_sha256": "ba015c9568f99971dc8fd536e900ac4b20101b1919c0e674febcbadd1d643319",
+      "source_id": "wildchat-3d6adedfa066babd365769ac5ab4ef83-turn-2020322",
+      "task": "programming"
+    },
+    {
+      "cue_family": "discourse_level_calibration",
+      "length_direction": "confident_longer",
+      "normalized_prompt_sha256": "20ad6b9a04ba8f0ae6db51bba48b2d6922e0d3591841a69c5987c167993a2da9",
+      "original_response_sha256": "595c018954fb9a90f63c2c9783b7a9073197525bbb773bd86b72239ee47a2944",
+      "source_id": "helpsteer2-train-row-6606",
+      "task": "comparison_analysis"
+    },
+    {
+      "cue_family": "contrastive_commitment",
+      "length_direction": "hedged_longer",
+      "normalized_prompt_sha256": "0e1e41455e40059325a1ba286ca5e631820673150a8002066b828958bf23f249",
+      "original_response_sha256": "072911534ce15dac99e5565101be2ce5a10e50aa8d61b70e8611c3ebb626506e",
+      "source_id": "helpsteer2-train-row-8772",
+      "task": "comparison_analysis"
+    },
+    {
+      "cue_family": "contrastive_commitment",
+      "length_direction": "confident_longer",
+      "normalized_prompt_sha256": "0cbb1e161e7e7ef629089638ff1ffcf96dcc40bff05f1c0a4d544d96c9504715",
+      "original_response_sha256": "bb968be8171912478a117c7046ef5d4e86e67f5048c4370f12bddc295bbea8e9",
+      "source_id": "helpsteer2-train-row-13692",
+      "task": "summary_judgment"
+    },
+    {
+      "cue_family": "embedded_stance_predicate",
+      "length_direction": "hedged_longer",
+      "normalized_prompt_sha256": "8bf3c2538defd07ddf9183f6643f16b7b9cb4bd2ab83a3319f5a030035cff810",
+      "original_response_sha256": "0c8294e59de436de80a6dc59c570a1e615fce126f297055d21c960ec8441be36",
+      "source_id": "helpsteer2-train-row-11779",
+      "task": "summary_judgment"
+    }
+  ],
+  "stage": "pre_rewrite_cross_task_microbatch"
+}

@@ -1,0 +1,55 @@
+experiment: cue_holdout_challenge_v1
+protocol_version: 1
+seed: 20261012
+reference_config: ../../diverse_pairs_multilayer_v1/configs/diverse_pairs_multilayer_v1.yaml
+reference_config_sha256: 1c8f857b2ba62d236e3eec55c7647285bc5aa673935ab824b97bc57f835fae9a
+development:
+  pairs: ../diverse_pairs_multilayer_v1/private_data/PAIRED_RESPONSES_50.jsonl
+  agent_qa_manifest: ../diverse_pairs_multilayer_v1/manifests/agent_qa_summary.json
+  required_pairs: 50
+challenge:
+  pairs: private_data/locked_pairs_50.jsonl
+  lock_metadata: manifests/locked_pairs_freeze_manifest.json
+  selection_manifest: manifests/challenge_selection_manifest.json
+  required_pairs: 50
+  required_review_status: agent_reviewed_development_only
+  required_independent_reviewers: 2
+  source_datasets:
+    - nvidia/HelpSteer2
+    - allenai/WildChat-1M
+  cue_families:
+    - embedded_stance_predicate
+    - modal_force_scope
+    - compositional_polarity
+    - discourse_level_calibration
+    - contrastive_commitment
+  tasks:
+    - factual_explanation
+    - math_logic
+    - programming
+    - comparison_analysis
+    - summary_judgment
+  required_longer_member_counts:
+    confident_longer: 25
+    hedged_longer: 25
+readout:
+  primary_layer: 14
+  ensemble: equal_train_standardized_28_layer_scores
+  bootstrap_draws: 2000
+  shuffled_training_orientation_fits: 200
+  nll_control: negative_mean_response_token_nll
+  length_control: negative_response_token_length
+  tfidf:
+    analyzer: char_wb
+    ngram_range: [3, 5]
+    min_df: 2
+    max_features: 20000
+    sublinear_tf: true
+  layer_selection_on_challenge: false
+  sign_selection_on_challenge: false
+runtime:
+  max_seconds: 7200
+  max_pairs: 100
+  cache_dir: cache/challenge_extraction
+output:
+  public_results: results/challenge_evaluation.json
