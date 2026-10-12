@@ -1,0 +1,91 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.2",
+  "selection_seed": 20261014,
+  "cached_candidate_inputs": [
+    "private_data/source_pool_1000_v1/acquisition/helpsteer2_candidates.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/1459509639a60c0f.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/5a5c6fd18c81fbec.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/a72db582e1703b8c.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/d703b4578078348e.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/e50c8cbc27df85b9.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/f5fdb96063fe917b.jsonl"
+  ],
+  "max_cached_candidate_rows": 15000,
+  "private_selection_review_path": "private_data/rewrite_dev_v32/SOURCE_SMOKE_SELECTION_REVIEW.json",
+  "private_selection_review_sha256": "ceb37d4a0e0068c2ccdf7c215d441666c8349970ce352f7608e32ae32bd9242e",
+  "forbidden_source_inputs": [
+    "private_data/source_pool_1000_v1/SOURCE_MANIFEST.jsonl",
+    "private_data/rewrite_dev_v3/SOURCE_SMOKE_8.jsonl",
+    "private_data/rewrite_dev_v3/SOURCE_CANARY_32.jsonl",
+    "private_data/rewrite_dev_v31/SOURCE_SMOKE_8.jsonl",
+    "private_data/rewrite_dev_v31/SOURCE_CANARY_CANDIDATE_POOL_45.jsonl",
+    "private_data/review_sources_50.jsonl",
+    "../cue_holdout_challenge_v1/private_data/challenge_sources_50.jsonl"
+  ],
+  "legacy_public_manifests": [
+    "manifests/source_pool_1000_freeze.json",
+    "manifests/rewrite_dev_v3_freeze.json",
+    "manifests/rewrite_dev_v31_freeze.json"
+  ],
+  "legacy_output_roots": [
+    "private_data/claude_rewrite_dev_v3",
+    "private_data/claude_rewrite_dev_v31"
+  ],
+  "public_freeze_manifest_path": "manifests/rewrite_dev_v32_freeze.json",
+  "private_manifest_dir": "private_data/rewrite_dev_v32",
+  "output_root": "private_data/claude_rewrite_dev_v32",
+  "sets": {
+    "smoke": {
+      "count": 8,
+      "input_file": "SOURCE_SMOKE_8.jsonl",
+      "source_suitability_status": "primary_eligible",
+      "dataset_counts": {
+        "allenai/WildChat-1M": 6,
+        "nvidia/HelpSteer2": 2
+      },
+      "task_counts": {
+        "factual_explanation": 4,
+        "math_logic": 1,
+        "programming": 1,
+        "comparison_analysis": 1,
+        "summary_judgment": 1
+      },
+      "length_counts": {
+        "short": 2,
+        "medium": 3,
+        "long": 3
+      },
+      "target_longer_member_counts": {
+        "confident": 4,
+        "hedged": 4
+      }
+    }
+  },
+  "batch_size": 8,
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "max_transport_retries": 2,
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.8,
+  "max_word_ratio": 1.2,
+  "prompt_target_min_word_ratio": 0.9,
+  "prompt_target_max_word_ratio": 1.1,
+  "prompt_pair_word_gap_min": 1,
+  "prompt_pair_word_gap_desired_max": 5,
+  "prompt_pair_word_gap_absolute": 5,
+  "prompt_pair_word_gap_fraction": 0.08,
+  "pair_gap_min_tokens": 8,
+  "pair_gap_mean_fraction": 0.1,
+  "min_substantive_edit_fraction": 0.1,
+  "retry_policy": {
+    "max_full_pair_retries": 1,
+    "attempt0_min_accepted": 7,
+    "attempt0_required_failures_for_retry": 1,
+    "final_required_accepted": 8,
+    "required_not_applicable": 0,
+    "canonical_selection": "earliest_passing_attempt",
+    "retry_scope": "both_arms_of_one_mechanically_failed_source",
+    "retry_receives_prior_generated_text": false
+  },
+  "claude_binary": "claude"
+}

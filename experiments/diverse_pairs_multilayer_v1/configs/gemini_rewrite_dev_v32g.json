@@ -1,0 +1,11 @@
+{
+  "protocol_version": "gemini-symmetric-diverse-rewrite-v3.2g-textonly",
+  "source_config": "configs/claude_rewrite_dev_v32.json",
+  "output_root": "private_data/gemini_rewrite_dev_v32g_textonly/smoke",
+  "public_report": "reports/gemini_smoke_v32g_textonly_quality_gate.json",
+  "model": "gemini-3.8-flash-low",
+  "effort": "low",
+  "agy_binary": "~/.local/bin/agy",
+  "max_transport_retries": 0,
+  "timeout_seconds": 1200
+}

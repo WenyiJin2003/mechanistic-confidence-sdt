@@ -1,0 +1,137 @@
+{
+  "all_v3_sources_excluded": true,
+  "builder_source_sha256": "f53301f5389a6540e7ef5c3e97da5932835e327bfc6466ec0c270de550c84749",
+  "candidate_pool": {
+    "count": 45,
+    "dataset_counts": {
+      "allenai/WildChat-1M": 38,
+      "nvidia/HelpSteer2": 7
+    },
+    "file_name": "SOURCE_CANARY_CANDIDATE_POOL_45.jsonl",
+    "file_sha256": "10976ccb08c9cc3070e54d5a449297a83833a404a0dac31d7b095421c3cd3bcc",
+    "length_counts": {
+      "long": 12,
+      "medium": 18,
+      "short": 15
+    },
+    "required_promoted_canary_count": 32,
+    "role": "source_only_review_pool_not_authorized_for_generation",
+    "source_ids_sha256": "a6aaa47d76bc50af779680638dd1046fb49ce72e5fb78d1273daf231f88cd6ee",
+    "status": "candidate_pending_source_only_semantic_review",
+    "task_counts": {
+      "comparison_analysis": 7,
+      "factual_explanation": 15,
+      "math_logic": 10,
+      "programming": 4,
+      "summary_judgment": 9
+    }
+  },
+  "config_sha256": "df11031ca476bec47b2e17afd6c296eade9903d1997940256061d4e312b93973",
+  "contains_source_text": false,
+  "freeze_version": "3.1",
+  "legacy_v3_canary": {
+    "bytes_modified": false,
+    "count": 32,
+    "file_sha256": "798ea405d8bddf7fc9393783da4348beeea05d451711ca9c04da15419d6a88f7",
+    "role": "transfer_or_diagnostic_only_not_v31_primary",
+    "source_ids_sha256": "2a65a44dca60a0dc2859a4d7ba9f23463656540901bf02eea3de961dea23a1e5"
+  },
+  "legacy_v3_public_manifest_sha256": "0ff124c590eba3fb705d3ab50ca768ab8590076798d858eab2e843f5f7d8b201",
+  "main_and_final_test_excluded": true,
+  "new_primary_canary_status": "candidate_frozen_pending_source_only_semantic_review_not_authorized_for_generation",
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.1",
+  "rewrite_generation_performed": false,
+  "selection_algorithm": "explicit suitability exclusions plus source-only agent-reviewed smoke allowlist, exact factorial slots, and exact coverage checks",
+  "selection_scope": "frozen reserve/train only; main/final-test, all v3 development sources, and recipe C excluded",
+  "selection_seed": 20261013,
+  "sets": {
+    "smoke": {
+      "count": 8,
+      "dataset_counts": {
+        "allenai/WildChat-1M": 6,
+        "nvidia/HelpSteer2": 2
+      },
+      "file_name": "SOURCE_SMOKE_8.jsonl",
+      "file_sha256": "cd2071472d3f4a60f876fd5fd4ca5af20794ad64b8c696e0f14580b723fb071f",
+      "length_counts": {
+        "long": 3,
+        "medium": 3,
+        "short": 2
+      },
+      "output_order_counts": {
+        "confident_first": 4,
+        "hedged_first": 4
+      },
+      "private_file_write_policy": "write_once_or_verify_identical_bytes",
+      "recipe_counts": {
+        "A": 4,
+        "B": 4
+      },
+      "recipe_topology_order_counts": {
+        "A|distributed|hedged_first": 1,
+        "A|early|confident_first": 1,
+        "A|late|confident_first": 1,
+        "A|middle|hedged_first": 1,
+        "B|distributed|confident_first": 1,
+        "B|early|hedged_first": 1,
+        "B|late|hedged_first": 1,
+        "B|middle|confident_first": 1
+      },
+      "selection_search_attempt": 0,
+      "source_ids_sha256": "43031c3ad66796831236a320ddfd75f7c97111879e6295c775ba58ed4c5b2b6b",
+      "source_suitability_status": "primary_eligible",
+      "task_counts": {
+        "comparison_analysis": 1,
+        "factual_explanation": 4,
+        "math_logic": 1,
+        "programming": 1,
+        "summary_judgment": 1
+      },
+      "topology_counts": {
+        "distributed": 2,
+        "early": 2,
+        "late": 2,
+        "middle": 2
+      }
+    }
+  },
+  "smoke_canary_disjoint": true,
+  "source_input_sha256": {
+    "SOURCE_MANIFEST_MAIN_1000.jsonl": "ee9b8c6669fb3f76aadd59f3eaa4db5513b11c2ee41cbea1a6f540a297789e29",
+    "SOURCE_MANIFEST_RESERVE_200.jsonl": "39209a46fc35f61ffba1afe7eb17caa485becec30291a7e341d175d45f3056c2"
+  },
+  "source_pool_manifest_sha256": "8b6c4f8429cbc317f1ab33ca563a3df11f69b6f98b22d04a073d9c13ca66f73b",
+  "source_suitability": {
+    "exclusion_reason_counts_nonexclusive": {
+      "creative_or_roleplay": 45,
+      "dialogue_or_code_only": 25,
+      "insufficient_stable_content": 6,
+      "meta_or_non_object_level_transformation": 9,
+      "politeness_or_correspondence": 9,
+      "previously_frozen_source": 40,
+      "prompt_or_template_generation": 7,
+      "refusal_or_clarification_only": 7,
+      "slogan_motivational_or_promotional": 5,
+      "unstable_or_high_stakes": 3
+    },
+    "previously_frozen_sources": 40,
+    "primary_eligible_after_rules_and_exclusions": 43,
+    "private_audit_file_name": "SOURCE_SUITABILITY_AUDIT.jsonl",
+    "private_audit_file_sha256": "18e28c41143088abc277a52359265a1d28c4c651880fab5fb3e9383196efd9de",
+    "private_canary_review_file_name": "SOURCE_CANARY_SOURCE_REVIEW.jsonl",
+    "private_canary_review_file_sha256": "2d2bbada4b76fe628e02ade0e14c2e9556d862aaf7ccebbf7db8f532fccbaaf7",
+    "reserve_train_candidates": 140,
+    "rule_version": "3.1",
+    "rules": {
+      "creative_or_roleplay": "exclude roleplay, fictional dialogue, lyrics, poems, stories, games, screenplays, and other creative continuation",
+      "dialogue_or_code_only": "exclude dialogue transcripts and outputs with too little explanatory prose outside code",
+      "insufficient_stable_content": "exclude very short or non-declarative responses without stable truth-apt or instructional claims",
+      "meta_or_non_object_level_transformation": "exclude capability checks, grammar-only edits, copyright evasion, and persona or copywriter tasks",
+      "politeness_or_correspondence": "exclude email, letter, message, invitation, apology, and politeness-only writing",
+      "prompt_or_template_generation": "exclude prompt generation, fill-in templates, placeholders, and meta-instructions",
+      "refusal_or_clarification_only": "exclude refusals, capability statements, and responses that only request more input",
+      "slogan_motivational_or_promotional": "exclude slogans, motivational copy, advertisements, SEO copy, and social posts",
+      "unstable_or_high_stakes": "exclude location-specific legal advice and time-sensitive recommendation or social-media recall"
+    }
+  }
+}

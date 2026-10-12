@@ -1,0 +1,212 @@
+{
+  "builder_source_sha256": "36e57d7704a148e50ae6b5c2e2301fc1113a1557c0d8b6e2bb7a3c5fc21a4997",
+  "cache_inputs": [
+    {
+      "file_name": "helpsteer2_candidates.jsonl",
+      "file_sha256": "ae81b1969fdc2d919576d2ed6dc9effb4a04675a769b0495b260e43e9d8260f7",
+      "row_count": 10129
+    },
+    {
+      "file_name": "1459509639a60c0f.jsonl",
+      "file_sha256": "4e13a6476df71d3cf300bb10f31515ff460fbd5048e4fc0d4b98f1fc20cdd1f5",
+      "row_count": 586
+    },
+    {
+      "file_name": "5a5c6fd18c81fbec.jsonl",
+      "file_sha256": "5d0a2631d1adebad9a459b04b6c9aea002faa3383f199e9afd6ecc476268457b",
+      "row_count": 626
+    },
+    {
+      "file_name": "a72db582e1703b8c.jsonl",
+      "file_sha256": "f2d6ec6425e5e2d1d928e8c85523d274f3d315c2e43dc914ed927fea72d88349",
+      "row_count": 689
+    },
+    {
+      "file_name": "d703b4578078348e.jsonl",
+      "file_sha256": "1e58093dacccce54d0aefa14ab0fc522a4f83494269bdecfeb0654c3d3d46dd9",
+      "row_count": 676
+    },
+    {
+      "file_name": "e50c8cbc27df85b9.jsonl",
+      "file_sha256": "37a7bd7fb619faed540ebcfd05772d2b62fb1236721ea9ace4a1acd0c03ace4b",
+      "row_count": 958
+    },
+    {
+      "file_name": "f5fdb96063fe917b.jsonl",
+      "file_sha256": "f3dbef4c74267b580f96f3912d0fe26ac9fa14c1e2d180ad4f9d4f9ed0cde02d",
+      "row_count": 1034
+    }
+  ],
+  "candidate_review_pool": {
+    "count": 96,
+    "dataset_counts": {
+      "allenai/WildChat-1M": 72,
+      "nvidia/HelpSteer2": 24
+    },
+    "file_name": "SOURCE_REVIEW_CANDIDATES_96.jsonl",
+    "file_sha256": "ece452c90b9be43cf5288fd47b4eb4ea3e0980d5c7214c6297e21d68cd181386",
+    "length_counts": {
+      "long": 39,
+      "medium": 33,
+      "short": 24
+    },
+    "source_ids_sha256": "11c5f3e9324266a8a0db67543747682fb63e65ec69acf167da65a8543a5fe136",
+    "status": "pending_source_only_human_review_not_authorized_for_generation",
+    "task_counts": {
+      "comparison_analysis": 15,
+      "factual_explanation": 36,
+      "math_logic": 15,
+      "programming": 15,
+      "summary_judgment": 15
+    }
+  },
+  "config_sha256": "4260097d14d43d4e9092dc32aa044a0e5084369cce265ccc4d468a478e9552d1",
+  "contains_source_text": false,
+  "eligible_after_automated_prefilters_not_human_approved": 8103,
+  "excluded_by_anchor_field_nonexclusive": {
+    "canonical_prompt_sha256": 1432,
+    "conversation_hash": 906,
+    "development_template_group": 1494,
+    "group_id": 1494,
+    "legacy_template_group": 1432,
+    "normalized_prompt_sha256": 1514,
+    "normalized_response_sha256": 1208,
+    "original_response_sha256": 1255,
+    "source_id": 1255
+  },
+  "freeze_version": "3.2",
+  "heuristic_pass_is_human_approval": false,
+  "human_source_review_status": "pending",
+  "model_calls": 0,
+  "network_calls": 0,
+  "prefilter_exclusion_reason_counts_nonexclusive": {
+    "code_only": 19,
+    "copywriting_or_promotion": 259,
+    "current_or_time_sensitive": 367,
+    "email_or_correspondence": 290,
+    "fixed_span_dominated": 187,
+    "legal_guidance": 19,
+    "medical_guidance": 33,
+    "meta_transformation": 149,
+    "refusal_or_clarification_only": 10,
+    "roleplay_or_creative": 480,
+    "uncertainty_central": 17
+  },
+  "prefilter_rules": {
+    "code_only": "responses dominated by code with too little explanatory prose for a content-preserving rewrite",
+    "copywriting_or_promotion": "advertising, marketing, SEO, slogans, social posts, or promotional copy",
+    "current_or_time_sensitive": "requests explicitly tied to current, latest, live, recent, or date-dependent facts",
+    "email_or_correspondence": "direct email, letter, message, invitation, apology, or cover-letter writing",
+    "fixed_span_dominated": "responses dominated by code, equations, URLs, quoted blocks, or tables that must remain fixed",
+    "legal_guidance": "personal or actionable legal, liability, litigation, contract, or regulatory guidance",
+    "medical_guidance": "personal diagnosis, treatment, dosage, medication, symptom, or emergency guidance",
+    "meta_transformation": "prompt generation, template filling, grammar-only editing, paraphrasing, or persona tasks",
+    "refusal_or_clarification_only": "assistant refusals, capability disclaimers, or responses that only request input",
+    "roleplay_or_creative": "direct requests or outputs for roleplay, fiction, dialogue, poetry, lyrics, screenplays, or other creative continuation",
+    "uncertainty_central": "the response's main content is inability to determine, missing information, or a future prediction"
+  },
+  "promotion_targets": {
+    "primary_canary_32": {
+      "dataset_counts": {
+        "allenai/WildChat-1M": 24,
+        "nvidia/HelpSteer2": 8
+      },
+      "length_counts": {
+        "long": 13,
+        "medium": 11,
+        "short": 8
+      },
+      "task_counts": {
+        "comparison_analysis": 5,
+        "factual_explanation": 12,
+        "math_logic": 5,
+        "programming": 5,
+        "summary_judgment": 5
+      }
+    },
+    "review_pool_64": {
+      "dataset_counts": {
+        "allenai/WildChat-1M": 48,
+        "nvidia/HelpSteer2": 16
+      },
+      "length_counts": {
+        "long": 26,
+        "medium": 22,
+        "short": 16
+      },
+      "task_counts": {
+        "comparison_analysis": 10,
+        "factual_explanation": 24,
+        "math_logic": 10,
+        "programming": 10,
+        "summary_judgment": 10
+      }
+    }
+  },
+  "protocol_version": "source-only-review-v3.2",
+  "raw_cached_row_count": 14698,
+  "removed_cache_duplicates_by_field_nonexclusive": {
+    "canonical_prompt_sha256": 3380,
+    "development_template_group": 3380,
+    "group_id": 3380,
+    "legacy_template_group": 3376,
+    "normalized_prompt_sha256": 3374
+  },
+  "required_exclusion_anchors": [
+    {
+      "file_name": "SOURCE_MANIFEST.jsonl",
+      "file_sha256": "bd821d1da4b35b6d5077eb07c9be2b532ec3509737d60333aa075df23ca78321",
+      "row_count": 1200
+    },
+    {
+      "file_name": "SOURCE_SMOKE_8.jsonl",
+      "file_sha256": "38692bed9a33ae4f545e3623514459846240bd9046be480db091b914d8c79ded",
+      "row_count": 8
+    },
+    {
+      "file_name": "SOURCE_CANARY_32.jsonl",
+      "file_sha256": "798ea405d8bddf7fc9393783da4348beeea05d451711ca9c04da15419d6a88f7",
+      "row_count": 32
+    },
+    {
+      "file_name": "SOURCE_SMOKE_8.jsonl",
+      "file_sha256": "cd2071472d3f4a60f876fd5fd4ca5af20794ad64b8c696e0f14580b723fb071f",
+      "row_count": 8
+    },
+    {
+      "file_name": "SOURCE_CANARY_CANDIDATE_POOL_45.jsonl",
+      "file_sha256": "10976ccb08c9cc3070e54d5a449297a83833a404a0dac31d7b095421c3cd3bcc",
+      "row_count": 45
+    },
+    {
+      "file_name": "SOURCE_SMOKE_8.jsonl",
+      "file_sha256": "901455e8108093d12060124045193541673a4f08bc95cc30385f99583a9ffa6e",
+      "row_count": 8
+    },
+    {
+      "file_name": "review_sources_50.jsonl",
+      "file_sha256": "374bff1044b2828abf9dfb07400f966a0764701525d11892f3547a17e3ac4a8d",
+      "row_count": 50
+    },
+    {
+      "file_name": "challenge_sources_50.jsonl",
+      "file_sha256": "9c5c6e3ff3a5317a548ff26743bab5930dba3a58d3f4199dde95e4188fa9a7b8",
+      "row_count": 50
+    }
+  ],
+  "review_packet": {
+    "blank_template_sha256": "a087a602116c6235d2def85cdb5021e95e0ef09a2d7d8292ea1fd4291b7b3787",
+    "count": 96,
+    "file_name": "SOURCE_REVIEW_PACKET_96.jsonl",
+    "instructions": "Copy this immutable blank packet to the configured completed-review file; fill every categorical field. Automated prefilter passage is not approval.",
+    "required_categorical_fields": [
+      "review_decision",
+      "content_stability",
+      "rewrite_suitability",
+      "uncertainty_central",
+      "high_stakes_or_current"
+    ]
+  },
+  "rewrite_generation_performed": false,
+  "selection_seed": 20261014
+}

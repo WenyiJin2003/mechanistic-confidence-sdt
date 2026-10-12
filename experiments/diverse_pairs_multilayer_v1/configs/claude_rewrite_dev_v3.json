@@ -1,0 +1,64 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3",
+  "selection_seed": 20261012,
+  "reserve_input_path": "private_data/source_pool_1000_v1/SOURCE_MANIFEST_RESERVE_200.jsonl",
+  "main_input_path": "private_data/source_pool_1000_v1/SOURCE_MANIFEST_MAIN_1000.jsonl",
+  "source_pool_manifest_path": "manifests/source_pool_1000_freeze.json",
+  "public_freeze_manifest_path": "manifests/rewrite_dev_v3_freeze.json",
+  "private_manifest_dir": "private_data/rewrite_dev_v3",
+  "output_root": "private_data/claude_rewrite_dev_v3",
+  "sets": {
+    "smoke": {
+      "count": 8,
+      "input_file": "SOURCE_SMOKE_8.jsonl",
+      "dataset_counts": {
+        "allenai/WildChat-1M": 6,
+        "nvidia/HelpSteer2": 2
+      },
+      "task_counts": {
+        "factual_explanation": 4,
+        "math_logic": 1,
+        "programming": 1,
+        "comparison_analysis": 1,
+        "summary_judgment": 1
+      },
+      "length_counts": {
+        "short": 2,
+        "medium": 3,
+        "long": 3
+      }
+    },
+    "canary": {
+      "count": 32,
+      "input_file": "SOURCE_CANARY_32.jsonl",
+      "dataset_counts": {
+        "allenai/WildChat-1M": 24,
+        "nvidia/HelpSteer2": 8
+      },
+      "task_counts": {
+        "factual_explanation": 12,
+        "math_logic": 5,
+        "programming": 5,
+        "comparison_analysis": 5,
+        "summary_judgment": 5
+      },
+      "length_counts": {
+        "short": 8,
+        "medium": 11,
+        "long": 13
+      }
+    }
+  },
+  "batch_size": 8,
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "max_transport_retries": 2,
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.8,
+  "max_word_ratio": 1.2,
+  "max_pair_length_ratio": 1.2,
+  "pair_gap_min_tokens": 8,
+  "pair_gap_mean_fraction": 0.1,
+  "min_substantive_edit_fraction": 0.1,
+  "claude_binary": "claude"
+}

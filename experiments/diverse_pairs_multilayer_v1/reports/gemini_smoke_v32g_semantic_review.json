@@ -1,0 +1,23 @@
+{
+  "protocol_version": "gemini-symmetric-diverse-rewrite-v3.2g-textonly",
+  "review_scope": "eight cached smoke pairs",
+  "reviewer_status": "agent_assisted_manual_review_not_human_certified",
+  "content_preservation": {
+    "pass": 4,
+    "needs_review": 2,
+    "clear_fail": 2
+  },
+  "confidence_contrast": {
+    "clear_and_usable": 3,
+    "weak_or_localized": 3,
+    "invalid_due_to_content_or_non_epistemic_shift": 2
+  },
+  "clear_failure_types": [
+    "normative_requirement_weakened_to_recommendation",
+    "proposed_explanation_changed_to_definitive_explanation"
+  ],
+  "contains_source_text": false,
+  "strict_smoke_gate_pass": false,
+  "scale_authorized": false,
+  "human_blind_review_completed": false
+}

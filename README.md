@@ -25,7 +25,13 @@ downstream proposal, not the next experiment.
 [Layer plot](experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png) ·
 [Challenge protocol](experiments/cue_holdout_challenge_v1/README.md) ·
 [Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
-[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)
+[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) ·
+[Rewrite-generation smoke](experiments/diverse_pairs_multilayer_v1/GEMINI_REWRITE_SMOKE.md)
+
+**Data expansion is not yet authorized.** The latest eight-source
+Antigravity/Gemini rewrite smoke failed the frozen quality gate and contained
+two clear content-preservation failures. This is a generation-method result,
+not evidence against the activation finding above.
 
 ## Historical diagnostic findings
 

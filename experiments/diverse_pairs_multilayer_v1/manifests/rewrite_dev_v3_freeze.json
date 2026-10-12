@@ -1,0 +1,123 @@
+{
+  "builder_source_sha256": "477335cf529a2fedc89ff7109eefe2c686cc605ec649e78db80f6f7ef11db0ec",
+  "config_sha256": "fd45b966d924988e13ebd9deb0de3415633a8d68af60867f0ff97429feeeba22",
+  "contains_source_text": false,
+  "freeze_version": "3.0",
+  "main_and_final_test_excluded": true,
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3",
+  "rewrite_generation_performed": false,
+  "selection_algorithm": "deterministic exact factorial slots with exact-rational task/length coverage penalty and SHA-256 tie breaking",
+  "selection_scope": "frozen reserve/train only; recipe C excluded",
+  "selection_seed": 20261012,
+  "sets": {
+    "canary": {
+      "count": 32,
+      "dataset_counts": {
+        "allenai/WildChat-1M": 24,
+        "nvidia/HelpSteer2": 8
+      },
+      "file_name": "SOURCE_CANARY_32.jsonl",
+      "file_sha256": "798ea405d8bddf7fc9393783da4348beeea05d451711ca9c04da15419d6a88f7",
+      "length_counts": {
+        "long": 13,
+        "medium": 11,
+        "short": 8
+      },
+      "output_order_counts": {
+        "confident_first": 16,
+        "hedged_first": 16
+      },
+      "private_file_write_policy": "write_once_or_verify_identical_bytes",
+      "recipe_counts": {
+        "A": 16,
+        "B": 16
+      },
+      "recipe_topology_order_counts": {
+        "A|distributed|confident_first": 2,
+        "A|distributed|hedged_first": 2,
+        "A|early|confident_first": 2,
+        "A|early|hedged_first": 2,
+        "A|late|confident_first": 2,
+        "A|late|hedged_first": 2,
+        "A|middle|confident_first": 2,
+        "A|middle|hedged_first": 2,
+        "B|distributed|confident_first": 2,
+        "B|distributed|hedged_first": 2,
+        "B|early|confident_first": 2,
+        "B|early|hedged_first": 2,
+        "B|late|confident_first": 2,
+        "B|late|hedged_first": 2,
+        "B|middle|confident_first": 2,
+        "B|middle|hedged_first": 2
+      },
+      "source_ids_sha256": "2a65a44dca60a0dc2859a4d7ba9f23463656540901bf02eea3de961dea23a1e5",
+      "task_counts": {
+        "comparison_analysis": 5,
+        "factual_explanation": 12,
+        "math_logic": 5,
+        "programming": 5,
+        "summary_judgment": 5
+      },
+      "topology_counts": {
+        "distributed": 8,
+        "early": 8,
+        "late": 8,
+        "middle": 8
+      }
+    },
+    "smoke": {
+      "count": 8,
+      "dataset_counts": {
+        "allenai/WildChat-1M": 6,
+        "nvidia/HelpSteer2": 2
+      },
+      "file_name": "SOURCE_SMOKE_8.jsonl",
+      "file_sha256": "38692bed9a33ae4f545e3623514459846240bd9046be480db091b914d8c79ded",
+      "length_counts": {
+        "long": 3,
+        "medium": 3,
+        "short": 2
+      },
+      "output_order_counts": {
+        "confident_first": 4,
+        "hedged_first": 4
+      },
+      "private_file_write_policy": "write_once_or_verify_identical_bytes",
+      "recipe_counts": {
+        "A": 4,
+        "B": 4
+      },
+      "recipe_topology_order_counts": {
+        "A|distributed|hedged_first": 1,
+        "A|early|confident_first": 1,
+        "A|late|confident_first": 1,
+        "A|middle|hedged_first": 1,
+        "B|distributed|confident_first": 1,
+        "B|early|hedged_first": 1,
+        "B|late|hedged_first": 1,
+        "B|middle|confident_first": 1
+      },
+      "source_ids_sha256": "c4a706f5e4b2ee37356c87b7793dd28a749d11d69c554e7d04ba68e06eb05778",
+      "task_counts": {
+        "comparison_analysis": 1,
+        "factual_explanation": 4,
+        "math_logic": 1,
+        "programming": 1,
+        "summary_judgment": 1
+      },
+      "topology_counts": {
+        "distributed": 2,
+        "early": 2,
+        "late": 2,
+        "middle": 2
+      }
+    }
+  },
+  "smoke_canary_disjoint": true,
+  "source_input_sha256": {
+    "SOURCE_MANIFEST_MAIN_1000.jsonl": "ee9b8c6669fb3f76aadd59f3eaa4db5513b11c2ee41cbea1a6f540a297789e29",
+    "SOURCE_MANIFEST_RESERVE_200.jsonl": "39209a46fc35f61ffba1afe7eb17caa485becec30291a7e341d175d45f3056c2"
+  },
+  "source_pool_manifest_sha256": "8b6c4f8429cbc317f1ab33ca563a3df11f69b6f98b22d04a073d9c13ca66f73b",
+  "target_longer_constraint_present": false
+}

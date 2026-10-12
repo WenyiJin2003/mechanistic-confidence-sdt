@@ -88,6 +88,7 @@ perfect performance on future data.
 | All-layer configuration | [configs/diverse_pairs_multilayer_v1.yaml](configs/diverse_pairs_multilayer_v1.yaml) |
 | Machine-readable diagnostic | [results/DEVELOPMENT_DIAGNOSTIC.json](results/DEVELOPMENT_DIAGNOSTIC.json) |
 | 20-pair expansion canary audit | [reports/claude_canary_20_audit.json](reports/claude_canary_20_audit.json) |
+| Gemini/Antigravity rewrite smoke | [GEMINI_REWRITE_SMOKE.md](GEMINI_REWRITE_SMOKE.md) |
 | Layer figure | [results/DEVELOPMENT_LAYER_COMPARISON.png](results/DEVELOPMENT_LAYER_COMPARISON.png) |
 | Engineering checks | [results/EXTRACTION_SANITY.json](results/EXTRACTION_SANITY.json) |
 | Extraction, readouts and review importer | [src/](src/) |
@@ -110,6 +111,12 @@ primary readout and the equal 28-layer score the prespecified ensemble. See
 training.
 
 ### 1,000-source expansion: stopped after the first canary
+
+The later Antigravity/Gemini transport pilot also **did not authorize scale**:
+the strict frozen gate passed 0/8, and agent-assisted semantic review found two
+clear content-preservation failures. See the concise
+[Gemini rewrite smoke report](GEMINI_REWRITE_SMOKE.md). These are failures of
+the current generation method, not activation-probe results.
 
 The source pool is frozen: 1,000 main sources plus 200 split-matched reserves,
 with a 750/250 WildChat–HelpSteer2 mixture and a fixed 700/150/150

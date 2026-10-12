@@ -1,0 +1,55 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.1",
+  "selection_seed": 20261013,
+  "reserve_input_path": "private_data/source_pool_1000_v1/SOURCE_MANIFEST_RESERVE_200.jsonl",
+  "main_input_path": "private_data/source_pool_1000_v1/SOURCE_MANIFEST_MAIN_1000.jsonl",
+  "source_pool_manifest_path": "manifests/source_pool_1000_freeze.json",
+  "legacy_v3_public_manifest_path": "manifests/rewrite_dev_v3_freeze.json",
+  "legacy_v3_private_manifest_dir": "private_data/rewrite_dev_v3",
+  "public_freeze_manifest_path": "manifests/rewrite_dev_v31_freeze.json",
+  "private_manifest_dir": "private_data/rewrite_dev_v31",
+  "output_root": "private_data/claude_rewrite_dev_v31",
+  "sets": {
+    "smoke": {
+      "count": 8,
+      "input_file": "SOURCE_SMOKE_8.jsonl",
+      "source_suitability_status": "primary_eligible",
+      "dataset_counts": {
+        "allenai/WildChat-1M": 6,
+        "nvidia/HelpSteer2": 2
+      },
+      "task_counts": {
+        "factual_explanation": 4,
+        "math_logic": 1,
+        "programming": 1,
+        "comparison_analysis": 1,
+        "summary_judgment": 1
+      },
+      "length_counts": {
+        "short": 2,
+        "medium": 3,
+        "long": 3
+      }
+    }
+  },
+  "canary_candidate_pool": {
+    "count": 45,
+    "input_file": "SOURCE_CANARY_CANDIDATE_POOL_45.jsonl",
+    "source_suitability_status": "candidate_pending_source_only_semantic_review"
+  },
+  "batch_size": 8,
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "max_transport_retries": 2,
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.8,
+  "max_word_ratio": 1.2,
+  "prompt_target_min_word_ratio": 0.9,
+  "prompt_target_max_word_ratio": 1.1,
+  "prompt_pair_word_gap_absolute": 5,
+  "prompt_pair_word_gap_fraction": 0.08,
+  "pair_gap_min_tokens": 8,
+  "pair_gap_mean_fraction": 0.1,
+  "min_substantive_edit_fraction": 0.1,
+  "claude_binary": "claude"
+}

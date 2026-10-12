@@ -1,0 +1,86 @@
+{
+  "protocol_version": "source-only-review-v3.2",
+  "selection_seed": 20261014,
+  "expected_acquisition_fingerprint": "e6752999b74f91fb228fb75bf4fd40d59cf8df95a0342aa2fef6aec0525b20ee",
+  "dataset_revisions": {
+    "allenai/WildChat-1M": "7d6490e462285cf85d91eabea0f9a954fbddcd1f",
+    "nvidia/HelpSteer2": "990b2711a36180dd19d9c94b8627844866f8982a"
+  },
+  "cache_patterns": [
+    "private_data/source_pool_1000_v1/acquisition/helpsteer2_candidates.jsonl",
+    "private_data/source_pool_1000_v1/acquisition/wildchat/*.jsonl"
+  ],
+  "required_exclusion_paths": [
+    "private_data/source_pool_1000_v1/SOURCE_MANIFEST.jsonl",
+    "private_data/rewrite_dev_v3/SOURCE_SMOKE_8.jsonl",
+    "private_data/rewrite_dev_v3/SOURCE_CANARY_32.jsonl",
+    "private_data/rewrite_dev_v31/SOURCE_SMOKE_8.jsonl",
+    "private_data/rewrite_dev_v31/SOURCE_CANARY_CANDIDATE_POOL_45.jsonl",
+    "private_data/rewrite_dev_v32/SOURCE_SMOKE_8.jsonl",
+    "private_data/review_sources_50.jsonl",
+    "../cue_holdout_challenge_v1/private_data/challenge_sources_50.jsonl"
+  ],
+  "candidate_quotas": {
+    "dataset_counts": {
+      "allenai/WildChat-1M": 72,
+      "nvidia/HelpSteer2": 24
+    },
+    "task_counts": {
+      "factual_explanation": 36,
+      "math_logic": 15,
+      "programming": 15,
+      "comparison_analysis": 15,
+      "summary_judgment": 15
+    },
+    "length_counts": {
+      "short": 24,
+      "medium": 33,
+      "long": 39
+    }
+  },
+  "promotion_targets": {
+    "review_pool_64": {
+      "dataset_counts": {
+        "allenai/WildChat-1M": 48,
+        "nvidia/HelpSteer2": 16
+      },
+      "task_counts": {
+        "factual_explanation": 24,
+        "math_logic": 10,
+        "programming": 10,
+        "comparison_analysis": 10,
+        "summary_judgment": 10
+      },
+      "length_counts": {
+        "short": 16,
+        "medium": 22,
+        "long": 26
+      }
+    },
+    "primary_canary_32": {
+      "dataset_counts": {
+        "allenai/WildChat-1M": 24,
+        "nvidia/HelpSteer2": 8
+      },
+      "task_counts": {
+        "factual_explanation": 12,
+        "math_logic": 5,
+        "programming": 5,
+        "comparison_analysis": 5,
+        "summary_judgment": 5
+      },
+      "length_counts": {
+        "short": 8,
+        "medium": 11,
+        "long": 13
+      }
+    }
+  },
+  "private_candidate_file": "private_data/rewrite_dev_v32/SOURCE_REVIEW_CANDIDATES_96.jsonl",
+  "private_review_packet": "private_data/rewrite_dev_v32/SOURCE_REVIEW_PACKET_96.jsonl",
+  "completed_review_file": "private_data/rewrite_dev_v32/SOURCE_REVIEW_COMPLETED_96.jsonl",
+  "promoted_review_pool_file": "private_data/rewrite_dev_v32/SOURCE_REVIEWED_POOL_64.jsonl",
+  "primary_canary_file": "private_data/rewrite_dev_v32/SOURCE_PRIMARY_CANARY_32.jsonl",
+  "public_freeze_manifest": "manifests/source_review_v32_freeze.json",
+  "public_promotion_manifest": "manifests/source_review_v32_promotion.json"
+}

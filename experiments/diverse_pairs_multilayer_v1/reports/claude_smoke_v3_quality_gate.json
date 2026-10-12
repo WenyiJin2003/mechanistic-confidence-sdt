@@ -1,0 +1,540 @@
+{
+  "acceptance_by_group": {
+    "dataset": [
+      {
+        "acceptance_rate": 0.333333,
+        "accepted": 2,
+        "group": "allenai/WildChat-1M",
+        "total": 6
+      },
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "nvidia/HelpSteer2",
+        "total": 2
+      }
+    ],
+    "length_bin": [
+      {
+        "acceptance_rate": 0.333333,
+        "accepted": 1,
+        "group": "long",
+        "total": 3
+      },
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "medium",
+        "total": 3
+      },
+      {
+        "acceptance_rate": 0.5,
+        "accepted": 1,
+        "group": "short",
+        "total": 2
+      }
+    ],
+    "rewrite_output_order": [
+      {
+        "acceptance_rate": 0.25,
+        "accepted": 1,
+        "group": "confident_first",
+        "total": 4
+      },
+      {
+        "acceptance_rate": 0.25,
+        "accepted": 1,
+        "group": "hedged_first",
+        "total": 4
+      }
+    ],
+    "rewrite_recipe": [
+      {
+        "acceptance_rate": 0.25,
+        "accepted": 1,
+        "group": "A",
+        "total": 4
+      },
+      {
+        "acceptance_rate": 0.25,
+        "accepted": 1,
+        "group": "B",
+        "total": 4
+      }
+    ],
+    "stance_topology": [
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "distributed",
+        "total": 2
+      },
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "early",
+        "total": 2
+      },
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "late",
+        "total": 2
+      },
+      {
+        "acceptance_rate": 1.0,
+        "accepted": 2,
+        "group": "middle",
+        "total": 2
+      }
+    ],
+    "task": [
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "comparison_analysis",
+        "total": 1
+      },
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "factual_explanation",
+        "total": 4
+      },
+      {
+        "acceptance_rate": 1.0,
+        "accepted": 1,
+        "group": "math_logic",
+        "total": 1
+      },
+      {
+        "acceptance_rate": 0.0,
+        "accepted": 0,
+        "group": "programming",
+        "total": 1
+      },
+      {
+        "acceptance_rate": 1.0,
+        "accepted": 1,
+        "group": "summary_judgment",
+        "total": 1
+      }
+    ]
+  },
+  "artifact_integrity": {
+    "all_record_hashes_valid": true,
+    "all_terminal": true,
+    "artifact_readable": true,
+    "batch_validation_issue_count": 0,
+    "complete_and_aligned": true,
+    "completed_expected_batch_count": 1,
+    "current_generation_contract_verified": true,
+    "current_generation_fingerprint_match_count": 1,
+    "duplicate_batch_artifact_count": 0,
+    "duplicate_record_identity_count": 0,
+    "duplicate_source_identity_count": 0,
+    "exact_expected_batch_set": true,
+    "expected_batch_count": 1,
+    "frozen_manifest_validated": true,
+    "generation_fingerprint_present": true,
+    "identity_or_design_mismatch_count": 0,
+    "matched_count": 8,
+    "missing_record_count": 0,
+    "parsed_artifact_count": 1,
+    "record_count": 8,
+    "records_hash_valid_count": 1,
+    "run_manifest_matches_current_identity": true,
+    "run_manifest_present": true,
+    "source_count": 8,
+    "terminal_artifact_count": 1,
+    "unexpected_batch_artifact_count": 0,
+    "unexpected_record_count": 0
+  },
+  "audit": "claude_symmetric_diverse_rewrite_v3_quality_gate",
+  "audit_version": 1,
+  "decision": {
+    "canary_authorized": false,
+    "human_review_required_for_scale": true,
+    "mechanical_blocker_categories": [
+      "label_length_direction_imbalance",
+      "member_length_ratio",
+      "not_all_records_accepted",
+      "pair_length_balance",
+      "recurring_cue_ngram_concentration"
+    ],
+    "mechanical_gate_pass": false,
+    "scale_authorized": false,
+    "semantic_review_required": true
+  },
+  "length_parity": {
+    "confident_longer_token_share_among_non_ties": 0.25,
+    "confident_longer_word_share_among_non_ties": 0.0,
+    "confident_minus_source_token_delta": {
+      "count": 8,
+      "maximum": 67.0,
+      "mean": -11.25,
+      "median": -13.5,
+      "minimum": -58.0
+    },
+    "confident_minus_source_word_delta": {
+      "count": 8,
+      "maximum": 59.0,
+      "mean": -11.0,
+      "median": -8.5,
+      "minimum": -70.0
+    },
+    "counting_method": "unicode_word_and_token_regex_no_model_call",
+    "dynamic_pair_token_gap_violation_count": 2,
+    "hedged_minus_source_token_delta": {
+      "count": 8,
+      "maximum": 81.0,
+      "mean": 1.25,
+      "median": -3.0,
+      "minimum": -63.0
+    },
+    "hedged_minus_source_word_delta": {
+      "count": 8,
+      "maximum": 75.0,
+      "mean": 2.375,
+      "median": 2.5,
+      "minimum": -68.0
+    },
+    "member_token_ratio_violation_count": 3,
+    "member_word_ratio_violation_count": 4,
+    "pair_absolute_token_gap": {
+      "count": 8,
+      "maximum": 29.0,
+      "mean": 14.0,
+      "median": 12.0,
+      "minimum": 1.0
+    },
+    "pair_absolute_word_gap": {
+      "count": 8,
+      "maximum": 30.0,
+      "mean": 13.375,
+      "median": 13.5,
+      "minimum": 0.0
+    },
+    "pair_max_min_token_ratio": {
+      "count": 8,
+      "maximum": 1.197183,
+      "mean": 1.075786,
+      "median": 1.078768,
+      "minimum": 1.006098
+    },
+    "pair_max_min_word_ratio": {
+      "count": 8,
+      "maximum": 1.22,
+      "mean": 1.086869,
+      "median": 1.096375,
+      "minimum": 1.0
+    },
+    "paired_confident_minus_hedged_token_delta": {
+      "count": 8,
+      "maximum": 5.0,
+      "mean": -12.5,
+      "median": -12.0,
+      "minimum": -29.0
+    },
+    "paired_confident_minus_hedged_word_delta": {
+      "count": 8,
+      "maximum": 0.0,
+      "mean": -13.375,
+      "median": -13.5,
+      "minimum": -30.0
+    },
+    "token_tie_count": 0,
+    "word_tie_count": 1
+  },
+  "output_order_effects": {
+    "confident_first": {
+      "acceptance_rate": 0.25,
+      "count": 4,
+      "mean_confident_minus_hedged_source_distance": 0.010941,
+      "mean_confident_minus_hedged_token_delta": -10.0,
+      "mean_confident_minus_hedged_word_delta": -11.0
+    },
+    "hedged_first": {
+      "acceptance_rate": 0.25,
+      "count": 4,
+      "mean_confident_minus_hedged_source_distance": 0.007488,
+      "mean_confident_minus_hedged_token_delta": -15.0,
+      "mean_confident_minus_hedged_word_delta": -15.75
+    }
+  },
+  "privacy": {
+    "contains_hashes": false,
+    "contains_phrases_or_ngrams": false,
+    "contains_reviewer_notes": false,
+    "contains_source_ids": false,
+    "contains_source_or_candidate_text": false,
+    "per_example_values_published": false,
+    "raw_text_location": "private_data_only"
+  },
+  "scope": {
+    "expected_pair_count": 8,
+    "matched_pair_count": 8,
+    "observed_record_count": 8,
+    "phase": "smoke"
+  },
+  "semantic_review": {
+    "blind": true,
+    "counts": {
+      "certainty_ordering": {
+        "correct": 8,
+        "reversed": 0,
+        "tie": 0,
+        "uncertain": 0
+      },
+      "confound": {
+        "major": 2,
+        "minor": 6,
+        "none": 0,
+        "uncertain": 0
+      },
+      "content_preservation": {
+        "fail": 0,
+        "pass": 7,
+        "uncertain": 1
+      },
+      "formatting": {
+        "mismatch": 0,
+        "pass": 8,
+        "uncertain": 0
+      },
+      "naturalness": {
+        "fail": 0,
+        "minor": 0,
+        "pass": 8,
+        "uncertain": 0
+      },
+      "observed_topology_x": {
+        "distributed": 7,
+        "early": 0,
+        "late": 1,
+        "middle": 0,
+        "unclear": 0
+      },
+      "observed_topology_y": {
+        "distributed": 7,
+        "early": 0,
+        "late": 1,
+        "middle": 0,
+        "unclear": 0
+      },
+      "shortcut": {
+        "major": 2,
+        "minor": 6,
+        "none": 0,
+        "uncertain": 0
+      },
+      "speaker_scope": {
+        "fail": 0,
+        "pass": 8,
+        "uncertain": 0
+      }
+    },
+    "human_certified": false,
+    "minor_allowance": 1,
+    "reviewed_pair_count": 8,
+    "reviewer_type": "agent",
+    "semantic_gate_pass": false,
+    "semantic_review_complete": true,
+    "status": "complete",
+    "topology_assignment_check": {
+      "all_candidates_match_assignment": false,
+      "candidate_match_count": 6,
+      "candidate_mismatch_count": 10,
+      "candidate_unclear_count": 0,
+      "pair_both_match_count": 3,
+      "pair_not_both_match_count": 5
+    }
+  },
+  "shortcut_indicators": {
+    "allowed_largest_repeated_cluster": 2,
+    "boundary_wrapper_count_by_label": {
+      "confident": 0,
+      "hedged": 0
+    },
+    "delta_repetition_by_label": {
+      "confident": {
+        "exact_duplicate_pair_count": 0,
+        "largest_near_duplicate_cluster": 1,
+        "near_duplicate_pair_count": 0
+      },
+      "hedged": {
+        "exact_duplicate_pair_count": 0,
+        "largest_near_duplicate_cluster": 1,
+        "near_duplicate_pair_count": 0
+      }
+    },
+    "duplicate_candidate_text_pair_count": 0,
+    "edit_shape_repetition_by_label": {
+      "confident": {
+        "duplicate_pair_count": 0,
+        "largest_identical_group": 1
+      },
+      "hedged": {
+        "duplicate_pair_count": 0,
+        "largest_identical_group": 1
+      }
+    },
+    "identical_pair_member_count": 0,
+    "recurring_novel_cue_ngram_concentration_by_label": {
+      "confident": {
+        "1_gram": {
+          "candidate_count": 8,
+          "candidate_count_with_any_recurrent_ngram": 8,
+          "gate_maximum_document_share": 0.5,
+          "gate_minimum_document_count": 3,
+          "maximum_document_frequency": 5,
+          "maximum_document_share": 0.625,
+          "maximum_label_exclusive_document_frequency": 5,
+          "maximum_label_exclusive_document_share": 0.625,
+          "recurrent_novel_type_count": 44,
+          "unique_novel_type_count": 429
+        },
+        "2_gram": {
+          "candidate_count": 8,
+          "candidate_count_with_any_recurrent_ngram": 8,
+          "gate_maximum_document_share": 0.35,
+          "gate_minimum_document_count": 3,
+          "maximum_document_frequency": 3,
+          "maximum_document_share": 0.375,
+          "maximum_label_exclusive_document_frequency": 3,
+          "maximum_label_exclusive_document_share": 0.375,
+          "recurrent_novel_type_count": 16,
+          "unique_novel_type_count": 1042
+        },
+        "3_gram": {
+          "candidate_count": 8,
+          "candidate_count_with_any_recurrent_ngram": 0,
+          "gate_maximum_document_share": 0.25,
+          "gate_minimum_document_count": 3,
+          "maximum_document_frequency": 1,
+          "maximum_document_share": 0.125,
+          "maximum_label_exclusive_document_frequency": 1,
+          "maximum_label_exclusive_document_share": 0.125,
+          "recurrent_novel_type_count": 0,
+          "unique_novel_type_count": 1259
+        }
+      },
+      "hedged": {
+        "1_gram": {
+          "candidate_count": 8,
+          "candidate_count_with_any_recurrent_ngram": 8,
+          "gate_maximum_document_share": 0.5,
+          "gate_minimum_document_count": 3,
+          "maximum_document_frequency": 4,
+          "maximum_document_share": 0.5,
+          "maximum_label_exclusive_document_frequency": 3,
+          "maximum_label_exclusive_document_share": 0.375,
+          "recurrent_novel_type_count": 57,
+          "unique_novel_type_count": 439
+        },
+        "2_gram": {
+          "candidate_count": 8,
+          "candidate_count_with_any_recurrent_ngram": 8,
+          "gate_maximum_document_share": 0.35,
+          "gate_minimum_document_count": 3,
+          "maximum_document_frequency": 3,
+          "maximum_document_share": 0.375,
+          "maximum_label_exclusive_document_frequency": 3,
+          "maximum_label_exclusive_document_share": 0.375,
+          "recurrent_novel_type_count": 21,
+          "unique_novel_type_count": 1116
+        },
+        "3_gram": {
+          "candidate_count": 8,
+          "candidate_count_with_any_recurrent_ngram": 4,
+          "gate_maximum_document_share": 0.25,
+          "gate_minimum_document_count": 3,
+          "maximum_document_frequency": 2,
+          "maximum_document_share": 0.25,
+          "maximum_label_exclusive_document_frequency": 2,
+          "maximum_label_exclusive_document_share": 0.25,
+          "recurrent_novel_type_count": 3,
+          "unique_novel_type_count": 1335
+        }
+      }
+    }
+  },
+  "source_composition": {
+    "dataset": {
+      "allenai/WildChat-1M": 6,
+      "nvidia/HelpSteer2": 2
+    },
+    "length_bin": {
+      "long": 3,
+      "medium": 3,
+      "short": 2
+    },
+    "rewrite_output_order": {
+      "confident_first": 4,
+      "hedged_first": 4
+    },
+    "rewrite_recipe": {
+      "A": 4,
+      "B": 4
+    },
+    "stance_topology": {
+      "distributed": 2,
+      "early": 2,
+      "late": 2,
+      "middle": 2
+    },
+    "task": {
+      "comparison_analysis": 1,
+      "factual_explanation": 4,
+      "math_logic": 1,
+      "programming": 1,
+      "summary_judgment": 1
+    }
+  },
+  "source_distance_and_edit_parity": {
+    "absolute_mean_source_distance_gap": 0.009214,
+    "confident_changed_fraction": {
+      "count": 8,
+      "maximum": 1.464912,
+      "mean": 0.889278,
+      "median": 0.839604,
+      "minimum": 0.477612
+    },
+    "confident_source_distance": {
+      "count": 8,
+      "maximum": 0.726908,
+      "mean": 0.591472,
+      "median": 0.589287,
+      "minimum": 0.424084
+    },
+    "definition": "word_sequence_distance_and_aggregate_edit_fraction",
+    "hedged_changed_fraction": {
+      "count": 8,
+      "maximum": 1.552632,
+      "mean": 0.900195,
+      "median": 0.886544,
+      "minimum": 0.559701
+    },
+    "hedged_source_distance": {
+      "count": 8,
+      "maximum": 0.735849,
+      "mean": 0.582258,
+      "median": 0.593114,
+      "minimum": 0.370892
+    },
+    "paired_confident_minus_hedged_source_distance": {
+      "count": 8,
+      "maximum": 0.090452,
+      "mean": 0.009214,
+      "median": 0.007875,
+      "minimum": -0.081467
+    }
+  },
+  "status_counts": {
+    "accepted": 2,
+    "needs_review": 0,
+    "not_applicable": 0,
+    "other": 0,
+    "validation_failed": 6
+  }
+}
