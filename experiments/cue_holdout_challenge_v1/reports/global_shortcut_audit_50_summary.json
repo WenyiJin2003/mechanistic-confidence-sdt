@@ -1,0 +1,55 @@
+{
+  "activation_or_score_information_used": false,
+  "audit": "global_score_free_pre_review",
+  "audit_version": 1,
+  "classification_counts": {
+    "minor": 7,
+    "none": 38,
+    "repair": 5
+  },
+  "formatting_match_counts": {
+    "pass": 50
+  },
+  "generic_endorsement_wrapper_counts": {
+    "none": 50
+  },
+  "human_review_certified": false,
+  "input_sha256": {
+    "frozen_sources": "9c5c6e3ff3a5317a548ff26743bab5930dba3a58d3f4199dde95e4188fa9a7b8",
+    "rewrite_output_cross_task_microbatch": "5bc1ed059b207f246d590c9680599456ec030a98f226816c4232438d1160ab9e",
+    "rewrite_output_remaining_factual_math": "17d06733e741dca50a2a81565d59e858d51a1dc93011672f51c626d42445a07b",
+    "rewrite_output_remaining_programming_comparison": "f98ca4b9b673f3287f3853edaea35c016262a15b48bac009cde5337f33f6e139",
+    "rewrite_output_remaining_summary": "4f659dfb351077c9643bb0f36e72c22b37bf568cf711a6ffa0185505e6292bd2",
+    "rewrite_spec": "c5e8ee977a21f8518c425778d3bc0e9b5e10672afa2dcba710ae79e1a7b9c781"
+  },
+  "minor_primary_reason_counts": {
+    "partial_or_secondary_answer_scope": 2,
+    "retained_reference_occurrence_for_planned_template_repair": 3,
+    "shared_short_cue_phrase_with_distinct_syntax": 2
+  },
+  "pair_count": 50,
+  "repair_primary_reason_counts": {
+    "answer_confidence_replaced_by_method_preference": 1,
+    "exact_cross_task_fixed_template": 1,
+    "near_fixed_cross_task_template": 1,
+    "recommendation_force_replaced_answer_confidence": 1,
+    "speaker_user_scope_mismatch": 1
+  },
+  "review_stage": "before_full_blinded_review",
+  "row_level_private_audit_sha256": "af41faa41f81551804129432bfd82d3170d8e5a1dc24f198e3da68630ff0c296",
+  "source_proposition_preservation_counts": {
+    "pass": 50
+  },
+  "speaker_certainty_scope_counts": {
+    "minor": 2,
+    "pass": 45,
+    "repair": 3
+  },
+  "status": "repair_required_before_blinded_review",
+  "template_reuse_counts": {
+    "minor": 6,
+    "none": 42,
+    "repair": 2
+  },
+  "text_free_public_summary": true
+}
