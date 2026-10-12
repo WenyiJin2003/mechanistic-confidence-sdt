@@ -1,0 +1,254 @@
+{
+  "audit": "claude_rewrite_canary_aggregate",
+  "audit_version": 2,
+  "decision": {
+    "automated_gate_pass": false,
+    "blocker_categories": [
+      "edit_position_concentration",
+      "generic_wrapper",
+      "runner_validation",
+      "structure_mismatch",
+      "tight_length_ratio",
+      "verbatim_original"
+    ],
+    "human_certified": false,
+    "scale_authorized": false,
+    "semantic_gate_pass": false
+  },
+  "global_shortcut_checks": {
+    "first_edit_position_counts": {
+      "confident": {
+        "early": 1,
+        "late": 0,
+        "middle": 0
+      },
+      "hedged": {
+        "early": 16,
+        "late": 1,
+        "middle": 3
+      }
+    },
+    "maximum_edit_signature_frequency": 1,
+    "maximum_first_edit_position_bin_count": 16,
+    "maximum_near_duplicate_delta_cluster_size": 3,
+    "maximum_reused_four_plus_token_span_pair_frequency": 1,
+    "maximum_reused_three_token_span_pair_frequency": 1,
+    "maximum_stance_family_pair_frequency": 8
+  },
+  "issue_counts": {
+    "added_authority": 0,
+    "added_refusal": 0,
+    "added_verification": 0,
+    "batch_protocol": 0,
+    "cross_record_leakage": 0,
+    "edit_position_concentration": 1,
+    "generic_wrapper": 1,
+    "low_pair_similarity": 0,
+    "low_source_similarity": 0,
+    "model_usage_contract": 0,
+    "near_duplicate_delta_cluster": 0,
+    "parsed_artifact_mismatch": 0,
+    "raw_batch_identity": 0,
+    "raw_content_integrity": 0,
+    "raw_transport_or_isolation": 0,
+    "repeated_edit_signature": 0,
+    "reused_four_plus_token_span": 0,
+    "reused_three_token_span": 0,
+    "runner_validation": 14,
+    "schema_leakage": 0,
+    "stance_family_concentration": 0,
+    "structure_mismatch": 1,
+    "tight_length_ratio": 1,
+    "verbatim_original": 19
+  },
+  "pair_checks": {
+    "absolute_token_gap_summary": {
+      "maximum": 11,
+      "median": 2.5,
+      "minimum": 0
+    },
+    "cross_record_leak_pair_count": 0,
+    "generic_wrapper_response_count": 1,
+    "pair_token_similarity_summary": {
+      "maximum": 0.997555,
+      "median": 0.987732,
+      "minimum": 0.816901
+    },
+    "schema_leak_pair_count": 0,
+    "source_token_similarity_summary": {
+      "maximum": 1.0,
+      "median": 0.997549,
+      "minimum": 0.816901
+    },
+    "structure_match_count": 19,
+    "target_length_direction_match_count": 8,
+    "verbatim_confident_count": 19,
+    "verbatim_hedged_count": 0,
+    "word_ratio_summary": {
+      "maximum": 1.321429,
+      "median": 1.0,
+      "minimum": 0.99
+    }
+  },
+  "privacy": {
+    "contains_extracted_phrases": false,
+    "contains_hashes": false,
+    "contains_rewrite_text": false,
+    "contains_source_identifiers": false,
+    "contains_source_text": false,
+    "text_free_public_summary": true
+  },
+  "runner_validation": {
+    "batch_issue_count": 0,
+    "issue_group_counts": {
+      "empty_or_identical": 0,
+      "identity_or_schema": 0,
+      "length_or_token": 14,
+      "not_applicable": 0,
+      "other": 0,
+      "protected_content": 0,
+      "writer_reported": 0
+    },
+    "parsed_artifact": {
+      "batch_identity_valid": true,
+      "configuration_valid": true,
+      "legacy_lineage_valid": true,
+      "legacy_recovery_present": true,
+      "length_control_issue_record_counts": {
+        "pair_token_gap_over_3": 9,
+        "target_length_direction_not_met": 12
+      },
+      "length_control_only_failed_record_count": 14,
+      "matches_independent_revalidation": true,
+      "other_validation_issue_record_count": 0,
+      "present": true,
+      "processing_failed": false,
+      "record_count": 20,
+      "records_hash_valid": true,
+      "selected_raw_matches_lineage": true,
+      "terminal": true
+    },
+    "status_counts": {
+      "accepted": 6,
+      "needs_review": 0,
+      "not_applicable": 0,
+      "unknown": 0,
+      "validation_failed": 14
+    },
+    "writer_issue_record_count": 0
+  },
+  "scope": {
+    "expected_pairs": 20,
+    "received_pairs": 20,
+    "recipe": "A",
+    "split": "train"
+  },
+  "semantic_review": {
+    "agent_reviewer_count": 1,
+    "blind": true,
+    "counts": {
+      "certainty_ordering": {
+        "correct": 20,
+        "reversed": 0,
+        "tie": 0,
+        "uncertain": 0
+      },
+      "content_preserved": {
+        "fail": 1,
+        "pass": 19,
+        "uncertain": 0
+      },
+      "formatting": {
+        "mismatch": 1,
+        "pass": 19,
+        "uncertain": 0
+      },
+      "naturalness": {
+        "fail": 0,
+        "minor": 3,
+        "pass": 17
+      },
+      "other_confound": {
+        "minor": 1,
+        "none": 18,
+        "repair": 1,
+        "uncertain": 0
+      },
+      "shortcut_concern": {
+        "minor": 0,
+        "none": 17,
+        "repair": 3,
+        "uncertain": 0
+      },
+      "speaker_scope": {
+        "fail": 4,
+        "pass": 16,
+        "uncertain": 0
+      }
+    },
+    "human_certified": false,
+    "human_reviewer_count": 0,
+    "repeated_minor_shortcut_group_count": 0,
+    "reviewed_pairs": 20,
+    "reviewer_count": 1,
+    "semantic_gate_pass": false,
+    "status": "complete"
+  },
+  "source_composition": {
+    "dataset_counts": {
+      "allenai/WildChat-1M": 20
+    },
+    "length_bin_counts": {
+      "long": 7,
+      "medium": 8,
+      "short": 5
+    },
+    "rewrite_output_order_counts": {
+      "confident_first": 7,
+      "hedged_first": 13
+    },
+    "target_longer_member_counts": {
+      "confident": 12,
+      "hedged": 8
+    },
+    "task_counts": {
+      "comparison_analysis": 2,
+      "factual_explanation": 6,
+      "math_logic": 3,
+      "programming": 5,
+      "summary_judgment": 4
+    }
+  },
+  "thresholds": {
+    "expected_pairs": 20,
+    "maximum_auxiliary_models": 1,
+    "maximum_auxiliary_output_share": 0.01,
+    "maximum_auxiliary_output_tokens": 32,
+    "maximum_cross_record_leak_pairs": 0,
+    "maximum_edit_signature_pairs": 3,
+    "maximum_first_edit_position_bin_pairs": 14,
+    "maximum_generic_wrapper_responses": 0,
+    "maximum_near_duplicate_delta_cluster": 3,
+    "maximum_reused_four_plus_token_span_pairs": 3,
+    "maximum_reused_three_token_span_pairs": 4,
+    "maximum_stance_family_pairs": 8,
+    "maximum_structure_mismatch_pairs": 0,
+    "maximum_verbatim_responses": 0,
+    "maximum_word_ratio": 1.2,
+    "minimum_pair_token_similarity": 0.8,
+    "minimum_source_token_similarity": 0.75,
+    "minimum_word_ratio": 0.8
+  },
+  "transport_and_envelope": {
+    "auxiliary_model_count": 1,
+    "auxiliary_output_share": 0.001071,
+    "auxiliary_output_tokens": 15,
+    "auxiliary_usage_within_gate": true,
+    "provider_environment_scrubbed": true,
+    "provider_key_absent": true,
+    "requested_model_reported": true,
+    "returncode_zero": true,
+    "structured_pair_count": 20,
+    "transport_error_count": 0
+  }
+}

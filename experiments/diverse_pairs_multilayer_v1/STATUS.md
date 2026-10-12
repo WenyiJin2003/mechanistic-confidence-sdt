@@ -13,12 +13,13 @@ has been run. See the [challenge result](../cue_holdout_challenge_v1/RESULTS.md)
 | Workspace, environment and existing snapshot inspection | completed | LOCAL_RESOURCE_ASSESSMENT.md; independent branch/worktree |
 | Public source access and schema precheck | completed | Both public preview endpoints parsed; pinned revisions recorded |
 | Bounded source selection and development inventory | completed | 38 WildChat / 12 HelpSteer2 responses; pinned provenance, dedup screens; all train-development |
-| Full 1,000-source grouped pool and approximately 700/150/150 split | planned | The independent challenge reduced the original shortcut concern; resume quality-gated source expansion |
+| Full 1,000-source grouped pool and 700/150/150 split | completed | 1,000 main + 200 reserves; 750/250 WildChat–HelpSteer2 in the main pool; old development and challenge sources excluded; byte-level manifest frozen |
 | Rewrite specification and first review packet | completed | GPT-6 Luna current-session workers; 50 pairs / 100 drafts; local HTML reviewer |
 | Stronger hesitant wording (revision 2) | completed | User-requested hedge-only revision; confident versions and source texts frozen; first packet archived |
 | Targeted content QA (revision 3) | completed | 40 kept, 10 revised, 50/50 accepted by a separate agent pass; not human review |
 | Pilot rewriter authorization | completed | User requested resource-efficient model and 50 pairs; no independent paid API |
-| Larger rewrite budget and quality decision | planned | Freeze a bounded expansion after human audit; do not silently replace diverse rewriting with templates |
+| Larger rewrite execution | stopped after canary | One 20-pair train/A canary generated and recovered locally; 980 calls were not made. Sonnet 4.6 performed the substantive generation; a bounded Claude Code helper produced 15 output tokens. Immutable v1 failure and zero-call v2 provenance are retained locally. |
+| Canary quality gate | failed; scale not authorized | 6/20 passed strict runner; 14 failed only length controls. Audit found 19/20 verbatim confident copies, early hesitant edits in 16/20, content preservation 19/20 and correct speaker scope 16/20. See `reports/claude_canary_20_audit.json`. |
 | Human content review | pending | All 50 records remain human_review=pending |
 | All-layer extraction and primary readout modules | completed | 100 responses, all 28 layers; final replay was 100 cache hits and zero forwards |
 | Review-export validation and importer | completed | Exact packet/text hash and A/B checks; separate reviewed outputs; no actual export received |
@@ -53,6 +54,17 @@ counts and stale review rejection. The focused final tests passed before the
 diagnostic. The 50-card review workflow and final static packet checks also
 passed; test annotations never changed the research data.
 
+The 1,000-source runner additionally rejects output outside ignored
+experiment-private storage, stale resume fingerprints, non-first-party Claude
+authentication, Claude error envelopes, malformed structured responses,
+unreasoned `not_applicable` records, writer-reported issues, response/full-chat
+token-limit violations and a pair-token gap above three. The model-usage gate
+requires positive requested-Sonnet output and permits only the exact internal
+Haiku helper with at most 64 output tokens and at most 1% output share. Its
+tests use mocked subprocesses. One bounded 20-source canary call has been made,
+recovered locally into the v2 namespace and rejected by the separate quality
+gate. No full 1,000-pair run has been made.
+
 The earlier bounded engineering check covered 20 pairs / 40 responses and verified
 finite `[40, 28, 3, 1536]` states, exact response spans, identical prompt controls,
 padding invariance and zero-forward replay. The completed development cache now
@@ -66,8 +78,11 @@ certainty order and confounds, and return the downloaded JSON. The canonical
 REVIEW_50_PAIRS.html points to the same Revision 3 content. A/B positions are
 randomized and each revision has a distinct browser-storage key.
 
-Research action: obtain human blind review of the already locked challenge, then
-complete the handoff's matched diverse-versus-template comparison and
-100/300/700-source learning curves. Keep layer 14 as the primary readout and the
-equal all-layer score as the prespecified ensemble. Do not rewrite or tune on
-the now score-exposed challenge. Loss training remains a later proposal.
+Research action: revise the rewrite contract and pass a fresh 20-pair canary
+before any larger generation. Both members must be non-verbatim matched
+rewrites, the confidence-bearing edit position must be counterbalanced, and
+length must be controlled without asking the rewriter to infer Qwen
+tokenization. Then obtain human blind review and complete the matched
+diverse-versus-template comparison and 100/300/700-source learning curves. Keep
+layer 14 as the primary readout and the equal all-layer score as the
+prespecified ensemble. Loss training remains a later proposal.

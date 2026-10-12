@@ -1,0 +1,118 @@
+experiment: diverse_pairs_multilayer_v1
+phase: freeze_source_pool_1000
+seed: 20261012
+
+datasets:
+  allenai/WildChat-1M:
+    revision: 7d6490e462285cf85d91eabea0f9a954fbddcd1f
+    license: ODC-BY
+    split: train
+  nvidia/HelpSteer2:
+    revision: 990b2711a36180dd19d9c94b8627844866f8982a
+    license: CC-BY-4.0
+    split: train
+
+# These are exact frozen-source quotas. Rewrites that fail later quality review
+# are replaced only from the matching split/source reserve.
+quotas:
+  main:
+    train:
+      allenai/WildChat-1M: 525
+      nvidia/HelpSteer2: 175
+    validation:
+      allenai/WildChat-1M: 112
+      nvidia/HelpSteer2: 38
+    test:
+      allenai/WildChat-1M: 113
+      nvidia/HelpSteer2: 37
+  reserve:
+    train:
+      allenai/WildChat-1M: 105
+      nvidia/HelpSteer2: 35
+    validation:
+      allenai/WildChat-1M: 23
+      nvidia/HelpSteer2: 7
+    test:
+      allenai/WildChat-1M: 22
+      nvidia/HelpSteer2: 8
+
+stratification:
+  tasks:
+    factual_explanation: 0.40
+    math_logic: 0.15
+    programming: 0.15
+    comparison_analysis: 0.15
+    summary_judgment: 0.15
+  lengths:
+    short: 0.25
+    medium: 0.35
+    long: 0.40
+  require_every_task_in_main_splits: [validation, test]
+  require_every_length_in_main_splits: [validation, test]
+
+rewrite_assignment:
+  train_validation_families: [A, B]
+  held_out_test_family: C
+  output_orders: [confident_first, hedged_first]
+  target_longer_members: [confident, hedged]
+  balance_within: [pool_partition, split, task, length_bin]
+
+screening:
+  min_response_words: 25
+  max_input_tokens: 920
+  max_response_tokens: 450
+  short_max_tokens: 128
+  medium_max_tokens: 256
+  near_prompt_shingle_size: 5
+  near_prompt_jaccard: 0.85
+  near_response_shingle_size: 5
+  near_response_jaccard: 0.82
+
+acquisition:
+  # Every pinned WildChat parquet shard is visited in a deterministic hash
+  # order. Row hashing thins the stream before tokenizer work.
+  wildchat_max_rows_per_shard: 60000
+  wildchat_prefilter_modulus: 20
+  # Math, programming, comparison and summary prompts are much rarer in the
+  # corpus. Sample those strata more densely without oversampling factual text.
+  wildchat_rare_prefilter_modulus: 5
+  wildchat_prefilter_bucket: 0
+  wildchat_eligible_cap_per_shard: 1200
+  wildchat_min_shards: 3
+  wildchat_stop_buffer_multiplier: 1.35
+  wildchat_stop_buffer_minimum: 25
+  helpsteer_eligible_cap: 12000
+  request_timeout_seconds: 60
+  max_retries: 2
+
+representation_tokenizer:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  snapshot_relative_to_repo: ../semantic-entropy-probes-stage0/cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  local_files_only: true
+
+exclusions:
+  # Both private text and public text-free manifests are read. Missing private
+  # files are allowed in a clean clone, but every available anchor is enforced.
+  old_jsonl:
+    - experiments/diverse_pairs_multilayer_v1/private_data/review_sources_50.jsonl
+    - experiments/cue_holdout_challenge_v1/private_data/challenge_sources_50.jsonl
+  old_manifests:
+    - experiments/diverse_pairs_multilayer_v1/manifests/review_source_inventory.json
+    - experiments/cue_holdout_challenge_v1/manifests/challenge_selection_manifest.json
+  minimum_old_source_ids: 100
+
+outputs:
+  private_directory: experiments/diverse_pairs_multilayer_v1/private_data/source_pool_1000_v1
+  main_file: SOURCE_MANIFEST_MAIN_1000.jsonl
+  reserve_file: SOURCE_MANIFEST_RESERVE_200.jsonl
+  all_file: SOURCE_MANIFEST.jsonl
+  public_manifest: experiments/diverse_pairs_multilayer_v1/manifests/source_pool_1000_freeze.json
+  public_coverage: experiments/diverse_pairs_multilayer_v1/manifests/source_pool_1000_coverage.json
+
+scientific_guards:
+  score_or_activation_used: false
+  rewrite_generation_in_this_stage: false
+  language_model_training_authorized: false
+  activation_steering_authorized: false
+  human_source_review: pending

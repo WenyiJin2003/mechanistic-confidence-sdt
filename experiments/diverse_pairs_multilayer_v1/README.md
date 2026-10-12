@@ -87,6 +87,7 @@ perfect performance on future data.
 | Pinned source identities, coverage and draft checks | [manifests/](manifests/) |
 | All-layer configuration | [configs/diverse_pairs_multilayer_v1.yaml](configs/diverse_pairs_multilayer_v1.yaml) |
 | Machine-readable diagnostic | [results/DEVELOPMENT_DIAGNOSTIC.json](results/DEVELOPMENT_DIAGNOSTIC.json) |
+| 20-pair expansion canary audit | [reports/claude_canary_20_audit.json](reports/claude_canary_20_audit.json) |
 | Layer figure | [results/DEVELOPMENT_LAYER_COMPARISON.png](results/DEVELOPMENT_LAYER_COMPARISON.png) |
 | Engineering checks | [results/EXTRACTION_SANITY.json](results/EXTRACTION_SANITY.json) |
 | Extraction, readouts and review importer | [src/](src/) |
@@ -108,14 +109,101 @@ primary readout and the equal 28-layer score the prespecified ensemble. See
 [NEXT_DECISION.md](NEXT_DECISION.md). This expansion does not authorize SDT
 training.
 
+### 1,000-source expansion: stopped after the first canary
+
+The source pool is frozen: 1,000 main sources plus 200 split-matched reserves,
+with a 750/250 WildChat–HelpSteer2 mixture and a fixed 700/150/150
+train/validation/test split. The earlier 50-pair development set and 50-pair
+challenge are excluded.
+
+The first 20-pair Claude canary **did not authorize scaling**. Six pairs passed
+the strict runner and 14 failed only the pair-length controls. More importantly,
+the independent audit found that 19/20 confident responses copied the source
+response verbatim, while the hesitant edit appeared near the beginning in
+16/20 pairs. Blind agent review found a clear certainty ordering in 20/20, but
+content preservation in 19/20 and correct speaker scope in 16/20. This contract
+would risk teaching a readout to detect an added hesitation cue rather than a
+broader confidence-related representation.
+
+The remaining 980 calls were stopped. The next action is a fresh 20-pair canary
+that requires both members to be genuine matched rewrites, counterbalances the
+position of the confidence-bearing edit, and uses a word-count instruction that
+Claude can execute while Qwen-token length remains an external check. See the
+text-free [aggregate canary audit](reports/claude_canary_20_audit.json).
+
+A separate, resumable Claude Code runner is now prepared for the planned
+1,000-source diverse-rewrite expansion. It uses the user's authenticated Claude
+subscription rather than an Anthropic API key, fixes the model to
+`claude-sonnet-4-6` at low effort, isolates every 20-source call without tools,
+plugins, MCP servers, Chrome access or session persistence, and validates the
+frozen input and every returned pair. A bounded first 20-source call completed,
+but the original v1 parser conservatively rejected its otherwise complete raw
+response because Claude Code reported both the requested Sonnet model and a
+15-output-token internal Haiku helper. The immutable v1 raw response, failure
+record and run manifest remain in `private_data/claude_rewrite_1000/`; no later
+batch has been generated. That response was subsequently recovered and audited
+locally with zero additional Claude calls; it failed the quality gate described
+above. Execution fails closed unless
+`claude auth status --json` reports `loggedIn=true`, `authMethod=claude.ai`, and
+`apiProvider=firstParty` in the same allowlisted, provider-credential-free
+environment used for generation. Outputs are restricted to this experiment's
+ignored `private_data/` tree.
+
+Resume safety is content-addressed: source bytes and order, source prompt and
+response content, rewrite order and length assignment, protocol, runner source,
+model/effort, system prompt, recipe instructions, structured schema and pinned
+Qwen validation settings all contribute to one generation fingerprint. Every
+raw attempt is immutable and a successfully saved raw response can be recovered
+without another model call. A mismatched prior artifact stops the run rather
+than being silently reused. Valid pairs must stay within 512 response tokens and
+1,024 full-chat tokens under the pinned local Qwen tokenizer, obey the assigned
+longer side with a gap of at most three tokens, and have no untriaged writer
+issue. `not_applicable` requires a written reason. Transport, auth, Claude error
+envelopes and structured-output processing failures produce a nonzero exit.
+The v2 parser requires the requested Sonnet model to produce positive output,
+allows only the exact internal helper model `claude-haiku-4-5-20251001`, and
+caps helper output at both 64 tokens and 1% of all reported model output. Any
+other model, malformed usage, larger helper output or usage inconsistency is a
+processing failure.
+
+### Canary v1-to-v2 recovery checklist
+
+The production config now writes only to
+`private_data/claude_rewrite_1000_v2/`. Do not delete, rename or resume the v1
+namespace. Recover the completed first response locally with the command below;
+`--recover-only` is mutually exclusive with `--execute`, skips authentication,
+and contains no Claude subprocess path:
+
+```sh
+python experiments/diverse_pairs_multilayer_v1/src/run_claude_rewrite_batches.py \
+  --recover-only \
+  --recover-from-output-dir experiments/diverse_pairs_multilayer_v1/private_data/claude_rewrite_1000 \
+  --max-batches 1
+```
+
+Recovery first verifies the old run contract, exact raw/manifest hashes, batch
+identity, prompt hash and original Claude command. It then revalidates the saved
+stdout under v2 and writes only a new parsed artifact with both fingerprints and
+the old raw, failure-record and manifest hashes. It never copies or modifies v1
+and records `additional_claude_calls: 0`. Confirm 20 terminal records and perform
+the separate canary quality review before authorizing any additional call. The
+fixed resume logic preserves the original batch boundaries; a partial cached
+batch now fails closed.
+
 ## Reproduce locally
 
 Use the existing project environment and already cached pinned Qwen snapshot.
-Paths and limits are in the YAML; there are no model downloads or inference APIs.
+Source-pool settings are in YAML and Claude-run settings are in the dedicated
+JSON config; validation never downloads a model.
 
 ```sh
 python experiments/diverse_pairs_multilayer_v1/src/run_development_diagnostic.py
 python -m pytest tests experiments/diverse_pairs_multilayer_v1/tests -q
+# After the 1,000-source pool is frozen, validate and print the Claude batch plan:
+python experiments/diverse_pairs_multilayer_v1/src/run_claude_rewrite_batches.py
+# Only after local recovery and canary review, a new bounded generation requires
+# explicit authorization and --execute. It resumes after the recovered batch.
+python experiments/diverse_pairs_multilayer_v1/src/run_claude_rewrite_batches.py --execute --max-batches 1
 ```
 
 The diagnostic needs the ignored local pair packet and refuses to run unless all

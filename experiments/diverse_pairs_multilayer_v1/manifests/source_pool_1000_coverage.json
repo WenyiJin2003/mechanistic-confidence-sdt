@@ -1,0 +1,386 @@
+{
+  "by_partition_split_dataset": [
+    {
+      "count": 113,
+      "dataset": "allenai/WildChat-1M",
+      "pool_partition": "main",
+      "split": "test"
+    },
+    {
+      "count": 37,
+      "dataset": "nvidia/HelpSteer2",
+      "pool_partition": "main",
+      "split": "test"
+    },
+    {
+      "count": 525,
+      "dataset": "allenai/WildChat-1M",
+      "pool_partition": "main",
+      "split": "train"
+    },
+    {
+      "count": 175,
+      "dataset": "nvidia/HelpSteer2",
+      "pool_partition": "main",
+      "split": "train"
+    },
+    {
+      "count": 112,
+      "dataset": "allenai/WildChat-1M",
+      "pool_partition": "main",
+      "split": "validation"
+    },
+    {
+      "count": 38,
+      "dataset": "nvidia/HelpSteer2",
+      "pool_partition": "main",
+      "split": "validation"
+    },
+    {
+      "count": 22,
+      "dataset": "allenai/WildChat-1M",
+      "pool_partition": "reserve",
+      "split": "test"
+    },
+    {
+      "count": 8,
+      "dataset": "nvidia/HelpSteer2",
+      "pool_partition": "reserve",
+      "split": "test"
+    },
+    {
+      "count": 105,
+      "dataset": "allenai/WildChat-1M",
+      "pool_partition": "reserve",
+      "split": "train"
+    },
+    {
+      "count": 35,
+      "dataset": "nvidia/HelpSteer2",
+      "pool_partition": "reserve",
+      "split": "train"
+    },
+    {
+      "count": 23,
+      "dataset": "allenai/WildChat-1M",
+      "pool_partition": "reserve",
+      "split": "validation"
+    },
+    {
+      "count": 7,
+      "dataset": "nvidia/HelpSteer2",
+      "pool_partition": "reserve",
+      "split": "validation"
+    }
+  ],
+  "by_partition_split_length": [
+    {
+      "count": 60,
+      "length_bin": "long",
+      "pool_partition": "main",
+      "split": "test"
+    },
+    {
+      "count": 53,
+      "length_bin": "medium",
+      "pool_partition": "main",
+      "split": "test"
+    },
+    {
+      "count": 37,
+      "length_bin": "short",
+      "pool_partition": "main",
+      "split": "test"
+    },
+    {
+      "count": 280,
+      "length_bin": "long",
+      "pool_partition": "main",
+      "split": "train"
+    },
+    {
+      "count": 245,
+      "length_bin": "medium",
+      "pool_partition": "main",
+      "split": "train"
+    },
+    {
+      "count": 175,
+      "length_bin": "short",
+      "pool_partition": "main",
+      "split": "train"
+    },
+    {
+      "count": 60,
+      "length_bin": "long",
+      "pool_partition": "main",
+      "split": "validation"
+    },
+    {
+      "count": 52,
+      "length_bin": "medium",
+      "pool_partition": "main",
+      "split": "validation"
+    },
+    {
+      "count": 38,
+      "length_bin": "short",
+      "pool_partition": "main",
+      "split": "validation"
+    },
+    {
+      "count": 12,
+      "length_bin": "long",
+      "pool_partition": "reserve",
+      "split": "test"
+    },
+    {
+      "count": 11,
+      "length_bin": "medium",
+      "pool_partition": "reserve",
+      "split": "test"
+    },
+    {
+      "count": 7,
+      "length_bin": "short",
+      "pool_partition": "reserve",
+      "split": "test"
+    },
+    {
+      "count": 56,
+      "length_bin": "long",
+      "pool_partition": "reserve",
+      "split": "train"
+    },
+    {
+      "count": 49,
+      "length_bin": "medium",
+      "pool_partition": "reserve",
+      "split": "train"
+    },
+    {
+      "count": 35,
+      "length_bin": "short",
+      "pool_partition": "reserve",
+      "split": "train"
+    },
+    {
+      "count": 12,
+      "length_bin": "long",
+      "pool_partition": "reserve",
+      "split": "validation"
+    },
+    {
+      "count": 10,
+      "length_bin": "medium",
+      "pool_partition": "reserve",
+      "split": "validation"
+    },
+    {
+      "count": 8,
+      "length_bin": "short",
+      "pool_partition": "reserve",
+      "split": "validation"
+    }
+  ],
+  "by_partition_split_task": [
+    {
+      "count": 23,
+      "pool_partition": "main",
+      "split": "test",
+      "task": "comparison_analysis"
+    },
+    {
+      "count": 60,
+      "pool_partition": "main",
+      "split": "test",
+      "task": "factual_explanation"
+    },
+    {
+      "count": 23,
+      "pool_partition": "main",
+      "split": "test",
+      "task": "math_logic"
+    },
+    {
+      "count": 22,
+      "pool_partition": "main",
+      "split": "test",
+      "task": "programming"
+    },
+    {
+      "count": 22,
+      "pool_partition": "main",
+      "split": "test",
+      "task": "summary_judgment"
+    },
+    {
+      "count": 106,
+      "pool_partition": "main",
+      "split": "train",
+      "task": "comparison_analysis"
+    },
+    {
+      "count": 280,
+      "pool_partition": "main",
+      "split": "train",
+      "task": "factual_explanation"
+    },
+    {
+      "count": 105,
+      "pool_partition": "main",
+      "split": "train",
+      "task": "math_logic"
+    },
+    {
+      "count": 105,
+      "pool_partition": "main",
+      "split": "train",
+      "task": "programming"
+    },
+    {
+      "count": 104,
+      "pool_partition": "main",
+      "split": "train",
+      "task": "summary_judgment"
+    },
+    {
+      "count": 22,
+      "pool_partition": "main",
+      "split": "validation",
+      "task": "comparison_analysis"
+    },
+    {
+      "count": 60,
+      "pool_partition": "main",
+      "split": "validation",
+      "task": "factual_explanation"
+    },
+    {
+      "count": 23,
+      "pool_partition": "main",
+      "split": "validation",
+      "task": "math_logic"
+    },
+    {
+      "count": 23,
+      "pool_partition": "main",
+      "split": "validation",
+      "task": "programming"
+    },
+    {
+      "count": 22,
+      "pool_partition": "main",
+      "split": "validation",
+      "task": "summary_judgment"
+    },
+    {
+      "count": 4,
+      "pool_partition": "reserve",
+      "split": "test",
+      "task": "comparison_analysis"
+    },
+    {
+      "count": 13,
+      "pool_partition": "reserve",
+      "split": "test",
+      "task": "factual_explanation"
+    },
+    {
+      "count": 4,
+      "pool_partition": "reserve",
+      "split": "test",
+      "task": "math_logic"
+    },
+    {
+      "count": 5,
+      "pool_partition": "reserve",
+      "split": "test",
+      "task": "programming"
+    },
+    {
+      "count": 4,
+      "pool_partition": "reserve",
+      "split": "test",
+      "task": "summary_judgment"
+    },
+    {
+      "count": 21,
+      "pool_partition": "reserve",
+      "split": "train",
+      "task": "comparison_analysis"
+    },
+    {
+      "count": 56,
+      "pool_partition": "reserve",
+      "split": "train",
+      "task": "factual_explanation"
+    },
+    {
+      "count": 21,
+      "pool_partition": "reserve",
+      "split": "train",
+      "task": "math_logic"
+    },
+    {
+      "count": 21,
+      "pool_partition": "reserve",
+      "split": "train",
+      "task": "programming"
+    },
+    {
+      "count": 21,
+      "pool_partition": "reserve",
+      "split": "train",
+      "task": "summary_judgment"
+    },
+    {
+      "count": 5,
+      "pool_partition": "reserve",
+      "split": "validation",
+      "task": "comparison_analysis"
+    },
+    {
+      "count": 12,
+      "pool_partition": "reserve",
+      "split": "validation",
+      "task": "factual_explanation"
+    },
+    {
+      "count": 4,
+      "pool_partition": "reserve",
+      "split": "validation",
+      "task": "math_logic"
+    },
+    {
+      "count": 4,
+      "pool_partition": "reserve",
+      "split": "validation",
+      "task": "programming"
+    },
+    {
+      "count": 5,
+      "pool_partition": "reserve",
+      "split": "validation",
+      "task": "summary_judgment"
+    }
+  ],
+  "contains_source_text": false,
+  "deduplication_rejections": {
+    "encoded_or_special_context": 5909,
+    "exact_response_overlap": 1,
+    "group_or_canonical_prompt_overlap": 4111,
+    "identity_overlap": 47,
+    "language_screen": 180,
+    "length_reserve_for_rewrites": 11492,
+    "near_prompt_overlap": 232,
+    "non_english_metadata": 153728,
+    "not_applicable": 1907,
+    "possible_pii": 836,
+    "too_short": 1473,
+    "toxic_or_redacted": 2763
+  },
+  "main_count": 1000,
+  "reserve_count": 200,
+  "source_count": 1200
+}
