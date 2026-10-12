@@ -20,10 +20,70 @@ from typing import Any
 HERE = Path(__file__).resolve()
 CHALLENGE = HERE.parents[1]
 DEFAULT_CONFIG = CHALLENGE / "configs" / "cue_holdout_challenge_v1.yaml"
+FROZEN_TASKS = (
+    "factual_explanation", "math_logic", "programming",
+    "comparison_analysis", "summary_judgment",
+)
+FROZEN_CUE_FAMILIES = (
+    "embedded_stance_predicate", "modal_force_scope", "compositional_polarity",
+    "discourse_level_calibration", "contrastive_commitment",
+)
+FROZEN_DATASETS = ("nvidia/HelpSteer2", "allenai/WildChat-1M")
+FROZEN_TFIDF = {
+    "analyzer": "char_wb", "ngram_range": [3, 5], "min_df": 2,
+    "max_features": 20000, "sublinear_tf": True,
+}
 
 
 class ReviewStatusError(ValueError):
     """Raised when the locked challenge lacks the required human-review gate."""
+
+
+def validate_frozen_protocol_config(config: dict[str, Any]) -> dict[str, Any]:
+    """Fail closed if a score-affecting preregistered challenge setting changed."""
+    if config.get("experiment") != "cue_holdout_challenge_v1" or config.get("protocol_version") != 1:
+        raise ValueError("Unexpected challenge experiment or protocol version")
+    if config.get("seed") != 20261012:
+        raise ValueError("Challenge evaluation seed differs from the frozen protocol")
+    challenge = config.get("challenge")
+    readout = config.get("readout")
+    if not isinstance(challenge, dict) or not isinstance(readout, dict):
+        raise ValueError("Challenge config must contain challenge and readout mappings")
+    expected_challenge = {
+        "required_pairs": 50,
+        "required_independent_reviewers": 2,
+        "source_datasets": list(FROZEN_DATASETS),
+        "tasks": list(FROZEN_TASKS),
+        "cue_families": list(FROZEN_CUE_FAMILIES),
+        "required_longer_member_counts": {"confident_longer": 25, "hedged_longer": 25},
+    }
+    for key, value in expected_challenge.items():
+        if challenge.get(key) != value:
+            raise ValueError(f"Challenge {key} differs from the frozen protocol")
+    if challenge.get("required_review_status") not in {
+            "agent_reviewed_development_only", "human_review_passed"}:
+        raise ValueError("Unsupported challenge review mode")
+    expected_readout = {
+        "primary_layer": 14,
+        "ensemble": "equal_train_standardized_28_layer_scores",
+        "bootstrap_draws": 2000,
+        "shuffled_training_orientation_fits": 200,
+        "nll_control": "negative_mean_response_token_nll",
+        "length_control": "negative_response_token_length",
+        "layer_selection_on_challenge": False,
+        "sign_selection_on_challenge": False,
+        "tfidf": FROZEN_TFIDF,
+    }
+    for key, value in expected_readout.items():
+        if readout.get(key) != value:
+            raise ValueError(f"Readout {key} differs from the frozen protocol")
+    return {
+        "primary_layer": 14,
+        "ensemble": expected_readout["ensemble"],
+        "layers": list(range(1, 29)),
+        "challenge_layer_selection": False,
+        "challenge_sign_selection": False,
+    }
 
 
 def _sha256_bytes(value: bytes) -> str:
@@ -111,6 +171,11 @@ def validate_lock_metadata(lock: dict, pairs_bytes: bytes, challenge_pairs: list
         raise ValueError("Challenge pair file does not match its locked SHA-256")
     if lock.get("source_ids_sha256") != source_ids_sha256(challenge_pairs):
         raise ValueError("Challenge source IDs do not match the locked source-ID digest")
+    hashes = lock.get("hashes")
+    packet_digest = hashes.get("blind_packet_sha256") if isinstance(hashes, dict) else None
+    if (not isinstance(packet_digest, str) or len(packet_digest) != 64
+            or any(character not in "0123456789abcdef" for character in packet_digest)):
+        raise ValueError("Challenge lock must include the exact blinded review-packet SHA-256")
     if any(not isinstance(row.get("dataset"), str) or not row["dataset"].strip()
            for row in challenge_pairs):
         raise ValueError("Every locked challenge pair must include a nonempty dataset")
@@ -123,7 +188,8 @@ def validate_lock_metadata(lock: dict, pairs_bytes: bytes, challenge_pairs: list
     return {"review_status": status, "reviewer_types": types,
             "independent_reviewer_count": required_independent_reviewers,
             "human_review": human_review, "scientific_status": scientific_status,
-            "agent_review_is_human_review": False, "by_dataset": pair_dataset_counts}
+            "agent_review_is_human_review": False, "by_dataset": pair_dataset_counts,
+            "blind_packet_sha256": packet_digest}
 
 
 def validate_development_acceptance(pairs: list[dict], manifest: dict,
@@ -516,6 +582,7 @@ def run(config_path: Path = DEFAULT_CONFIG) -> dict:
 
     config_path = Path(config_path).resolve()
     eval_config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    frozen_protocol = validate_frozen_protocol_config(eval_config)
     source_datasets = _validated_source_datasets(eval_config["challenge"].get("source_datasets"))
     base = config_path.parent.parent
     ref_path = (config_path.parent / eval_config["reference_config"]).resolve()
@@ -607,6 +674,8 @@ def run(config_path: Path = DEFAULT_CONFIG) -> dict:
                    "challenge_by_cue_family": challenge_design["by_cue_family"],
                    "challenge_by_length_direction": challenge_design["by_length_direction"]},
         "provenance": {"reference_config_sha256": ref_hash,
+                       "challenge_config_sha256": _sha256_bytes(config_path.read_bytes()),
+                       "frozen_protocol": frozen_protocol,
                        "development_pairs_sha256": _sha256_bytes(dev_path.read_bytes()),
                        "development_agent_qa_manifest_sha256": _sha256_bytes(dev_manifest_path.read_bytes()),
                        "challenge_pairs_sha256": _sha256_bytes(challenge_pairs_bytes),

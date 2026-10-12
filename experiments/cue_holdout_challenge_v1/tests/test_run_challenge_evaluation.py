@@ -1,3 +1,4 @@
+import copy
 import hashlib
 import json
 import sys
@@ -87,6 +88,30 @@ def dev_rows():
 
 
 class ChallengeEvaluationGateTests(unittest.TestCase):
+    def test_score_affecting_protocol_settings_are_frozen(self):
+        import yaml
+
+        path = Path(__file__).resolve().parents[1] / "configs" / "cue_holdout_challenge_v1.yaml"
+        config = yaml.safe_load(path.read_text(encoding="utf-8"))
+        frozen = evaluator.validate_frozen_protocol_config(config)
+        self.assertEqual(frozen["primary_layer"], 14)
+        self.assertEqual(frozen["layers"], list(range(1, 29)))
+        for section, key, value in (
+            (None, "seed", 7),
+            ("readout", "primary_layer", 13),
+            ("readout", "ensemble", "best_challenge_layer"),
+            ("readout", "layer_selection_on_challenge", True),
+            ("readout", "sign_selection_on_challenge", True),
+            ("readout", "tfidf", {"analyzer": "word"}),
+            ("challenge", "tasks", list(reversed(TASKS))),
+            ("challenge", "source_datasets", list(reversed(DATASETS))),
+        ):
+            changed = copy.deepcopy(config)
+            target = changed if section is None else changed[section]
+            target[key] = value
+            with self.assertRaisesRegex(ValueError, "frozen protocol"):
+                evaluator.validate_frozen_protocol_config(changed)
+
     def test_locked_pair_file_and_selection_manifest_hashes_are_required(self):
         rows = challenge_rows()
         raw = ("\n".join(json.dumps(row, sort_keys=True) for row in rows) + "\n").encode()
@@ -104,6 +129,7 @@ class ChallengeEvaluationGateTests(unittest.TestCase):
                 "pair_count": 50, "challenge_pairs_sha256": hashlib.sha256(raw).hexdigest(),
                 "source_ids_sha256": evaluator.source_ids_sha256(rows),
                 "selection_manifest_sha256": hashlib.sha256(selection_bytes).hexdigest(),
+                "hashes": {"blind_packet_sha256": "a" * 64},
                 "counts": {"datasets": dataset_counts(rows)}}
         provenance = evaluator.validate_lock_metadata(lock, raw, rows, "human_review_passed", selection_bytes, 2)
         self.assertEqual(provenance["review_status"], "human_review_passed")
@@ -118,6 +144,11 @@ class ChallengeEvaluationGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "dataset counts"):
             evaluator.validate_lock_metadata(
                 broken_counts, raw, rows, "human_review_passed", selection_bytes, 2)
+        missing_packet_digest = dict(lock)
+        missing_packet_digest.pop("hashes")
+        with self.assertRaisesRegex(ValueError, "review-packet SHA-256"):
+            evaluator.validate_lock_metadata(
+                missing_packet_digest, raw, rows, "human_review_passed", selection_bytes, 2)
         lock["locked"] = False
         with self.assertRaisesRegex(ValueError, "locked=true"):
             evaluator.validate_lock_metadata(lock, raw, rows, "human_review_passed", selection_bytes, 2)
@@ -143,10 +174,12 @@ class ChallengeEvaluationGateTests(unittest.TestCase):
                 "scientific_status": "development_only_not_human_validated",
                 "pair_count": 50, "challenge_pairs_sha256": hashlib.sha256(raw).hexdigest(),
                 "source_ids_sha256": evaluator.source_ids_sha256(rows),
+                "hashes": {"blind_packet_sha256": "b" * 64},
                 "counts": {"datasets": dataset_counts(rows)}}
         provenance = evaluator.validate_lock_metadata(lock, raw, rows,
                           "agent_reviewed_development_only", required_independent_reviewers=2)
         self.assertFalse(provenance["human_review"])
+        self.assertEqual(provenance["blind_packet_sha256"], "b" * 64)
         self.assertEqual(provenance["scientific_status"], "development_only_not_human_validated")
         evaluator.validate_challenge_design(rows, TASKS, FAMILIES,
                     {"confident_longer": 25, "hedged_longer": 25},

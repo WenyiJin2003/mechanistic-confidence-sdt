@@ -2,7 +2,8 @@
 
 The rewrite JSONL must contain complete text rows plus a successful validator
 marker (validation_status='pass', or an empty automatic_flags/validation_flags
-list). The mapping is private output from prepare_blind_review.py. Reviewer
+list). The packet and mapping are the paired private outputs from
+prepare_blind_review.py; both are verified and hash-bound into the lock. Reviewer
 JSONL rows contain only blind_id, content_preservation, stronger_commitment,
 formatting_mismatch, shortcut_concern, and optional notes. Reviewer type is
 supplied separately on the CLI as agent or human and is never inferred.
@@ -48,6 +49,7 @@ REVIEW_REQUIRED = {
     "formatting_mismatch", "shortcut_concern",
 }
 REVIEW_ALLOWED = REVIEW_REQUIRED | {"notes"}
+PACKET_REQUIRED = {"blind_id", "prompt", "original_response", "response_a", "response_b"}
 REVIEW_VALUES = {
     "content_preservation": {"pass", "fail", "uncertain"},
     "stronger_commitment": {"A", "B", "tie", "uncertain"},
@@ -178,6 +180,14 @@ def _check_allocation(rows: list[dict[str, Any]], mapping_by_source: dict[str, d
                         _add_issue(issues, mapping_by_source.get(str(row.get("source_id", "")), {}).get("blind_id"),
                                    row.get("source_id"), f"task_family_cell_not_2:{task}:{family}")
                 _add_issue(issues, None, None, f"task_family_cell_not_2:{task}:{family}")
+            direction_counts = Counter(
+                row.get("length_direction") for row in rows
+                if row.get("task") == task and row.get("cue_family") == family
+            )
+            for direction in LENGTH_DIRECTIONS:
+                if direction_counts[direction] != 1:
+                    _add_issue(issues, None, None,
+                               f"task_family_direction_not_1:{task}:{family}:{direction}")
     for direction in LENGTH_DIRECTIONS:
         if counts["length_directions"].get(direction, 0) != 25:
             for row in rows:
@@ -197,6 +207,45 @@ def _check_allocation(rows: list[dict[str, Any]], mapping_by_source: dict[str, d
         if row.get("length_direction") not in LENGTH_DIRECTIONS:
             _add_issue(issues, mapping.get("blind_id"), source_id, "unknown_length_direction")
     return counts
+
+
+def _check_blind_packet(packet_rows: list[dict[str, Any]],
+                        rewrite_by_source: dict[str, dict[str, Any]],
+                        mapping_by_blind: dict[str, dict[str, Any]],
+                        issues: dict[tuple[str, str], set[str]]) -> None:
+    """Bind the reviewed A/B packet exactly to the private mapping and rewrites."""
+    packet_by_blind, packet_counts = _index(packet_rows, "blind_id")
+    if len(packet_rows) != 50:
+        _add_issue(issues, None, None, f"blind_packet_row_count_not_50:{len(packet_rows)}")
+    for blind_id, count in packet_counts.items():
+        if not blind_id:
+            _add_issue(issues, None, None, "blind_packet_blind_id_missing")
+        elif count > 1:
+            mapping = mapping_by_blind.get(blind_id, {})
+            _add_issue(issues, blind_id, mapping.get("source_id"), "duplicate_blind_packet_blind_id")
+        elif blind_id not in mapping_by_blind:
+            _add_issue(issues, blind_id, None, "blind_packet_unknown_blind_id")
+    for blind_id, mapping in mapping_by_blind.items():
+        packet = packet_by_blind.get(blind_id)
+        source_id = mapping.get("source_id")
+        if packet is None:
+            _add_issue(issues, blind_id, source_id, "blind_packet_row_missing")
+            continue
+        if set(packet) != PACKET_REQUIRED:
+            _add_issue(issues, blind_id, source_id, "blind_packet_fields_not_exact")
+        rewrite = rewrite_by_source.get(str(source_id))
+        if rewrite is None:
+            continue
+        if packet.get("prompt") != rewrite.get("prompt"):
+            _add_issue(issues, blind_id, source_id, "blind_packet_prompt_mismatch")
+        if packet.get("original_response") != rewrite.get("original_response"):
+            _add_issue(issues, blind_id, source_id, "blind_packet_original_response_mismatch")
+        a_role, b_role = mapping.get("a_role"), mapping.get("b_role")
+        if a_role in {"confident", "hedged"} and b_role in {"confident", "hedged"}:
+            if packet.get("response_a") != rewrite.get(f"{a_role}_response"):
+                _add_issue(issues, blind_id, source_id, "blind_packet_response_a_mismatch")
+            if packet.get("response_b") != rewrite.get(f"{b_role}_response"):
+                _add_issue(issues, blind_id, source_id, "blind_packet_response_b_mismatch")
 
 
 def _check_rewrite_validation(row: dict[str, Any], blind_id: str | None,
@@ -274,7 +323,8 @@ def _reviewer_issues(decisions: list[dict[str, Any]], reviewer_number: int,
 def evaluate_lock(rewrite_rows: list[dict[str, Any]], mapping_rows: list[dict[str, Any]],
                   reviewer1_rows: list[dict[str, Any]], reviewer2_rows: list[dict[str, Any]],
                   reviewer_types: tuple[str, str],
-                  selection_manifest: dict[str, Any] | None = None) -> dict[str, Any]:
+                  selection_manifest: dict[str, Any] | None = None,
+                  packet_rows: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     """Return lock rows or a private remediation list; never write files here."""
     if len(reviewer_types) != 2 or any(value not in {"agent", "human"} for value in reviewer_types):
         raise ValueError("Exactly two reviewer types, each agent or human, are required")
@@ -284,6 +334,10 @@ def evaluate_lock(rewrite_rows: list[dict[str, Any]], mapping_rows: list[dict[st
     rewrite_by_source, rewrite_counts = _index(rewrite_rows, "source_id")
     mapping_by_source, mapping_source_counts = _index(mapping_rows, "source_id")
     mapping_by_blind, mapping_blind_counts = _index(mapping_rows, "blind_id")
+    if packet_rows is None:
+        _add_issue(issues, None, None, "blind_packet_missing")
+    else:
+        _check_blind_packet(packet_rows, rewrite_by_source, mapping_by_blind, issues)
 
     selected_records = selection_manifest.get("source_records", []) if isinstance(selection_manifest, dict) else []
     selected_by_source, selected_counts = _index(selected_records, "source_id")
@@ -476,6 +530,7 @@ def evaluate_lock(rewrite_rows: list[dict[str, Any]], mapping_rows: list[dict[st
 
 def _public_manifest(outcome: dict[str, Any], locked_dump: str,
                      rewrite_paths: list[Path], mapping_path: Path,
+                     packet_path: Path,
                      reviewer_paths: tuple[Path, Path],
                      selection_manifest_path: Path) -> dict[str, Any]:
     types = outcome["reviewer_types"]
@@ -515,6 +570,7 @@ def _public_manifest(outcome: dict[str, Any], locked_dump: str,
             "locked_pairs_sha256": sha256_bytes(locked_bytes),
             "rewrite_inputs_sha256": [sha256_bytes(path.read_bytes()) for path in rewrite_paths],
             "blind_mapping_sha256": sha256_bytes(mapping_path.read_bytes()),
+            "blind_packet_sha256": sha256_bytes(packet_path.read_bytes()),
             "reviewer_decisions_sha256": [
                 {"type": types[index], "sha256": sha256_bytes(path.read_bytes())}
                 for index, path in enumerate(reviewer_paths)
@@ -546,6 +602,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="Full rewrite rows merged with successful private validation status")
     parser.add_argument("--mapping", type=Path, required=True,
                         help="Private blinded mapping JSONL")
+    parser.add_argument("--packet", type=Path, required=True,
+                        help="Exact private A/B packet given to both blinded reviewers")
     parser.add_argument("--selection-manifest", type=Path,
                         default=CHALLENGE / "manifests" / "challenge_selection_manifest.json",
                         help="Frozen public source-selection manifest")
@@ -575,11 +633,12 @@ def main(argv: list[str] | None = None) -> int:
 
     rewrites = [row for path in args.rewrites for row in read_jsonl(path)]
     mapping = read_jsonl(args.mapping)
+    packet = read_jsonl(args.packet)
     selection_manifest = json.loads(args.selection_manifest.read_text(encoding="utf-8"))
     reviewer1 = read_jsonl(args.reviewer_1)
     reviewer2 = read_jsonl(args.reviewer_2)
     types = (args.reviewer_1_type, args.reviewer_2_type)
-    outcome = evaluate_lock(rewrites, mapping, reviewer1, reviewer2, types, selection_manifest)
+    outcome = evaluate_lock(rewrites, mapping, reviewer1, reviewer2, types, selection_manifest, packet)
 
     if not outcome["locked"]:
         _write_private(remediation_path, _dump_jsonl(outcome["remediation"]))
@@ -595,7 +654,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     locked_dump = _dump_jsonl(outcome["locked_rows"])
-    manifest = _public_manifest(outcome, locked_dump, args.rewrites, args.mapping,
+    manifest = _public_manifest(outcome, locked_dump, args.rewrites, args.mapping, args.packet,
                                 (args.reviewer_1, args.reviewer_2), args.selection_manifest)
     _write_private(locked_path, locked_dump)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
