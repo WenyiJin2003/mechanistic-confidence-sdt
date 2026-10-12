@@ -1,0 +1,51 @@
+experiment: diverse_pairs_multilayer_v1
+phase: train_development_rewrite_review_50
+review_revision: 2
+revision_reason: user_requested_clearer_hesitant_commitment
+seed: 20261011
+source_count: 50
+response_count: 100
+source_targets:
+  allenai/WildChat-1M: 38
+  nvidia/HelpSteer2: 12
+source_revision:
+  allenai/WildChat-1M: 7d6490e462285cf85d91eabea0f9a954fbddcd1f
+  nvidia/HelpSteer2: 990b2711a36180dd19d9c94b8627844866f8982a
+split: train_development
+exclude_from_final_test: true
+rewrite:
+  provider: current_codex_session
+  invocation: collaboration.spawn_agent
+  model_alias: gpt-6-luna
+  model_revision: null
+  reasoning_effort: low
+  fork_history: none
+  batch_sizes: [17, 17, 16]
+  independent_paid_api_calls: 0
+  external_api_processing_approved: false
+  source_text_scope: selected_public_prompt_and_response_only
+  authorization: user_requested_50_pairs_with_resource_efficient_model
+  max_attempts_per_source: 3
+  families: [A, B]
+  joint_output_order: balanced_25_confident_first_25_hedged_first
+  revision_2:
+    changed_field: hedged_response
+    preserve_confident_response: true
+    preserve_source_text: true
+    archive_previous_packet: private_data/review_revision_1
+    independent_review_storage: true
+representation_model:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  local_files_only: true
+  tokenizer_only_in_this_phase: true
+  max_input_tokens: 1024
+  max_response_tokens: 512
+human_review:
+  reviewer: user
+  status: pending
+  recommended_content_preservation_min: 0.95
+  recommended_clear_certainty_order_min: 0.90
+main_readout_fit: not_started
+language_model_training: not_authorized
+activation_steering: not_authorized

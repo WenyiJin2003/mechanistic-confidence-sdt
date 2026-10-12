@@ -1,5 +1,20 @@
 # Mechanistic Confidence for Synthetic Fact Learning
 
+**Research direction update, 11 October 2026:** the next primary study uses
+diverse, content-preserving confident/hedged response pairs and compares layer 14
+with a multi-layer ensemble on the same data and labels. Correctness, evidence
+support and semantic entropy remain separate diagnostics. The historical v4
+findings below are retained; they do not set this study's training target or its
+data-construction prerequisites. See the [new preparation status](experiments/diverse_pairs_multilayer_v1/STATUS.md).
+
+**Current stage:** 50 real-source confident/hedged pairs are drafted and awaiting
+individual content review. A 20-pair check validates the new 28-layer extraction
+pipeline, including exact cache replay. Layer-14 versus ensemble performance has
+not been measured yet. See the [active study](experiments/diverse_pairs_multilayer_v1/README.md)
+and [protocol](experiments/diverse_pairs_multilayer_v1/PROTOCOL.md).
+
+## Historical diagnostic findings
+
 **A new linear probe detects contextual support for a fixed answer on unseen
 facts and wording: 71.9% paired ordering. The full confidence validation remains
 incomplete because missing information is not reliably distinguished.**
@@ -29,10 +44,10 @@ internal objective that helps a model learn target facts more reliably:
 \lambda\mathcal L_{\mathrm{internal}}.
 ```
 
-[Latest report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) ·
+[Historical v4 report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) ·
 [Questions and answers](datasets/README.md) ·
 [Method](docs/experiments/EXPERIMENT_MAP.md) ·
-[Current experiment](docs/experiments/EVIDENCE_CONFIDENCE_README_V4.md)
+[Historical v4 method](docs/experiments/EVIDENCE_CONFIDENCE_README_V4.md)
 
 ## Research sequence
 

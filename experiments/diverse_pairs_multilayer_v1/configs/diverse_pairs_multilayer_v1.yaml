@@ -1,0 +1,60 @@
+experiment: diverse_pairs_multilayer_v1
+protocol_version: 0.1
+seed: 20261011
+data:
+  pairs: private_data/PAIRED_RESPONSES_50.jsonl
+  phase: train_development_engineering_only
+  required_review_for_scientific_fit: passed
+  final_source_split: not_frozen
+  final_recipe_family: not_frozen
+model:
+  id: Qwen/Qwen2.5-1.5B-Instruct
+  revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  snapshot: ../../../semantic-entropy-probes-stage0/cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+  local_files_only: true
+  quantized: false
+  system_prompt: You are a helpful assistant.
+  expected_num_layers: 28
+  expected_hidden_size: 1536
+  layers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+  primary_pooling: response_mean
+  auxiliary_pooling: final_response_token
+  negative_control: final_prompt_token
+  end_of_turn_token: <|im_end|>
+  max_input_tokens: 1024
+  max_response_tokens: 512
+  attention: sdpa
+runtime:
+  device_preference: [mps, cuda, cpu]
+  accelerator_dtype: float16
+  cpu_dtype: float32
+  batch_size: 1
+  max_pairs: 20
+  max_seconds: 1200
+  max_rss_gib: 10
+  prompt_control_atol: 0.005
+  padding_control_atol: 0.02
+  padding_nll_atol: 0.05
+  extra_padding_tokens: 7
+  cache_dir: cache/all_layer_preflight
+  cache_dtype: float16
+readout:
+  target: expressed_certainty_about_preserved_answer_content
+  C: 0.01
+  fit_intercept: false
+  max_iter: 2000
+  primary_reference_layer: 14
+  primary_ensemble: equal_train_standardized_layer_scores
+  secondary: [mean_difference, source_grouped_oof_stacking]
+  oof_folds: 5
+  bootstrap_draws: 2000
+  statistical_unit: source_conversation_group
+  ties: 0.5
+  near_zero_score_std: 1.0e-12
+  fit_research_data_now: false
+output:
+  sanity: results/EXTRACTION_SANITY.json
+  private_rows: private_data/extraction_preflight_rows.jsonl
+  private_states: cache/preflight_states.npz
+language_model_training: not_authorized
+activation_steering: not_authorized

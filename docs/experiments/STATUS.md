@@ -1,5 +1,19 @@
 # Project Status
 
+**Research priority update, 11 October 2026:** primary work now targets diverse,
+content-preserving confident/hedged response pairs and a same-data comparison
+of layer 14 and multi-layer readouts. The earlier evidence-support results are
+diagnostics, not prerequisites for constructing the new paired dataset.
+Preparation is local. The first 50 development pairs have been drafted with
+GPT-6 Luna and revised for clearer hesitation; human content review remains
+pending. The separate 28-layer extraction pipeline passed a 20-pair engineering
+benchmark and exact cache replay; no research readout comparison has been scored.
+No language-model training or steering is authorized.
+See the [redirection note](../../experiments/diverse_pairs_multilayer_v1/REDIRECTION_NOTE.md)
+and [current preparation status](../../experiments/diverse_pairs_multilayer_v1/STATUS.md).
+
+## Historical v4 status
+
 Last updated: 8 October 2026. **V4 is complete. A new support readout transfers,
 but confidence validation remains incomplete. Training stays deferred.**
 

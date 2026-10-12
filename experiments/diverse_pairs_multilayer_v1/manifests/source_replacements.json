@@ -1,0 +1,16 @@
+[
+  {
+    "review_id": "P038",
+    "old_source_id": "wildchat-7970f8bc20dfaa800fd6a9ea9a5ccfbf-turn-2020562",
+    "new_source_id": "wildchat-ae0d439a7593faeea94b7e3bb7629519-turn-2023022",
+    "reason": "Code-only source offers no editable epistemic explanation; identical pair rejected",
+    "reserve_rule": "same source/task, lowest fixed-seed source hash not already selected; no probe scores"
+  },
+  {
+    "review_id": "P041",
+    "old_source_id": "wildchat-881d796c72c7ea3d5728f6f981c6606b-turn-2017762",
+    "new_source_id": "wildchat-9aeb47f1916688b3dd49710660f649dd-turn-2019535",
+    "reason": "Pure creative sentence task unsuitable; observed frequency change always->might is not content preserving",
+    "reserve_rule": "same source/task, lowest fixed-seed source hash not already selected; no probe scores"
+  }
+]
