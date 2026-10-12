@@ -1,0 +1,84 @@
+{
+  "audit": "post_repair_global_audit_50",
+  "date": "2026-10-12",
+  "score_free": true,
+  "pre_blind": true,
+  "pairs_reviewed": 50,
+  "source_rows": 50,
+  "unique_source_ids": 50,
+  "writer_rows": 50,
+  "unique_writer_source_ids": 50,
+  "source_writer_id_match": true,
+  "frozen_metadata_match": true,
+  "task_counts": {
+    "factual_explanation": 10,
+    "math_logic": 10,
+    "programming": 10,
+    "comparison_analysis": 10,
+    "summary_judgment": 10
+  },
+  "cue_family_counts": {
+    "embedded_stance_predicate": 10,
+    "modal_force_scope": 10,
+    "compositional_polarity": 10,
+    "discourse_level_calibration": 10,
+    "contrastive_commitment": 10
+  },
+  "length_direction_counts": {
+    "confident_longer": 25,
+    "hedged_longer": 25
+  },
+  "task_family_direction_cells_valid": true,
+  "content_preservation_counts": {
+    "pass": 49,
+    "uncertain": 1,
+    "fail": 0
+  },
+  "formatting_mismatch_counts": {
+    "no": 50,
+    "yes": 0,
+    "uncertain": 0
+  },
+  "speaker_confidence_scope_counts": {
+    "pass": 48,
+    "uncertain": 1,
+    "fail": 1
+  },
+  "cue_family_applicability_counts": {
+    "pass": 48,
+    "uncertain": 0,
+    "fail": 2
+  },
+  "certainty_ordering_counts": {
+    "confident_stronger": 50,
+    "hedged_stronger": 0,
+    "tie": 0,
+    "uncertain": 0
+  },
+  "concern_counts": {
+    "none": 29,
+    "minor": 16,
+    "repair": 5
+  },
+  "template_screen": {
+    "prohibited_preface_reuse_detected": false,
+    "fixed_full_sentence_template_reuse_detected": false,
+    "aggregate_lexical_repetition": "minor",
+    "generic_or_categorical_wrapper_repairs": 2,
+    "recurrent_axes": [
+      "conclude_suspect",
+      "must_might",
+      "uncertainty_certainty",
+      "settled_provisional",
+      "firm_tentative"
+    ]
+  },
+  "repair_ids": [
+    "wildchat-f31b98fcbb3fdff3da8c4029b5b252d2-turn-2021681",
+    "wildchat-530e7fa1a3e53ddb604dbbaaf3f85b04-turn-2018170",
+    "helpsteer2-train-row-1896",
+    "wildchat-d1936e6b87c637866988623953202864-turn-2020891",
+    "helpsteer2-train-row-15061"
+  ],
+  "verdict": "repair_required"
+}
