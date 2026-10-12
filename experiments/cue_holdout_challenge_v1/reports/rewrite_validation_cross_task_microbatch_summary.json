@@ -1,0 +1,24 @@
+{
+  "allocation_flags": [],
+  "audit_rows": 10,
+  "correct_length_direction_counts": {
+    "confident_longer": 5,
+    "hedged_longer": 5
+  },
+  "flag_counts": {},
+  "human_review_certified": false,
+  "semantic_equivalence_certified": false,
+  "source_length_direction_counts": {
+    "confident_longer": 5,
+    "hedged_longer": 5
+  },
+  "source_rows": 10,
+  "status_counts": {
+    "pass": 10
+  },
+  "tokenizer": "Qwen2.5-1.5B-Instruct",
+  "tokenizer_snapshot_id": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "validator": "cue_holdout_rewrite_validator",
+  "validator_version": 1,
+  "writer_rows": 10
+}

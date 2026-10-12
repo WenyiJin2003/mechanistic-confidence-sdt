@@ -84,15 +84,15 @@ contain code, hashes, aggregate coverage and aggregate results only.
 
 ## Current status
 
-Preparation is in progress. The first low-cost 10-pair rewrite preflight passed
-mechanical checks after repair, but an independent blinded agent pre-screen
-rejected it because two pairs changed source content and most pairs reused an
-obvious appended endorsement pattern. Those drafts were not scored. The
-rewrite contract now explicitly forbids that pattern, and a replacement
-microbatch must pass a second blind pre-screen before the remaining 40 pairs are
-written. The replacement input is a fixed score-free cross-task slice: two
-sources per task, two per cue family, and five per length direction. Run
-`python3 src/prepare_cross_task_microbatch.py` to validate without writing, then
-repeat with `--apply` to write the private rewrite input and its public text-free
-manifest. This step prepares source rows only; it does not generate rewrites or
-run inference. No challenge activation has been inspected.
+The 50-source inventory is frozen after score-free source curation and
+independent agent QA. The first factual-only rewrite preflight was rejected
+before scoring because it changed content and relied on conspicuous endorsement
+wrappers. Its drafts were discarded.
+
+The replacement cross-task preflight uses two sources per task, two per cue
+family and five per length direction. After one pre-scoring repair for a
+repeated contrastive construction, both fresh blinded agent reviewers found
+10/10 content preservation, 10/10 intended certainty ordering and no material
+shortcut or formatting failure. This is development-only agent QA, not human
+review. Rewriting and blind review of the remaining 40 pairs are in progress.
+No challenge activation has been inspected.
