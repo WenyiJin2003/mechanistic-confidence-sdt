@@ -1,0 +1,20 @@
+{
+  "protocol_version": "claude-component-rewrite-v3.6",
+  "input_path": "private_data/rewrite_dev_v34/SOURCE_CANARY_20.jsonl",
+  "input_manifest_path": "manifests/rewrite_dev_v34_freeze.json",
+  "output_dir": "private_data/claude_component_rewrite_dev_v36",
+  "input_pool_size": 20,
+  "expected_sources": 10,
+  "frozen_batch_number": 2,
+  "expected_batch_source_ids_sha256": "ca982bac2da139557e05fa9c4136454e8b318ca714df4ece76fd768887dab5c3",
+  "expected_batch_source_hashes_sha256": "c18e639c268a31274210ba021b323b408b964763e3e49b17bf738161d44b6ae0",
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.75,
+  "max_word_ratio": 1.25,
+  "accepted_legacy_cache_fingerprints": [
+    "0fd4620a08eb9b6a74c20eb56f4b144453111449e212111e356669d72305991f"
+  ],
+  "claude_binary": "claude"
+}

@@ -1,23 +1,17 @@
 # Project Status
 
-**Research priority update, 12 October 2026:** the independent cue-holdout
-challenge is complete. A frozen layer-14 readout trained on the first 50
-development pairs ordered **47/50 new pairs (94%)**; the fixed all-layer
-ensemble ordered **48/50 (96%)**. Character TF-IDF reached 68%, answer
-likelihood 60% and counterbalanced length 50%. This supports a transferable
-hidden-state signal for expressed certainty about preserved answer content and
-shows that the tested text, likelihood and length controls do not fully explain
-the hidden-state result.
-
-The result remains development-only: the challenge was reviewed by two blinded
-agents, not humans, and it does not establish subjective belief, correctness,
-evidence-sensitive confidence, causality or training benefit. It completes a
-bounded 50-development / 50-challenge pilot, not the full diverse-pair handoff.
-The next research step is human audit followed by the matched
-diverse-versus-template comparison and 100/300/700-source learning curves. No
+**Research priority update, 12 October 2026:** the bounded cue-holdout probe
+result remains positive (layer 14: 47/50; fixed all-layer ensemble: 48/50), but
+the active task is now pair construction. A 200-source review kept 74 candidates,
+rejected 110 and sent 16 to human review. The latest two-stage canary reached
+10/10 mechanical and independent model-assisted semantic passes after recorded
+repair. Across the two retained canaries, 20/20 pass both checks; blind human
+review remains pending. Next, freeze a cue-only baseline and a
+leave-one-cue-family-out test before expanding at 100/300/700 sources. No
 language-model training or steering has been run. See the
-[current result](../../experiments/cue_holdout_challenge_v1/RESULTS.md) and
-[frozen challenge](../../experiments/cue_holdout_challenge_v1/README.md).
+[construction gate](../../experiments/diverse_pairs_multilayer_v1/reports/DATA_CONSTRUCTION_GATE.md),
+[probe result](../../experiments/cue_holdout_challenge_v1/RESULTS.md), and
+[next decision](../../experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md).
 
 ## Historical v4 status
 

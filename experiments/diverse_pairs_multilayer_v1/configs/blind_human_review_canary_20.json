@@ -1,0 +1,30 @@
+{
+  "title": "Blind human review: final 20-pair construction canary",
+  "seed": 20261012,
+  "expected_pairs": 20,
+  "source_files": [
+    {
+      "path": "private_data/rewrite_dev_v34/SOURCE_CANARY_20.jsonl",
+      "file_sha256": "200377d4a5ee1fe24bfcc2d296e86dc63c063146b12f9de7e4a911643da895fa"
+    },
+    {
+      "path": "private_data/rewrite_dev_v37/SOURCE_CANARY_10.jsonl",
+      "file_sha256": "ba41ae996e3178ed76ab710601cd2b32598c75b084ead3319a7edc87995df5de"
+    }
+  ],
+  "pair_batches": [
+    {
+      "cohort": "v3.5_component_repaired",
+      "path": "private_data/claude_component_rewrite_dev_v35_repaired/final_canary_10.json",
+      "file_sha256": "e4b289383894ea77ac70768acb059ce25c37ab4409adf5914fb7634c449a9c4a",
+      "records_sha256": "f27cdb9146799727582246b126df7038da4ba8b585c4fb6ae349dccfa2a57f2b"
+    },
+    {
+      "cohort": "v3.7_two_stage_repaired",
+      "path": "private_data/claude_two_stage_rewrite_dev_v37/final_canary_10.json",
+      "file_sha256": "a30ea202e2979629fac49e8925a14e13f6a9e68405e80fee21cdd1b7745f6f86",
+      "records_sha256": "1bbd87eb7a3a7a42f0d1e065cbb69f25a2e12ad4b4781109f141c041849de0ed"
+    }
+  ],
+  "output_dir": "private_data/blind_human_review_canary_20"
+}

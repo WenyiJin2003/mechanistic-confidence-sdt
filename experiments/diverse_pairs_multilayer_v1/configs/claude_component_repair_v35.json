@@ -1,0 +1,13 @@
+{
+  "protocol_version": "claude-component-repair-v3.5",
+  "base_config_path": "configs/claude_component_rewrite_dev_v35.json",
+  "output_dir": "private_data/claude_component_rewrite_dev_v35_repaired",
+  "repair_slots": ["P0007", "P0016", "P0072", "P0082", "P0158"],
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "timeout_seconds": 1200,
+  "accepted_legacy_cache_fingerprints": [
+    "89ba443f20961442f8206168f7f3bc875025593a43a0734e3bb2fdbb63d6d82f"
+  ],
+  "claude_binary": "claude"
+}

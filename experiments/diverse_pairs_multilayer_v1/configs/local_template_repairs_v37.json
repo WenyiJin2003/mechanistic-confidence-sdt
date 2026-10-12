@@ -1,0 +1,6 @@
+{
+  "protocol_version": "local-template-repairs-v3.7",
+  "base_config_path": "configs/claude_two_stage_rewrite_dev_v37.json",
+  "patch_path": "private_data/claude_two_stage_rewrite_dev_v37/local_repairs.json",
+  "output_path": "private_data/claude_two_stage_rewrite_dev_v37/final_canary_10.json"
+}

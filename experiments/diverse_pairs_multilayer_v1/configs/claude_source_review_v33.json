@@ -1,0 +1,15 @@
+{
+  "protocol_version": "claude-source-only-review-v3.3",
+  "input_path": "private_data/gpt_rewrite_dev_v33/SOURCE_BATCH_200_ASSIGNED.jsonl",
+  "input_manifest_path": "manifests/rewrite_production_v33_freeze.json",
+  "output_dir": "private_data/claude_source_review_v33/shard_0001",
+  "expected_sources": 200,
+  "batch_size": 40,
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "timeout_seconds": 1200,
+  "accepted_legacy_cache_fingerprints": [
+    "0b13a42f6d106a6bc1e7e68d891ae3a9a635b1ab0cc4dd0e505196fea6fa7630"
+  ],
+  "claude_binary": "claude"
+}

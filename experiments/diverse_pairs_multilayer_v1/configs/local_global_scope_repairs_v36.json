@@ -1,0 +1,7 @@
+{
+  "protocol_version": "local-component-repairs-v3.5",
+  "base_config_path": "configs/claude_component_rewrite_dev_v35.json",
+  "input_path": "private_data/claude_component_rewrite_dev_v35_repaired/final_first_batch.json",
+  "patch_path": "private_data/claude_component_rewrite_dev_v35_repaired/global_scope_repairs_v36.json",
+  "output_path": "private_data/claude_component_rewrite_dev_v35_repaired/final_first_batch_v36.json"
+}

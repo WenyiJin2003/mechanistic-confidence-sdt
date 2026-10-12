@@ -1,0 +1,45 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.3",
+  "contains_source_text": false,
+  "file_name": "SOURCE_BATCH_200_ASSIGNED.jsonl",
+  "file_sha256": "775a9a8aaeeb11a04c24ebd67a0296bf4e5ae2ec26d8c5516aaab5b7972891a2",
+  "source_count": 200,
+  "source_ids_sha256": "2701b6decdf9718657c6d34cb7e235b013293784b597df13591d370936095371",
+  "source_review_status": "passed_automated_prefilter_not_human_certified",
+  "human_source_review_status": "pending",
+  "generation_gate": "one_20_pair_batch_then_semantic_audit_before_scale",
+  "dataset_counts": {
+    "allenai/WildChat-1M": 150,
+    "nvidia/HelpSteer2": 50
+  },
+  "task_counts": {
+    "comparison_analysis": 30,
+    "factual_explanation": 80,
+    "math_logic": 30,
+    "programming": 30,
+    "summary_judgment": 30
+  },
+  "length_counts": {
+    "long": 80,
+    "medium": 70,
+    "short": 50
+  },
+  "stance_topology_counts": {
+    "distributed": 50,
+    "early": 50,
+    "late": 50,
+    "middle": 50
+  },
+  "rewrite_output_order_counts": {
+    "confident_first": 100,
+    "hedged_first": 100
+  },
+  "target_longer_member_counts": {
+    "confident": 100,
+    "hedged": 100
+  },
+  "rewrite_recipe_counts": {
+    "A": 100,
+    "B": 100
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "protocol_version": "claude-two-stage-paraphrase-v3.7",
+  "contains_source_text": false,
+  "selected_source_count": 10,
+  "selected_file_name": "SOURCE_CANARY_10.jsonl",
+  "selected_file_sha256": "ba41ae996e3178ed76ab710601cd2b32598c75b084ead3319a7edc87995df5de",
+  "selected_source_ids_sha256": "7f99bdba16b5e422a1f7c213745b839b593a250024cafcbae7c5f943351d4ab4",
+  "selected_response_hashes_sha256": "4e7b8cf97a9c84bd1a0aeaafb4fb3d8473cabdf4f17b0c08cd37daf87af70b92",
+  "source_construction": "v3.6_second_batch_with_one_independently_audited_replacement",
+  "replacement": {
+    "removed_production_slot": "P0020",
+    "inserted_source_production_slot": "P0086",
+    "copied_assignment_fields": [
+      "stance_topology",
+      "rewrite_recipe",
+      "rewrite_output_order",
+      "target_longer_member"
+    ],
+    "source_identity_and_response_hash_preserved": true,
+    "independent_semantic_audit_decision": "eligible"
+  },
+  "assignment_counts": {
+    "stance_topology": {
+      "distributed": 3,
+      "early": 2,
+      "late": 2,
+      "middle": 3
+    },
+    "rewrite_recipe": {
+      "A": 5,
+      "B": 5
+    },
+    "rewrite_output_order": {
+      "confident_first": 5,
+      "hedged_first": 5
+    },
+    "target_longer_member": {
+      "confident": 5,
+      "hedged": 5
+    }
+  },
+  "source_text_human_certified": false,
+  "model_calls_for_selection": 0
+}

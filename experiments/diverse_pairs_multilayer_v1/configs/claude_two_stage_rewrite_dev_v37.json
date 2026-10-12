@@ -1,0 +1,21 @@
+{
+  "protocol_version": "claude-two-stage-paraphrase-v3.7",
+  "input_path": "private_data/rewrite_dev_v37/SOURCE_CANARY_10.jsonl",
+  "input_manifest_path": "manifests/rewrite_dev_v37_freeze.json",
+  "cue_bank_path": "configs/global_confidence_cue_bank_v37.json",
+  "cue_bank_sha256": "bd3ed0e612c01c52784769e991bec0508e4088c576ef2327556a0cd6d478474d",
+  "output_dir": "private_data/claude_two_stage_rewrite_dev_v37",
+  "expected_sources": 10,
+  "expected_source_ids_sha256": "7f99bdba16b5e422a1f7c213745b839b593a250024cafcbae7c5f943351d4ab4",
+  "expected_response_hashes_sha256": "4e7b8cf97a9c84bd1a0aeaafb4fb3d8473cabdf4f17b0c08cd37daf87af70b92",
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.75,
+  "max_word_ratio": 1.25,
+  "minimum_source_edit_fraction": 0.08,
+  "accepted_legacy_cache_fingerprints": [
+    "1fb1997e7d3590cfe40918ca515c4a17f7aa4add101599adc58d073eb6d6530b"
+  ],
+  "claude_binary": "claude"
+}

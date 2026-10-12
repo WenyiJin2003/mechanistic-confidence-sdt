@@ -1,0 +1,15 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.4",
+  "input_path": "private_data/rewrite_dev_v34/SOURCE_CANARY_20.jsonl",
+  "input_manifest_path": "manifests/rewrite_dev_v34_freeze.json",
+  "output_dir": "private_data/claude_rewrite_dev_v34",
+  "expected_sources": 20,
+  "batch_size": 20,
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "max_transport_retries": 2,
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.75,
+  "max_word_ratio": 1.25,
+  "claude_binary": "claude"
+}

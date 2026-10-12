@@ -1,88 +1,67 @@
-# Diverse paired certainty / multi-layer status
+# Diverse Paired Certainty: Current Status
 
-Updated 12 October 2026. Revision 3 passed agent-assisted QA and the 50-pair
-development diagnostic is complete. Its independent cue/recipe-holdout
-follow-up is also complete: layer 14 reached 47/50 and the fixed ensemble 48/50,
-above character TF-IDF (34/50), answer likelihood (30/50) and length (25/50).
-Human review is still pending; no language-model training or causal intervention
-has been run. See the [challenge result](../cue_holdout_challenge_v1/RESULTS.md).
+Updated 12 October 2026.
 
-| Step | Status | Evidence / next action |
+## Research result
+
+**The bounded probe pilot passed its independent challenge.** A frozen layer-14
+readout trained on 50 development pairs ordered 47/50 new confident–hesitant
+pairs correctly; the fixed 28-layer ensemble reached 48/50. Character TF-IDF,
+answer likelihood, and length reached 34/50, 30/50, and 25/50.
+
+This supports a transferable signal for **expressed certainty about preserved
+answer content** in this task. It does not establish correctness, evidence
+support, subjective belief, causality, or usefulness as a training loss.
+
+## Data-construction status
+
+| Item | Status | Result |
 |---|---|---|
-| Complete handoff read and priority correction | completed | REDIRECTION_NOTE.md; historical reports retained |
-| Workspace, environment and existing snapshot inspection | completed | LOCAL_RESOURCE_ASSESSMENT.md; independent branch/worktree |
-| Public source access and schema precheck | completed | Both public preview endpoints parsed; pinned revisions recorded |
-| Bounded source selection and development inventory | completed | 38 WildChat / 12 HelpSteer2 responses; pinned provenance, dedup screens; all train-development |
-| Full 1,000-source grouped pool and 700/150/150 split | completed | 1,000 main + 200 reserves; 750/250 WildChat–HelpSteer2 in the main pool; old development and challenge sources excluded; byte-level manifest frozen |
-| Rewrite specification and first review packet | completed | GPT-6 Luna current-session workers; 50 pairs / 100 drafts; local HTML reviewer |
-| Stronger hesitant wording (revision 2) | completed | User-requested hedge-only revision; confident versions and source texts frozen; first packet archived |
-| Targeted content QA (revision 3) | completed | 40 kept, 10 revised, 50/50 accepted by a separate agent pass; not human review |
-| Pilot rewriter authorization | completed | User requested resource-efficient model and 50 pairs; no independent paid API |
-| Larger rewrite execution | stopped after canary | One 20-pair train/A canary generated and recovered locally; 980 calls were not made. Sonnet 4.6 performed the substantive generation; a bounded Claude Code helper produced 15 output tokens. Immutable v1 failure and zero-call v2 provenance are retained locally. |
-| Canary quality gate | failed; scale not authorized | 6/20 passed strict runner; 14 failed only length controls. Audit found 19/20 verbatim confident copies, early hesitant edits in 16/20, content preservation 19/20 and correct speaker scope 16/20. See `reports/claude_canary_20_audit.json`. |
-| Human content review | pending | All 50 records remain human_review=pending |
-| All-layer extraction and primary readout modules | completed | 100 responses, all 28 layers; final replay was 100 cache hits and zero forwards |
-| Review-export validation and importer | completed | Exact packet/text hash and A/B checks; separate reviewed outputs; no actual export received |
-| Limited model-forward benchmark | completed | 20 pairs / 40 responses, all 28 layers; final implementation 31.6 seconds; exact cache replay with zero forwards |
-| Development layer-14 / ensemble comparison | completed | Both 50/50; no ensemble gain; surface controls also near-perfect |
-| Independent cue/recipe-holdout challenge | completed | 50 new source groups; 5 tasks and 5 cue families; 25/25 length direction; two blinded agent reviews |
-| Frozen one-shot challenge evaluation | completed | Layer 14 47/50; ensemble 48/50; no challenge fitting or selection |
-| Human challenge review | pending | Development-only result; locked texts must not be changed after scoring |
-| Matched diverse-vs-template 2×2 | not started | Same source IDs and locked natural test set required |
-| 100/300/700-source learning curves | not started | Refit from cached states; no test-based layer or recipe selection |
-| SDT training or activation steering | not authorized | Downstream separate decision after this handoff is completed |
+| Development probe | Complete | Layer 14 and the 28-layer ensemble both reached 50/50; text and length shortcuts remained |
+| Cue/recipe-holdout challenge | Complete and score-exposed | Layer 14: 47/50; ensemble: 48/50 |
+| Human review of the completed probe sets | Pending | Existing agent-assisted review is not human certification |
+| 200-source rewrite review | Complete | 74 eligible, 110 rejected, 16 require human review |
+| v3.3 full-pair canary | Rejected | 1 direct retain, 14 repairs, 5 discards out of 20 |
+| v3.4 shared-base canary | Revised | 2 direct retains, 8 repairs out of 10 |
+| v3.5 component canary | Retained for final review | 10/10 mechanical and independent semantic passes after repair |
+| v3.6 symmetric-copy canary | Control only | 0/10 paraphrase-gate passes; retain only as a lexical cue control |
+| v3.7 two-stage canary | Retained for final review | 10/10 mechanical and independent model-assisted semantic passes after five record-level repairs |
+| Combined retained canaries | Model-assisted gates complete | 20/20 mechanical and semantic passes; not human-certified |
+| Blinded human-review packet | Ready | 20 pairs; reproducible A/B order, balanced 5/5 within each cohort; judgments pending |
+| Blind human review of final 20 canary pairs | Pending | Required before expansion |
+| Cue-only baseline and leave-one-cue-family-out test | Not frozen | Must be specified before probe scoring |
+| 100/300/700-source learning curves | Not started | Conditional on the review and design gates |
+| SDT training or activation steering | Not authorized | Separate downstream decision |
 
-Revision 3 retains three warnings about the original source answers (P002, P008
-and P022). The answers were intentionally not corrected during style rewriting.
-No final draft has an empty or identical pair, protected-code mismatch,
-numerical-count warning or token-limit exceedance under the implemented rules.
-These automated screens and the agent QA are not semantic certification by a
-human reviewer. Private revision archives preserve every prior packet.
+The v3.3–v3.7 figures are sequential development results, not an unbiased method
+benchmark. No full 1,000-pair run has been made.
 
-The main development result is deliberately narrow. Layer 14, the equal 28-layer
-ensemble, every individual layer and character TF-IDF each ordered 50/50 pairs
-correctly. Negative mean NLL ordered 49/50 and negative response length 47/50.
-In 47/50 pairs the hesitant response is longer. Therefore this set establishes
-easy separability, but cannot identify a preferred layer or rule out a shared
-rewrite shortcut. The ensemble's 20-run shuffle control was also inconclusive:
-two shuffled runs reached 100%. See the
-[development report](reports/DEVELOPMENT_DIAGNOSTIC.md).
+## Current method
 
-The regression suite checks hidden-state indexing, response spans, NLL shifting,
-pair order, cache identity, source-disjoint folds, train-only transforms, metric
-counts and stale review rejection. The focused final tests passed before the
-diagnostic. The 50-card review workflow and final static packet checks also
-passed; test annotations never changed the research data.
+The candidate main recipe uses two stages:
 
-The 1,000-source runner additionally rejects output outside ignored
-experiment-private storage, stale resume fingerprints, non-first-party Claude
-authentication, Claude error envelopes, malformed structured responses,
-unreasoned `not_applicable` records, writer-reported issues, response/full-chat
-token-limit violations and a pair-token gap above three. The model-usage gate
-requires positive requested-Sonnet output and permits only the exact internal
-Haiku helper with at most 64 output tokens and at most 1% output share. Its
-tests use mocked subprocesses. One bounded 20-source canary call has been made,
-recovered locally into the v2 namespace and rejected by the separate quality
-gate. No full 1,000-pair run has been made.
+1. Claude produces one neutral, content-preserving paraphrase.
+2. A local audited cue bank renders confident and hesitant versions from the
+   same shared content.
 
-The earlier bounded engineering check covered 20 pairs / 40 responses and verified
-finite `[40, 28, 3, 1536]` states, exact response spans, identical prompt controls,
-padding invariance and zero-forward replay. The completed development cache now
-covers 50 pairs / 100 responses. The final diagnostic replay used 100 cache hits
-and zero model forwards. See the
-[engineering record](results/EXTRACTION_SANITY.json) and
-[diagnostic JSON](results/DEVELOPMENT_DIAGNOSTIC.json).
+Mechanical checks then test pair structure, length, cue placement, protected
+content, and genuine paraphrasing. Independent semantic review checks content
+equivalence and whether certainty belongs to the speaker rather than changing
+the claim itself. Human review remains the final gate.
 
-Human-review action: open private_data/REVIEW_50_PAIRS_V3.html, assess content,
-certainty order and confounds, and return the downloaded JSON. The canonical
-REVIEW_50_PAIRS.html points to the same Revision 3 content. A/B positions are
-randomized and each revision has a distinct browser-storage key.
+See the [data-construction report](reports/DATA_CONSTRUCTION_GATE.md) for the
+full development table and the [challenge result](../cue_holdout_challenge_v1/RESULTS.md)
+for the frozen probe evaluation.
 
-Research action: revise the rewrite contract and pass a fresh 20-pair canary
-before any larger generation. Both members must be non-verbatim matched
-rewrites, the confidence-bearing edit position must be counterbalanced, and
-length must be controlled without asking the rewriter to infer Qwen
-tokenization. Then obtain human blind review and complete the matched
-diverse-versus-template comparison and 100/300/700-source learning curves. Keep
-layer 14 as the primary readout and the equal all-layer score as the
-prespecified ensemble. Loss training remains a later proposal.
+## Immediate action
+
+1. Complete blind human review of the final 20 canary pairs.
+2. Freeze the matched cue-only baseline and leave-one-cue-family-out protocol.
+3. If both gates pass, expand in checkpoints of 100, 300, and 700 sources.
+4. Extract all layers once, reuse cached states, and report layer 14 plus every
+   layer and the fixed equal-layer ensemble.
+
+The locked challenge must not be repaired or rescored. Private third-party text
+and review files remain local and ignored. Historical canaries, failures, and
+transport records stay in the repository as evidence but are not the current
+execution plan.

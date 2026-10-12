@@ -1,0 +1,47 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.4",
+  "contains_source_text": false,
+  "source_review_protocol": "claude-source-only-review-v3.3",
+  "source_review_generation_fingerprint": "0b13a42f6d106a6bc1e7e68d891ae3a9a635b1ab0cc4dd0e505196fea6fa7630",
+  "source_review_decision_counts": {
+    "eligible": 74,
+    "needs_human_review": 16,
+    "reject": 110
+  },
+  "source_review_human_certified": false,
+  "selection_rule": "deterministic_binary_milp_earliest_feasible_slots",
+  "selected_source_count": 20,
+  "selected_file_name": "SOURCE_CANARY_20.jsonl",
+  "selected_file_sha256": "200377d4a5ee1fe24bfcc2d296e86dc63c063146b12f9de7e4a911643da895fa",
+  "selected_source_ids_sha256": "877c5d91970bc4a2fb9c583035897dea91709ae945cfdd53a72d4e5d8d3ececa",
+  "quota_counts": {
+    "dataset:allenai/WildChat-1M": 15,
+    "dataset:nvidia/HelpSteer2": 5,
+    "task:factual_explanation": 8,
+    "task:math_logic": 4,
+    "task:programming": 3,
+    "task:summary_judgment": 3,
+    "task:comparison_analysis": 2,
+    "length_bin:short": 4,
+    "length_bin:medium": 8,
+    "length_bin:long": 8,
+    "stance_topology:early": 5,
+    "stance_topology:middle": 5,
+    "stance_topology:late": 5,
+    "stance_topology:distributed": 5,
+    "rewrite_recipe:A": 10,
+    "rewrite_recipe:B": 10,
+    "rewrite_output_order:confident_first": 10,
+    "rewrite_output_order:hedged_first": 10,
+    "target_longer_member:confident": 10,
+    "target_longer_member:hedged": 10
+  },
+  "private_source_review_artifact_sha256": {
+    "source_review_01_eac657b8f6b7.json": "f657ba2b878be1ac3580c23e1d965804e004707a10328e05804d3ba660b34dd2",
+    "source_review_02_53ae3054a6fe.json": "46e8bb0dbb969b149dbe504b4103247a449a99b5c71463e7ede806f56d740aac",
+    "source_review_03_605a8e8391fe.json": "965b700dafdcd3c555dd0b53ad51d747700fd595dae5d5c3df33f5f113d4ae18",
+    "source_review_04_10ab4dea8945.json": "89fdafb2894df52ddf015c43c280ad893fa8208a9144f08dd5ce4706249a1be4",
+    "source_review_05_77972d691502.json": "b2a5cb864823d0e722bf52817f440ab7ffa1b5f22f041cebed1632e8724ebdac"
+  },
+  "model_calls_for_selection": 0
+}

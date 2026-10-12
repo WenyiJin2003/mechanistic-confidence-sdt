@@ -1,0 +1,15 @@
+{
+  "protocol_version": "claude-symmetric-diverse-rewrite-v3.3",
+  "input_path": "private_data/gpt_rewrite_dev_v33/SOURCE_BATCH_200_ASSIGNED.jsonl",
+  "input_manifest_path": "manifests/rewrite_production_v33_freeze.json",
+  "output_dir": "private_data/claude_rewrite_production_v33/shard_0001",
+  "expected_sources": 200,
+  "batch_size": 20,
+  "model": "claude-sonnet-4-6",
+  "effort": "low",
+  "max_transport_retries": 2,
+  "timeout_seconds": 1200,
+  "min_word_ratio": 0.75,
+  "max_word_ratio": 1.25,
+  "claude_binary": "claude"
+}

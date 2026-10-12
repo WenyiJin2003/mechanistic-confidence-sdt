@@ -1,0 +1,94 @@
+{
+  "protocol_version": "data-construction-gate-v1",
+  "raw_text_policy": "private_gitignored",
+  "source_review": {
+    "review_type": "model_assisted",
+    "candidates": 200,
+    "eligible": 74,
+    "rejected": 110,
+    "needs_human_review": 16
+  },
+  "development_iterations": [
+    {
+      "method": "v3.3_full_pair",
+      "n": 20,
+      "mechanical_accepted": 2,
+      "semantic_initial": {"direct_retain": 1, "local_repair": 14, "discard": 5}
+    },
+    {
+      "method": "v3.4_shared_base",
+      "n": 10,
+      "mechanical_accepted": 7,
+      "semantic_initial": {"direct_retain": 2, "local_repair": 8, "discard": 0}
+    },
+    {
+      "method": "v3.5_component_renderer",
+      "n": 10,
+      "mechanical_initial_accepted": 5,
+      "semantic_initial": {"direct_retain": 5, "local_repair": 5, "discard": 0},
+      "mechanical_final_accepted": 10,
+      "semantic_final": {"direct_retain": 10, "local_repair": 0, "discard": 0}
+    },
+    {
+      "method": "v3.6_symmetric_copying_control",
+      "n": 10,
+      "mechanical_accepted": 0,
+      "neutral_edit_fraction_range": [0.0, 0.036],
+      "semantic_when_ignoring_edit_gate": {"direct_retain": 4, "local_repair": 6, "discard": 0},
+      "intended_use": "lexical_control_only"
+    },
+    {
+      "method": "v3.7_two_stage",
+      "n": 10,
+      "mechanical_initial_accepted": 9,
+      "semantic_initial": {"direct_retain": 7, "local_repair": 3, "discard": 0},
+      "record_level_local_repairs": 5,
+      "mechanical_final_accepted": 10,
+      "semantic_final": {"direct_retain": 10, "local_repair": 0, "discard": 0}
+    }
+  ],
+  "final_canaries": [
+    {
+      "method": "v3.5_component_renderer",
+      "n": 10,
+      "private_file_sha256": "e4b289383894ea77ac70768acb059ce25c37ab4409adf5914fb7634c449a9c4a",
+      "records_sha256": "f27cdb9146799727582246b126df7038da4ba8b585c4fb6ae349dccfa2a57f2b",
+      "private_semantic_audit_sha256": "357d1dabb175a008bb25e2de77fdc473a1c176264b87b13b99a3ce859d760309",
+      "semantic_review": "independent_model_assisted"
+    },
+    {
+      "method": "v3.7_two_stage",
+      "n": 10,
+      "source_file_sha256": "ba41ae996e3178ed76ab710601cd2b32598c75b084ead3319a7edc87995df5de",
+      "cue_bank_sha256": "bd3ed0e612c01c52784769e991bec0508e4088c576ef2327556a0cd6d478474d",
+      "private_file_sha256": "a30ea202e2979629fac49e8925a14e13f6a9e68405e80fee21cdd1b7745f6f86",
+      "records_sha256": "1bbd87eb7a3a7a42f0d1e065cbb69f25a2e12ad4b4781109f141c041849de0ed",
+      "private_semantic_audit_sha256": "319eb57e4c03f06a1da01b09640c2334dd013c931f09466f8a3aac03827ccea2",
+      "semantic_review": "independent_model_assisted"
+    }
+  ],
+  "combined_final": {
+    "pairs": 20,
+    "mechanical_accepted": 20,
+    "semantic_direct_retain": 20,
+    "semantic_review": "independent_model_assisted",
+    "human_blind_review": "pending",
+    "gate_status": "ready_for_human_blind_review_not_scale"
+  },
+  "blind_human_review_packet": {
+    "status": "built_review_pending",
+    "pairs": 20,
+    "config_sha256": "16409180e62e8209bd393eb04489985fc8b13b03334b97d77b0cfcd70767dd14",
+    "blinded_rows_sha256": "716203a1f1553976341daf040b6029750ca4abad4a39954776fe96119abe3170",
+    "input_binding": "source_file_sha256_and_pair_file_plus_records_sha256",
+    "reproducible_ab_order": true,
+    "balanced_within_each_ten_pair_cohort": true,
+    "public_text_exported": false
+  },
+  "next_controls": [
+    "blind_human_review",
+    "cue_only_baseline",
+    "leave_one_cue_family_out"
+  ],
+  "interpretation_warning": "Sequential development iterations are not an unbiased method comparison."
+}

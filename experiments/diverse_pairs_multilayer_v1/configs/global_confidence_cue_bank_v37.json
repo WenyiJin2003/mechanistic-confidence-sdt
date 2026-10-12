@@ -1,0 +1,106 @@
+{
+  "protocol_version": "local-global-cue-bank-v3.7",
+  "contains_source_text": false,
+  "cue_sets": [
+    {
+      "cue_set_id": "global_01",
+      "stance_topology": "early",
+      "target_longer_member": "hedged",
+      "confident_cues": ["Overall, I stand firmly and fully behind this answer."],
+      "hedged_cues": ["Overall, I endorse this answer, though I retain some uncertainty."]
+    },
+    {
+      "cue_set_id": "global_02",
+      "stance_topology": "distributed",
+      "target_longer_member": "confident",
+      "confident_cues": [
+        "My answer reflects a clear and settled judgment.",
+        "Taken as a whole, I stand firmly behind this response."
+      ],
+      "hedged_cues": [
+        "My answer reflects a tentative judgment.",
+        "Taken as a whole, this response seems reasonable to me."
+      ]
+    },
+    {
+      "cue_set_id": "global_03",
+      "stance_topology": "distributed",
+      "target_longer_member": "hedged",
+      "confident_cues": [
+        "Overall, I stand behind this answer.",
+        "The response as a whole is my considered conclusion."
+      ],
+      "hedged_cues": [
+        "Overall, I provisionally stand behind this answer.",
+        "The response as a whole remains my best judgment, with some uncertainty."
+      ]
+    },
+    {
+      "cue_set_id": "global_04",
+      "stance_topology": "late",
+      "target_longer_member": "hedged",
+      "confident_cues": ["This explanation, overall, is one I fully endorse."],
+      "hedged_cues": [
+        "This explanation, overall, is my best judgment, although I am not fully certain."
+      ]
+    },
+    {
+      "cue_set_id": "global_05",
+      "stance_topology": "early",
+      "target_longer_member": "confident",
+      "confident_cues": [
+        "Overall, I firmly and clearly stand behind this response."
+      ],
+      "hedged_cues": ["Overall, I tentatively endorse this response." ]
+    },
+    {
+      "cue_set_id": "global_06",
+      "stance_topology": "middle",
+      "target_longer_member": "confident",
+      "confident_cues": [
+        "At this point, my overall answer is a clear and settled conclusion."
+      ],
+      "hedged_cues": ["At this point, my overall answer remains a tentative conclusion." ]
+    },
+    {
+      "cue_set_id": "global_07",
+      "stance_topology": "late",
+      "target_longer_member": "hedged",
+      "confident_cues": ["Taken together, I stand fully behind this response."],
+      "hedged_cues": [
+        "Taken together, I think this response is sound, but not beyond doubt."
+      ]
+    },
+    {
+      "cue_set_id": "global_08",
+      "stance_topology": "middle",
+      "target_longer_member": "confident",
+      "confident_cues": [
+        "My overall assessment here is clear, settled, and firmly held."
+      ],
+      "hedged_cues": ["My overall assessment here remains tentative." ]
+    },
+    {
+      "cue_set_id": "global_09",
+      "stance_topology": "distributed",
+      "target_longer_member": "hedged",
+      "confident_cues": [
+        "Overall, this answer reflects my considered view.",
+        "The full response is one I stand behind."
+      ],
+      "hedged_cues": [
+        "Overall, this answer reflects my tentative view.",
+        "The full response is my best current view, though some uncertainty remains."
+      ]
+    },
+    {
+      "cue_set_id": "global_10",
+      "stance_topology": "middle",
+      "target_longer_member": "confident",
+      "confident_cues": [
+        "The answer as a whole is my especially clear and firm conclusion."
+      ],
+      "hedged_cues": ["The answer as a whole is my tentative conclusion." ]
+    }
+  ]
+}
