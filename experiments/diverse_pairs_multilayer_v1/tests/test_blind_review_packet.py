@@ -74,9 +74,15 @@ class BlindReviewPacketTests(unittest.TestCase):
         self.assertNotIn("source-1", page)
         for field in ["content_equivalence", "certainty_contrast", "naturalness", "cue_scope", "decision", "comment"]:
             self.assertIn(f'data-field="{field}"', page)
+        self.assertIn("blind_human_review_1.json", page)
+        self.assertNotIn("blind_human_review_20.json", page)
         self.assertEqual(key["pairs"][0]["version_a_label"], assignment(17, "source-1")[0])
         self.assertEqual(manifest["pairs"], 1)
         self.assertTrue(manifest["blinded"])
+        self.assertEqual(
+            manifest["unblind_key_sha256"],
+            sha256_file(self.base / "private_data/review/UNBLIND_KEY.json"),
+        )
 
     def test_same_seed_reproduces_packet(self):
         first = build_packet(self.config_path, self.base)

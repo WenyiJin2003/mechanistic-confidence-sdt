@@ -232,6 +232,7 @@ def render_html(rows: list[dict[str, Any]], packet_hash: str, title: str) -> str
         )
 
     identities_json = json.dumps(identities, ensure_ascii=False).replace("<", "\\u003c")
+    export_filename = f"blind_human_review_{len(rows)}.json"
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title>
 <style>body{{margin:0;background:#f4f5f7;color:#18202b;font:16px/1.55 system-ui,-apple-system,sans-serif}}main{{max-width:1500px;margin:auto;padding:24px}}h1{{font-size:27px;margin:0 0 8px}}.intro{{max-width:1050px}}.toolbar{{display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:sticky;top:0;background:#f4f5f7;padding:10px 0;z-index:2}}button,select{{font:inherit;padding:7px;border:1px solid #bac3ce;border-radius:7px;background:white}}button{{cursor:pointer}}.primary{{background:#2352a3;color:white}}.card{{background:white;border:1px solid #dce1e7;border-radius:12px;padding:20px}}.card[hidden]{{display:none}}.meta{{color:#536071;margin-bottom:12px}}pre{{font:15px/1.6 ui-monospace,SFMono-Regular,monospace;white-space:pre-wrap;overflow-wrap:anywhere}}.source{{background:#f7f8fa;border:1px solid #dbe2eb;border-radius:8px;padding:12px;margin-top:12px}}.versions{{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}}.versions section{{border:1px solid #dbe2eb;border-radius:8px;padding:12px;background:#fafbfd}}h2{{font-size:17px;margin:0 0 8px}}.review{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}}.review label{{display:flex;flex-direction:column;gap:6px}}.comment{{display:block;margin-top:14px}}textarea{{width:100%;min-height:78px;box-sizing:border-box;font:inherit;padding:8px}}#progress{{font-weight:650}}@media(max-width:900px){{.versions,.review{{grid-template-columns:1fr}}.toolbar{{position:static}}}}</style></head><body><main>
 <header><h1>{esc(title)}</h1><p class="intro">Review each same-content pair without guessing its intended label. Compare both versions with the source, then judge <strong>content equivalence, speaker-level certainty contrast, naturalness, and whether the stance cue applies to the whole response</strong>. This is not a correctness review. The page contains no answer key.</p></header>
@@ -246,7 +247,7 @@ function progress(){{const complete=identities.filter(m=>required.every(k=>(revi
 cards.forEach((card,i)=>card.querySelectorAll('[data-field]').forEach(el=>{{el.value=(reviews[identities[i].review_id]||{{}})[el.dataset.field]||'';el.addEventListener('input',()=>{{const id=identities[i].review_id;reviews[id]||={{}};reviews[id][el.dataset.field]=el.value;reviews[id].updated_at=new Date().toISOString();try{{localStorage.setItem(storageKey,JSON.stringify(reviews))}}catch(e){{storageAvailable=false}}progress()}})}}));
 function show(i){{current=Math.max(0,Math.min(cards.length-1,i));cards.forEach((c,n)=>c.hidden=n!==current);jump.value=current;document.getElementById('position').textContent=(current+1)+' / '+cards.length;document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===cards.length-1;window.scrollTo(0,0)}}
 document.getElementById('prev').onclick=()=>show(current-1);document.getElementById('next').onclick=()=>show(current+1);jump.onchange=()=>show(Number(jump.value));
-document.getElementById('export').onclick=()=>{{const payload={{packet_sha256:packetHash,reviewed_at:new Date().toISOString(),blinded:true,reviews:identities.map(m=>({{...m,...(reviews[m.review_id]||{{}})}}))}};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{{type:'application/json'}}));const a=document.createElement('a');a.href=url;a.download='blind_human_review_20.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}};show(0);progress();
+document.getElementById('export').onclick=()=>{{const payload={{packet_sha256:packetHash,reviewed_at:new Date().toISOString(),blinded:true,reviews:identities.map(m=>({{...m,...(reviews[m.review_id]||{{}})}}))}};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{{type:'application/json'}}));const a=document.createElement('a');a.href=url;a.download={json.dumps(export_filename)};a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}};show(0);progress();
 </script></body></html>'''
 
 
@@ -274,8 +275,10 @@ def build_packet(
         "seed": int(config["seed"]),
         "pairs": key,
     }
+    key_text = json.dumps(key_payload, indent=2) + "\n"
     manifest = {
         "packet_sha256": packet_hash,
+        "unblind_key_sha256": sha256_text(key_text),
         "pairs": len(rows),
         "blinded": True,
         "reproducible_ab_order": True,
@@ -293,7 +296,7 @@ def build_packet(
     }
     (output_dir / "BLINDED_ROWS.jsonl").write_text(rows_dump, encoding="utf-8")
     (output_dir / "BLIND_REVIEW.html").write_text(html_text, encoding="utf-8")
-    (output_dir / "UNBLIND_KEY.json").write_text(json.dumps(key_payload, indent=2) + "\n", encoding="utf-8")
+    (output_dir / "UNBLIND_KEY.json").write_text(key_text, encoding="utf-8")
     (output_dir / "MANIFEST.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return manifest
 

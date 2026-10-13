@@ -1,0 +1,125 @@
+{
+  "authorizes_probe_scoring": false,
+  "authorizes_sdt_training": false,
+  "bindings": {
+    "config_sha256": "a3b96b582e9631de0e6c9320057b84ef8e2e88bfacc71504884582288dc38bd5",
+    "final_file_sha256": "dc75f51bbbc8055689f4e399728e15cc2e4b6fcd421e0c327fe316d42cffdd5c",
+    "model_config_sha256": "885d0dceae8fa5c136da9209121ec9eb11160488e840de3bc1f29353674e5712",
+    "model_id": "cross-encoder/nli-deberta-v3-small",
+    "model_revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+    "model_weights_sha256": "ebc79588dd73ccfb6a3f6078519cfbf512c5305384c5ea1845bc71cd32216e86",
+    "records_sha256": "e479d51f891abc737bed628099c440f46f516ba0979f032087ae0f39f50cf59b",
+    "source_file_sha256": "e2722d52342aba31f4e9af7104b0048d575526f19c3dd12e12b1aef02b7ceba5",
+    "source_ids_sha256": "dd04f5a6a858f72a05952b3d4340cb41c9cfe98ccacaea95c657172421f925a9",
+    "source_response_hashes_sha256": "b01acebd102c63efc2761435711c02029969a1e97bcec850d10dc398b18d5378",
+    "tokenizer_bundle_sha256": "afecb88b6bd7c8d182d496b2da5d618cfb5fcbb5913f5b2ab8a7c4b7c8f5f582",
+    "tokenizer_files_sha256": {
+      "added_tokens.json": "a4b6bfe668f2b3cf6f0cd535e98a0663d2d0d4a4a15f13075ad3597d33985a23",
+      "special_tokens_map.json": "ed7c099c988dbb414b18a6980d20cb57b91b7cd119f6f6941eb364b0e892e712",
+      "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+      "tokenizer.json": "5124ef2ead1a10a717703bc436de7f353da76d6340e4587719b42b1693707964",
+      "tokenizer_config.json": "f3eecd07c370ef0bf7dd3780d3cd68cf9c8b00c267e21a208ddcd8f82bfec1a6"
+    },
+    "tokenizer_sha256": "5124ef2ead1a10a717703bc436de7f353da76d6340e4587719b42b1693707964"
+  },
+  "chunk_counts": {
+    "source": {
+      "count": 100,
+      "maximum": 3.0,
+      "mean": 1.52,
+      "median": 1.5,
+      "minimum": 1.0
+    },
+    "template": {
+      "count": 100,
+      "maximum": 3.0,
+      "mean": 1.5,
+      "median": 1.0,
+      "minimum": 1.0
+    }
+  },
+  "contains_per_example_results": false,
+  "contains_source_or_response_text": false,
+  "counts": {
+    "by_dataset": {
+      "allenai/WildChat-1M": {
+        "flagged": 11,
+        "not_flagged": 64
+      },
+      "nvidia/HelpSteer2": {
+        "flagged": 3,
+        "not_flagged": 22
+      }
+    },
+    "by_task": {
+      "comparison_analysis": {
+        "flagged": 3,
+        "not_flagged": 16
+      },
+      "factual_explanation": {
+        "flagged": 6,
+        "not_flagged": 28
+      },
+      "math_logic": {
+        "flagged": 2,
+        "not_flagged": 14
+      },
+      "programming": {
+        "flagged": 1,
+        "not_flagged": 12
+      },
+      "summary_judgment": {
+        "flagged": 2,
+        "not_flagged": 16
+      }
+    },
+    "cache_hits": 0,
+    "flag_counts": {
+      "source_to_template:high_best_contradiction": 1,
+      "source_to_template:low_best_entailment": 6,
+      "template_to_source:high_best_contradiction": 1,
+      "template_to_source:low_best_entailment": 10
+    },
+    "flagged_pair_count": 14,
+    "judgment_count": 506,
+    "new_judgments": 506,
+    "not_flagged_pair_count": 86,
+    "pair_count": 100
+  },
+  "decision": "triage_complete_human_blind_review_still_required",
+  "limitations": [
+    "MNLI probabilities are screening signals, not semantic-equivalence certificates.",
+    "This audit compares exact fenced-code hashes, then masks those blocks before NLI; construction validation covers additional protected code spans.",
+    "Chunking can miss claims that require evidence across chunk boundaries.",
+    "Naturalness, confidence ordering, and global cue scope require blind human review."
+  ],
+  "method": {
+    "comparison": "original_response_vs_marker_stripped_shared_template",
+    "counterpart_selection": "all_chunk_cross_product",
+    "directions": [
+      "template_to_source",
+      "source_to_template"
+    ],
+    "lexical_overlap_role": "diagnostic_and_deterministic_ranking_only",
+    "maximum_observed_pair_tokens": 440,
+    "model_max_length": 512,
+    "target_wordpiece_tokens": 220,
+    "thresholds": {
+      "interpretation": "screening_flags_only_not_semantic_certification",
+      "maximum_best_contradiction": 0.5,
+      "minimum_best_entailment": 0.5
+    },
+    "truncation": false
+  },
+  "protocol_version": "local-nli-semantic-triage-v1",
+  "purpose": "independent_local_semantic_triage_for_blind_human_review",
+  "runtime": {
+    "cpu_fallback": false,
+    "device": "mps",
+    "dtype": "float32"
+  },
+  "schema": "local-nli-semantic-triage-public-v1",
+  "semantic_certification": false,
+  "status": "complete",
+  "training_data_validated": false
+}

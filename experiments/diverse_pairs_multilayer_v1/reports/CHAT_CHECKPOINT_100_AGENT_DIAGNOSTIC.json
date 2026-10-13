@@ -1,0 +1,85 @@
+{
+  "schema": "agent-blind-diagnostic-public-v2",
+  "status": "complete",
+  "purpose": "label_blind_model_assisted_construction_diagnostic",
+  "reviewer_type": "agent",
+  "human_certified": false,
+  "blinded": true,
+  "semantic_certification": false,
+  "certainty_direction_relative_to_intended_labels": "not_captured_or_verified",
+  "training_data_validated": false,
+  "authorizes_probe_scoring": false,
+  "authorizes_sdt_training": false,
+  "bindings": {
+    "packet_sha256": "12ab1ed328af16227c1b2e3463ad17089f6ba105a824c679223cc367338947cd",
+    "packet_manifest_sha256": "9f001096ab828e4303b981fd13ed9cb764ed0df44f0450d8966f8c5a68052bd8",
+    "unblind_key_sha256": "4b47d16bd25ad8a4161d163bb6d4330acec61433da0fc1f89b5ebcacd7bf494b",
+    "nli_report_sha256": "eab4bc27df7b55e42846bc95b6cb74112b2a059b183572a8ccdfb23d50e60eec",
+    "private_nli_triage_sha256": "2fa4d7e9a4d030f33571635b51b17ee93169206d3278d9690eb56ecaa0ffa283",
+    "private_diagnostic_sha256": "cd5462763acd316d61fee761fa294650e85365674e018b2dafc65519591e376d"
+  },
+  "sampling_design": {
+    "packet_pair_count": 100,
+    "reviewed_pair_count": 24,
+    "nli_flagged": {
+      "available": 14,
+      "reviewed": 14,
+      "selection": "complete_stratum"
+    },
+    "nli_unflagged": {
+      "available": 86,
+      "reviewed": 10,
+      "selection": "task- and dataset-balanced diagnostic sample"
+    },
+    "representative_of_full_packet": false
+  },
+  "counts": {
+    "decision": {
+      "accept": 5,
+      "discuss": 4,
+      "reject": 15
+    },
+    "content_preservation": {
+      "preserved": 24
+    },
+    "certainty_contrast": {
+      "clear": 24
+    },
+    "naturalness": {
+      "clearly_natural": 5,
+      "not_clearly_natural": 19
+    },
+    "cue_scope": {
+      "ambiguous": 2,
+      "global": 22
+    }
+  },
+  "decision_counts_by_sampling_stratum": {
+    "nli_flagged": {
+      "accept": 2,
+      "discuss": 3,
+      "reject": 9
+    },
+    "nli_unflagged_sample": {
+      "accept": 3,
+      "discuss": 1,
+      "reject": 6
+    }
+  },
+  "decision": "repair_or_regenerate_before_probe_scoring_or_scale_up",
+  "limitations": [
+    "This is a label-blind model-assisted diagnostic, not a human-certified review.",
+    "Only 24 of 100 pairs were reviewed; all 14 NLI-flagged pairs were intentionally oversampled, while 10 of 86 unflagged pairs formed a task- and dataset-balanced diagnostic sample.",
+    "The aggregate decision rates are therefore nonrepresentative and must not be interpreted as full-dataset pass rates.",
+    "NLI-based sampling makes between-stratum comparisons descriptive rather than an independent estimate of NLI screening accuracy.",
+    "The review recorded whether a clear certainty contrast was present, but not which version was more certain; direction relative to intended confident/hedged labels was not captured or verified.",
+    "Preserved content and a clear certainty contrast do not compensate for unnatural wording or ambiguous cue scope.",
+    "This diagnostic does not validate training data and does not authorize probe scoring, loss training, or activation steering."
+  ],
+  "privacy": {
+    "per_example_records": false,
+    "identity_bearing_fields": false,
+    "source_or_response_text": false,
+    "reviewer_comments": false
+  }
+}

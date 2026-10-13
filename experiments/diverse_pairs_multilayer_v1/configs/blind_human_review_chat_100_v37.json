@@ -1,0 +1,20 @@
+{
+  "title": "Blind human review: 100-source ordinary-Chat checkpoint",
+  "seed": 20261013,
+  "expected_pairs": 100,
+  "source_files": [
+    {
+      "path": "private_data/gpt56_chat_neutral_100_v37/SOURCE_BATCH_100.jsonl",
+      "file_sha256": "e2722d52342aba31f4e9af7104b0048d575526f19c3dd12e12b1aef02b7ceba5"
+    }
+  ],
+  "pair_batches": [
+    {
+      "cohort": "gpt56_ordinary_chat_neutral_v37",
+      "path": "private_data/gpt56_chat_neutral_100_v37/FINAL_100.json",
+      "file_sha256": "dc75f51bbbc8055689f4e399728e15cc2e4b6fcd421e0c327fe316d42cffdd5c",
+      "records_sha256": "e479d51f891abc737bed628099c440f46f516ba0979f032087ae0f39f50cf59b"
+    }
+  ],
+  "output_dir": "private_data/blind_human_review_chat_100_v37"
+}

@@ -15,6 +15,13 @@ support, subjective belief, causality, or usefulness as a training loss.
 
 ## Data-construction status
 
+**The 100-source set is mechanically complete but not activation-ready in its
+current form.** A label-blind, model-assisted diagnostic found preserved
+content and a clear certainty contrast in all 24 reviewed cases, but it did not
+record or verify A/B direction against the intended labels. Both pair members
+were clearly natural in only 5/24. Fixed global cue placement creates genre and
+formatting confounds, so probe scoring is paused.
+
 | Item | Status | Result |
 |---|---|---|
 | Development probe | Complete | Layer 14 and the 28-layer ensemble both reached 50/50; text and length shortcuts remained |
@@ -26,14 +33,17 @@ support, subjective belief, causality, or usefulness as a training loss.
 | v3.5 component canary | Retained for final review | 10/10 mechanical and independent semantic passes after repair |
 | v3.6 symmetric-copy canary | Control only | 0/10 paraphrase-gate passes; retain only as a lexical cue control |
 | v3.7 two-stage canary | Retained for final review | 10/10 mechanical and independent model-assisted semantic passes after five record-level repairs |
-| GPT-5.6 ordinary-Chat transport canary | Mechanical gate complete | 9/10 direct; 10/10 after one targeted numeric-preservation repair; semantic and human review pending |
+| GPT-5.6 ordinary-Chat transport canary | Mechanical gate complete | 9/10 direct; 10/10 after one targeted numeric-preservation repair |
 | Combined retained canaries | Model-assisted gates complete | 20/20 mechanical and semantic passes; not human-certified |
-| Blinded human-review packet | Ready | 20 pairs; reproducible A/B order, balanced 5/5 within each cohort; judgments pending |
-| 100-source ordinary-Chat checkpoint | **Mechanically complete** | **100/100 final pass; 81 without recorded repair; 19 unique repaired records; semantic and human review pending** |
-| Independent semantic and blind human review | Pending | Required before these pairs can be treated as validated data |
+| Historical retained-canary human-review packet | Ready | 20 earlier pairs; reproducible A/B order, balanced 5/5 within each cohort; judgments pending |
+| 100-source ordinary-Chat checkpoint | **Mechanically complete** | **100/100 final pass; 81 without recorded repair; 19 unique repaired records** |
+| Local NLI triage | Complete | 506 bidirectional exhaustive-chunk judgments; 14/100 flagged; maximum 440/512 tokens with no truncation; triage only |
+| Label-blind diagnostic review | **Complete; rendering gate did not pass** | **24 selected pairs: content preserved 24/24, clear contrast 24/24, intended A/B direction not recorded or verified, both natural 5/24; 5 accept, 4 discuss, 15 reject** |
+| Full human certification | Not completed | Diagnostic review was model-assisted and the selected cases were nonrepresentative |
+| Genre-aware 20-pair canary | Next | Add source eligibility and genre-specific cue placement; review all 20 blindly |
 | Cue-only baseline and leave-one-cue-family-out test | Not frozen | Must be specified before probe scoring |
-| 100-source layer comparison | Not started | Conditional on the review and design gates |
-| 300/700-source expansion | Not started | Conditional on the 100-source results |
+| 100-source layer comparison | Not started | Current rendering will not be scored; conditional on successful canary, repair and repeated review |
+| 300/700-source expansion | Not started | Conditional on a successful canary and repaired 100-source result |
 | SDT training or activation steering | Not authorized | Separate downstream decision |
 
 The v3.3–v3.7 figures are sequential development results, not an unbiased method
@@ -64,22 +74,36 @@ transport events, not missing data. The [checkpoint report](reports/CHAT_CHECKPO
 the public audit trail.
 
 Mechanical checks then test pair structure, length, cue placement, protected
-content, and genuine paraphrasing. Independent semantic review checks content
-equivalence and whether certainty belongs to the speaker rather than changing
-the claim itself. Human review remains the final gate.
+content, and genuine paraphrasing. A local NLI triage made 506 bidirectional
+chunk judgments and flagged 14/100 records. The subsequent label-blind
+model-assisted review covered all 14 flags plus a task- and dataset-balanced
+diagnostic sample of 10 unflagged records. The NLI-flagged group yielded
+2 accept, 3 discuss and 9 reject decisions; the unflagged sample yielded 3, 1
+and 6. Because this selection oversampled flags, it is a diagnostic rather than
+a population-rate estimate. It is also not human certification.
+
+The dominant issue was not changed answer content. Fixed global cue sentences
+were unnatural or misplaced in lists, tables, dialogue, code and examples,
+strict-format responses, and genres where “conclusion” language does not fit.
 
 See the [data-construction report](reports/DATA_CONSTRUCTION_GATE.md) for the
 full development table and the [challenge result](../cue_holdout_challenge_v1/RESULTS.md)
-for the frozen probe evaluation.
+for the frozen probe evaluation. The
+[review-gate report](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) gives the new
+aggregate results and decision.
 
 ## Immediate action
 
-1. Complete independent semantic audit and blind human review of the 100-source
-   checkpoint.
-2. Freeze the matched cue-only baseline and leave-one-cue-family-out protocol.
-3. If the review and design gates pass, extract all layers once, reuse cached
-   states, and report layer 14, every layer, and the fixed ensemble.
-4. Expand to 300 and 700 sources only if the 100-source evidence warrants it.
+1. Retain the neutral templates and define source eligibility plus genre-aware
+   cue placement.
+2. Build a 20-pair canary across the affected genres and review every pair
+   blindly.
+3. Only if the canary passes, repair and re-render the 100 pairs, repeat the
+   full review gate, and freeze the shortcut-control protocol.
+4. Only then extract all layers once and report layer 14, every layer, and the
+   fixed ensemble.
+5. Expand to 300 and 700 sources only if the repaired 100-source evidence
+   warrants it.
 
 The locked challenge must not be repaired or rescored. Private third-party text
 and review files remain local and ignored. Historical canaries, failures, and

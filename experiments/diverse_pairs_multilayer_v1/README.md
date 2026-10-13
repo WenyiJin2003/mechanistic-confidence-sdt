@@ -8,19 +8,26 @@ TF-IDF reached 34/50, answer likelihood 30/50, and response length 25/50. This
 supports a transferable hidden-state signal for **expressed certainty about
 preserved answer content** on this bounded task.
 
-**A 100-source construction checkpoint now passes all final mechanical checks.**
-Eighty-one records required no recorded repair; 19 required at least one repair,
-with 12 model-regenerated templates, eight local template repairs, and one
-record receiving both. Five unsuitable sources were replaced within the same
-sampling strata before the set was finalized.
+**The 100-source construction is mechanically complete, but the current pairs
+are not activation-ready.** Local bidirectional chunk-NLI triage produced 506
+judgments without truncation and flagged 14/100 pairs. A label-blind,
+model-assisted review then examined all 14 flags and a task- and
+dataset-balanced diagnostic sample of 10 unflagged pairs. Content was preserved
+in 24/24 and a clear certainty contrast was judged in 24/24, but A/B direction
+against the intended labels was not recorded or verified. Both versions were
+clearly natural in only 5/24; the decisions were 5 accept, 4 discuss and 15
+reject.
 
-This checkpoint does not strengthen the probe result by itself. Independent
-semantic review and blind human review are still pending, so the 100 pairs are
-not validated training data. No new probe score, SDT loss training, activation
-steering, or causal test has been run on them.
+The review sample was diagnostic and nonrepresentative, so these counts do not
+estimate the failure rate among all 100 pairs. It was not human certification.
+The result is nevertheless sufficient to stop the current rendering before
+hidden-state scoring: fixed global cue sentences disrupt several genres and
+create placement shortcuts. No new probe score, SDT loss training, activation
+steering, or causal test has been run on these 100 pairs.
 
 [Challenge result](../cue_holdout_challenge_v1/RESULTS.md) ·
 [100-source checkpoint](reports/CHAT_CHECKPOINT_100.md) ·
+[100-source review gate](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) ·
 [Data-construction gate](reports/DATA_CONSTRUCTION_GATE.md) ·
 [Next decision](NEXT_DECISION.md)
 
@@ -87,12 +94,15 @@ flowchart LR
     B --> C["Frozen cue rendering"]
     C --> D["Confident / hesitant pair"]
     D --> E["Mechanical checks<br/>100 / 100"]
-    E --> F["Semantic + blind human review<br/>pending"]
-    F --> G["Probe comparison<br/>not yet run"]
+    E --> F["Diagnostic review<br/>24 selected pairs"]
+    F --> G["Naturalness / placement<br/>gate did not pass"]
+    G --> H["Genre-aware 20-pair canary<br/>next"]
 ```
 
 The [checkpoint report](reports/CHAT_CHECKPOINT_100.md) gives the complete
 repair accounting, balance, transport notes, and reproducibility links. The
+[review-gate report](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) records the
+NLI triage, label-blind diagnostic, limitations, and decision. The
 [freeze manifest](manifests/gpt56_chat_neutral_100_v37_freeze.json) and
 [text-free summary](manifests/gpt56_chat_neutral_100_v37_summary.json) record
 the selected sources by hash and the final counts.
@@ -119,12 +129,16 @@ exact source-review counts, initial and repaired results, and decision boundary.
 
 ## Next step
 
-1. Run an independent semantic audit and blind human review of the 100-source
-   checkpoint.
-2. Freeze a matched cue-only baseline and a leave-one-cue-family-out test.
-3. If those gates pass, extract and cache every layer once; compare layer 14,
-   every individual layer, and the fixed equal-layer ensemble.
-4. Expand to 300 and 700 sources only if the 100-source results justify it.
+1. Keep the neutral templates, add source-eligibility rules, and replace the
+   fixed global cue placement with genre-aware rendering.
+2. Build a 20-pair canary across the affected genres and review all 20 blindly.
+3. Only if that canary passes, repair and re-render the 100 pairs and repeat the
+   full review gate.
+4. Then freeze the cue-only baseline and leave-one-cue-family-out test, extract
+   every layer once, and compare layer 14, all individual layers, and the fixed
+   equal-layer ensemble.
+5. Expand to 300 and 700 sources only if the repaired 100-source result
+   justifies it.
 
 The locked 50-pair challenge is already score-exposed and must not be edited or
 tuned against. No 1,000-pair generation, SDT loss training, activation steering,
@@ -141,6 +155,7 @@ remain under ignored `private_data/`.
 | Development result | [reports/DEVELOPMENT_DIAGNOSTIC.md](reports/DEVELOPMENT_DIAGNOSTIC.md) |
 | Data-construction decision | [reports/DATA_CONSTRUCTION_GATE.md](reports/DATA_CONSTRUCTION_GATE.md) |
 | 100-source construction checkpoint | [reports/CHAT_CHECKPOINT_100.md](reports/CHAT_CHECKPOINT_100.md) |
+| 100-source review gate | [reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) |
 | Current status | [STATUS.md](STATUS.md) |
 | Next decision | [NEXT_DECISION.md](NEXT_DECISION.md) |
 | Research definition and method | [PROTOCOL.md](PROTOCOL.md) |

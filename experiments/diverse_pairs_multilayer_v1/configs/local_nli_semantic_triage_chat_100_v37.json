@@ -1,0 +1,56 @@
+{
+  "protocol_version": "local-nli-semantic-triage-v1",
+  "expected_pairs": 100,
+  "source_input": {
+    "path": "private_data/gpt56_chat_neutral_100_v37/SOURCE_BATCH_100.jsonl",
+    "file_sha256": "e2722d52342aba31f4e9af7104b0048d575526f19c3dd12e12b1aef02b7ceba5",
+    "source_ids_sha256": "dd04f5a6a858f72a05952b3d4340cb41c9cfe98ccacaea95c657172421f925a9",
+    "response_hashes_sha256": "b01acebd102c63efc2761435711c02029969a1e97bcec850d10dc398b18d5378"
+  },
+  "final_input": {
+    "path": "private_data/gpt56_chat_neutral_100_v37/FINAL_100.json",
+    "file_sha256": "dc75f51bbbc8055689f4e399728e15cc2e4b6fcd421e0c327fe316d42cffdd5c",
+    "records_sha256": "e479d51f891abc737bed628099c440f46f516ba0979f032087ae0f39f50cf59b"
+  },
+  "model": {
+    "id": "cross-encoder/nli-deberta-v3-small",
+    "revision": "fa2804872c3b4bd748f38c0185cc85775361e735",
+    "snapshot": "../../../semantic-entropy-probes-stage0/cache/huggingface/models--cross-encoder--nli-deberta-v3-small/snapshots/fa2804872c3b4bd748f38c0185cc85775361e735",
+    "config_sha256": "885d0dceae8fa5c136da9209121ec9eb11160488e840de3bc1f29353674e5712",
+    "tokenizer_sha256": "5124ef2ead1a10a717703bc436de7f353da76d6340e4587719b42b1693707964",
+    "tokenizer_files_sha256": {
+      "added_tokens.json": "a4b6bfe668f2b3cf6f0cd535e98a0663d2d0d4a4a15f13075ad3597d33985a23",
+      "special_tokens_map.json": "ed7c099c988dbb414b18a6980d20cb57b91b7cd119f6f6941eb364b0e892e712",
+      "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+      "tokenizer.json": "5124ef2ead1a10a717703bc436de7f353da76d6340e4587719b42b1693707964",
+      "tokenizer_config.json": "f3eecd07c370ef0bf7dd3780d3cd68cf9c8b00c267e21a208ddcd8f82bfec1a6"
+    },
+    "weights_sha256": "ebc79588dd73ccfb6a3f6078519cfbf512c5305384c5ea1845bc71cd32216e86",
+    "max_length": 512,
+    "batch_size": 8,
+    "local_files_only": true,
+    "device_preference": [
+      "mps",
+      "cuda",
+      "cpu"
+    ],
+    "dtype": "float32"
+  },
+  "chunking": {
+    "target_wordpiece_tokens": 220,
+    "counterpart_selection": "all_chunk_cross_product",
+    "lexical_overlap": "word_count_cosine",
+    "fenced_code_policy": "verify_mechanically_then_mask_with_stable_placeholder"
+  },
+  "triage_thresholds": {
+    "minimum_best_entailment": 0.5,
+    "maximum_best_contradiction": 0.5,
+    "interpretation": "screening_flags_only_not_semantic_certification"
+  },
+  "cache_path": "private_data/gpt56_chat_neutral_100_v37/semantic_triage/nli_cache_v1.json",
+  "private_output_path": "private_data/gpt56_chat_neutral_100_v37/semantic_triage/semantic_triage_v1.json",
+  "public_report_path": "reports/CHAT_CHECKPOINT_100_NLI_TRIAGE.json",
+  "human_review_required": true,
+  "authorizes_probe_scoring": false,
+  "authorizes_sdt_training": false
+}

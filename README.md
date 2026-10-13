@@ -13,18 +13,21 @@ Character TF-IDF reached 68%, answer likelihood 60% and response length 50%.
 Unlike the original development diagnostic, the hidden-state result therefore
 cannot be explained by those controls alone.
 
-**Research decision:** the bounded 50-development / 50-challenge pilot supports
-continuing the diverse-pair study. A separate 100-source construction checkpoint
-now passes all final mechanical rules: 81 records have no recorded repair and
-19 have at least one. This demonstrates a workable development pipeline, but
-independent semantic audit and blind human review are still pending. The new
-pairs are not yet validated training data, and no new probe score or loss
-training result should be inferred from their construction.
+**Research decision:** the bounded 50-development / 50-challenge pilot still
+supports a transferable readout for expressed certainty. The separate
+100-source construction is mechanically complete, but its current rendering is
+**not activation-ready**. A label-blind, model-assisted review found preserved
+content and a clear certainty contrast in all 24 diagnostic cases, but it did
+not record or verify A/B direction against the intended labels. Both versions
+were clearly natural in only 5/24. Fixed global cue sentences created systematic
+placement and genre confounds.
 
-The immediate next step is to review the 100 pairs, then freeze the cue-only and
-leave-one-cue-family-out controls. If those gates pass, cache all hidden-state
-layers once and compare layer 14, every individual layer, and the fixed
-ensemble. Expansion to 300 and 700 sources remains conditional. The target name
+The diagnostic deliberately reviewed all 14 local-NLI flags plus a task- and
+dataset-balanced diagnostic sample of 10 unflagged pairs. It is neither a
+population failure-rate estimate nor human certification. The immediate next
+step is therefore a fully reviewed 20-pair canary with source eligibility and
+genre-aware cue placement. We will not score probe layers or train a loss on
+the current 100 pairs. The target name
 stays narrow: **expressed certainty about preserved answer content**.
 
 [Current result](experiments/cue_holdout_challenge_v1/RESULTS.md) ·
@@ -32,6 +35,7 @@ stays narrow: **expressed certainty about preserved answer content**.
 [Challenge protocol](experiments/cue_holdout_challenge_v1/README.md) ·
 [Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
 [100-source checkpoint](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100.md) ·
+[100-source review gate](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) ·
 [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) ·
 [Data-construction gate](experiments/diverse_pairs_multilayer_v1/reports/DATA_CONSTRUCTION_GATE.md)
 
@@ -39,9 +43,10 @@ The 100-source checkpoint used 75 WildChat and 25 HelpSteer responses across
 five task groups, ten cue sets, and exact 50/50 balancing of output order and
 the longer pair member. All 100 records pass final mechanical checks after 12
 model-regenerated templates and eight local template repairs across 19 unique
-records; one record received both repair types. Five unsuitable sources were
-replaced within the same sampling strata. These are construction findings, not
-evidence for or against the activation result above.
+records; one record received both repair types. A local bidirectional chunk-NLI
+triage then made 506 judgments without truncation and flagged 14/100 for review.
+These are data-construction and diagnostic findings, not evidence for or
+against the earlier activation result.
 
 ## Historical diagnostic findings
 
@@ -94,9 +99,10 @@ reproducibility. The research sequence is:
 | 6 | Evidence-Sensitive Readout v4 | Can a new support readout transfer across facts and wording, and agree with model behavior? | 71.9% support ordering; missing-information and behavior checks failed | [Report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Data](datasets/evidence-confidence-v4/README.md) | Complete |
 | 7a | Diverse Paired Certainty + Multi-Layer | Is expressed certainty decodable across diverse content? | Hidden states reached 50/50, but text also reached 50/50; an independent challenge was required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
 | 7b | Cue/recipe-holdout transfer | Does the frozen certainty readout transfer to new sources and cue constructions beyond text, likelihood and length controls? | Layer 14: 47/50; ensemble: 48/50; TF-IDF: 34/50; likelihood: 30/50; length: 25/50 | [Result](experiments/cue_holdout_challenge_v1/RESULTS.md) | Development-only evaluation complete |
-| **Current** | **100-source construction checkpoint** | **Can the balanced same-content pair workflow operate beyond a small canary?** | **100/100 final mechanical pass; semantic and blind human review pending** | **[Checkpoint](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100.md)** | **Review next; not validated training data** |
-| **Next** | **Matched 100-source probe comparison** | **Does the signal survive semantic review, cue-only controls, cue-family holdout, and comparison across all layers?** | **Not yet tested** | **[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **Conditional on review and design gates** |
-| Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100.md#decision) | Conditional on the 100-source result |
+| **Current** | **100-source review gate** | **Are the mechanically valid pairs natural enough for activation scoring?** | **No: content was preserved and a clear certainty contrast was judged in 24/24 diagnostic cases, but A/B direction was not verified and both versions were clearly natural in only 5/24** | **[Review gate](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md)** | **Current rendering not activation-ready** |
+| **Next** | **Genre-aware 20-pair canary** | **Can source eligibility and genre-specific cue placement remove the identified confounds?** | **Not yet tested** | **[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **Full blind review required** |
+| Later | Repaired 100-source all-layer comparison | Does the signal survive review, cue-only controls, cue-family holdout, and comparison across every layer? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md#decision) | Conditional on the canary and repeated review gate |
+| Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md#decision) | Conditional on the repaired 100-source result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
 
 ```mermaid
@@ -108,9 +114,10 @@ flowchart LR
     D --> H["Cue/recipe-holdout<br/>94% at layer 14"]
     E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
     H --> X["100-source construction<br/>mechanically complete"]
-    X --> R["Semantic audit +<br/>blind human review"]
-    R --> M["Cue-only baseline +<br/>cue-family holdout"]
-    M --> Y["All-layer comparison<br/>on 100 sources"]
+    X --> R["Diagnostic review gate<br/>naturalness failed"]
+    R --> K["Genre-aware 20-pair<br/>fully reviewed canary"]
+    K --> M["Repair 100 + repeat review<br/>freeze shortcut controls"]
+    M --> Y["All-layer comparison<br/>only after gates pass"]
     Y --> Z["Conditional 300 / 700<br/>expansion"]
     Z -. "only after a new decision" .-> T
 ```
