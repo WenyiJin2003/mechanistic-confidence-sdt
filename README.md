@@ -13,32 +13,35 @@ Character TF-IDF reached 68%, answer likelihood 60% and response length 50%.
 Unlike the original development diagnostic, the hidden-state result therefore
 cannot be explained by those controls alone.
 
-**Research decision:** this bounded 50-development / 50-challenge pilot supports
-continuing the diverse-pair study, but it does not complete the full handoff.
-The immediate next step is blind human review of the final construction canary,
-followed by a matched cue-only baseline, leave-one-cue-family-out evaluation,
-and 100/300/700-source learning curves. Use layer 14 as the simple primary
-readout and keep the target name narrow:
-**expressed certainty about preserved answer content**. Loss training remains a
-downstream proposal, not the next experiment.
+**Research decision:** the bounded 50-development / 50-challenge pilot supports
+continuing the diverse-pair study. A separate 100-source construction checkpoint
+now passes all final mechanical rules: 81 records have no recorded repair and
+19 have at least one. This demonstrates a workable development pipeline, but
+independent semantic audit and blind human review are still pending. The new
+pairs are not yet validated training data, and no new probe score or loss
+training result should be inferred from their construction.
+
+The immediate next step is to review the 100 pairs, then freeze the cue-only and
+leave-one-cue-family-out controls. If those gates pass, cache all hidden-state
+layers once and compare layer 14, every individual layer, and the fixed
+ensemble. Expansion to 300 and 700 sources remains conditional. The target name
+stays narrow: **expressed certainty about preserved answer content**.
 
 [Current result](experiments/cue_holdout_challenge_v1/RESULTS.md) ·
 [Layer plot](experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png) ·
 [Challenge protocol](experiments/cue_holdout_challenge_v1/README.md) ·
 [Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
+[100-source checkpoint](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100.md) ·
 [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) ·
 [Data-construction gate](experiments/diverse_pairs_multilayer_v1/reports/DATA_CONSTRUCTION_GATE.md)
 
-**Data expansion is not yet authorized.** Review of 200 source candidates kept
-74, rejected 110 and sent 16 to human review. The latest two-stage rewrite
-canary passed 10/10 mechanical checks after five recorded record-level repairs,
-and its final independent model-assisted semantic audit retained 10/10. Together
-with the earlier retained canary, **20/20 pairs now pass both checks**; blind
-human review is still pending, with a balanced label-blind local review packet
-already prepared. An
-earlier symmetric-copy method is retained only as a lexical-control condition.
-These are data-construction findings, not evidence for or against the activation
-result above.
+The 100-source checkpoint used 75 WildChat and 25 HelpSteer responses across
+five task groups, ten cue sets, and exact 50/50 balancing of output order and
+the longer pair member. All 100 records pass final mechanical checks after 12
+model-regenerated templates and eight local template repairs across 19 unique
+records; one record received both repair types. Five unsuitable sources were
+replaced within the same sampling strata. These are construction findings, not
+evidence for or against the activation result above.
 
 ## Historical diagnostic findings
 
@@ -91,8 +94,9 @@ reproducibility. The research sequence is:
 | 6 | Evidence-Sensitive Readout v4 | Can a new support readout transfer across facts and wording, and agree with model behavior? | 71.9% support ordering; missing-information and behavior checks failed | [Report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Data](datasets/evidence-confidence-v4/README.md) | Complete |
 | 7a | Diverse Paired Certainty + Multi-Layer | Is expressed certainty decodable across diverse content? | Hidden states reached 50/50, but text also reached 50/50; an independent challenge was required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
 | 7b | Cue/recipe-holdout transfer | Does the frozen certainty readout transfer to new sources and cue constructions beyond text, likelihood and length controls? | Layer 14: 47/50; ensemble: 48/50; TF-IDF: 34/50; likelihood: 30/50; length: 25/50 | [Result](experiments/cue_holdout_challenge_v1/RESULTS.md) | Development-only evaluation complete |
-| **Current** | **Pair-construction gate** | **Can a diverse same-content pair recipe pass semantic and shortcut review before scale?** | **74/200 sources eligible; final canaries 20/20 mechanical and model-assisted semantic passes; human review pending** | **[Construction report](experiments/diverse_pairs_multilayer_v1/reports/DATA_CONSTRUCTION_GATE.md)** | **Blind human review next** |
-| **Next** | **Matched diversity/scale completion** | **Does diverse rewriting beat a cue-only baseline under leave-one-cue-family-out transfer, and how does performance change at 100/300/700 sources?** | **Not yet tested** | **[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **Conditional on construction gate** |
+| **Current** | **100-source construction checkpoint** | **Can the balanced same-content pair workflow operate beyond a small canary?** | **100/100 final mechanical pass; semantic and blind human review pending** | **[Checkpoint](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100.md)** | **Review next; not validated training data** |
+| **Next** | **Matched 100-source probe comparison** | **Does the signal survive semantic review, cue-only controls, cue-family holdout, and comparison across all layers?** | **Not yet tested** | **[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **Conditional on review and design gates** |
+| Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100.md#decision) | Conditional on the 100-source result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
 
 ```mermaid
@@ -103,10 +107,12 @@ flowchart LR
     C --> D["Diverse paired certainty<br/>development diagnostic"]
     D --> H["Cue/recipe-holdout<br/>94% at layer 14"]
     E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
-    H --> X["Pair-construction gate<br/>+ blind human audit"]
-    X --> M["Cue-only baseline +<br/>cue-family holdout"]
-    M --> Y["100 / 300 / 700<br/>learning curves"]
-    Y -. "only after a new decision" .-> T
+    H --> X["100-source construction<br/>mechanically complete"]
+    X --> R["Semantic audit +<br/>blind human review"]
+    R --> M["Cue-only baseline +<br/>cue-family holdout"]
+    M --> Y["All-layer comparison<br/>on 100 sources"]
+    Y --> Z["Conditional 300 / 700<br/>expansion"]
+    Z -. "only after a new decision" .-> T
 ```
 
 Steps 1–3 estimate different readouts with different labels and token positions.

@@ -1,0 +1,109 @@
+{
+  "protocol_version": "gpt56-ordinary-chat-neutral-paraphrase-v3.7",
+  "contains_source_or_response_text": false,
+  "chat_surface": "ordinary_chat",
+  "model_family_requested": "GPT-5.6",
+  "exact_model_slug": "unavailable_from_thread_interface",
+  "source_count": 100,
+  "batch_size": 20,
+  "batch_count": 5,
+  "transport_chunk_size": 10,
+  "transport_chunk_count": 10,
+  "transport_events": {
+    "oversized_twenty_record_response_reemitted_as_ten_record_parts": 1,
+    "stale_source_id_response_rejected_and_retried": 1
+  },
+  "transport_note": "The first 20-record call completed but exceeded the thread read limit; later calls use ten records to avoid re-emitting completed output.",
+  "source_file_sha256": "e2722d52342aba31f4e9af7104b0048d575526f19c3dd12e12b1aef02b7ceba5",
+  "source_pool_sha256": "ee9b8c6669fb3f76aadd59f3eaa4db5513b11c2ee41cbea1a6f540a297789e29",
+  "source_ids_sha256": "dd04f5a6a858f72a05952b3d4340cb41c9cfe98ccacaea95c657172421f925a9",
+  "source_response_hashes_sha256": "b01acebd102c63efc2761435711c02029969a1e97bcec850d10dc398b18d5378",
+  "cue_bank_sha256": "bd3ed0e612c01c52784769e991bec0508e4088c576ef2327556a0cd6d478474d",
+  "selection": {
+    "partition": "main",
+    "split": "train",
+    "first_pool_id": "M0002",
+    "last_pool_id": "M0695",
+    "zero_based_start": 1,
+    "stride": 7,
+    "replacements": [
+      {
+        "selected_pool_id": "M0121",
+        "replacement_pool_id": "M0042",
+        "reason": "original source was not applicable because protected JSON fields left no meaningful paraphrase freedom"
+      },
+      {
+        "selected_pool_id": "M0296",
+        "replacement_pool_id": "M0071",
+        "reason": "original source contained only protected Midjourney command strings and no prose available for meaningful paraphrase"
+      },
+      {
+        "selected_pool_id": "M0338",
+        "replacement_pool_id": "M0236",
+        "reason": "original source was too short to preserve its content while accommodating the frozen distributed stance cues within the length bound"
+      },
+      {
+        "selected_pool_id": "M0499",
+        "replacement_pool_id": "M0454",
+        "reason": "original source was too short to accommodate the frozen distributed stance cues within the rendered-length bound"
+      },
+      {
+        "selected_pool_id": "M0506",
+        "replacement_pool_id": "M0096",
+        "reason": "original source was too short to preserve its conditional request while accommodating the frozen distributed stance cues within the rendered-length bound"
+      }
+    ]
+  },
+  "counts": {
+    "dataset": {
+      "allenai/WildChat-1M": 75,
+      "nvidia/HelpSteer2": 25
+    },
+    "task": {
+      "comparison_analysis": 19,
+      "factual_explanation": 34,
+      "math_logic": 16,
+      "programming": 13,
+      "summary_judgment": 18
+    },
+    "length_bin": {
+      "long": 43,
+      "medium": 33,
+      "short": 24
+    },
+    "rewrite_recipe": {
+      "A": 50,
+      "B": 50
+    },
+    "rewrite_output_order": {
+      "confident_first": 50,
+      "hedged_first": 50
+    },
+    "target_longer_member": {
+      "confident": 50,
+      "hedged": 50
+    },
+    "stance_topology": {
+      "distributed": 30,
+      "early": 20,
+      "late": 20,
+      "middle": 30
+    },
+    "cue_set_id": {
+      "global_01": 10,
+      "global_02": 10,
+      "global_03": 10,
+      "global_04": 10,
+      "global_05": 10,
+      "global_06": 10,
+      "global_07": 10,
+      "global_08": 10,
+      "global_09": 10,
+      "global_10": 10
+    }
+  },
+  "source_review": "automated_screening_only_human_review_pending",
+  "semantic_review": "pending",
+  "human_pair_review": "pending",
+  "decision": "development_expansion_checkpoint_not_validated_training_data"
+}

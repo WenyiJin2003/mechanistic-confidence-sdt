@@ -8,15 +8,19 @@ TF-IDF reached 34/50, answer likelihood 30/50, and response length 25/50. This
 supports a transferable hidden-state signal for **expressed certainty about
 preserved answer content** on this bounded task.
 
-The study is not ready for a training loss. The remaining bottleneck is the
-quality and scale of the paired data. A 200-source review retained 74 eligible
-candidates, rejected 110, and sent 16 to human review. The latest two-stage
-rewrite canary reached 10/10 mechanical passes after five recorded record-level
-repairs, and its final independent model-assisted semantic audit retained
-10/10. Combined with the earlier retained canary, 20/20 pairs pass both checks;
-blind human review is still pending.
+**A 100-source construction checkpoint now passes all final mechanical checks.**
+Eighty-one records required no recorded repair; 19 required at least one repair,
+with 12 model-regenerated templates, eight local template repairs, and one
+record receiving both. Five unsuitable sources were replaced within the same
+sampling strata before the set was finalized.
+
+This checkpoint does not strengthen the probe result by itself. Independent
+semantic review and blind human review are still pending, so the 100 pairs are
+not validated training data. No new probe score, SDT loss training, activation
+steering, or causal test has been run on them.
 
 [Challenge result](../cue_holdout_challenge_v1/RESULTS.md) ·
+[100-source checkpoint](reports/CHAT_CHECKPOINT_100.md) ·
 [Data-construction gate](reports/DATA_CONSTRUCTION_GATE.md) ·
 [Next decision](NEXT_DECISION.md)
 
@@ -69,7 +73,31 @@ flowchart LR
     E --> D
 ```
 
-## Current data-construction gate
+## 100-source construction checkpoint
+
+The ordinary-Chat expansion requested GPT-5.6, although the thread interface
+did not expose an exact model slug. It used 75 WildChat and 25 HelpSteer sources
+across five task groups, ten cue sets used ten times each, balanced pair order,
+and balanced assignment of the longer response. All 100 records pass the final
+mechanical rules after recorded repairs.
+
+```mermaid
+flowchart LR
+    A["Screened source"] --> B["Neutral paraphrase"]
+    B --> C["Frozen cue rendering"]
+    C --> D["Confident / hesitant pair"]
+    D --> E["Mechanical checks<br/>100 / 100"]
+    E --> F["Semantic + blind human review<br/>pending"]
+    F --> G["Probe comparison<br/>not yet run"]
+```
+
+The [checkpoint report](reports/CHAT_CHECKPOINT_100.md) gives the complete
+repair accounting, balance, transport notes, and reproducibility links. The
+[freeze manifest](manifests/gpt56_chat_neutral_100_v37_freeze.json) and
+[text-free summary](manifests/gpt56_chat_neutral_100_v37_summary.json) record
+the selected sources by hash and the final counts.
+
+## Earlier data-construction development
 
 The first expansion recipes exposed several failure modes: verbatim source
 copying, early or formulaic hesitation cues, object-level meaning changes, and
@@ -91,18 +119,19 @@ exact source-review counts, initial and repaired results, and decision boundary.
 
 ## Next step
 
-1. Blind human-review the final 20 canary pairs.
+1. Run an independent semantic audit and blind human review of the 100-source
+   checkpoint.
 2. Freeze a matched cue-only baseline and a leave-one-cue-family-out test.
-3. If those gates pass, expand at 100, 300, and 700 sources and fit learning
-   curves from cached states.
+3. If those gates pass, extract and cache every layer once; compare layer 14,
+   every individual layer, and the fixed equal-layer ensemble.
+4. Expand to 300 and 700 sources only if the 100-source results justify it.
 
 The locked 50-pair challenge is already score-exposed and must not be edited or
 tuned against. No 1,000-pair generation, SDT loss training, activation steering,
 or causal claim is authorized in this phase.
 
-The label-blind 20-pair review page is generated locally with
-`src/build_blind_review_packet.py`; all source text, reviewer output, and the
-separate unblinding key remain under ignored `private_data/`.
+All source text, rewritten responses, reviewer output, and unblinding material
+remain under ignored `private_data/`.
 
 ## Repository map
 
@@ -111,6 +140,7 @@ separate unblinding key remain under ignored `private_data/`.
 | Challenge result | [../cue_holdout_challenge_v1/RESULTS.md](../cue_holdout_challenge_v1/RESULTS.md) |
 | Development result | [reports/DEVELOPMENT_DIAGNOSTIC.md](reports/DEVELOPMENT_DIAGNOSTIC.md) |
 | Data-construction decision | [reports/DATA_CONSTRUCTION_GATE.md](reports/DATA_CONSTRUCTION_GATE.md) |
+| 100-source construction checkpoint | [reports/CHAT_CHECKPOINT_100.md](reports/CHAT_CHECKPOINT_100.md) |
 | Current status | [STATUS.md](STATUS.md) |
 | Next decision | [NEXT_DECISION.md](NEXT_DECISION.md) |
 | Research definition and method | [PROTOCOL.md](PROTOCOL.md) |

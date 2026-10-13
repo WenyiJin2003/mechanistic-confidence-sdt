@@ -1,0 +1,150 @@
+{
+  "protocol_version": "gpt56-ordinary-chat-neutral-paraphrase-v3.7",
+  "contains_source_or_response_text": false,
+  "chat_surface": "ordinary_chat",
+  "model_family_requested": "GPT-5.6",
+  "exact_model_slug": "unavailable_from_thread_interface",
+  "source_count": 100,
+  "batch_count": 5,
+  "transport_chunk_size": 10,
+  "transport_chunk_count": 10,
+  "transport_events": {
+    "oversized_twenty_record_response_reemitted_as_ten_record_parts": 1,
+    "stale_source_id_response_rejected_and_retried": 1
+  },
+  "initial_mechanical_counts_available": false,
+  "final_mechanical_counts": {
+    "accepted": 100
+  },
+  "repair_counts": {
+    "records_without_recorded_repair": 81,
+    "model_regenerated_templates": 12,
+    "local_template_repairs": 8,
+    "repaired_unique_records": 19,
+    "records_with_both_model_and_local_repair": 1,
+    "source_pool_replacements": 5
+  },
+  "balance_counts": {
+    "dataset": {
+      "allenai/WildChat-1M": 75,
+      "nvidia/HelpSteer2": 25
+    },
+    "task": {
+      "comparison_analysis": 19,
+      "factual_explanation": 34,
+      "math_logic": 16,
+      "programming": 13,
+      "summary_judgment": 18
+    },
+    "length_bin": {
+      "long": 43,
+      "medium": 33,
+      "short": 24
+    },
+    "rewrite_recipe": {
+      "A": 50,
+      "B": 50
+    },
+    "rewrite_output_order": {
+      "confident_first": 50,
+      "hedged_first": 50
+    },
+    "target_longer_member": {
+      "confident": 50,
+      "hedged": 50
+    },
+    "stance_topology": {
+      "distributed": 30,
+      "early": 20,
+      "late": 20,
+      "middle": 30
+    },
+    "cue_set_id": {
+      "global_01": 10,
+      "global_02": 10,
+      "global_03": 10,
+      "global_04": 10,
+      "global_05": 10,
+      "global_06": 10,
+      "global_07": 10,
+      "global_08": 10,
+      "global_09": 10,
+      "global_10": 10
+    }
+  },
+  "hashes": {
+    "config_sha256": "d553fbd11aa8efcd176079389a6def9584ef60268781bef2555f2a960fb6d925",
+    "cue_bank_sha256": "bd3ed0e612c01c52784769e991bec0508e4088c576ef2327556a0cd6d478474d",
+    "source_file_sha256": "e2722d52342aba31f4e9af7104b0048d575526f19c3dd12e12b1aef02b7ceba5",
+    "source_ids_sha256": "dd04f5a6a858f72a05952b3d4340cb41c9cfe98ccacaea95c657172421f925a9",
+    "source_response_hashes_sha256": "b01acebd102c63efc2761435711c02029969a1e97bcec850d10dc398b18d5378",
+    "combined_records_sha256": "e479d51f891abc737bed628099c440f46f516ba0979f032087ae0f39f50cf59b",
+    "private_final_file_sha256": "dc75f51bbbc8055689f4e399728e15cc2e4b6fcd421e0c327fe316d42cffdd5c"
+  },
+  "per_batch": [
+    {
+      "batch_number": 1,
+      "final_mechanical_counts": {
+        "accepted": 20
+      },
+      "records_without_recorded_repair": 16,
+      "model_regenerated_templates": 1,
+      "local_template_repairs": 3,
+      "records_with_both_model_and_local_repair": 0,
+      "final_raw_sha256": "6c05ec8abd5f35c60b0b3f728b4dd6608dc9ed116b9bdf5d55fdf5f01f9a22ad",
+      "parsed_records_sha256": "7d8957ec54dfbb4b11ca18ad2046f0a871f8801b9de702f8dd69cecab17abd20"
+    },
+    {
+      "batch_number": 2,
+      "final_mechanical_counts": {
+        "accepted": 20
+      },
+      "records_without_recorded_repair": 15,
+      "model_regenerated_templates": 3,
+      "local_template_repairs": 2,
+      "records_with_both_model_and_local_repair": 0,
+      "final_raw_sha256": "7cb44189e8456244cc4874da599f00bf6ba7f9df153b56c212e51eb591370494",
+      "parsed_records_sha256": "7f5b81aec91e6261eba6698f7b844a9b4e06aaa1d302ca4904b0dabc2958cff3"
+    },
+    {
+      "batch_number": 3,
+      "final_mechanical_counts": {
+        "accepted": 20
+      },
+      "records_without_recorded_repair": 15,
+      "model_regenerated_templates": 3,
+      "local_template_repairs": 3,
+      "records_with_both_model_and_local_repair": 1,
+      "final_raw_sha256": "e44d315ef1b633db6d55659ecf2810d250757621cea7feea96a1fa20d8ecf833",
+      "parsed_records_sha256": "adedeaa675ba2bdbd9e7892843b4f7ce109a1a4aa15d461a6a05cb971962a0b1"
+    },
+    {
+      "batch_number": 4,
+      "final_mechanical_counts": {
+        "accepted": 20
+      },
+      "records_without_recorded_repair": 15,
+      "model_regenerated_templates": 5,
+      "local_template_repairs": 0,
+      "records_with_both_model_and_local_repair": 0,
+      "final_raw_sha256": "0531e673677e564d90f80aedd38cce55b14f76aa9d624b55c0a0dc7bb85517e0",
+      "parsed_records_sha256": "ce83717da955dce68575e5616f7e1f8189e8a19976826dae038678c05f9982c8"
+    },
+    {
+      "batch_number": 5,
+      "final_mechanical_counts": {
+        "accepted": 20
+      },
+      "records_without_recorded_repair": 20,
+      "model_regenerated_templates": 0,
+      "local_template_repairs": 0,
+      "records_with_both_model_and_local_repair": 0,
+      "final_raw_sha256": "b981564a82670b67e2d140fc991578e15412deeb500fa047bfefec8daeb18125",
+      "parsed_records_sha256": "7d74079292a9c0c5b8d87c6fb34741517b53f1180bc9b445b3f8b41a2c41778a"
+    }
+  ],
+  "semantic_review": "pending",
+  "human_pair_review": "pending",
+  "source_review": "automated_screening_only_human_review_pending",
+  "decision": "development_expansion_checkpoint_not_validated_training_data"
+}

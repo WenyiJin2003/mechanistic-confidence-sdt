@@ -29,9 +29,11 @@ support, subjective belief, causality, or usefulness as a training loss.
 | GPT-5.6 ordinary-Chat transport canary | Mechanical gate complete | 9/10 direct; 10/10 after one targeted numeric-preservation repair; semantic and human review pending |
 | Combined retained canaries | Model-assisted gates complete | 20/20 mechanical and semantic passes; not human-certified |
 | Blinded human-review packet | Ready | 20 pairs; reproducible A/B order, balanced 5/5 within each cohort; judgments pending |
-| Blind human review of final 20 canary pairs | Pending | Required before expansion |
+| 100-source ordinary-Chat checkpoint | **Mechanically complete** | **100/100 final pass; 81 without recorded repair; 19 unique repaired records; semantic and human review pending** |
+| Independent semantic and blind human review | Pending | Required before these pairs can be treated as validated data |
 | Cue-only baseline and leave-one-cue-family-out test | Not frozen | Must be specified before probe scoring |
-| 100/300/700-source learning curves | Not started | Conditional on the review and design gates |
+| 100-source layer comparison | Not started | Conditional on the review and design gates |
+| 300/700-source expansion | Not started | Conditional on the 100-source results |
 | SDT training or activation steering | Not authorized | Separate downstream decision |
 
 The v3.3–v3.7 figures are sequential development results, not an unbiased method
@@ -39,22 +41,27 @@ benchmark. No full 1,000-pair run has been made.
 
 ## Current method
 
-The candidate main recipe uses two stages:
+The candidate pair recipe uses two stages:
 
-1. Claude produces one neutral, content-preserving paraphrase.
+1. A language model produces one neutral, content-preserving paraphrase.
 2. A local audited cue bank renders confident and hesitant versions from the
    same shared content.
 
-An ordinary-Chat GPT-5.6 canary reused the same frozen ten-source v3.7 inputs
-and cue assignments to test a lower-Work-quota paraphrase transport. It returned
-complete structured output for all ten sources. Nine passed mechanical checks
-directly; one repeated a protected numeric phrase and passed after one recorded
-targeted repair. The Work/Codex weekly meter remained at 1% before and after at
-the available whole-percentage resolution. The exact Chat model slug was not
-exposed by the thread interface. This is a transport and mechanical result only;
-the new paraphrases still require independent semantic and human review. The
-text-free counts and artifact hashes are recorded in the
-[`GPT-5.6 Chat canary summary`](manifests/gpt56_chat_canary_10_summary.json).
+The ordinary-Chat workflow has now been exercised on 100 sources. The requested
+model family was GPT-5.6, but the exact Chat model slug was not exposed. The
+final set contains 75 WildChat and 25 HelpSteer sources across five task groups,
+ten balanced cue sets, balanced output order, and balanced longer-member
+assignment. All 100 records pass final mechanical checks. Eighty-one have no
+recorded repair; 19 have at least one, comprising 12 model-regenerated templates
+and eight local template repairs with one overlap. Five sources were replaced
+within the same strata before finalization.
+
+One twenty-record response exceeded the thread read limit and was re-emitted in
+groups of ten. One stale-ID response was rejected and retried. These are recorded
+transport events, not missing data. The [checkpoint report](reports/CHAT_CHECKPOINT_100.md),
+[freeze manifest](manifests/gpt56_chat_neutral_100_v37_freeze.json), and
+[text-free summary](manifests/gpt56_chat_neutral_100_v37_summary.json) contain
+the public audit trail.
 
 Mechanical checks then test pair structure, length, cue placement, protected
 content, and genuine paraphrasing. Independent semantic review checks content
@@ -67,13 +74,12 @@ for the frozen probe evaluation.
 
 ## Immediate action
 
-1. Complete blind human review of the final 20 canary pairs.
-2. Complete independent semantic review of the ten GPT-5.6 Chat paraphrases.
-3. Freeze the matched cue-only baseline and leave-one-cue-family-out protocol.
-4. If the review and design gates pass, expand in checkpoints of 100, 300, and
-   700 sources.
-5. Extract all layers once, reuse cached states, and report layer 14 plus every
-   layer and the fixed equal-layer ensemble.
+1. Complete independent semantic audit and blind human review of the 100-source
+   checkpoint.
+2. Freeze the matched cue-only baseline and leave-one-cue-family-out protocol.
+3. If the review and design gates pass, extract all layers once, reuse cached
+   states, and report layer 14, every layer, and the fixed ensemble.
+4. Expand to 300 and 700 sources only if the 100-source evidence warrants it.
 
 The locked challenge must not be repaired or rescored. Private third-party text
 and review files remain local and ignored. Historical canaries, failures, and

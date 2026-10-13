@@ -1,0 +1,53 @@
+{
+  "protocol_version": "gpt56-ordinary-chat-neutral-paraphrase-v3.7",
+  "chat_surface": "ordinary_chat",
+  "model_family_requested": "GPT-5.6",
+  "source_pool_path": "private_data/source_pool_1000_v1/SOURCE_MANIFEST_MAIN_1000.jsonl",
+  "source_pool_sha256": "ee9b8c6669fb3f76aadd59f3eaa4db5513b11c2ee41cbea1a6f540a297789e29",
+  "selected_source_ids_sha256": "dd04f5a6a858f72a05952b3d4340cb41c9cfe98ccacaea95c657172421f925a9",
+  "selected_response_hashes_sha256": "b01acebd102c63efc2761435711c02029969a1e97bcec850d10dc398b18d5378",
+  "selection_start_zero_based": 1,
+  "selection_stride": 7,
+  "source_replacements": [
+    {
+      "selected_pool_id": "M0121",
+      "replacement_pool_id": "M0042",
+      "reason": "original source was not applicable because protected JSON fields left no meaningful paraphrase freedom"
+    },
+    {
+      "selected_pool_id": "M0296",
+      "replacement_pool_id": "M0071",
+      "reason": "original source contained only protected Midjourney command strings and no prose available for meaningful paraphrase"
+    },
+    {
+      "selected_pool_id": "M0338",
+      "replacement_pool_id": "M0236",
+      "reason": "original source was too short to preserve its content while accommodating the frozen distributed stance cues within the length bound"
+    },
+    {
+      "selected_pool_id": "M0499",
+      "replacement_pool_id": "M0454",
+      "reason": "original source was too short to accommodate the frozen distributed stance cues within the rendered-length bound"
+    },
+    {
+      "selected_pool_id": "M0506",
+      "replacement_pool_id": "M0096",
+      "reason": "original source was too short to preserve its conditional request while accommodating the frozen distributed stance cues within the rendered-length bound"
+    }
+  ],
+  "source_count": 100,
+  "batch_size": 20,
+  "transport_chunk_size": 10,
+  "transport_events": {
+    "oversized_twenty_record_response_reemitted_as_ten_record_parts": 1,
+    "stale_source_id_response_rejected_and_retried": 1
+  },
+  "cue_bank_path": "configs/global_confidence_cue_bank_v37.json",
+  "cue_bank_sha256": "bd3ed0e612c01c52784769e991bec0508e4088c576ef2327556a0cd6d478474d",
+  "output_dir": "private_data/gpt56_chat_neutral_100_v37",
+  "public_manifest_path": "manifests/gpt56_chat_neutral_100_v37_freeze.json",
+  "min_word_ratio": 0.75,
+  "max_word_ratio": 1.25,
+  "minimum_source_edit_fraction": 0.08,
+  "source_review_status": "automated_screening_only_human_review_pending"
+}
