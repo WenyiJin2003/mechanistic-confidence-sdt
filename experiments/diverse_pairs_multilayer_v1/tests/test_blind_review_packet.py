@@ -67,7 +67,8 @@ class BlindReviewPacketTests(unittest.TestCase):
     def test_packet_is_blind_and_has_all_review_dimensions(self):
         manifest = build_packet(self.config_path, self.base)
         page = (self.base / "private_data/review/BLIND_REVIEW.html").read_text()
-        key = json.loads((self.base / "private_data/review/UNBLIND_KEY.json").read_text())
+        key_path = self.base / "private_data/review/UNBLIND_KEY.json"
+        key = json.loads(key_path.read_text())
         self.assertNotIn("confident_response", page)
         self.assertNotIn("hedged_response", page)
         self.assertNotIn("version_a_label", page)
@@ -77,12 +78,52 @@ class BlindReviewPacketTests(unittest.TestCase):
         self.assertIn("blind_human_review_1.json", page)
         self.assertNotIn("blind_human_review_20.json", page)
         self.assertEqual(key["pairs"][0]["version_a_label"], assignment(17, "source-1")[0])
+        self.assertEqual(set(key), {"packet_sha256", "seed", "pairs"})
         self.assertEqual(manifest["pairs"], 1)
         self.assertTrue(manifest["blinded"])
+        self.assertNotIn("review_schema_id", manifest)
+        self.assertNotIn("review_schema_sha256", manifest)
+        self.assertNotIn("packet_hash_mode", manifest)
+        self.assertNotIn('data-field="structure_format"', page)
+        rows_path = self.base / "private_data/review/BLINDED_ROWS.jsonl"
+        self.assertEqual(manifest["packet_sha256"], sha256_file(rows_path))
         self.assertEqual(
             manifest["unblind_key_sha256"],
-            sha256_file(self.base / "private_data/review/UNBLIND_KEY.json"),
+            sha256_file(key_path),
         )
+
+    def test_optional_structure_schema_is_visible_required_and_hash_bound(self):
+        legacy = build_packet(self.config_path, self.base)
+        config = json.loads(self.config_path.read_text())
+        config["review_schema"] = {
+            "schema_id": "fixture-six-field-v1",
+            "include_structure_format": True,
+        }
+        config["output_dir"] = "private_data/review_structure"
+        structure_config = self.base / "structure_config.json"
+        structure_config.write_text(json.dumps(config))
+        manifest = build_packet(structure_config, self.base)
+        page = (self.base / "private_data/review_structure/BLIND_REVIEW.html").read_text()
+        self.assertIn('data-field="structure_format"', page)
+        self.assertIn('"structure_format"', page)
+        self.assertEqual(
+            manifest["review_dimensions"],
+            ["content_equivalence", "certainty_contrast", "naturalness", "cue_scope", "structure_format", "decision"],
+        )
+        self.assertEqual(manifest["review_schema_id"], "fixture-six-field-v1")
+        self.assertEqual(
+            manifest["packet_hash_mode"],
+            "schema-keycore-and-blinded-rows-sha256-v3",
+        )
+        self.assertEqual(
+            json.loads((self.base / "private_data/review_structure/UNBLIND_KEY.json").read_text())["review_schema_sha256"],
+            manifest["review_schema_sha256"],
+        )
+        self.assertEqual(
+            json.loads((self.base / "private_data/review_structure/UNBLIND_KEY.json").read_text())["key_core_sha256"],
+            manifest["key_core_sha256"],
+        )
+        self.assertNotEqual(manifest["packet_sha256"], legacy["packet_sha256"])
 
     def test_same_seed_reproduces_packet(self):
         first = build_packet(self.config_path, self.base)

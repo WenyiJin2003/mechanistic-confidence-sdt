@@ -1,5 +1,9 @@
 # Next Decision: Fix Pair Rendering Before Probe Scoring
 
+> **Current status (2026-10-13):** This decision led to the frozen v3.8
+> genre-aware canary. Its main and cue-only blind-review packets are prepared;
+> human review is pending. See [V38_GENRE_AWARE_CANARY.md](V38_GENRE_AWARE_CANARY.md).
+
 ## Decision
 
 **Do not score hidden-state layers on the current 100 pairs, start SDT loss

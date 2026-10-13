@@ -1,4 +1,4 @@
-"""Validate and import the generic five-field blind human-review export.
+"""Validate and import a schema-bound generic blind human-review export.
 
 The reviewer-facing page deliberately omits the intended confidence labels. This
 importer joins an export to the separately stored answer key only after checking
@@ -25,13 +25,19 @@ from typing import Any
 BASE = Path(__file__).resolve().parents[1]
 PRIVATE = BASE / "private_data"
 
-REVIEW_FIELDS = (
+BASE_REVIEW_FIELDS = (
     "content_equivalence",
     "certainty_contrast",
     "naturalness",
     "cue_scope",
     "decision",
 )
+STRUCTURE_FORMAT_FIELD = "structure_format"
+LEGACY_PACKET_HASH_MODE = "blinded-rows-sha256-v1"
+OBSOLETE_SCHEMA_BOUND_PACKET_HASH_MODE = "schema-and-blinded-rows-sha256-v2"
+KEY_BOUND_PACKET_HASH_MODE = "schema-keycore-and-blinded-rows-sha256-v3"
+# Backward-compatible public name for callers that use the original schema.
+REVIEW_FIELDS = BASE_REVIEW_FIELDS
 ENUMS = {
     "content_equivalence": {
         "",
@@ -64,11 +70,18 @@ ENUMS = {
         "both_local_only",
         "uncertain",
     },
+    "structure_format": {
+        "",
+        "both_preserved",
+        "a_changed",
+        "b_changed",
+        "both_changed",
+        "uncertain",
+    },
     "decision": {"", "accept", "reject", "discuss"},
 }
 TOP_LEVEL_KEYS = {"packet_sha256", "reviewed_at", "blinded", "reviews"}
-REVIEW_KEYS = {"review_id", *REVIEW_FIELDS, "comment", "updated_at"}
-KEY_FIELDS = {
+KEY_CORE_FIELDS = (
     "review_id",
     "source_id",
     "cohort",
@@ -77,7 +90,8 @@ KEY_FIELDS = {
     "source_response_sha256",
     "version_a_sha256",
     "version_b_sha256",
-}
+)
+KEY_FIELDS = set(KEY_CORE_FIELDS)
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -88,11 +102,38 @@ def sha256_text(value: str) -> str:
     return sha256_bytes(value.encode("utf-8"))
 
 
+def _schema_binding(schema_id: str, review_dimensions: list[str]) -> str:
+    return json.dumps(
+        {"review_schema_id": schema_id, "review_dimensions": review_dimensions},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
 def _is_sha256(value: Any) -> bool:
     return (
         isinstance(value, str)
         and len(value) == 64
         and all(character in "0123456789abcdef" for character in value)
+    )
+
+
+def _key_core_sha256(key_rows: Any) -> str:
+    if not isinstance(key_rows, list) or not key_rows:
+        raise ValueError("UNBLIND_KEY must contain a nonempty pairs list")
+    core = []
+    for index, entry in enumerate(key_rows):
+        if not isinstance(entry, dict) or not KEY_FIELDS.issubset(entry):
+            raise ValueError(f"Unblind key entry {index} is incomplete")
+        core.append({field: entry[field] for field in KEY_CORE_FIELDS})
+    return sha256_text(
+        json.dumps(
+            core,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
     )
 
 
@@ -145,7 +186,7 @@ def _require_private_path(path: Path, base: Path) -> Path:
 
 def _validate_packet(
     packet_dir: Path,
-) -> tuple[str, list[str], dict[str, dict[str, Any]], dict[str, Any]]:
+) -> tuple[str, list[str], dict[str, dict[str, Any]], dict[str, Any], tuple[str, ...]]:
     manifest_path = packet_dir / "MANIFEST.json"
     key_path = packet_dir / "UNBLIND_KEY.json"
     rows_path = packet_dir / "BLINDED_ROWS.jsonl"
@@ -160,19 +201,88 @@ def _validate_packet(
         raise ValueError("UNBLIND_KEY packet hash is stale or mismatched")
     key_file_hash = manifest.get("unblind_key_sha256")
     if not _is_sha256(key_file_hash):
-        raise ValueError("Manifest unblind_key_sha256 is missing or invalid")
+        raise ValueError(
+            "Manifest is not key-bound: unblind_key_sha256 is missing or invalid; "
+            "regenerate the pending packet from its frozen config before review"
+        )
     if sha256_bytes(key_path.read_bytes()) != key_file_hash:
         raise ValueError("UNBLIND_KEY file hash is stale or mismatched")
-    if sha256_bytes(rows_path.read_bytes()) != packet_hash:
-        raise ValueError("BLINDED_ROWS packet hash is stale or mismatched")
     if manifest.get("blinded") is not True:
         raise ValueError("Manifest must identify a blinded packet")
-    if manifest.get("review_dimensions") != list(REVIEW_FIELDS):
-        raise ValueError("Manifest review dimensions do not match the five-field schema")
-
+    review_dimensions = manifest.get("review_dimensions")
+    valid_schemas = [
+        list(BASE_REVIEW_FIELDS),
+        [*BASE_REVIEW_FIELDS[:-1], STRUCTURE_FORMAT_FIELD, BASE_REVIEW_FIELDS[-1]],
+    ]
+    if review_dimensions not in valid_schemas:
+        raise ValueError("Manifest review dimensions do not match a supported schema")
+    review_fields = tuple(review_dimensions)
+    has_structure = STRUCTURE_FORMAT_FIELD in review_fields
+    default_schema_id = (
+        "generic-six-field-structure-v1" if has_structure else "generic-five-field-v1"
+    )
+    schema_id = manifest.get("review_schema_id", default_schema_id)
+    if not isinstance(schema_id, str) or not schema_id:
+        raise ValueError("Manifest review_schema_id is missing or invalid")
+    binding = _schema_binding(schema_id, review_dimensions)
+    schema_hash = manifest.get("review_schema_sha256")
+    if schema_hash is not None and schema_hash != sha256_text(binding):
+        raise ValueError("Manifest review schema hash is stale or mismatched")
+    hash_mode = manifest.get("packet_hash_mode", LEGACY_PACKET_HASH_MODE)
     key_rows = key.get("pairs")
-    if not isinstance(key_rows, list) or not key_rows:
-        raise ValueError("UNBLIND_KEY must contain a nonempty pairs list")
+    actual_key_core_hash = _key_core_sha256(key_rows)
+    if has_structure:
+        if key.get("packet_hash_mode") != hash_mode:
+            raise ValueError("UNBLIND_KEY packet hash mode is stale or mismatched")
+        if key.get("review_schema_sha256") != schema_hash:
+            raise ValueError("UNBLIND_KEY review schema hash is stale or mismatched")
+        manifest_key_core_hash = manifest.get("key_core_sha256")
+        if not _is_sha256(manifest_key_core_hash):
+            raise ValueError(
+                "Six-field packet is not key-core-bound; regenerate it before review"
+            )
+        if key.get("key_core_sha256") != manifest_key_core_hash:
+            raise ValueError("UNBLIND_KEY key core hash is stale or mismatched")
+        if actual_key_core_hash != manifest_key_core_hash:
+            raise ValueError("Semantic key core hash is stale or mismatched")
+    else:
+        if key.get("packet_hash_mode", hash_mode) != hash_mode:
+            raise ValueError("UNBLIND_KEY packet hash mode is stale or mismatched")
+        if key.get("review_schema_sha256", schema_hash) != schema_hash:
+            raise ValueError("UNBLIND_KEY review schema hash is stale or mismatched")
+    rows_bytes = rows_path.read_bytes()
+    try:
+        rows_text = rows_bytes.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise ValueError("BLINDED_ROWS must be valid UTF-8") from exc
+    if hash_mode == LEGACY_PACKET_HASH_MODE:
+        if has_structure:
+            raise ValueError("Structure-format schema requires a schema-bound packet hash")
+        actual_packet_hash = sha256_bytes(rows_bytes)
+    elif hash_mode == OBSOLETE_SCHEMA_BOUND_PACKET_HASH_MODE:
+        raise ValueError(
+            "Six-field packet uses an obsolete unbound hash mode; regenerate it "
+            "to bind key_core_sha256 before review"
+        )
+    elif hash_mode == KEY_BOUND_PACKET_HASH_MODE:
+        if (
+            not has_structure
+            or schema_hash != sha256_text(binding)
+            or actual_key_core_hash != manifest.get("key_core_sha256")
+        ):
+            raise ValueError(
+                "Key-bound packet is missing a valid structure review schema or key core"
+            )
+        actual_packet_hash = sha256_text(
+            f"schema-keycore-bound-review-packet-v3\n{binding}\n"
+            f"{actual_key_core_hash}\n{rows_text}"
+        )
+    else:
+        raise ValueError(f"Unsupported packet_hash_mode: {hash_mode}")
+    if actual_packet_hash != packet_hash:
+        label = "BLINDED_ROWS packet hash" if hash_mode == LEGACY_PACKET_HASH_MODE else "BLINDED_ROWS/schema packet hash"
+        raise ValueError(f"{label} is stale or mismatched")
+
     if manifest.get("pairs") != len(key_rows) or len(rows) != len(key_rows):
         raise ValueError("Manifest, unblind key, and blinded-row counts disagree")
 
@@ -230,17 +340,20 @@ def _validate_packet(
         for field, actual in checks.items():
             if entry[field] != actual:
                 raise ValueError(f"Stale {field} for {review_id}")
-    return packet_hash, expected_ids, key_by_id, manifest
+    return packet_hash, expected_ids, key_by_id, manifest, review_fields
 
 
-def _normalize_review(entry: dict[str, Any]) -> dict[str, Any]:
-    unknown = set(entry) - REVIEW_KEYS
+def _normalize_review(
+    entry: dict[str, Any], review_fields: tuple[str, ...]
+) -> dict[str, Any]:
+    review_keys = {"review_id", *review_fields, "comment", "updated_at"}
+    unknown = set(entry) - review_keys
     if unknown:
         raise ValueError(
             f"Unknown fields for review {entry.get('review_id')}: {sorted(unknown)}"
         )
     normalized: dict[str, Any] = {}
-    for field in REVIEW_FIELDS:
+    for field in review_fields:
         value = entry.get(field, "")
         if not isinstance(value, str) or value not in ENUMS[field]:
             raise ValueError(f"Invalid {field} value for {entry.get('review_id')}")
@@ -261,7 +374,7 @@ def validate_and_decode(
 ) -> tuple[dict[str, Any], dict[str, Any], bytes]:
     """Return private decoded data, a text-free aggregate, and raw export bytes."""
     packet_dir = _require_private_path(packet_dir, base)
-    packet_hash, expected_ids, key_by_id, _manifest = _validate_packet(packet_dir)
+    packet_hash, expected_ids, key_by_id, _manifest, review_fields = _validate_packet(packet_dir)
     raw_export = review_export.read_bytes()
     export = _load_object(review_export, "review export")
     unknown_top = set(export) - TOP_LEVEL_KEYS
@@ -286,7 +399,7 @@ def validate_and_decode(
             raise ValueError("Every review must have a nonempty review_id")
         if review_id in normalized_by_id:
             raise ValueError(f"Duplicate review_id in export: {review_id}")
-        normalized_by_id[review_id] = _normalize_review(entry)
+        normalized_by_id[review_id] = _normalize_review(entry, review_fields)
 
     expected_set = set(expected_ids)
     actual_set = set(normalized_by_id)
@@ -296,15 +409,16 @@ def validate_and_decode(
         raise ValueError(f"Review IDs do not match packet; missing={missing}, extra={extra}")
 
     decoded_records = []
-    field_counts = {field: Counter() for field in REVIEW_FIELDS}
+    field_counts = {field: Counter() for field in review_fields}
     alignment_counts: Counter[str] = Counter()
     complete_count = 0
     for review_id in expected_ids:
         review = normalized_by_id[review_id]
         key_entry = key_by_id[review_id]
-        complete = all(review[field] != "" for field in REVIEW_FIELDS)
+        complete = all(review[field] != "" for field in review_fields)
+        legacy_complete = all(review[field] != "" for field in BASE_REVIEW_FIELDS)
         complete_count += int(complete)
-        for field in REVIEW_FIELDS:
+        for field in review_fields:
             field_counts[field][review[field] or "missing"] += 1
 
         intended_choice = (
@@ -336,7 +450,12 @@ def validate_and_decode(
                     "version_b_sha256": key_entry["version_b_sha256"],
                 },
                 "review": review,
-                "all_five_fields_complete": complete,
+                "all_required_fields_complete": complete,
+                "all_five_fields_complete": legacy_complete,
+                **(
+                    {"all_six_fields_complete": complete}
+                    if STRUCTURE_FORMAT_FIELD in review_fields else {}
+                ),
                 "intended_certainty_choice_from_key": intended_choice,
                 "certainty_alignment_with_key": alignment,
             }
@@ -348,6 +467,7 @@ def validate_and_decode(
         "packet_sha256": packet_hash,
         "reviewed_at": export["reviewed_at"],
         "blinded_review": True,
+        "review_dimensions": list(review_fields),
         "label_provenance": (
             "Confidence labels come only from UNBLIND_KEY.json; reviewer choices "
             "never create or modify labels."
@@ -358,6 +478,7 @@ def validate_and_decode(
         "schema_version": 1,
         "packet_sha256": packet_hash,
         "pairs": total,
+        "review_dimensions": list(review_fields),
         "complete_pairs": complete_count,
         "incomplete_pairs": total - complete_count,
         "gate_completed": complete_count == total,

@@ -18,6 +18,26 @@ from typing import Any
 
 BASE = Path(__file__).resolve().parents[1]
 PRIVATE = BASE / "private_data"
+BASE_REVIEW_DIMENSIONS = [
+    "content_equivalence",
+    "certainty_contrast",
+    "naturalness",
+    "cue_scope",
+    "decision",
+]
+STRUCTURE_REVIEW_DIMENSION = "structure_format"
+LEGACY_PACKET_HASH_MODE = "blinded-rows-sha256-v1"
+KEY_BOUND_PACKET_HASH_MODE = "schema-keycore-and-blinded-rows-sha256-v3"
+KEY_CORE_FIELDS = (
+    "review_id",
+    "source_id",
+    "cohort",
+    "version_a_label",
+    "version_b_label",
+    "source_response_sha256",
+    "version_a_sha256",
+    "version_b_sha256",
+)
 
 
 def sha256_text(text: str) -> str:
@@ -26,6 +46,52 @@ def sha256_text(text: str) -> str:
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def review_schema_binding(schema_id: str, review_dimensions: list[str]) -> str:
+    return json.dumps(
+        {"review_schema_id": schema_id, "review_dimensions": review_dimensions},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+
+def key_core_sha256(key_rows: list[dict[str, Any]]) -> str:
+    """Hash the semantic A/B mapping without creating a packet-hash cycle."""
+    core = []
+    for index, entry in enumerate(key_rows):
+        missing = [field for field in KEY_CORE_FIELDS if field not in entry]
+        if missing:
+            raise ValueError(f"Key entry {index} is missing core fields: {missing}")
+        core.append({field: entry[field] for field in KEY_CORE_FIELDS})
+    return sha256_text(
+        json.dumps(
+            core,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )
+
+
+def compute_packet_hash(
+    rows_dump: str,
+    schema_id: str,
+    review_dimensions: list[str],
+    key_core_hash: str | None = None,
+) -> tuple[str, str, str]:
+    binding = review_schema_binding(schema_id, review_dimensions)
+    binding_hash = sha256_text(binding)
+    if STRUCTURE_REVIEW_DIMENSION not in review_dimensions:
+        return sha256_text(rows_dump), LEGACY_PACKET_HASH_MODE, binding_hash
+    if not isinstance(key_core_hash, str) or len(key_core_hash) != 64:
+        raise ValueError("Six-field packet requires key_core_sha256")
+    preimage = (
+        f"schema-keycore-bound-review-packet-v3\n{binding}\n"
+        f"{key_core_hash}\n{rows_dump}"
+    )
+    return sha256_text(preimage), KEY_BOUND_PACKET_HASH_MODE, binding_hash
 
 
 def load_records(path: Path) -> list[dict[str, Any]]:
@@ -205,10 +271,65 @@ def assemble_blinded_rows(
     }
 
 
-def render_html(rows: list[dict[str, Any]], packet_hash: str, title: str) -> str:
+def review_schema(config: dict[str, Any]) -> tuple[str, list[str]]:
+    schema = config.get("review_schema")
+    if schema is None:
+        return "generic-five-field-v1", list(BASE_REVIEW_DIMENSIONS)
+    if not isinstance(schema, dict):
+        raise ValueError("review_schema must be an object")
+    unknown = set(schema) - {"schema_id", "include_structure_format"}
+    if unknown:
+        raise ValueError(f"Unknown review_schema fields: {sorted(unknown)}")
+    include_structure = schema.get("include_structure_format", False)
+    if not isinstance(include_structure, bool):
+        raise ValueError("review_schema.include_structure_format must be boolean")
+    schema_id = schema.get(
+        "schema_id",
+        "generic-six-field-structure-v1" if include_structure else "generic-five-field-v1",
+    )
+    if not isinstance(schema_id, str) or not schema_id:
+        raise ValueError("review_schema.schema_id must be nonempty text")
+    dimensions = list(BASE_REVIEW_DIMENSIONS)
+    if include_structure:
+        dimensions.insert(-1, STRUCTURE_REVIEW_DIMENSION)
+    return schema_id, dimensions
+
+
+def render_html(
+    rows: list[dict[str, Any]],
+    packet_hash: str,
+    title: str,
+    review_dimensions: list[str],
+) -> str:
     def esc(value: Any) -> str:
         return html.escape(str(value), quote=True)
 
+    include_structure = STRUCTURE_REVIEW_DIMENSION in review_dimensions
+    structure_field = (
+        '<label>5. Structure and requested format（结构与格式是否保持）'
+        '<select data-field="structure_format"><option value="">Not reviewed</option>'
+        '<option value="both_preserved">Both preserve structure and requested format</option>'
+        '<option value="a_changed">A changes structure or format</option>'
+        '<option value="b_changed">B changes structure or format</option>'
+        '<option value="both_changed">Both change structure or format</option>'
+        '<option value="uncertain">Uncertain</option></select></label>'
+        if include_structure else ""
+    )
+    structure_field_line = f"{structure_field}\n" if include_structure else ""
+    decision_number = 6 if include_structure else 5
+    required_js = (
+        json.dumps(review_dimensions)
+        if include_structure
+        else "['content_equivalence','certainty_contrast','naturalness','cue_scope','decision']"
+    )
+    intro_dimensions = (
+        "content equivalence, speaker-level certainty contrast, naturalness, "
+        "whether the stance cue applies to the whole response, and "
+        "structure/requested-format preservation"
+        if include_structure
+        else "content equivalence, speaker-level certainty contrast, naturalness, "
+        "and whether the stance cue applies to the whole response"
+    )
     cards = []
     identities = []
     for index, row in enumerate(rows):
@@ -225,7 +346,7 @@ def render_html(rows: list[dict[str, Any]], packet_hash: str, title: str) -> str
 <label>2. Speaker-level certainty contrast（整个回答的说话者确定程度）<select data-field="certainty_contrast"><option value="">Not reviewed</option><option value="a_more_certain">A is clearly more certain</option><option value="b_more_certain">B is clearly more certain</option><option value="no_clear_contrast">No clear contrast</option><option value="uncertain">Uncertain</option></select></label>
 <label>3. Naturalness（语言是否自然）<select data-field="naturalness"><option value="">Not reviewed</option><option value="both_natural">Both are natural</option><option value="a_unnatural">A is unnatural</option><option value="b_unnatural">B is unnatural</option><option value="both_unnatural">Both are unnatural</option><option value="uncertain">Uncertain</option></select></label>
 <label>4. Cue scope（语气线索是否覆盖整个回答）<select data-field="cue_scope"><option value="">Not reviewed</option><option value="both_global">Both versions have global scope</option><option value="a_local_only">A is only local or ambiguous</option><option value="b_local_only">B is only local or ambiguous</option><option value="both_local_only">Both are only local or ambiguous</option><option value="uncertain">Uncertain</option></select></label>
-<label>5. Overall decision<select data-field="decision"><option value="">Not reviewed</option><option value="accept">Accept pair</option><option value="reject">Reject pair</option><option value="discuss">Needs discussion</option></select></label>
+{structure_field_line}<label>{decision_number}. Overall decision<select data-field="decision"><option value="">Not reviewed</option><option value="accept">Accept pair</option><option value="reject">Reject pair</option><option value="discuss">Needs discussion</option></select></label>
 </div>
 <label class="comment">Comment / 备注<textarea data-field="comment" placeholder="Explain any content change, weak contrast, unnatural wording, or local-only cue. Reject if any issue makes the pair unsuitable."></textarea></label>
 </article>'''
@@ -235,14 +356,14 @@ def render_html(rows: list[dict[str, Any]], packet_hash: str, title: str) -> str
     export_filename = f"blind_human_review_{len(rows)}.json"
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(title)}</title>
 <style>body{{margin:0;background:#f4f5f7;color:#18202b;font:16px/1.55 system-ui,-apple-system,sans-serif}}main{{max-width:1500px;margin:auto;padding:24px}}h1{{font-size:27px;margin:0 0 8px}}.intro{{max-width:1050px}}.toolbar{{display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:sticky;top:0;background:#f4f5f7;padding:10px 0;z-index:2}}button,select{{font:inherit;padding:7px;border:1px solid #bac3ce;border-radius:7px;background:white}}button{{cursor:pointer}}.primary{{background:#2352a3;color:white}}.card{{background:white;border:1px solid #dce1e7;border-radius:12px;padding:20px}}.card[hidden]{{display:none}}.meta{{color:#536071;margin-bottom:12px}}pre{{font:15px/1.6 ui-monospace,SFMono-Regular,monospace;white-space:pre-wrap;overflow-wrap:anywhere}}.source{{background:#f7f8fa;border:1px solid #dbe2eb;border-radius:8px;padding:12px;margin-top:12px}}.versions{{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}}.versions section{{border:1px solid #dbe2eb;border-radius:8px;padding:12px;background:#fafbfd}}h2{{font-size:17px;margin:0 0 8px}}.review{{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}}.review label{{display:flex;flex-direction:column;gap:6px}}.comment{{display:block;margin-top:14px}}textarea{{width:100%;min-height:78px;box-sizing:border-box;font:inherit;padding:8px}}#progress{{font-weight:650}}@media(max-width:900px){{.versions,.review{{grid-template-columns:1fr}}.toolbar{{position:static}}}}</style></head><body><main>
-<header><h1>{esc(title)}</h1><p class="intro">Review each same-content pair without guessing its intended label. Compare both versions with the source, then judge <strong>content equivalence, speaker-level certainty contrast, naturalness, and whether the stance cue applies to the whole response</strong>. This is not a correctness review. The page contains no answer key.</p></header>
+<header><h1>{esc(title)}</h1><p class="intro">Review each same-content pair without guessing its intended label. Compare both versions with the source, then judge <strong>{intro_dimensions}</strong>. This is not a correctness review. The page contains no answer key.</p></header>
 <nav class="toolbar"><button id="prev">Previous</button><span id="position"></span><button id="next">Next</button><label>Jump <select id="jump"></select></label><span id="progress"></span><button class="primary" id="export">Download review JSON</button><span id="save-status"></span></nav>
 {''.join(cards)}
 </main><script>
 const packetHash={json.dumps(packet_hash)};const identities={identities_json};const storageKey='blind-pair-review-'+packetHash;let reviews={{}};let current=0;let storageAvailable=true;
 try{{reviews=JSON.parse(localStorage.getItem(storageKey)||'{{}}')}}catch(e){{storageAvailable=false}}
 const cards=[...document.querySelectorAll('.card')];const jump=document.getElementById('jump');identities.forEach((m,i)=>{{const o=document.createElement('option');o.value=i;o.textContent=m.review_id;jump.append(o)}});
-const required=['content_equivalence','certainty_contrast','naturalness','cue_scope','decision'];
+const required={required_js};
 function progress(){{const complete=identities.filter(m=>required.every(k=>(reviews[m.review_id]||{{}})[k])).length;document.getElementById('progress').textContent='Complete '+complete+' / '+identities.length;document.getElementById('save-status').textContent=storageAvailable?'Saved in this browser until export':'Browser storage unavailable; export often'}}
 cards.forEach((card,i)=>card.querySelectorAll('[data-field]').forEach(el=>{{el.value=(reviews[identities[i].review_id]||{{}})[el.dataset.field]||'';el.addEventListener('input',()=>{{const id=identities[i].review_id;reviews[id]||={{}};reviews[id][el.dataset.field]=el.value;reviews[id].updated_at=new Date().toISOString();try{{localStorage.setItem(storageKey,JSON.stringify(reviews))}}catch(e){{storageAvailable=false}}progress()}})}}));
 function show(i){{current=Math.max(0,Math.min(cards.length-1,i));cards.forEach((c,n)=>c.hidden=n!==current);jump.value=current;document.getElementById('position').textContent=(current+1)+' / '+cards.length;document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===cards.length-1;window.scrollTo(0,0)}}
@@ -255,10 +376,14 @@ def build_packet(
     config_path: Path, base: Path = BASE, *, overwrite: bool = False
 ) -> dict[str, Any]:
     config = json.loads(config_path.read_text(encoding="utf-8"))
+    schema_id, review_dimensions = review_schema(config)
     rows, key, input_bindings = assemble_blinded_rows(config, base)
 
     rows_dump = "".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows)
-    packet_hash = sha256_text(rows_dump)
+    key_core_hash = key_core_sha256(key)
+    packet_hash, packet_hash_mode, schema_hash = compute_packet_hash(
+        rows_dump, schema_id, review_dimensions, key_core_hash
+    )
     output_dir = require_private_output(base, config["output_dir"])
     existing_manifest = output_dir / "MANIFEST.json"
     if existing_manifest.exists() and not overwrite:
@@ -269,12 +394,20 @@ def build_packet(
             )
     output_dir.mkdir(parents=True, exist_ok=True)
     title = config.get("title", f"Blind review: {len(rows)} paired responses")
-    html_text = render_html(rows, packet_hash, title)
+    html_text = render_html(rows, packet_hash, title, review_dimensions)
     key_payload = {
         "packet_sha256": packet_hash,
         "seed": int(config["seed"]),
         "pairs": key,
     }
+    if STRUCTURE_REVIEW_DIMENSION in review_dimensions:
+        key_payload.update(
+            {
+                "packet_hash_mode": packet_hash_mode,
+                "review_schema_sha256": schema_hash,
+                "key_core_sha256": key_core_hash,
+            }
+        )
     key_text = json.dumps(key_payload, indent=2) + "\n"
     manifest = {
         "packet_sha256": packet_hash,
@@ -282,18 +415,19 @@ def build_packet(
         "pairs": len(rows),
         "blinded": True,
         "reproducible_ab_order": True,
-        "review_dimensions": [
-            "content_equivalence",
-            "certainty_contrast",
-            "naturalness",
-            "cue_scope",
-            "decision",
-        ],
+        "review_dimensions": review_dimensions,
         "human_review": "pending",
         "public_text_exported": False,
         "config_sha256": sha256_file(config_path),
         "input_bindings": input_bindings,
     }
+    if STRUCTURE_REVIEW_DIMENSION in review_dimensions:
+        # Schema metadata is opt-in so rerunning a historical five-field config
+        # preserves its exact key and manifest serialization.
+        manifest["packet_hash_mode"] = packet_hash_mode
+        manifest["review_schema_sha256"] = schema_hash
+        manifest["review_schema_id"] = schema_id
+        manifest["key_core_sha256"] = key_core_hash
     (output_dir / "BLINDED_ROWS.jsonl").write_text(rows_dump, encoding="utf-8")
     (output_dir / "BLIND_REVIEW.html").write_text(html_text, encoding="utf-8")
     (output_dir / "UNBLIND_KEY.json").write_text(key_text, encoding="utf-8")

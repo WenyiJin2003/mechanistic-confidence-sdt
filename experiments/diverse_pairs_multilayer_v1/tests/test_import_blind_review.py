@@ -16,10 +16,12 @@ import build_blind_review_packet as builder
 import import_blind_review as importer
 
 
-def _write_packet(tmp_path: Path, pair_count: int = 3) -> Path:
+def _write_packet(
+    tmp_path: Path, pair_count: int = 3, *, include_structure: bool = False
+) -> Path:
     base = tmp_path
     private = base / "private_data"
-    private.mkdir()
+    private.mkdir(parents=True)
     sources = []
     pairs = []
     for index in range(pair_count):
@@ -77,6 +79,11 @@ def _write_packet(tmp_path: Path, pair_count: int = 3) -> Path:
         ],
         "output_dir": "private_data/review_packet",
     }
+    if include_structure:
+        config["review_schema"] = {
+            "schema_id": "fixture-six-field-structure-v1",
+            "include_structure_format": True,
+        }
     config_path = base / "packet_config.json"
     config_path.write_text(json.dumps(config), encoding="utf-8")
     builder.build_packet(config_path, base)
@@ -105,6 +112,8 @@ def _export_for(packet_dir: Path, *, complete: bool = True) -> dict:
                     "updated_at": "2026-10-13T12:00:00Z",
                 }
             )
+            if "structure_format" in manifest["review_dimensions"]:
+                review["structure_format"] = "both_preserved"
         reviews.append(review)
     return {
         "packet_sha256": manifest["packet_sha256"],
@@ -260,6 +269,16 @@ def test_rejects_stale_blinded_rows_hash(tmp_path):
         importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
 
 
+def test_rejects_crlf_normalization_of_hash_bound_rows(tmp_path):
+    packet_dir = _write_packet(tmp_path)
+    rows_path = packet_dir / "BLINDED_ROWS.jsonl"
+    rows_path.write_bytes(rows_path.read_bytes().replace(b"\n", b"\r\n"))
+    export_path = tmp_path / "review_export.json"
+    _write_export(export_path, _export_for(packet_dir))
+    with pytest.raises(ValueError, match="BLINDED_ROWS packet hash"):
+        importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+
+
 def test_refuses_public_decoded_output_and_overwrite(tmp_path):
     packet_dir = _write_packet(tmp_path)
     export_path = tmp_path / "review_export.json"
@@ -284,7 +303,7 @@ def test_refuses_public_decoded_output_and_overwrite(tmp_path):
         )
 
 
-def test_existing_twenty_pair_packet_schema_is_supported(tmp_path):
+def test_synthetic_bound_five_field_packet_schema_is_supported(tmp_path):
     packet_dir = _write_packet(tmp_path, pair_count=20)
     export_path = tmp_path / "review_export.json"
     _write_export(export_path, _export_for(packet_dir))
@@ -294,3 +313,173 @@ def test_existing_twenty_pair_packet_schema_is_supported(tmp_path):
     assert len(decoded["records"]) == 20
     assert aggregate["pairs"] == 20
     assert aggregate["gate_completed"] is True
+
+
+def test_legacy_packet_has_raw_rows_hash_and_no_schema_metadata(tmp_path):
+    packet_dir = _write_packet(tmp_path)
+    manifest = json.loads((packet_dir / "MANIFEST.json").read_text())
+    key = json.loads((packet_dir / "UNBLIND_KEY.json").read_text())
+    assert set(key) == {"packet_sha256", "seed", "pairs"}
+    assert not ({"review_schema_id", "review_schema_sha256", "packet_hash_mode"} & set(manifest))
+    assert manifest["packet_sha256"] == importer.sha256_bytes(
+        (packet_dir / "BLINDED_ROWS.jsonl").read_bytes()
+    )
+    export_path = tmp_path / "review_export.json"
+    _write_export(export_path, _export_for(packet_dir))
+    decoded, aggregate, _ = importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+    assert decoded["records"][0]["all_five_fields_complete"] is True
+    assert aggregate["gate_completed"] is True
+
+
+def test_prechange_unbound_legacy_manifest_requires_explicit_migration(tmp_path):
+    packet_dir = _write_packet(tmp_path)
+    manifest_path = packet_dir / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest.pop("unblind_key_sha256")
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    export_path = tmp_path / "review_export.json"
+    _write_export(export_path, _export_for(packet_dir))
+    with pytest.raises(ValueError, match="not key-bound.*regenerate"):
+        importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+
+
+def test_structure_schema_is_required_for_v38_gate_but_legacy_remains_five_field(tmp_path):
+    packet_dir = _write_packet(tmp_path, include_structure=True)
+    export = _export_for(packet_dir)
+    export_path = tmp_path / "review_export.json"
+    _write_export(export_path, export)
+    decoded, aggregate, _ = importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+    assert aggregate["review_dimensions"] == [
+        "content_equivalence", "certainty_contrast", "naturalness", "cue_scope", "structure_format", "decision"
+    ]
+    assert aggregate["gate_completed"] is True
+    assert decoded["records"][0]["all_six_fields_complete"] is True
+
+    export["reviews"][0].pop("structure_format")
+    _write_export(export_path, export)
+    _, incomplete, _ = importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+    assert incomplete["complete_pairs"] == 2
+    assert incomplete["gate_completed"] is False
+    assert incomplete["counts"]["structure_format"]["missing"] == 1
+
+
+def test_five_field_export_cannot_be_reused_for_structure_packet(tmp_path):
+    legacy_dir = _write_packet(tmp_path)
+    legacy_export = _export_for(legacy_dir)
+
+    other = tmp_path / "structure"
+    structure_dir = _write_packet(other, include_structure=True)
+    export_path = other / "legacy_shaped_export.json"
+    _write_export(export_path, legacy_export)
+    with pytest.raises(ValueError, match="packet hash is stale"):
+        importer.validate_and_decode(structure_dir, export_path, base=other)
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (
+            lambda manifest, key: manifest.update(review_schema_id="tampered-v1"),
+            "review schema hash",
+        ),
+        (
+            lambda manifest, key: manifest.update(
+                review_dimensions=[
+                    "content_equivalence", "certainty_contrast", "naturalness",
+                    "structure_format", "cue_scope", "decision",
+                ]
+            ),
+            "supported schema",
+        ),
+        (
+            lambda manifest, key: manifest.update(packet_hash_mode="blinded-rows-sha256-v1"),
+            "hash mode",
+        ),
+    ],
+)
+def test_structure_packet_rejects_schema_manifest_tampering(tmp_path, mutation, message):
+    packet_dir = _write_packet(tmp_path, include_structure=True)
+    manifest_path = packet_dir / "MANIFEST.json"
+    key = json.loads((packet_dir / "UNBLIND_KEY.json").read_text())
+    manifest = json.loads(manifest_path.read_text())
+    mutation(manifest, key)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    export_path = tmp_path / "review_export.json"
+    _write_export(export_path, _export_for(packet_dir))
+    with pytest.raises(ValueError, match=message):
+        importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+
+
+def test_structure_packet_rejects_key_schema_binding_mismatch(tmp_path):
+    packet_dir = _write_packet(tmp_path, include_structure=True)
+    key_path = packet_dir / "UNBLIND_KEY.json"
+    key = json.loads(key_path.read_text())
+    key["review_schema_sha256"] = "0" * 64
+    key_path.write_text(json.dumps(key, indent=2) + "\n")
+    manifest_path = packet_dir / "MANIFEST.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["unblind_key_sha256"] = importer.sha256_bytes(key_path.read_bytes())
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+    export_path = tmp_path / "review_export.json"
+    _write_export(export_path, _export_for(packet_dir))
+    with pytest.raises(ValueError, match="UNBLIND_KEY review schema hash"):
+        importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+
+
+def test_structure_packet_identity_changes_when_ab_labels_are_swapped(tmp_path):
+    packet_dir = _write_packet(tmp_path, include_structure=True)
+    old_export = _export_for(packet_dir)
+    manifest_path = packet_dir / "MANIFEST.json"
+    key_path = packet_dir / "UNBLIND_KEY.json"
+    rows_path = packet_dir / "BLINDED_ROWS.jsonl"
+    manifest = json.loads(manifest_path.read_text())
+    key = json.loads(key_path.read_text())
+    old_packet_hash = manifest["packet_sha256"]
+
+    first = key["pairs"][0]
+    first["version_a_label"], first["version_b_label"] = (
+        first["version_b_label"], first["version_a_label"]
+    )
+    new_key_core = builder.key_core_sha256(key["pairs"])
+    new_packet_hash, new_mode, new_schema_hash = builder.compute_packet_hash(
+        rows_path.read_text(),
+        manifest["review_schema_id"],
+        manifest["review_dimensions"],
+        new_key_core,
+    )
+    assert new_packet_hash != old_packet_hash
+    assert new_mode == manifest["packet_hash_mode"]
+    assert new_schema_hash == manifest["review_schema_sha256"]
+
+    key["packet_sha256"] = new_packet_hash
+    key["key_core_sha256"] = new_key_core
+    key_path.write_text(json.dumps(key, indent=2) + "\n")
+    manifest["packet_sha256"] = new_packet_hash
+    manifest["key_core_sha256"] = new_key_core
+    manifest["unblind_key_sha256"] = importer.sha256_bytes(key_path.read_bytes())
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+
+    export_path = tmp_path / "old_review_export.json"
+    _write_export(export_path, old_export)
+    with pytest.raises(ValueError, match="packet hash is stale"):
+        importer.validate_and_decode(packet_dir, export_path, base=tmp_path)
+
+
+def test_rejects_structure_field_on_legacy_packet_and_invalid_structure_choice(tmp_path):
+    legacy = _write_packet(tmp_path)
+    payload = _export_for(legacy)
+    payload["reviews"][0]["structure_format"] = "both_preserved"
+    export_path = tmp_path / "legacy_export.json"
+    _write_export(export_path, payload)
+    with pytest.raises(ValueError, match="Unknown fields"):
+        importer.validate_and_decode(legacy, export_path, base=tmp_path)
+
+    other = tmp_path / "other"
+    other.mkdir()
+    structure = _write_packet(other, include_structure=True)
+    payload = _export_for(structure)
+    payload["reviews"][0]["structure_format"] = "maybe"
+    export_path = other / "structure_export.json"
+    _write_export(export_path, payload)
+    with pytest.raises(ValueError, match="Invalid structure_format"):
+        importer.validate_and_decode(structure, export_path, base=other)

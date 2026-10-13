@@ -1,0 +1,1315 @@
+{
+  "protocol_version": "genre-aware-placement-canary-v3.8",
+  "frozen": true,
+  "frozen_date": "2026-10-13",
+  "seed": 2026101380,
+  "purpose": "engineering_and_naturalness_gate_only",
+  "gate_limitations": {
+    "authorizes_probe_scoring": false,
+    "authorizes_lofo_interpretation": false,
+    "authorizes_population_claims": false,
+    "authorizes_sdt_loss_training": false,
+    "authorizes_renderer_application_to_all_100_sources": false,
+    "table_dialogue_and_indented_code_require_separate_canaries": true,
+    "lofo_reserved_for_fully_reviewed_100": true,
+    "activation_not_inspected_before_freeze": true,
+    "stress_set_role": "prior_diagnostic_development_set_6_failed_or_discuss_plus_4_accepted_controls",
+    "fresh_set_role": "fresh_diagnostic_subset_not_unbiased_test"
+  },
+  "builder": {
+    "path": "src/build_genre_aware_canary_v38.py",
+    "file_sha256": "5503b6e4c96c79c90bf75366ec6c1397ad20ebbe75d0fb4bb80d937b9ca6dd98"
+  },
+  "review_tooling": {
+    "builder": {
+      "path": "src/build_blind_review_packet.py",
+      "file_sha256": "f457939e2fffcb6b18ee82ab58839c474910ca8a5681693be685bc480e14374e"
+    },
+    "importer": {
+      "path": "src/import_blind_review.py",
+      "file_sha256": "ee05be0b4ec6e6c3d8ba76b7bca99433587967910a1d9b0987f7a3298c6ed6d2"
+    }
+  },
+  "protocol": {
+    "path": "V38_GENRE_AWARE_CANARY.md",
+    "file_sha256": "d65853ddf2263e59da031c1f9518511db1177b70a2480e514d06558ffb90fe46"
+  },
+  "structure_algorithm_version": "protected-ranges-v38-2",
+  "renderer_scope": {
+    "scope_version": "v38-prose-list-fenced-code-only-1",
+    "eligible_response_structures": [
+      "plain_prose",
+      "list",
+      "fenced_code"
+    ],
+    "eligible_protected_kinds": [
+      "code_fence",
+      "list_block"
+    ],
+    "deferred_ineligible_structures": [
+      "dialogue",
+      "indented_code",
+      "markdown_table"
+    ],
+    "separate_canary_required_before_inclusion": [
+      "dialogue",
+      "indented_code",
+      "markdown_table"
+    ],
+    "selected_coverage": {
+      "main": {
+        "sources": {
+          "contains_dialogue": 0,
+          "contains_fenced_code": 3,
+          "contains_indented_code": 0,
+          "contains_list": 3,
+          "contains_markdown_table": 0,
+          "contains_other_unsupported": 0,
+          "plain_prose_only": 14
+        },
+        "protected_ranges": {
+          "code_fence": 6,
+          "list_block": 3
+        }
+      },
+      "control": {
+        "sources": {
+          "contains_dialogue": 0,
+          "contains_fenced_code": 3,
+          "contains_indented_code": 0,
+          "contains_list": 3,
+          "contains_markdown_table": 0,
+          "contains_other_unsupported": 0,
+          "plain_prose_only": 14
+        },
+        "protected_ranges": {
+          "code_fence": 6,
+          "list_block": 3
+        }
+      }
+    },
+    "gate_pass_authorizes": "rerender_and_review_of_eligible_prose_list_fenced_code_sources_only",
+    "gate_pass_authorizes_all_100_without_rescreening": false
+  },
+  "inputs": {
+    "source": {
+      "path": "private_data/gpt56_chat_neutral_100_v37/SOURCE_BATCH_100.jsonl",
+      "file_sha256": "e2722d52342aba31f4e9af7104b0048d575526f19c3dd12e12b1aef02b7ceba5",
+      "records_sha256": "a7bba5ab099f3a22cc5c345dc764a44c2d42bdeb5c4341d86642c6190d4a6bf8"
+    },
+    "neutral": {
+      "path": "private_data/gpt56_chat_neutral_100_v37/FINAL_100.json",
+      "file_sha256": "dc75f51bbbc8055689f4e399728e15cc2e4b6fcd421e0c327fe316d42cffdd5c",
+      "records_sha256": "e479d51f891abc737bed628099c440f46f516ba0979f032087ae0f39f50cf59b"
+    },
+    "prior_diagnostic": {
+      "path": "private_data/blind_human_review_chat_100_v37/AGENT_DIAGNOSTIC_REVIEW.json",
+      "file_sha256": "cd5462763acd316d61fee761fa294650e85365674e018b2dafc65519591e376d"
+    },
+    "prior_unblind_key": {
+      "path": "private_data/blind_human_review_chat_100_v37/UNBLIND_KEY.json",
+      "file_sha256": "4b47d16bd25ad8a4161d163bb6d4330acec61433da0fc1f89b5ebcacd7bf494b"
+    }
+  },
+  "tokenizer": {
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "snapshot_path": "../../../semantic-entropy-probes-stage0/cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "local_files_only": true,
+    "use_fast": true,
+    "artifact_sha256": {
+      "tokenizer.json": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+      "tokenizer_config.json": "5b5d4f65d0acd3b2d56a35b56d374a36cbc1c8fa5cf3b3febbbfabf22f359583",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+    },
+    "transformers_version": "4.57.6",
+    "tokenizers_version": "0.22.2"
+  },
+  "eligibility_reason_taxonomy": [
+    "strict_output_contract",
+    "creative_roleplay_voice",
+    "non_substantive_acknowledgement",
+    "protected_structure_only",
+    "no_safe_boundary",
+    "cue_referent_mismatch",
+    "speaker_voice_conflict",
+    "meta_stance_conflict",
+    "deferred_markdown_table",
+    "deferred_dialogue",
+    "deferred_indented_code",
+    "unsupported_protected_structure"
+  ],
+  "screened_exclusions": [
+    {
+      "production_slot": "G0024",
+      "eligibility": "ineligible",
+      "reason_codes": [
+        "creative_roleplay_voice"
+      ]
+    },
+    {
+      "production_slot": "G0051",
+      "eligibility": "ineligible",
+      "reason_codes": [
+        "protected_structure_only"
+      ]
+    },
+    {
+      "production_slot": "G0068",
+      "eligibility": "ineligible",
+      "reason_codes": [
+        "protected_structure_only",
+        "no_safe_boundary"
+      ]
+    },
+    {
+      "production_slot": "G0046",
+      "eligibility": "ineligible",
+      "reason_codes": [
+        "strict_output_contract",
+        "no_safe_boundary"
+      ]
+    }
+  ],
+  "cue_bank": {
+    "confidence": {
+      "single": [
+        "I have high confidence in this {referent} as a whole{qualification}.",
+        "I have limited confidence in this {referent} as a whole{qualification}."
+      ],
+      "distributed": [
+        [
+          "I have high confidence in the {referent} that follows{qualification}.",
+          "Overall, my confidence in it remains high."
+        ],
+        [
+          "I have limited confidence in the {referent} that follows{qualification}.",
+          "Overall, my confidence in it remains limited."
+        ]
+      ]
+    },
+    "certainty": {
+      "single": [
+        "I am certain about this {referent} as presented{qualification}.",
+        "I am uncertain about this {referent} as presented{qualification}."
+      ],
+      "distributed": [
+        [
+          "I am certain about the {referent} that follows{qualification}.",
+          "Taken together, I remain certain about it."
+        ],
+        [
+          "I am uncertain about the {referent} that follows{qualification}.",
+          "Taken together, I remain uncertain about it."
+        ]
+      ]
+    },
+    "stand": {
+      "single": [
+        "I confidently stand behind this {referent}{qualification}.",
+        "I cautiously stand behind this {referent}{qualification}."
+      ],
+      "distributed": [
+        [
+          "I confidently stand behind the {referent} that follows{qualification}.",
+          "Overall, it remains a position I fully endorse."
+        ],
+        [
+          "I cautiously stand behind the {referent} that follows{qualification}.",
+          "Overall, it remains a position I cautiously endorse."
+        ]
+      ]
+    },
+    "view": {
+      "single": [
+        "This {referent}, as stated{qualification}, is my settled view.",
+        "This {referent}, as stated{qualification}, is my provisional view."
+      ],
+      "distributed": [
+        [
+          "The {referent} that follows reflects my settled view{qualification}.",
+          "Taken together, it remains my firm position."
+        ],
+        [
+          "The {referent} that follows reflects my provisional view{qualification}.",
+          "Taken together, it remains my tentative position."
+        ]
+      ]
+    },
+    "doubt": {
+      "single": [
+        "Overall, I have little doubt about this {referent}{qualification}.",
+        "Overall, I have some doubt about this {referent}{qualification}."
+      ],
+      "distributed": [
+        [
+          "I have little doubt about the {referent} that follows{qualification}.",
+          "Overall, it leaves me with little doubt."
+        ],
+        [
+          "I have some doubt about the {referent} that follows{qualification}.",
+          "Overall, it leaves me with some doubt."
+        ]
+      ]
+    }
+  },
+  "cue_bank_sha256": "061d542fe7db680e2d475de0710184a29fba10e1bfd66014298d73e8c7b20d87",
+  "selection": [
+    {
+      "production_slot": "G0003",
+      "cohort": "development_stress",
+      "task": "summary_judgment",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "early",
+      "cue_family": "doubt",
+      "cue_referent": "research summary",
+      "include_qualifications": false,
+      "pair_presentation_order": "confident_first",
+      "source_id_sha256": "05fe4118bff4b2f406ca7f1358e67df38482c2424bf62124542a063e6d721353",
+      "original_response_sha256": "b63e218098c1e670208c96c948513fc1e47df0577da7e271ca2ef986d70db905",
+      "neutral_base_sha256": "fc72ab054d857f32c967701ebe52c01a43ef8091933c7ac473f569c7dd3aa2a4",
+      "main_offsets": [
+        0
+      ],
+      "control_offsets": [
+        0
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "fc72ab054d857f32c967701ebe52c01a43ef8091933c7ac473f569c7dd3aa2a4",
+        "length_chars": 1671,
+        "newline_count": 19,
+        "protected_ranges": [
+          {
+            "kind": "list_block",
+            "start": 400,
+            "end": 1439
+          }
+        ],
+        "protected_ranges_sha256": "62504e5ca3b10b081a0a716c71137dd992f39fde0b7b30962d9d3e97f5a2255d",
+        "protected_kind_counts": {
+          "list_block": 1
+        }
+      },
+      "control_structure": {
+        "text_sha256": "b63e218098c1e670208c96c948513fc1e47df0577da7e271ca2ef986d70db905",
+        "length_chars": 1874,
+        "newline_count": 20,
+        "protected_ranges": [
+          {
+            "kind": "list_block",
+            "start": 477,
+            "end": 1598
+          }
+        ],
+        "protected_ranges_sha256": "676df64b8d9686cf930a2c19fb1c26231d5d03169618a960572277236b301cac",
+        "protected_kind_counts": {
+          "list_block": 1
+        }
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "discuss"
+    },
+    {
+      "production_slot": "G0076",
+      "cohort": "development_stress",
+      "task": "comparison_analysis",
+      "dataset": "nvidia/HelpSteer2",
+      "topology": "early",
+      "cue_family": "confidence",
+      "cue_referent": "comparison",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "4a5da10d78a9204fafc11fa9b1d567167551796dc4c0d98fc7e39eb68cb997f9",
+      "original_response_sha256": "6d1a678bba6f2e629a003cfed00439c6fb1002e90c002dd37a764dbbcc882878",
+      "neutral_base_sha256": "2012926666228dac682e61eee375a1bee00ee07a4cf21e04a26ce0aeb9e9be70",
+      "main_offsets": [
+        0
+      ],
+      "control_offsets": [
+        0
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "2012926666228dac682e61eee375a1bee00ee07a4cf21e04a26ce0aeb9e9be70",
+        "length_chars": 1369,
+        "newline_count": 7,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "6d1a678bba6f2e629a003cfed00439c6fb1002e90c002dd37a764dbbcc882878",
+        "length_chars": 1645,
+        "newline_count": 8,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "discuss"
+    },
+    {
+      "production_slot": "G0095",
+      "cohort": "development_stress",
+      "task": "programming",
+      "dataset": "nvidia/HelpSteer2",
+      "topology": "early",
+      "cue_family": "certainty",
+      "cue_referent": "explanation",
+      "include_qualifications": false,
+      "pair_presentation_order": "confident_first",
+      "factual_validity_note": "source explanation appears technically unreliable; correctness is not a canary label",
+      "source_id_sha256": "68c882b546aa0578c64b2809b3826af839bc4b55f086b9e2811cb62eacb0b3be",
+      "original_response_sha256": "5b02ce52745ed93400320c279b1b592ee5340ac814913f7944cf138bfbf95ebd",
+      "neutral_base_sha256": "784c2ed26fd3bbf30afae56451fe5588b286df76986de89208ebf13cf013d648",
+      "main_offsets": [
+        0
+      ],
+      "control_offsets": [
+        0
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "784c2ed26fd3bbf30afae56451fe5588b286df76986de89208ebf13cf013d648",
+        "length_chars": 329,
+        "newline_count": 1,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "5b02ce52745ed93400320c279b1b592ee5340ac814913f7944cf138bfbf95ebd",
+        "length_chars": 313,
+        "newline_count": 0,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "accept"
+    },
+    {
+      "production_slot": "G0060",
+      "cohort": "fresh_diagnostic",
+      "task": "summary_judgment",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "early",
+      "cue_family": "stand",
+      "cue_referent": "summary",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "69b08c5011eddf4036b78df210a5158c4055d6161323b56309b98ec74a0e4e47",
+      "original_response_sha256": "0d8eda3b8f0926fb037102c7e6ef53c125c47f545767d3a18e8f3d4f9b758ef9",
+      "neutral_base_sha256": "6fb96221fe42572f814762a9ddbc3eaefeb16a9744ae408b4fbf1a2fe167c6f0",
+      "main_offsets": [
+        0
+      ],
+      "control_offsets": [
+        0
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "6fb96221fe42572f814762a9ddbc3eaefeb16a9744ae408b4fbf1a2fe167c6f0",
+        "length_chars": 530,
+        "newline_count": 1,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "0d8eda3b8f0926fb037102c7e6ef53c125c47f545767d3a18e8f3d4f9b758ef9",
+        "length_chars": 542,
+        "newline_count": 0,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0044",
+      "cohort": "fresh_diagnostic",
+      "task": "math_logic",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "early",
+      "cue_family": "view",
+      "cue_referent": "solution",
+      "include_qualifications": false,
+      "pair_presentation_order": "confident_first",
+      "factual_validity_note": "source answer contains incorrect mathematics; correctness is not a canary label",
+      "source_id_sha256": "685843a070ba961188cef4bbda3fe684efd88ec93e4644639ab77bea865f4b95",
+      "original_response_sha256": "8afb99aa4446a2b72ae5e52ee0ff6a294031877317edc6638290169da0a5e0bc",
+      "neutral_base_sha256": "d01b6a16f60af601beef4a54117b8e759cbf3b615afb113348901a8e73325048",
+      "main_offsets": [
+        0
+      ],
+      "control_offsets": [
+        0
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "d01b6a16f60af601beef4a54117b8e759cbf3b615afb113348901a8e73325048",
+        "length_chars": 336,
+        "newline_count": 13,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "8afb99aa4446a2b72ae5e52ee0ff6a294031877317edc6638290169da0a5e0bc",
+        "length_chars": 347,
+        "newline_count": 12,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0029",
+      "cohort": "development_stress",
+      "task": "programming",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "middle",
+      "cue_family": "certainty",
+      "cue_referent": "solution",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "02fbf6db9b65599a24fbcca1e8de96c482fc3fbef6eb3b702b640ac5ef5cedb8",
+      "original_response_sha256": "afbda6b7d55407f13696f0f5b13c7db1ceb8a4f4c182c1601dbc4149eddcb1ae",
+      "neutral_base_sha256": "e5856aed6dce33e1b31aee5536c382343d2cc494441c5a2a811d488570a0e62c",
+      "main_offsets": [
+        507
+      ],
+      "control_offsets": [
+        524
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "e5856aed6dce33e1b31aee5536c382343d2cc494441c5a2a811d488570a0e62c",
+        "length_chars": 1288,
+        "newline_count": 39,
+        "protected_ranges": [
+          {
+            "kind": "code_fence",
+            "start": 188,
+            "end": 395
+          },
+          {
+            "kind": "code_fence",
+            "start": 673,
+            "end": 1173
+          }
+        ],
+        "protected_ranges_sha256": "0e219374cf691ae2deae40dd66236d369d01c71e65cda3251717e77337a33809",
+        "protected_kind_counts": {
+          "code_fence": 2
+        }
+      },
+      "control_structure": {
+        "text_sha256": "afbda6b7d55407f13696f0f5b13c7db1ceb8a4f4c182c1601dbc4149eddcb1ae",
+        "length_chars": 1348,
+        "newline_count": 40,
+        "protected_ranges": [
+          {
+            "kind": "code_fence",
+            "start": 190,
+            "end": 397
+          },
+          {
+            "kind": "code_fence",
+            "start": 714,
+            "end": 1214
+          }
+        ],
+        "protected_ranges_sha256": "c31fd0ae2be103403d643921a85a4fb8e6e7946e887bd34f9e80d694234b051f",
+        "protected_kind_counts": {
+          "code_fence": 2
+        }
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "reject"
+    },
+    {
+      "production_slot": "G0048",
+      "cohort": "development_stress",
+      "task": "math_logic",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "middle",
+      "cue_family": "doubt",
+      "cue_referent": "interpretation",
+      "include_qualifications": true,
+      "pair_presentation_order": "confident_first",
+      "source_id_sha256": "0d04bf335f62a82a49b9f77cf1c954cb2f4094f28f92ad20456c3ed8476e4985",
+      "original_response_sha256": "f8a12685dc8edba1c188d079d851ef4cbc959549dc15c7e304f7d1072d94a4a5",
+      "neutral_base_sha256": "ae068f056022407e880c0603222428aac35f69a3d5bfbf5ac0774361dde7ecf5",
+      "main_offsets": [
+        625
+      ],
+      "control_offsets": [
+        780
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "ae068f056022407e880c0603222428aac35f69a3d5bfbf5ac0774361dde7ecf5",
+        "length_chars": 1251,
+        "newline_count": 5,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "f8a12685dc8edba1c188d079d851ef4cbc959549dc15c7e304f7d1072d94a4a5",
+        "length_chars": 1509,
+        "newline_count": 6,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "discuss"
+    },
+    {
+      "production_slot": "G0100",
+      "cohort": "development_stress",
+      "task": "math_logic",
+      "dataset": "nvidia/HelpSteer2",
+      "topology": "middle",
+      "cue_family": "stand",
+      "cue_referent": "method description",
+      "include_qualifications": true,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "09003117c7ddf0c0426fcfbd38e0c5c8eea39597f23f7f2b3e6e060389dac83a",
+      "original_response_sha256": "8a864058acb43211f70ff0c6ff197eddcb7af441dbadf13440d07a6e78c027b0",
+      "neutral_base_sha256": "c2d30bde0f157558d423e303c2f7994a549ae6725c2164e650fde81099115158",
+      "main_offsets": [
+        756
+      ],
+      "control_offsets": [
+        750
+      ],
+      "main_styles": [
+        "inline_sentence"
+      ],
+      "control_styles": [
+        "inline_sentence"
+      ],
+      "main_structure": {
+        "text_sha256": "c2d30bde0f157558d423e303c2f7994a549ae6725c2164e650fde81099115158",
+        "length_chars": 1796,
+        "newline_count": 5,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "8a864058acb43211f70ff0c6ff197eddcb7af441dbadf13440d07a6e78c027b0",
+        "length_chars": 1759,
+        "newline_count": 4,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "reject"
+    },
+    {
+      "production_slot": "G0058",
+      "cohort": "fresh_diagnostic",
+      "task": "summary_judgment",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "middle",
+      "cue_family": "confidence",
+      "cue_referent": "review",
+      "include_qualifications": true,
+      "pair_presentation_order": "confident_first",
+      "source_id_sha256": "650ec98967ad8f959ad9a224aa9d106948196548412e58257ee3a07f0c19b215",
+      "original_response_sha256": "f727e439190b4f2e0357f080ed75d09b348b9f7fb74a19aed0b88a8fd66cc675",
+      "neutral_base_sha256": "dabc451f4a9683f9d95a5356a2440e9fb91bf0746d690d57d1ad83a6e203c274",
+      "main_offsets": [
+        840
+      ],
+      "control_offsets": [
+        739
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "dabc451f4a9683f9d95a5356a2440e9fb91bf0746d690d57d1ad83a6e203c274",
+        "length_chars": 1716,
+        "newline_count": 9,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "f727e439190b4f2e0357f080ed75d09b348b9f7fb74a19aed0b88a8fd66cc675",
+        "length_chars": 1494,
+        "newline_count": 10,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0065",
+      "cohort": "fresh_diagnostic",
+      "task": "programming",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "middle",
+      "cue_family": "view",
+      "cue_referent": "solution",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "d6e89c77785dfb73a59b4cbb4a8f112b92d037b678ce72c0a5d90c63cde38dda",
+      "original_response_sha256": "48c8bb964378a91e582419e104c9d8c71e71ff8e905f84ff6743fe9e64048e2f",
+      "neutral_base_sha256": "6f4600363aed2c39f9ec4e37ccb91d8289a1028c5de88aadccbf5ae3fc7ae0a2",
+      "main_offsets": [
+        357
+      ],
+      "control_offsets": [
+        315
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "6f4600363aed2c39f9ec4e37ccb91d8289a1028c5de88aadccbf5ae3fc7ae0a2",
+        "length_chars": 795,
+        "newline_count": 11,
+        "protected_ranges": [
+          {
+            "kind": "code_fence",
+            "start": 190,
+            "end": 357
+          }
+        ],
+        "protected_ranges_sha256": "242d5bd7b7960e14075185ccf7b22729041bbc4cc23f7489814060df155a7811",
+        "protected_kind_counts": {
+          "code_fence": 1
+        }
+      },
+      "control_structure": {
+        "text_sha256": "48c8bb964378a91e582419e104c9d8c71e71ff8e905f84ff6743fe9e64048e2f",
+        "length_chars": 659,
+        "newline_count": 12,
+        "protected_ranges": [
+          {
+            "kind": "code_fence",
+            "start": 147,
+            "end": 314
+          }
+        ],
+        "protected_ranges_sha256": "5328004af4261ad8d5816b1412e0bbf5604a2d5a2d754d1e24757002e0989433",
+        "protected_kind_counts": {
+          "code_fence": 1
+        }
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0021",
+      "cohort": "development_stress",
+      "task": "math_logic",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "late",
+      "cue_family": "view",
+      "cue_referent": "calculation",
+      "include_qualifications": false,
+      "pair_presentation_order": "confident_first",
+      "factual_validity_note": "source answer contains incorrect mathematics; correctness is not a canary label",
+      "source_id_sha256": "a81f3afebd10e0c13899cd0503bb2ff926500269a8b653f3738d31dfcf6bedc1",
+      "original_response_sha256": "2a7a4eca786a9580176a6c2aed559bcdcd1cccf7c099e1a9107f6649fee26f58",
+      "neutral_base_sha256": "2b952731a4f26063ac048179290b4260f335431a3fbe2e612be87c1d480442e0",
+      "main_offsets": [
+        1064
+      ],
+      "control_offsets": [
+        928
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "2b952731a4f26063ac048179290b4260f335431a3fbe2e612be87c1d480442e0",
+        "length_chars": 1137,
+        "newline_count": 21,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "2a7a4eca786a9580176a6c2aed559bcdcd1cccf7c099e1a9107f6649fee26f58",
+        "length_chars": 1009,
+        "newline_count": 26,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "accept"
+    },
+    {
+      "production_slot": "G0039",
+      "cohort": "development_stress",
+      "task": "factual_explanation",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "late",
+      "cue_family": "confidence",
+      "cue_referent": "casting assessment",
+      "include_qualifications": true,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "0622234e9de91cc1018758cfc3063810408a291af60aeee31ffc3ff93ae37fa6",
+      "original_response_sha256": "884eca4e0cbac3e02815350064d6879a89af120dc4eb4b9d332b06cfe7ee46bc",
+      "neutral_base_sha256": "d527d350560798a856caef75d37a52749f3088998ff8382c074f541e8648d45f",
+      "main_offsets": [
+        932
+      ],
+      "control_offsets": [
+        1010
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "d527d350560798a856caef75d37a52749f3088998ff8382c074f541e8648d45f",
+        "length_chars": 1099,
+        "newline_count": 7,
+        "protected_ranges": [
+          {
+            "kind": "list_block",
+            "start": 242,
+            "end": 932
+          }
+        ],
+        "protected_ranges_sha256": "85df7a87de2293507442d099dfcb986b19e6c0d1acb10e900b7722adfd9908b1",
+        "protected_kind_counts": {
+          "list_block": 1
+        }
+      },
+      "control_structure": {
+        "text_sha256": "884eca4e0cbac3e02815350064d6879a89af120dc4eb4b9d332b06cfe7ee46bc",
+        "length_chars": 1138,
+        "newline_count": 8,
+        "protected_ranges": [
+          {
+            "kind": "list_block",
+            "start": 272,
+            "end": 1010
+          }
+        ],
+        "protected_ranges_sha256": "4996c96adacbc3c2606f7d75c54c09ac75efa8892f39388b84526d24c29ff323",
+        "protected_kind_counts": {
+          "list_block": 1
+        }
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "accept"
+    },
+    {
+      "production_slot": "G0085",
+      "cohort": "fresh_diagnostic",
+      "task": "factual_explanation",
+      "dataset": "nvidia/HelpSteer2",
+      "topology": "late",
+      "cue_family": "certainty",
+      "cue_referent": "explanation",
+      "include_qualifications": false,
+      "pair_presentation_order": "confident_first",
+      "factual_validity_note": "source explanation appears technically unreliable; correctness is not a canary label",
+      "source_id_sha256": "fc01636e2bd690c26075e3fd69d3b7009ef8043326fe404117ec2094d4c464eb",
+      "original_response_sha256": "bb50b5d847d484cc2cb6890e3bc067c594bfca13889e2e35d22e61fd822450e1",
+      "neutral_base_sha256": "dc97f21d2fab7b7aebecb41bcb9892f0a0b3f13014dddae22fae10bfa80ba1a3",
+      "main_offsets": [
+        1133
+      ],
+      "control_offsets": [
+        1164
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "inline_sentence"
+      ],
+      "main_structure": {
+        "text_sha256": "dc97f21d2fab7b7aebecb41bcb9892f0a0b3f13014dddae22fae10bfa80ba1a3",
+        "length_chars": 1233,
+        "newline_count": 5,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "bb50b5d847d484cc2cb6890e3bc067c594bfca13889e2e35d22e61fd822450e1",
+        "length_chars": 1266,
+        "newline_count": 4,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0026",
+      "cohort": "fresh_diagnostic",
+      "task": "comparison_analysis",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "late",
+      "cue_family": "stand",
+      "cue_referent": "analysis",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "c52bae4cbff6b480368353f8823ecbb4ed5bf38b479cfdc3737d6e224f6e630a",
+      "original_response_sha256": "abaa9cf60638fcda976c56eecacca6d5b9592d37850e1c498f71b2d22000db30",
+      "neutral_base_sha256": "3092009271618cfc4c299d95d455ee84723b40609fd2e7eb9503d689fc4fa0fa",
+      "main_offsets": [
+        1717
+      ],
+      "control_offsets": [
+        1810
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "inline_sentence"
+      ],
+      "main_structure": {
+        "text_sha256": "3092009271618cfc4c299d95d455ee84723b40609fd2e7eb9503d689fc4fa0fa",
+        "length_chars": 1845,
+        "newline_count": 3,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "abaa9cf60638fcda976c56eecacca6d5b9592d37850e1c498f71b2d22000db30",
+        "length_chars": 2020,
+        "newline_count": 2,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0094",
+      "cohort": "fresh_diagnostic",
+      "task": "comparison_analysis",
+      "dataset": "nvidia/HelpSteer2",
+      "topology": "late",
+      "cue_family": "doubt",
+      "cue_referent": "comparison",
+      "include_qualifications": true,
+      "pair_presentation_order": "confident_first",
+      "source_id_sha256": "c6d20d622ebb8b76719f0ec2ca9db6ff2fe3df2de8720798127bc8cee04671d0",
+      "original_response_sha256": "f34a50fcf2b14da6cd874ce771407737b6b23fae74a5c308afdb94c4b1dd94ac",
+      "neutral_base_sha256": "f313c6a92dc4ad3bc2f8accd62bb97f18c8d0cfdf7142c55f70d1df18d55929f",
+      "main_offsets": [
+        1874
+      ],
+      "control_offsets": [
+        1981
+      ],
+      "main_styles": [
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "f313c6a92dc4ad3bc2f8accd62bb97f18c8d0cfdf7142c55f70d1df18d55929f",
+        "length_chars": 2304,
+        "newline_count": 7,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "f34a50fcf2b14da6cd874ce771407737b6b23fae74a5c308afdb94c4b1dd94ac",
+        "length_chars": 2508,
+        "newline_count": 8,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0040",
+      "cohort": "development_stress",
+      "task": "factual_explanation",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "distributed",
+      "cue_family": "doubt",
+      "cue_referent": "account",
+      "include_qualifications": true,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "f728f05e67fd73ccacf2ac6264ff34fe29849136dd44cb25c16869f1c3d2b0e9",
+      "original_response_sha256": "7238aabd3a00303b79d308e682cf97a9ef9c829237b43e9b7d406537c51999de",
+      "neutral_base_sha256": "f30f2a387510e17b03b0d8c8709f9a1b7c4486c68228ce5bc9f07fce74e8fed7",
+      "main_offsets": [
+        0,
+        1112
+      ],
+      "control_offsets": [
+        0,
+        1196
+      ],
+      "main_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "f30f2a387510e17b03b0d8c8709f9a1b7c4486c68228ce5bc9f07fce74e8fed7",
+        "length_chars": 1440,
+        "newline_count": 4,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "7238aabd3a00303b79d308e682cf97a9ef9c829237b43e9b7d406537c51999de",
+        "length_chars": 1492,
+        "newline_count": 6,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "reject"
+    },
+    {
+      "production_slot": "G0049",
+      "cohort": "development_stress",
+      "task": "comparison_analysis",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "distributed",
+      "cue_family": "confidence",
+      "cue_referent": "answer",
+      "include_qualifications": false,
+      "pair_presentation_order": "confident_first",
+      "source_id_sha256": "dd3675cbe0012e3c584dbb627adfbbe2702f1b5cf30c15ea64469f9543582db7",
+      "original_response_sha256": "b403f34f4044125aa6de0778d0cce1756fe63d273ebd1cd8ee02c2298d5fffef",
+      "neutral_base_sha256": "39f954a3fd249c9b51428bc75e3f7748ddf580106419dede25caf263203950f5",
+      "main_offsets": [
+        0,
+        383
+      ],
+      "control_offsets": [
+        0,
+        247
+      ],
+      "main_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph",
+        "inline_sentence"
+      ],
+      "main_structure": {
+        "text_sha256": "39f954a3fd249c9b51428bc75e3f7748ddf580106419dede25caf263203950f5",
+        "length_chars": 462,
+        "newline_count": 2,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "b403f34f4044125aa6de0778d0cce1756fe63d273ebd1cd8ee02c2298d5fffef",
+        "length_chars": 558,
+        "newline_count": 0,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": "accept"
+    },
+    {
+      "production_slot": "G0035",
+      "cohort": "fresh_diagnostic",
+      "task": "summary_judgment",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "distributed",
+      "cue_family": "certainty",
+      "cue_referent": "summary",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "f668be337361bd35d9bc04d644c79f7f86666dc38088fdc44c059ce788e89d63",
+      "original_response_sha256": "e608df30b785131e4281b03b5c2a49e10b2ea374ab20cf0b0a80bfae19cce617",
+      "neutral_base_sha256": "a35cd87930fbc51fc4a2540c1dddb34d19ea79cbc5dd09bfe6a334ca7786bc97",
+      "main_offsets": [
+        0,
+        951
+      ],
+      "control_offsets": [
+        0,
+        1007
+      ],
+      "main_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "a35cd87930fbc51fc4a2540c1dddb34d19ea79cbc5dd09bfe6a334ca7786bc97",
+        "length_chars": 1274,
+        "newline_count": 3,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "control_structure": {
+        "text_sha256": "e608df30b785131e4281b03b5c2a49e10b2ea374ab20cf0b0a80bfae19cce617",
+        "length_chars": 1311,
+        "newline_count": 4,
+        "protected_ranges": [],
+        "protected_ranges_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "protected_kind_counts": {}
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0052",
+      "cohort": "fresh_diagnostic",
+      "task": "factual_explanation",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "distributed",
+      "cue_family": "stand",
+      "cue_referent": "medical overview",
+      "include_qualifications": true,
+      "pair_presentation_order": "confident_first",
+      "source_id_sha256": "9bb9505d7276ee856915374f611a6eb2c5fe474b7bda74b2e594858f2090213d",
+      "original_response_sha256": "3627ba12e8da7da46b07509c37fb4669711426d5c03f058206065331f32cbd9e",
+      "neutral_base_sha256": "a272e599d72579c54f0cb323108fc4db3df5316dffb9b1c6840de44771aec305",
+      "main_offsets": [
+        0,
+        2414
+      ],
+      "control_offsets": [
+        0,
+        2064
+      ],
+      "main_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "a272e599d72579c54f0cb323108fc4db3df5316dffb9b1c6840de44771aec305",
+        "length_chars": 2575,
+        "newline_count": 12,
+        "protected_ranges": [
+          {
+            "kind": "list_block",
+            "start": 230,
+            "end": 2414
+          }
+        ],
+        "protected_ranges_sha256": "1b7205b1da2b4c43878e89cbd8b860399116be037f84ca1f2371ec3699bc6e63",
+        "protected_kind_counts": {
+          "list_block": 1
+        }
+      },
+      "control_structure": {
+        "text_sha256": "3627ba12e8da7da46b07509c37fb4669711426d5c03f058206065331f32cbd9e",
+        "length_chars": 2199,
+        "newline_count": 14,
+        "protected_ranges": [
+          {
+            "kind": "list_block",
+            "start": 201,
+            "end": 2064
+          }
+        ],
+        "protected_ranges_sha256": "28d27e86565afc77b6fab3235d48e0e501dd9244e59aef51299d6ffdd78c21a4",
+        "protected_kind_counts": {
+          "list_block": 1
+        }
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    },
+    {
+      "production_slot": "G0043",
+      "cohort": "fresh_diagnostic",
+      "task": "programming",
+      "dataset": "allenai/WildChat-1M",
+      "topology": "distributed",
+      "cue_family": "view",
+      "cue_referent": "solution",
+      "include_qualifications": false,
+      "pair_presentation_order": "hedged_first",
+      "source_id_sha256": "b218afe6afcd4600d6169d229b9d26c0939adeff65c945622424b71462bf1a57",
+      "original_response_sha256": "ec36656782f55f94555edcd928e1f93e16c9e66ab63275eab4543d80e5249ade",
+      "neutral_base_sha256": "dde5e55f2ee7ced683f7d6c0dade03aa10cf04285fca17382bd48fc6d269c452",
+      "main_offsets": [
+        0,
+        914
+      ],
+      "control_offsets": [
+        0,
+        811
+      ],
+      "main_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "control_styles": [
+        "paragraph",
+        "paragraph"
+      ],
+      "main_structure": {
+        "text_sha256": "dde5e55f2ee7ced683f7d6c0dade03aa10cf04285fca17382bd48fc6d269c452",
+        "length_chars": 914,
+        "newline_count": 18,
+        "protected_ranges": [
+          {
+            "kind": "code_fence",
+            "start": 193,
+            "end": 234
+          },
+          {
+            "kind": "code_fence",
+            "start": 344,
+            "end": 414
+          },
+          {
+            "kind": "code_fence",
+            "start": 812,
+            "end": 914
+          }
+        ],
+        "protected_ranges_sha256": "e7cc714c13b31e3f6bc8620a8a99e250d1d8f9b1f4e78b8581dfb82963468b65",
+        "protected_kind_counts": {
+          "code_fence": 3
+        }
+      },
+      "control_structure": {
+        "text_sha256": "ec36656782f55f94555edcd928e1f93e16c9e66ab63275eab4543d80e5249ade",
+        "length_chars": 811,
+        "newline_count": 20,
+        "protected_ranges": [
+          {
+            "kind": "code_fence",
+            "start": 227,
+            "end": 268
+          },
+          {
+            "kind": "code_fence",
+            "start": 357,
+            "end": 427
+          },
+          {
+            "kind": "code_fence",
+            "start": 709,
+            "end": 811
+          }
+        ],
+        "protected_ranges_sha256": "cde29f69ce9e967346449a624c98c4231ee83e34fddebc01f0867db67d3c5d3a",
+        "protected_kind_counts": {
+          "code_fence": 3
+        }
+      },
+      "eligibility": "eligible",
+      "eligibility_reason_codes": [],
+      "prior_diagnostic_decision": null
+    }
+  ],
+  "outputs": {
+    "private_dir": "private_data/genre_aware_canary_v38",
+    "public_manifest": "manifests/genre_aware_canary_v38.json"
+  },
+  "selection_sha256": "913239715e101e4eda9d8b09453d2d3c5c0b3d0968be2f5e11bd993ea5397833"
+}

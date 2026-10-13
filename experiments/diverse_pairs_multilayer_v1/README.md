@@ -96,7 +96,7 @@ flowchart LR
     D --> E["Mechanical checks<br/>100 / 100"]
     E --> F["Diagnostic review<br/>24 selected pairs"]
     F --> G["Naturalness / placement<br/>gate did not pass"]
-    G --> H["Genre-aware 20-pair canary<br/>next"]
+    G --> H["v3.8 canary prepared<br/>human review pending"]
 ```
 
 The [checkpoint report](reports/CHAT_CHECKPOINT_100.md) gives the complete
@@ -129,16 +129,23 @@ exact source-review counts, initial and repaired results, and decision boundary.
 
 ## Next step
 
-1. Keep the neutral templates, add source-eligibility rules, and replace the
-   fixed global cue placement with genre-aware rendering.
-2. Build a 20-pair canary across the affected genres and review all 20 blindly.
-3. Only if that canary passes, repair and re-render the 100 pairs and repeat the
+1. Complete and export the blind human review of the prepared 20-pair main and
+   cue-only packets.
+2. Import both reviews and apply the frozen 20/20 gate without inspecting
+   activations.
+3. Only if both canary packets pass, repair and re-render the 100 pairs and repeat the
    full review gate.
 4. Then freeze the cue-only baseline and leave-one-cue-family-out test, extract
    every layer once, and compare layer 14, all individual layers, and the fixed
    equal-layer ensemble.
 5. Expand to 300 and 700 sources only if the repaired 100-source result
    justifies it.
+
+The prepared v3.8 packet removes the two repeatedly used v3.7 sentences, but it
+is not activation-ready. It has 18/20 unique cue-pair renderings, yet all pairs
+still use one of five one-token polarity swaps and one qualification phrase
+appears in 7/20. The blind review, cue-only control, later cue-family holdout,
+and broader cue diversification are therefore required before probe scoring.
 
 The locked 50-pair challenge is already score-exposed and must not be edited or
 tuned against. No 1,000-pair generation, SDT loss training, activation steering,
@@ -156,6 +163,7 @@ remain under ignored `private_data/`.
 | Data-construction decision | [reports/DATA_CONSTRUCTION_GATE.md](reports/DATA_CONSTRUCTION_GATE.md) |
 | 100-source construction checkpoint | [reports/CHAT_CHECKPOINT_100.md](reports/CHAT_CHECKPOINT_100.md) |
 | 100-source review gate | [reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) |
+| Prepared v3.8 blind-review canary | [V38_GENRE_AWARE_CANARY.md](V38_GENRE_AWARE_CANARY.md) |
 | Current status | [STATUS.md](STATUS.md) |
 | Next decision | [NEXT_DECISION.md](NEXT_DECISION.md) |
 | Research definition and method | [PROTOCOL.md](PROTOCOL.md) |

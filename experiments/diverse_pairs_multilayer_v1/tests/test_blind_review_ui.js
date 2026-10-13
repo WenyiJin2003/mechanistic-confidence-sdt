@@ -36,7 +36,14 @@ const {chromium} = require(path.join(process.argv[4], 'playwright'));
     await page.locator('.card:visible [data-field=certainty_contrast]').selectOption('a_more_certain');
     await page.locator('.card:visible [data-field=naturalness]').selectOption('both_natural');
     await page.locator('.card:visible [data-field=cue_scope]').selectOption('both_global');
-    await page.locator('.card:visible [data-field=decision]').selectOption('accept');
+    const structureField = page.locator('.card:visible [data-field=structure_format]');
+    if (await structureField.count()) {
+      await page.locator('.card:visible [data-field=decision]').selectOption('accept');
+      assert.match(await page.locator('#progress').textContent(), new RegExp(`0 / ${expected}$`));
+      await structureField.selectOption('both_preserved');
+    } else {
+      await page.locator('.card:visible [data-field=decision]').selectOption('accept');
+    }
     assert.match(await page.locator('#progress').textContent(), new RegExp(`1 / ${expected}$`));
     await page.reload();
     assert.equal(

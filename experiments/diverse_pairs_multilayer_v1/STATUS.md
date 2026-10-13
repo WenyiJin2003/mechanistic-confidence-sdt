@@ -35,12 +35,12 @@ formatting confounds, so probe scoring is paused.
 | v3.7 two-stage canary | Retained for final review | 10/10 mechanical and independent model-assisted semantic passes after five record-level repairs |
 | GPT-5.6 ordinary-Chat transport canary | Mechanical gate complete | 9/10 direct; 10/10 after one targeted numeric-preservation repair |
 | Combined retained canaries | Model-assisted gates complete | 20/20 mechanical and semantic passes; not human-certified |
-| Historical retained-canary human-review packet | Ready | 20 earlier pairs; reproducible A/B order, balanced 5/5 within each cohort; judgments pending |
+| Historical retained-canary human-review packet | Preserved; migration required before use | 20 earlier pairs retained only for provenance; its pre-binding manifest is rejected by the current importer and is not used by v3.8 |
 | 100-source ordinary-Chat checkpoint | **Mechanically complete** | **100/100 final pass; 81 without recorded repair; 19 unique repaired records** |
 | Local NLI triage | Complete | 506 bidirectional exhaustive-chunk judgments; 14/100 flagged; maximum 440/512 tokens with no truncation; triage only |
 | Label-blind diagnostic review | **Complete; rendering gate did not pass** | **24 selected pairs: content preserved 24/24, clear contrast 24/24, intended A/B direction not recorded or verified, both natural 5/24; 5 accept, 4 discuss, 15 reject** |
 | Full human certification | Not completed | Diagnostic review was model-assisted and the selected cases were nonrepresentative |
-| Genre-aware 20-pair canary | Next | Add source eligibility and genre-specific cue placement; review all 20 blindly |
+| Genre-aware 20-pair canary | Prepared; human review pending | 20 blinded main pairs plus a 20-pair cue-only control; limited to eligible prose, lists, and fenced code |
 | Cue-only baseline and leave-one-cue-family-out test | Not frozen | Must be specified before probe scoring |
 | 100-source layer comparison | Not started | Current rendering will not be scored; conditional on successful canary, repair and repeated review |
 | 300/700-source expansion | Not started | Conditional on a successful canary and repaired 100-source result |
@@ -94,11 +94,11 @@ aggregate results and decision.
 
 ## Immediate action
 
-1. Retain the neutral templates and define source eligibility plus genre-aware
-   cue placement.
-2. Build a 20-pair canary across the affected genres and review every pair
-   blindly.
-3. Only if the canary passes, repair and re-render the 100 pairs, repeat the
+1. Complete and export the blind human review of the prepared 20-pair main and
+   cue-only packets.
+2. Import both reviews and apply the frozen 20/20 gate without inspecting
+   activations.
+3. Only if both canary packets pass, repair and re-render the 100 pairs, repeat the
    full review gate, and freeze the shortcut-control protocol.
 4. Only then extract all layers once and report layer 14, every layer, and the
    fixed ensemble.

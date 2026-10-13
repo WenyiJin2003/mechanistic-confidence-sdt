@@ -24,11 +24,17 @@ placement and genre confounds.
 
 The diagnostic deliberately reviewed all 14 local-NLI flags plus a task- and
 dataset-balanced diagnostic sample of 10 unflagged pairs. It is neither a
-population failure-rate estimate nor human certification. The immediate next
-step is therefore a fully reviewed 20-pair canary with source eligibility and
-genre-aware cue placement. We will not score probe layers or train a loss on
-the current 100 pairs. The target name
+population failure-rate estimate nor human certification. The 20-pair
+genre-aware main and cue-only review packets are now prepared. The immediate
+next step is to complete and import their blind human review. We will not score
+probe layers or train a loss on the current 100 pairs. The target name
 stays narrow: **expressed certainty about preserved answer content**.
+
+The canary removes the two repeatedly used v3.7 sentences, but it is still a
+quality gate rather than final data: 18/20 cue-pair renderings are unique, while
+five one-token polarity swaps and one repeated qualification phrase remain.
+Those lexical shortcuts require the cue-only control, later cue-family holdout,
+and broader cue diversification before any new probe claim.
 
 [Current result](experiments/cue_holdout_challenge_v1/RESULTS.md) ·
 [Layer plot](experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png) ·
@@ -100,7 +106,7 @@ reproducibility. The research sequence is:
 | 7a | Diverse Paired Certainty + Multi-Layer | Is expressed certainty decodable across diverse content? | Hidden states reached 50/50, but text also reached 50/50; an independent challenge was required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
 | 7b | Cue/recipe-holdout transfer | Does the frozen certainty readout transfer to new sources and cue constructions beyond text, likelihood and length controls? | Layer 14: 47/50; ensemble: 48/50; TF-IDF: 34/50; likelihood: 30/50; length: 25/50 | [Result](experiments/cue_holdout_challenge_v1/RESULTS.md) | Development-only evaluation complete |
 | **Current** | **100-source review gate** | **Are the mechanically valid pairs natural enough for activation scoring?** | **No: content was preserved and a clear certainty contrast was judged in 24/24 diagnostic cases, but A/B direction was not verified and both versions were clearly natural in only 5/24** | **[Review gate](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md)** | **Current rendering not activation-ready** |
-| **Next** | **Genre-aware 20-pair canary** | **Can source eligibility and genre-specific cue placement remove the identified confounds?** | **Not yet tested** | **[Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **Full blind review required** |
+| **Current** | **Genre-aware 20-pair canary** | **Can source eligibility and genre-specific cue placement remove the identified confounds?** | **Main and cue-only packets are prepared; no human judgment has been entered** | **[Frozen protocol](experiments/diverse_pairs_multilayer_v1/V38_GENRE_AWARE_CANARY.md)** | **Blind human review pending** |
 | Later | Repaired 100-source all-layer comparison | Does the signal survive review, cue-only controls, cue-family holdout, and comparison across every layer? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md#decision) | Conditional on the canary and repeated review gate |
 | Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md#decision) | Conditional on the repaired 100-source result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
@@ -115,7 +121,7 @@ flowchart LR
     E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
     H --> X["100-source construction<br/>mechanically complete"]
     X --> R["Diagnostic review gate<br/>naturalness failed"]
-    R --> K["Genre-aware 20-pair<br/>fully reviewed canary"]
+    R --> K["Genre-aware 20-pair<br/>review packets prepared"]
     K --> M["Repair 100 + repeat review<br/>freeze shortcut controls"]
     M --> Y["All-layer comparison<br/>only after gates pass"]
     Y --> Z["Conditional 300 / 700<br/>expansion"]
