@@ -1,0 +1,38 @@
+{
+  "protocol_version": "gpt56-ordinary-chat-neutral-paraphrase-canary-v1",
+  "date": "2026-10-13",
+  "purpose": "Test ordinary Chat as a lower-Work-quota transport for the frozen v3.7 neutral-paraphrase stage.",
+  "chat_surface": "ordinary_chat",
+  "model_family_requested": "GPT-5.6",
+  "exact_model_slug": "unavailable_from_thread_interface",
+  "reasoning_setting": "unavailable_from_thread_interface",
+  "source_protocol": "claude-two-stage-paraphrase-v3.7",
+  "source_count": 10,
+  "source_ids_sha256": "7f99bdba16b5e422a1f7c213745b839b593a250024cafcbae7c5f943351d4ab4",
+  "initial_output": {
+    "valid_json": true,
+    "complete_records": 10,
+    "not_applicable": 0,
+    "mechanically_accepted": 9,
+    "mechanically_failed": 1,
+    "failure": "One response repeated the protected numeric phrase Article 5 once beyond the source count."
+  },
+  "targeted_repair": {
+    "records_requested": 1,
+    "records_returned": 1,
+    "mechanically_accepted_after_repair": 10,
+    "mechanically_failed_after_repair": 0
+  },
+  "work_codex_weekly_used_percent_before": 1,
+  "work_codex_weekly_used_percent_after": 1,
+  "quota_note": "No change was visible at whole-percentage resolution; this is not proof of zero underlying usage.",
+  "private_artifacts": {
+    "raw_sha256": "e5cabc7c778d98d3ca8342b0361c6e37bf3dfe0a832468714279477682bdc811",
+    "repair_01_sha256": "6002730c40f985afd30b48102da3b3fb94c953597c02f163360dc68179ccfdd1",
+    "final_sha256": "95ecb3f660252fe14455f95c2c15e76df61a169c9a8185e6ffe65b5e31dae2c2"
+  },
+  "contains_source_or_response_text": false,
+  "semantic_equivalence_review": "pending",
+  "human_review": "pending",
+  "decision": "Transport and mechanical canary passed after one targeted repair. Do not treat this as authorization for an unreviewed 1000-source run."
+}
