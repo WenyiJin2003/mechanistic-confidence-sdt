@@ -19,12 +19,15 @@ ordinary ChatGPT chat on the same score-exposed challenge sources. It preserves
 the exact 5 × 5 × 2 allocation and 25/25 length-direction balance. After eighteen
 unique pairs received targeted full-pair regeneration across structural and independent
 pre-screen rounds, all 50 pass the mechanical validator and
-shortcut screen. Human review is pending; the exact executed Chat model slug
-was not exposed. No activations were inspected, so this is not an independent
-probe test and does not change the reported probe result. The next gate is blind
-human review of this packet; if accepted, the recipe should be applied to fresh,
-unscored sources before any new evaluation. No language-model training or
-steering has been run. See the
+shortcut screen. On 13 October 2026, the project researcher inspected the blind
+packet and judged it broadly acceptable. This was a single-reviewer qualitative
+screen, without a structured row-level export or inter-reviewer agreement. The
+recipe is provisionally frozen and the project is paused for advisor review.
+The exact executed Chat model slug was not exposed. No activations were
+inspected, so this is not an independent probe test and does not change the
+reported probe result. If continuation is agreed, the next gate is to apply the
+frozen recipe to fresh, unscored sources and repeat review before any new
+evaluation. No language-model training or steering has been run. See the
 [construction gate](../../experiments/diverse_pairs_multilayer_v1/reports/DATA_CONSTRUCTION_GATE.md),
 [probe result](../../experiments/cue_holdout_challenge_v1/RESULTS.md),
 [direct-pair construction report](../../experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md), and

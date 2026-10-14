@@ -37,9 +37,11 @@ for provenance, but human review of the v3.8 packets should not continue.
 ordinary ChatGPT chat produced 50 full confident/hesitant pairs on the same
 score-exposed challenge sources. The set retains the 5 × 5 × 2 grid and 25/25
 length-direction balance; all 50 pass the mechanical and shortcut screens after
-eighteen unique pairs received targeted full-pair regeneration. Human review is pending, and the exact
-executed Chat model slug was not exposed. This is provider and recipe QA, not a
-new probe evaluation. See the
+eighteen unique pairs received targeted full-pair regeneration. The project
+researcher judged the blind packet broadly acceptable, and the recipe is
+provisionally frozen while the next experiment is discussed with the advisor.
+The exact executed Chat model slug was not exposed. This is provider and recipe
+QA, not a new probe evaluation. See the
 [construction report](../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md).
 
 [Challenge result](../cue_holdout_challenge_v1/RESULTS.md) ·
@@ -115,8 +117,9 @@ flowchart LR
     F --> G["Naturalness / placement<br/>gate did not pass"]
     G --> H["v3.8 shared-base canary<br/>rejected as main data"]
     H --> I["50 direct full-pair rewrites<br/>automated gates passed"]
-    I --> J["Human blind review<br/>pending"]
-    J --> K["Freeze recipe; apply to<br/>fresh unscored sources"]
+    I --> J["Single-researcher screen<br/>broadly acceptable"]
+    J --> K["Advisor review<br/>current pause point"]
+    K --> L["Conditional fresh<br/>unscored sources"]
 ```
 
 The [checkpoint report](reports/CHAT_CHECKPOINT_100.md) gives the complete
@@ -151,12 +154,11 @@ exact source-review counts, initial and repaired results, and decision boundary.
 ## Next step
 
 1. Keep v3.8 only as a frozen cue-only diagnostic/control.
-2. Complete blind human review of the 50 direct full-pair rewrites for content
-   equivalence, intended direction, naturalness, cue scope, formatting, and
-   distributed rewriting.
-3. If the packet passes, freeze the direct-rewrite recipe and apply it to fresh,
-   unscored sources before making any new probe claim.
-4. Repeat the complete mechanical and human review gates on that unscored set.
+2. Record the single-researcher judgment as broadly acceptable, not as
+   independent human certification.
+3. Pause for advisor review of the evidence and proposed fresh test.
+4. If continuation is agreed, apply the provisionally frozen recipe to fresh,
+   unscored sources and repeat the complete mechanical and human review gates.
 5. Then freeze the cue-only baseline and leave-one-cue-family-out test, extract
    every layer once, and compare layer 14, all individual layers, and the fixed
    equal-layer ensemble.

@@ -100,9 +100,12 @@ contain code, hashes, aggregate coverage and aggregate results only.
 
 An ordinary ChatGPT chat has produced a separate 50-pair direct-rewrite packet
 using these same, already score-exposed sources. All 50 pass the mechanical and
-shortcut screens, while blind human review remains pending. No activations were
-inspected. This follow-up evaluates the rewrite workflow only and does not alter
-the frozen challenge result or provide an independent probe test. See the
+shortcut screens. On 13 October 2026, the project researcher judged the blind
+packet broadly acceptable. The recipe is provisionally frozen while the next
+experiment is discussed with the advisor. This one-reviewer screen is not
+independent human certification. No activations were inspected. This follow-up
+evaluates the rewrite workflow only and does not alter the frozen challenge
+result or provide an independent probe test. See the
 [construction report](CHAT_PROVIDER_REPLICATION_50.md).
 
 ## Current status

@@ -1,10 +1,12 @@
-# Next Decision: Human-Review Direct Pairs Before New Probe Scoring
+# Next Decision: Advisor Review Before a Fresh Unscored Test
 
 > **Current status (2026-10-13):** The frozen v3.8 shared-base canary remains
 > rejected as main data. A replacement 50-pair direct-rewrite run now passes
-> the automated construction gates; blind human review is pending. These are
-> the already score-exposed challenge sources, so the packet is provider and
-> recipe QA rather than a new probe evaluation. See
+> the automated construction gates and was judged broadly acceptable in a
+> single-researcher blind screen. The recipe is provisionally frozen, and work
+> is paused for advisor review. These are the already score-exposed challenge
+> sources, so the packet is provider and recipe QA rather than a new probe
+> evaluation. See
 > [the construction report](../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md).
 
 ## Decision
@@ -16,7 +18,8 @@ confounds. V3.8 changed cue placement but retained a shared neutral base, so it
 did not test natural full-response rewriting. The next experiment is a small,
 fully reviewed direct-rewrite recipe in which both pair members are directly
 and completely rewritten from the same source. The 50-pair provider run now
-passes automated checks; human review is the remaining gate.
+passes automated checks and the first qualitative screen. The immediate
+decision is whether to invest in one fresh, unscored evaluation.
 
 ## What remains established
 
@@ -72,12 +75,13 @@ fluency or content preservation cannot repair that scientific mismatch.
 
 1. **Retain v3.8 only as a diagnostic/control.** Do not continue its human
    review or treat it as main data.
-2. **Human-review the completed 50-pair direct-rewrite packet.** Report content
-   preservation, intended A/B-label direction, naturalness, cue scope,
-   formatting, distributed rewriting, and accept/discuss/reject decisions.
-3. **If it passes, freeze the source-eligibility and rewrite recipe.** The
-   current sources are score-exposed and cannot become a new test set.
-4. **Apply the frozen recipe to fresh, unscored sources.** Repeat the complete
+2. **Record the current screen without overstating it.** The project researcher
+   judged the packet broadly acceptable, but no structured row-level export or
+   inter-reviewer agreement is available.
+3. **Review the evidence and proposed test with the advisor.** No new generation
+   or activation scoring begins before this discussion.
+4. **If continuation is agreed, apply the provisionally frozen recipe to fresh,
+   unscored sources.** Repeat the complete
    mechanical and blind human review gates before inspecting activations.
 5. **Then freeze shortcut controls and score once.** Predefine the matched
    cue-only baseline and leave-one-cue-family-out evaluation; cache all hidden

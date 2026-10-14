@@ -32,8 +32,10 @@ diagnostic/control. Human review of the v3.8 packets should stop.
 gates.** It uses the same score-exposed challenge sources, preserves the exact
 5 × 5 × 2 grid and 25/25 length-direction balance, and reaches 50/50 mechanical
 passes plus 50/50 shortcut-screen passes after eighteen unique pairs received targeted full-pair
-regenerations. Human review is pending. No activations were inspected, so this
-does not change the probe result or constitute an independent test. See the
+regenerations. The project researcher judged the blind packet broadly
+acceptable. The recipe is provisionally frozen and work is paused for advisor
+review. No activations were inspected, so this does not change the probe result
+or constitute an independent test. See the
 [construction report](../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md).
 
 | Item | Status | Result |
@@ -55,7 +57,8 @@ does not change the probe result or constitute an independent test. See the
 | Label-blind diagnostic review | **Complete; rendering gate did not pass** | **24 selected pairs: content preserved 24/24, clear contrast 24/24, intended A/B direction not recorded or verified, both natural 5/24; 5 accept, 4 discuss, 15 reject** |
 | Full human certification | Not completed | Diagnostic review was model-assisted and the selected cases were nonrepresentative |
 | v3.8 genre-aware canary | **Rejected as main data; preserve as control/provenance** | The 20 main pairs have 25 differing Qwen-token positions, measured against 5,102 confident-side Qwen tokens (0.49%); human review of the v3.8 packets should stop |
-| 50-pair direct-rewrite provider run | **Automated gates complete; human review pending** | 50/50 mechanical passes and 50/50 shortcut-screen passes after eighteen unique pairs received targeted regeneration; score-exposed recipe QA only |
+| 50-pair direct-rewrite provider run | **Broadly acceptable in one researcher screen; provisionally frozen** | 50/50 mechanical passes and 50/50 shortcut-screen passes after eighteen unique pairs received targeted regeneration; score-exposed recipe QA only |
+| Advisor review | **Current pause point** | Decide whether to invest in one fresh, unscored evaluation; no new generation or activation scoring before discussion |
 | Cue-only baseline and leave-one-cue-family-out test | Not frozen | Must be specified before probe scoring |
 | 100-source layer comparison | Not started | Current rendering will not be scored; conditional on accepted direct full-pair rewrites and repeated review |
 | 300/700-source expansion | Not started | Conditional on accepted paired rewrites and a successful fresh unscored result |
@@ -77,7 +80,8 @@ candidate main-data recipe. The v3.8 audit found that pair members were
 effectively the same response plus one or two local cue substitutions. Human
 naturalness review cannot resolve that shortcut. The replacement 50-pair run
 rewrites both versions as complete responses with certainty integrated into the
-substantive discourse; its human review is now the active gate.
+substantive discourse. Its first qualitative screen is complete; advisor review
+is now the active gate.
 
 ### Historical 100-source checkpoint
 
@@ -119,9 +123,11 @@ aggregate results and decision.
 ## Immediate action
 
 1. Keep v3.8 frozen as a cue-only control and provenance record.
-2. Complete blind human review of the 50 direct full-pair rewrites.
-3. If they pass, freeze the direct-rewrite recipe and apply it to fresh,
-   unscored sources; repeat the full mechanical and human review gates.
+2. Record the 50-pair packet as broadly acceptable in one researcher screen,
+   not as independent human certification.
+3. Pause for advisor review. If continuation is agreed, apply the provisionally
+   frozen recipe to fresh, unscored sources and repeat the full mechanical and
+   human review gates.
 4. Freeze the shortcut-control protocol before activation inspection.
 5. Only then extract all layers once and report layer 14, every layer, and the
    fixed ensemble.

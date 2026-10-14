@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "decision_date": "2026-10-13",
+  "packet_sha256": "340a6719bae2a9b11e50da8d5614c55cddaa9c583a0d54f4d3c3a979fba60752",
+  "decision": "broadly_acceptable_provisional_freeze_pending_advisor_review",
+  "review_mode": "single_researcher_qualitative_blind_packet_review",
+  "reviewer_count": 1,
+  "structured_row_level_export_available": false,
+  "inter_reviewer_agreement_measured": false,
+  "score_exposed_sources": true,
+  "independent_probe_test": false,
+  "activations_inspected": false,
+  "scientific_scope": "data_construction_gate_only"
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "status": "provisionally_frozen_pending_advisor_review",
+  "freeze_date": "2026-10-13",
+  "recipe": "ordinary_chat_direct_full_pair_rewrite_v1",
+  "acceptance_mode": "single_researcher_qualitative_blind_packet_review",
+  "implementation_commit": "871a54115678f85992680e82bccbfa67578a7635",
+  "score_exposed_acceptance_packet": {
+    "pairs": 50,
+    "packet_sha256": "340a6719bae2a9b11e50da8d5614c55cddaa9c583a0d54f4d3c3a979fba60752",
+    "unblind_key_sha256": "2b2e6e3d4250fc544e0bc55d13478708fe16190e1c404f0ede2281d435867116",
+    "may_support_new_probe_claim": false
+  },
+  "frozen_file_sha256": {
+    "REWRITE_SPEC.md": "c5e8ee977a21f8518c425778d3bc0e9b5e10672afa2dcba710ae79e1a7b9c781",
+    "src/prepare_chat_provider_replication.py": "de1ac3cfb51e88a28fc0450a0d236e9961c85f3d324b6aa3777e5dec56a80a01",
+    "src/audit_provider_rewrites.py": "090e39ed00d2d751b3f7c4a27c91f33eea07892407f37f3372f1f70e0f2ba381",
+    "src/build_provider_review_html.py": "c1461fa723cf570288e1983a3933c2acfeddb15b0bcce742f7a5a96a17e98dc8",
+    "src/merge_chat_repairs.py": "daeecad430ad48b2b2d62b399467aeb91fe28fcc477946b1177147b7e680150b"
+  },
+  "next_application": "fresh_unscored_sources_only",
+  "before_activation_scoring": [
+    "repeat_mechanical_validation",
+    "repeat_shortcut_screen",
+    "repeat_blind_human_review",
+    "freeze_cue_only_and_leave_one_cue_family_out_controls"
+  ]
+}

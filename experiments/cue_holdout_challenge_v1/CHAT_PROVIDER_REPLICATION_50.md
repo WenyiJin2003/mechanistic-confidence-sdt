@@ -3,8 +3,10 @@
 ## Conclusion
 
 **The ordinary-Chat workflow produced all 50 direct confident/hesitant rewrite
-pairs and passed both automated construction screens. This is a data-construction
-result only. Human review is still pending.**
+pairs and passed both automated construction screens. On 13 October 2026, the
+project researcher inspected the label-blind packet and judged it broadly
+acceptable. The recipe is provisionally frozen while the next experiment is
+discussed with the advisor. This remains a data-construction result only.**
 
 The run reused the same 50 source groups from the already scored cue-holdout
 challenge. It therefore cannot update the probe result or serve as an
@@ -34,15 +36,17 @@ flags.
 ## Interpretation boundary
 
 The automated checks and manual pre-screen do not certify semantic equivalence,
-naturalness, or the intended confidence direction. A label-blind 50-pair human-
-review packet has been prepared and is the next gate. The responses were
-generated through an existing ordinary ChatGPT chat; the exact executed model
-slug was not exposed.
+naturalness, or the intended confidence direction. The project researcher's
+qualitative acceptance is a one-reviewer gate: no structured row-level export
+was provided and inter-reviewer agreement was not measured. It should not be
+described as independent human certification. The responses were generated
+through an existing ordinary ChatGPT chat; the exact executed model slug was
+not exposed.
 
 Because the sources are score-exposed, this is a provider and rewrite-recipe
-check, not a new probe experiment. If human review passes, the recipe should be
-frozen and applied to fresh, unscored sources before any new activation or
-probe-performance claim.
+check, not a new probe experiment. If the advisor agrees to continue, the
+provisionally frozen recipe should be applied to fresh, unscored sources before
+any new activation or probe-performance claim.
 
 ## Reproducibility and data boundary
 
@@ -53,6 +57,8 @@ The public workflow is implemented in:
 - [`src/merge_chat_repairs.py`](src/merge_chat_repairs.py)
 - [`src/build_provider_review_html.py`](src/build_provider_review_html.py)
 - [`reports/chat_provider_replication_50_summary.json`](reports/chat_provider_replication_50_summary.json)
+- [`reports/chat_provider_replication_50_human_gate.json`](reports/chat_provider_replication_50_human_gate.json)
+- [`manifests/chat_direct_pair_recipe_v1_freeze.json`](manifests/chat_direct_pair_recipe_v1_freeze.json)
 
 Third-party source text, rewritten responses, row-level audits, and the blind
 review packet remain in ignored `private_data/`. Only code and aggregate,

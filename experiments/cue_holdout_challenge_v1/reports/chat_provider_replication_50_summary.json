@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "automated_construction_gates_complete_human_review_pending",
+  "status": "single_researcher_screen_broadly_acceptable_paused_for_advisor_review",
   "source_boundary": "same_score_exposed_cue_holdout_sources",
   "provider": "ordinary_chatgpt_chat",
   "exact_model_slug_exposed": false,
@@ -29,7 +29,11 @@
     "manual_review": 0,
     "reject": 0
   },
-  "human_review": "pending",
+  "human_review": "single_researcher_qualitative_screen_broadly_acceptable",
+  "human_review_date": "2026-10-13",
+  "structured_row_level_review_export_available": false,
+  "inter_reviewer_agreement_measured": false,
+  "recipe_freeze_decision": "provisionally_frozen_pending_advisor_review",
   "semantic_equivalence_certified": false,
   "naturalness_certified": false,
   "activations_inspected": false,
