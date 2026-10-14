@@ -24,19 +24,30 @@ placement and genre confounds.
 
 The diagnostic deliberately reviewed all 14 local-NLI flags plus a task- and
 dataset-balanced diagnostic sample of 10 unflagged pairs. It is neither a
-population failure-rate estimate nor human certification. The 20-pair
-genre-aware main and cue-only review packets are now prepared. The immediate
-next step is to complete and import their blind human review. We will not score
-probe layers or train a loss on the current 100 pairs. The target name
-stays narrow: **expressed certainty about preserved answer content**.
+population failure-rate estimate nor human certification. We will not score
+probe layers or train a loss on the current 100 pairs. The target name stays
+narrow: **expressed certainty about preserved answer content**.
 
-The canary removes the two repeatedly used v3.7 sentences, but it is still a
-quality gate rather than final data: 18/20 cue-pair renderings are unique, while
-five one-token polarity swaps and one repeated qualification phrase remain.
-Those lexical shortcuts require the cue-only control, later cue-family holdout,
-and broader cue diversification before any new probe claim.
+**The subsequent v3.8 genre-aware canary is rejected as main paired-rewrite
+data.** Its two versions retain the same neutral base and differ only through
+one or two minimal, detachable certainty-cue substitutions. Across the 20 main
+pairs, there are 25 differing Qwen-token positions, measured against 5,102
+confident-side Qwen tokens (0.49%).
+This construction is therefore useful only as a cue-only shortcut diagnostic or
+control. Human review of the v3.8 packets should stop: naturalness judgments
+cannot turn them into the intended fully rewritten confident–hesitant dataset. Its protocol,
+packets, and negative audit remain in the repository for provenance.
+
+**Current construction status:** A replacement ordinary-Chat run produced 50
+direct full-pair rewrites on the same score-exposed challenge sources. The final
+set preserves the 5 × 5 × 2 grid and 25/25 length balance; all 50 pass the
+mechanical and shortcut screens after eighteen unique pairs received targeted
+full-pair regeneration across structural and independent pre-screen rounds.
+Human review is pending. This is a provider and rewrite-recipe check only: no
+activations were inspected, and it does not change the probe result.
 
 [Current result](experiments/cue_holdout_challenge_v1/RESULTS.md) ·
+[Direct-pair construction report](experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md) ·
 [Layer plot](experiments/cue_holdout_challenge_v1/results/CUE_HOLDOUT_LAYER_TRANSFER.png) ·
 [Challenge protocol](experiments/cue_holdout_challenge_v1/README.md) ·
 [Development diagnostic](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) ·
@@ -105,10 +116,11 @@ reproducibility. The research sequence is:
 | 6 | Evidence-Sensitive Readout v4 | Can a new support readout transfer across facts and wording, and agree with model behavior? | 71.9% support ordering; missing-information and behavior checks failed | [Report](reports/EVIDENCE_CONFIDENCE_RESULTS_V4.md) · [Data](datasets/evidence-confidence-v4/README.md) | Complete |
 | 7a | Diverse Paired Certainty + Multi-Layer | Is expressed certainty decodable across diverse content? | Hidden states reached 50/50, but text also reached 50/50; an independent challenge was required | [Report](experiments/diverse_pairs_multilayer_v1/reports/DEVELOPMENT_DIAGNOSTIC.md) | Development diagnostic complete |
 | 7b | Cue/recipe-holdout transfer | Does the frozen certainty readout transfer to new sources and cue constructions beyond text, likelihood and length controls? | Layer 14: 47/50; ensemble: 48/50; TF-IDF: 34/50; likelihood: 30/50; length: 25/50 | [Result](experiments/cue_holdout_challenge_v1/RESULTS.md) | Development-only evaluation complete |
-| **Current** | **100-source review gate** | **Are the mechanically valid pairs natural enough for activation scoring?** | **No: content was preserved and a clear certainty contrast was judged in 24/24 diagnostic cases, but A/B direction was not verified and both versions were clearly natural in only 5/24** | **[Review gate](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md)** | **Current rendering not activation-ready** |
-| **Current** | **Genre-aware 20-pair canary** | **Can source eligibility and genre-specific cue placement remove the identified confounds?** | **Main and cue-only packets are prepared; no human judgment has been entered** | **[Frozen protocol](experiments/diverse_pairs_multilayer_v1/V38_GENRE_AWARE_CANARY.md)** | **Blind human review pending** |
-| Later | Repaired 100-source all-layer comparison | Does the signal survive review, cue-only controls, cue-family holdout, and comparison across every layer? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md#decision) | Conditional on the canary and repeated review gate |
-| Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Checkpoint plan](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md#decision) | Conditional on the repaired 100-source result |
+| Completed diagnostic | 100-source review gate | Are the mechanically valid pairs natural enough for activation scoring? | No: content was preserved and a clear certainty contrast was judged in 24/24 diagnostic cases, but A/B direction was not verified and both versions were clearly natural in only 5/24 | [Review gate](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) | Current rendering not activation-ready |
+| Diagnostic | v3.8 genre-aware canary audit | Does shared-base cue rendering remove the identified shortcuts? | No: the pair members are the same neutral base with only one or two minimal cue substitutions | [Frozen protocol](experiments/diverse_pairs_multilayer_v1/V38_GENRE_AWARE_CANARY.md) | Rejected as main data; retain as cue-only control/provenance |
+| **Current** | **Ordinary-Chat direct-pair replication on 50 score-exposed sources** | **Can ordinary Chat reproduce the direct full-pair construction workflow?** | **50/50 mechanical passes and 50/50 shortcut-screen passes after eighteen unique pairs received targeted regeneration; blind human review pending** | **[Construction report](experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md)** | **Data-construction gate only; no new probe claim** |
+| Later | Fresh unscored direct-pair comparison | Does the signal survive human review, cue-only controls, cue-family holdout, and comparison across every layer? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Conditional on an accepted recipe and a newly frozen unscored set |
+| Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Conditional on the fresh unscored result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
 
 ```mermaid
@@ -121,8 +133,10 @@ flowchart LR
     E -. "independent diagnostic" .-> T["Training loss<br/>deferred"]
     H --> X["100-source construction<br/>mechanically complete"]
     X --> R["Diagnostic review gate<br/>naturalness failed"]
-    R --> K["Genre-aware 20-pair<br/>review packets prepared"]
-    K --> M["Repair 100 + repeat review<br/>freeze shortcut controls"]
+    R --> K["v3.8 shared-base audit<br/>rejected as main data"]
+    K --> N["50 direct full-pair rewrites<br/>automated gates passed"]
+    N --> V["Human blind review<br/>pending"]
+    V --> M["Freeze recipe, then use<br/>fresh unscored sources"]
     M --> Y["All-layer comparison<br/>only after gates pass"]
     Y --> Z["Conditional 300 / 700<br/>expansion"]
     Z -. "only after a new decision" .-> T

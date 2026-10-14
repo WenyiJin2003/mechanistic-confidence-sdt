@@ -25,6 +25,23 @@ hidden-state scoring: fixed global cue sentences disrupt several genres and
 create placement shortcuts. No new probe score, SDT loss training, activation
 steering, or causal test has been run on these 100 pairs.
 
+**The v3.8 genre-aware canary also failed as main data before human review.**
+It preserves one neutral base and changes only one or two minimal, detachable
+certainty cues per pair. Across the 20 main pairs, there are 25 differing
+Qwen-token positions, measured against 5,102 confident-side Qwen tokens
+(0.49%). This is a cue-only shortcut control,
+not the intended natural full-pair rewrite. Its frozen materials are preserved
+for provenance, but human review of the v3.8 packets should not continue.
+
+**The replacement direct-rewrite canary is now mechanically complete.** An
+ordinary ChatGPT chat produced 50 full confident/hesitant pairs on the same
+score-exposed challenge sources. The set retains the 5 × 5 × 2 grid and 25/25
+length-direction balance; all 50 pass the mechanical and shortcut screens after
+eighteen unique pairs received targeted full-pair regeneration. Human review is pending, and the exact
+executed Chat model slug was not exposed. This is provider and recipe QA, not a
+new probe evaluation. See the
+[construction report](../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md).
+
 [Challenge result](../cue_holdout_challenge_v1/RESULTS.md) ·
 [100-source checkpoint](reports/CHAT_CHECKPOINT_100.md) ·
 [100-source review gate](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) ·
@@ -96,7 +113,10 @@ flowchart LR
     D --> E["Mechanical checks<br/>100 / 100"]
     E --> F["Diagnostic review<br/>24 selected pairs"]
     F --> G["Naturalness / placement<br/>gate did not pass"]
-    G --> H["v3.8 canary prepared<br/>human review pending"]
+    G --> H["v3.8 shared-base canary<br/>rejected as main data"]
+    H --> I["50 direct full-pair rewrites<br/>automated gates passed"]
+    I --> J["Human blind review<br/>pending"]
+    J --> K["Freeze recipe; apply to<br/>fresh unscored sources"]
 ```
 
 The [checkpoint report](reports/CHAT_CHECKPOINT_100.md) gives the complete
@@ -111,17 +131,18 @@ the selected sources by hash and the final counts.
 
 The first expansion recipes exposed several failure modes: verbatim source
 copying, early or formulaic hesitation cues, object-level meaning changes, and
-length confounds. The current two-stage method asks Claude for one neutral,
-content-preserving paraphrase, then uses an auditable local cue bank to produce
-the confident and hesitant versions.
+length confounds. The historical shared-base construction asked Claude for one
+neutral, content-preserving paraphrase, then used an auditable local cue bank to
+produce the confident and hesitant versions. It is no longer the main-data
+method because the two members differ too locally.
 
 | Development version | Main result | Use |
 |---|---|---|
 | v3.3 | 1 direct retain, 14 repairs, 5 discards out of 20 | Rejected |
 | v3.4 | 2 direct retains, 8 repairs out of 10 | Revised |
-| v3.5 | 10/10 mechanical and semantic passes after repair | First retained canary |
+| v3.5 | 10/10 mechanical and semantic passes after repair | Historical construction gate |
 | v3.6 | 0/10 paraphrase-gate passes; only 0–3.6% neutral edits | **Lexical-control data only** |
-| v3.7 | 10/10 mechanical and final semantic passes after repair | Second retained canary; candidate main recipe |
+| v3.7 | 10/10 mechanical and final semantic passes after repair | Historical construction gate; later rejected as a main recipe |
 
 These were sequential development iterations, not an unbiased benchmark. See
 the [canonical construction report](reports/DATA_CONSTRUCTION_GATE.md) for the
@@ -129,23 +150,22 @@ exact source-review counts, initial and repaired results, and decision boundary.
 
 ## Next step
 
-1. Complete and export the blind human review of the prepared 20-pair main and
-   cue-only packets.
-2. Import both reviews and apply the frozen 20/20 gate without inspecting
-   activations.
-3. Only if both canary packets pass, repair and re-render the 100 pairs and repeat the
-   full review gate.
-4. Then freeze the cue-only baseline and leave-one-cue-family-out test, extract
+1. Keep v3.8 only as a frozen cue-only diagnostic/control.
+2. Complete blind human review of the 50 direct full-pair rewrites for content
+   equivalence, intended direction, naturalness, cue scope, formatting, and
+   distributed rewriting.
+3. If the packet passes, freeze the direct-rewrite recipe and apply it to fresh,
+   unscored sources before making any new probe claim.
+4. Repeat the complete mechanical and human review gates on that unscored set.
+5. Then freeze the cue-only baseline and leave-one-cue-family-out test, extract
    every layer once, and compare layer 14, all individual layers, and the fixed
    equal-layer ensemble.
-5. Expand to 300 and 700 sources only if the repaired 100-source result
+6. Expand to 300 and 700 sources only if the fresh unscored result
    justifies it.
 
-The prepared v3.8 packet removes the two repeatedly used v3.7 sentences, but it
-is not activation-ready. It has 18/20 unique cue-pair renderings, yet all pairs
-still use one of five one-token polarity swaps and one qualification phrase
-appears in 7/20. The blind review, cue-only control, later cue-family holdout,
-and broader cue diversification are therefore required before probe scoring.
+The v3.8 packet remains useful because it isolates the easiest possible lexical
+cue condition. It cannot support a claim about a natural confidence-related
+representation, regardless of whether its individual sentences sound fluent.
 
 The locked 50-pair challenge is already score-exposed and must not be edited or
 tuned against. No 1,000-pair generation, SDT loss training, activation steering,
@@ -163,7 +183,8 @@ remain under ignored `private_data/`.
 | Data-construction decision | [reports/DATA_CONSTRUCTION_GATE.md](reports/DATA_CONSTRUCTION_GATE.md) |
 | 100-source construction checkpoint | [reports/CHAT_CHECKPOINT_100.md](reports/CHAT_CHECKPOINT_100.md) |
 | 100-source review gate | [reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md](reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) |
-| Prepared v3.8 blind-review canary | [V38_GENRE_AWARE_CANARY.md](V38_GENRE_AWARE_CANARY.md) |
+| Frozen v3.8 cue-only diagnostic and provenance | [V38_GENRE_AWARE_CANARY.md](V38_GENRE_AWARE_CANARY.md) |
+| 50-pair direct-rewrite construction report | [../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md](../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md) |
 | Current status | [STATUS.md](STATUS.md) |
 | Next decision | [NEXT_DECISION.md](NEXT_DECISION.md) |
 | Research definition and method | [PROTOCOL.md](PROTOCOL.md) |

@@ -1,5 +1,26 @@
 # v3.8 Genre-Aware Placement Canary
 
+## Post-audit outcome
+
+**Rejected as main paired-rewrite data; retain only as a cue-only diagnostic
+and provenance record. Human review of the v3.8 packets should stop.** The frozen protocol below
+correctly documents what was built, but a structural audit showed that the two
+members of each main pair share the same neutral base and differ only through
+one or two minimal, detachable cue substitutions. Fifteen of 20 pairs differ by
+one Qwen token and five differ by two. Across the 20 main pairs, there are 25
+differing Qwen-token positions, measured against 5,102 confident-side Qwen
+tokens (0.49%).
+
+This construction can test sensitivity to explicit lexical cues. It cannot
+serve as the intended natural confident–hesitant rewrite dataset, and a perfect
+naturalness review would not change that limitation. The next main-data canary
+must directly rewrite both complete responses from the same source. The
+remaining sections are preserved unchanged as the frozen pre-audit design.
+
+## Archived pre-audit protocol
+
+**The sections below are retained for provenance, not as current instructions.**
+
 ## Decision scope
 
 This 20-pair canary is an **engineering and naturalness gate only**. It asks whether confidence/hedging cues can be added to diverse, frozen responses without changing their non-cue content or damaging the response genre and structure.

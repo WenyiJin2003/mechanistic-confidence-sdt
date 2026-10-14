@@ -96,6 +96,15 @@ validation and a preregistered learning-and-retention experiment.
 Third-party response text and rewrites are never added to Git. Public artifacts
 contain code, hashes, aggregate coverage and aggregate results only.
 
+## Provider-replication follow-up
+
+An ordinary ChatGPT chat has produced a separate 50-pair direct-rewrite packet
+using these same, already score-exposed sources. All 50 pass the mechanical and
+shortcut screens, while blind human review remains pending. No activations were
+inspected. This follow-up evaluates the rewrite workflow only and does not alter
+the frozen challenge result or provide an independent probe test. See the
+[construction report](CHAT_PROVIDER_REPLICATION_50.md).
+
 ## Current status
 
 The 50-pair challenge is frozen after score-free source curation, mechanical

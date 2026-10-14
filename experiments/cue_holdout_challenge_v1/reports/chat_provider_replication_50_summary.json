@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "automated_construction_gates_complete_human_review_pending",
+  "source_boundary": "same_score_exposed_cue_holdout_sources",
+  "provider": "ordinary_chatgpt_chat",
+  "exact_model_slug_exposed": false,
+  "source_pairs": 50,
+  "allocation": {
+    "tasks": 5,
+    "cue_families": 5,
+    "pairs_per_task_by_cue_cell": 2,
+    "pairs_per_task": 10,
+    "pairs_per_cue_family": 10
+  },
+  "length_direction_counts": {
+    "confident_longer": 25,
+    "hedged_longer": 25
+  },
+  "maximum_absolute_qwen_token_gap": 3,
+  "unique_pairs_with_targeted_full_pair_regeneration": 18,
+  "targeted_full_pair_rewrite_passes": 19,
+  "mechanical_validator": {
+    "pass": 50,
+    "flagged": 0,
+    "fail": 0
+  },
+  "shortcut_screen": {
+    "pass": 50,
+    "manual_review": 0,
+    "reject": 0
+  },
+  "human_review": "pending",
+  "semantic_equivalence_certified": false,
+  "naturalness_certified": false,
+  "activations_inspected": false,
+  "new_probe_claim": false
+}

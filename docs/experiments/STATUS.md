@@ -1,16 +1,33 @@
 # Project Status
 
-**Research priority update, 12 October 2026:** the bounded cue-holdout probe
+**Research priority update, 13 October 2026:** the bounded cue-holdout probe
 result remains positive (layer 14: 47/50; fixed all-layer ensemble: 48/50), but
-the active task is now pair construction. A 200-source review kept 74 candidates,
-rejected 110 and sent 16 to human review. The latest two-stage canary reached
-10/10 mechanical and independent model-assisted semantic passes after recorded
-repair. Across the two retained canaries, 20/20 pass both checks; blind human
-review remains pending. Next, freeze a cue-only baseline and a
-leave-one-cue-family-out test before expanding at 100/300/700 sources. No
-language-model training or steering has been run. See the
+the active task is pair construction. The 100-source rendering is mechanically
+complete and not activation-ready. A 200-source review kept 74 candidates,
+rejected 110 and sent 16 to human review; those historical construction results
+remain part of the audit trail.
+
+**The v3.8 genre-aware canary is rejected as main paired-rewrite data before
+human review.** Its two versions keep the same neutral base and differ only by
+one or two minimal, detachable cue substitutions. The 20 main pairs differ at
+25 differing Qwen-token positions, measured against 5,102 confident-side Qwen
+tokens (0.49%). Human review of the v3.8 packets should stop. V3.8 remains frozen only as a cue-only diagnostic/control and
+provenance record.
+
+A replacement 50-pair direct-rewrite canary has now been produced through an
+ordinary ChatGPT chat on the same score-exposed challenge sources. It preserves
+the exact 5 × 5 × 2 allocation and 25/25 length-direction balance. After eighteen
+unique pairs received targeted full-pair regeneration across structural and independent
+pre-screen rounds, all 50 pass the mechanical validator and
+shortcut screen. Human review is pending; the exact executed Chat model slug
+was not exposed. No activations were inspected, so this is not an independent
+probe test and does not change the reported probe result. The next gate is blind
+human review of this packet; if accepted, the recipe should be applied to fresh,
+unscored sources before any new evaluation. No language-model training or
+steering has been run. See the
 [construction gate](../../experiments/diverse_pairs_multilayer_v1/reports/DATA_CONSTRUCTION_GATE.md),
-[probe result](../../experiments/cue_holdout_challenge_v1/RESULTS.md), and
+[probe result](../../experiments/cue_holdout_challenge_v1/RESULTS.md),
+[direct-pair construction report](../../experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md), and
 [next decision](../../experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md).
 
 ## Historical v4 status

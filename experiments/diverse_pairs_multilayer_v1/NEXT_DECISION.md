@@ -1,15 +1,22 @@
-# Next Decision: Fix Pair Rendering Before Probe Scoring
+# Next Decision: Human-Review Direct Pairs Before New Probe Scoring
 
-> **Current status (2026-10-13):** This decision led to the frozen v3.8
-> genre-aware canary. Its main and cue-only blind-review packets are prepared;
-> human review is pending. See [V38_GENRE_AWARE_CANARY.md](V38_GENRE_AWARE_CANARY.md).
+> **Current status (2026-10-13):** The frozen v3.8 shared-base canary remains
+> rejected as main data. A replacement 50-pair direct-rewrite run now passes
+> the automated construction gates; blind human review is pending. These are
+> the already score-exposed challenge sources, so the packet is provider and
+> recipe QA rather than a new probe evaluation. See
+> [the construction report](../cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md).
 
 ## Decision
 
 **Do not score hidden-state layers on the current 100 pairs, start SDT loss
-training, or scale to 1,000 pairs.** The construction is mechanically complete,
+training, or scale to 1,000 pairs.** The earlier construction is mechanically complete,
 but a label-blind diagnostic found systematic naturalness and cue-placement
-confounds. The next experiment is a fully reviewed 20-pair, genre-aware canary.
+confounds. V3.8 changed cue placement but retained a shared neutral base, so it
+did not test natural full-response rewriting. The next experiment is a small,
+fully reviewed direct-rewrite recipe in which both pair members are directly
+and completely rewritten from the same source. The 50-pair provider run now
+passes automated checks; human review is the remaining gate.
 
 ## What remains established
 
@@ -52,37 +59,46 @@ lists, tables, dialogue, code and worked examples, conflict with strict format
 or length constraints, and sometimes use genre-inappropriate “conclusion”
 language. These artifacts could give a probe an easy shortcut.
 
+## Why v3.8 stopped before human review
+
+V3.8 preserved one neutral base and changed only one or two minimal,
+detachable certainty cues per pair. Fifteen of its 20 main pairs differ by one
+Qwen token and five differ by two; in total, there are 25 differing Qwen-token
+positions, measured against 5,102 confident-side Qwen tokens (0.49%). This is a valid cue-only shortcut
+condition, not a natural confident–hesitant rewrite dataset. Human ratings of
+fluency or content preservation cannot repair that scientific mismatch.
+
 ## Immediate sequence
 
-1. **Retain the neutral templates.** Do not regenerate content that passed the
-   content-preservation diagnostic.
-2. **Define source eligibility.** Exclude or specially handle responses whose
-   requested format cannot naturally accommodate speaker-level calibration.
-3. **Implement genre-aware cue placement.** Use renderers for prose, lists,
-   tables, dialogue, code/examples and strict-format responses rather than one
-   global insertion rule.
-4. **Build a 20-pair canary and review all 20 blindly.** Cover the affected
-   genres and report content preservation, clear contrast, intended A/B-label
-   direction, naturalness, scope and accept/discuss/reject decisions.
-5. **Only if the canary passes, repair and re-render the 100 pairs.** Repeat the
-   complete review gate before inspecting activation scores.
-6. **Then freeze shortcut controls and score once.** Predefine the matched
+1. **Retain v3.8 only as a diagnostic/control.** Do not continue its human
+   review or treat it as main data.
+2. **Human-review the completed 50-pair direct-rewrite packet.** Report content
+   preservation, intended A/B-label direction, naturalness, cue scope,
+   formatting, distributed rewriting, and accept/discuss/reject decisions.
+3. **If it passes, freeze the source-eligibility and rewrite recipe.** The
+   current sources are score-exposed and cannot become a new test set.
+4. **Apply the frozen recipe to fresh, unscored sources.** Repeat the complete
+   mechanical and blind human review gates before inspecting activations.
+5. **Then freeze shortcut controls and score once.** Predefine the matched
    cue-only baseline and leave-one-cue-family-out evaluation; cache all hidden
    layers and report layer 14, every layer, the fixed ensemble, text,
    likelihood and length on identical splits.
-7. Expand to 300 and 700 sources only if the repaired 100-source study supports
+6. Expand to 300 and 700 sources only if the fresh unscored study supports
    continuation. Make a separate decision before any functional loss pilot.
 
 ## Canary pass conditions
 
-- All 20 pairs preserve answer content, show a clear speaker-level certainty
+- All reviewed pairs preserve answer content, show a clear speaker-level certainty
   contrast, and verify the intended confident/hesitant A/B direction.
+- Both members are complete rewrites; where genre and length permit, the
+  contrast is distributed through the response. It cannot reduce to deleting
+  one generic sentence or swapping one local polarity word.
 - Naturalness and cue scope pass under a label-blind review, including the
   difficult genres identified above.
 - Format, code, numerical values and user-requested constraints are preserved.
 - Failures are recorded rather than silently repaired after seeing activation
   scores.
-- The 100-source rerendering rules and later probe protocol are frozen before
+- The unscored-set rendering rules and later probe protocol are frozen before
   activation results are inspected.
 
 ## Boundary
