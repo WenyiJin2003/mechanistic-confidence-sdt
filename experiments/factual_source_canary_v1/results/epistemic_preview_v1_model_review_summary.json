@@ -1,0 +1,42 @@
+{
+  "activation_extraction_started": false,
+  "artifact_role": "development_preview",
+  "construction_diagnostics": {
+    "diagnostic_is_not_probe_performance": true,
+    "length_direction_counts": {
+      "hesitant_longer": 6
+    },
+    "length_measure": "whitespace_words_not_model_tokens",
+    "shorter_text_selects_intended_confident_pairs": 6,
+    "total_words_by_role": {
+      "confident": 841,
+      "hesitant": 918
+    }
+  },
+  "human_review_certified": false,
+  "input_sha256": {
+    "answer_key": "5b58e3bfd7eb1500c93de26f99523cf120f9849ee104b6e0e960cd1b6d41e328",
+    "draft": "e80aa30f9acc6a807db5c6db8fbc3359f31e35faf256a036adab68a665e57185",
+    "model_review": "cf15b50cd055454b2e1659c3a5692a7004c2b7b4d01ff6fb1f8f7765740e89b3",
+    "preview_status": "7e1c5e5104d30f686b57ce83d1245df65b91e64c3b7f2925e5561048520504f2",
+    "reviewer_html": "5c1e8c47e6b25cdb1d73f81e13d0908dbc806b9c022332c8169a4b4d713d3e54",
+    "source": "38869458a57be7ae1e8e8ba8d8209c850599fe2b32620bb16f883c8632c48a1d"
+  },
+  "interpretation": "These are reviewer judgments and text-construction diagnostics, not model-confidence or probe-performance measurements.",
+  "next_action": "Review the six drafts, then improve length counterbalancing and wording diversity before a larger construction run. Ordinary epistemic hedging remains allowed.",
+  "packet_sha256": "0e2a3b919c1c06229b06b4820fc80642412f9faf3661387f761b22b280ce656e",
+  "pair_count": 6,
+  "probe_fitting_started": false,
+  "review_counts": {
+    "both_versions_natural": 2,
+    "clear_certainty_contrast": 6,
+    "factual_core_preserved": 6,
+    "intended_confident_version_selected": 6,
+    "neither_version_has_major_naturalness_issues": 6
+  },
+  "review_type": "blinded_model_assisted",
+  "reviewer_count": 1,
+  "schema": "epistemic-preview-model-review-summary-v1",
+  "sdt_training_started": false,
+  "status": "model_review_complete_researcher_feedback_pending"
+}

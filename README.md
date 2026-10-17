@@ -9,9 +9,14 @@ the v4 contrasts too weak and several constructions unnatural. We are revising
 the same six inspected sources as a small development preview before further
 data expansion. The six complete-response drafts are ready for researcher
 feedback; they remain close to source wording and repeat some hedges, so this
-is not yet a validated diverse-rewrite dataset. See the
+is not yet a validated diverse-rewrite dataset. A blinded model reviewer
+identified the intended confident version in **6/6** pairs and judged the
+factual core preserved in **6/6**. Both versions were fully natural in **2/6**;
+the remaining issues were minor. All six hesitant responses are longer, so
+length and wording diversity need attention before expansion. These are text
+review judgments, not probe results. See the
 [revised rewrite rule](experiments/factual_source_canary_v1/EPISTEMIC_REWRITE_UPDATE.md)
-and [preview status](experiments/factual_source_canary_v1/results/epistemic_preview_v1_status.json).
+and [six-pair review](experiments/factual_source_canary_v1/results/EPISTEMIC_PREVIEW_REVIEW.md).
 
 The **0/6** result below remains the historical result under the v4 rubric.
 Some of that rubric's content constraints were too restrictive about the
@@ -197,7 +202,7 @@ reproducibility. The research sequence is:
 | Completed decision | Advisor review | What should replace the score-exposed construction set? | Prioritize stronger confident/hesitant contrast and higher-quality factual sources | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Feedback incorporated into the factual-source canary |
 | Completed gate | Factual source selection | Can we freeze 120 evidence-audited sources without silently admitting source or qualifier errors? | 120 core sources and 24 backups frozen; final secondary samples 12/12 confirmed in each dataset | [Selection result](experiments/factual_source_canary_v1/results/SOURCE_SELECTION_RESULTS.md) | Model-assisted data gate; not a probe result |
 | Historical checkpoint | Factual rewrite canary v4 + replacement plan v5 | Can the v4 recipe create a strong contrast under its frozen rules? | After repair, 6/12 were mechanically clean; two blinded model reviews found 0/6 strict passes under the old rubric. | [v4 checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) · [review](experiments/factual_source_canary_v1/results/CLEAN_SIX_MODEL_REVIEW.md) · [v5 plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) | Retain as history; the new epistemic rule is evaluated separately. |
-| **Current** | **Six-source epistemic rewrite preview** | **Can stronger natural hedging vary commitment while preserving the factual core?** | **Six new development drafts are saved. They remain close to source wording and repeat some hedges; researcher feedback is pending.** | **[Revised rule](experiments/factual_source_canary_v1/EPISTEMIC_REWRITE_UPDATE.md) · [preview status](experiments/factual_source_canary_v1/results/epistemic_preview_v1_status.json)** | **Review the new contrast and factual core, then finalize the recipe before expanding data or comparing layers.** |
+| **Current** | **Six-source epistemic rewrite preview** | **Can stronger natural hedging vary commitment while preserving the factual core?** | **One blinded model review: 6/6 factual-core preservation, 6/6 intended direction, 2/6 both fully natural. All hesitant texts are longer; no probe was fitted.** | **[Revised rule](experiments/factual_source_canary_v1/EPISTEMIC_REWRITE_UPDATE.md) · [review](experiments/factual_source_canary_v1/results/EPISTEMIC_PREVIEW_REVIEW.md)** | **Collect researcher feedback and improve length counterbalancing and paraphrase diversity before expansion.** |
 | Conditional next | Fresh unscored factual-pair comparison | Does the signal survive human review, source holdout, cue controls, and comparison across every layer? | Not yet tested | [Source plan](experiments/factual_source_canary_v1/configs/source_selection_plan_v1.json) | Start only after the factual pair gate passes |
 | Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Conditional on the fresh unscored result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |

@@ -16,6 +16,13 @@ private under `private_data/rewrite_canary_v1/epistemic_preview_v1/`.
 Run `python3 src/prepare_epistemic_preview.py --render` from this experiment's
 directory to rebuild the page from the saved drafts. No browser is opened.
 
+**The blinded model review is complete:** 6/6 intended directions were
+identified and 6/6 factual cores judged preserved. Both versions were fully
+natural in 2/6 pairs; the other issues were minor. All six hesitant responses
+are longer. The [review report](results/EPISTEMIC_PREVIEW_REVIEW.md) explains
+these construction diagnostics and the next recipe changes. Researcher
+feedback remains pending; these counts are not probe performance.
+
 **The 120-source core will use 40 ASQA responses, 40 QASPER author
 abstracts, and 40 BillSum summaries.** FeTaQA is retained as a separate
 20-source short-form external test, not as core training or layer-selection
