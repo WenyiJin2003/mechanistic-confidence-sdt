@@ -1,0 +1,160 @@
+{
+  "activations_inspected": false,
+  "batch_count": 3,
+  "batch_size": 4,
+  "by_cue_family": {
+    "compositional_polarity": 2,
+    "contrastive_commitment": 2,
+    "discourse_level_calibration": 2,
+    "embedded_stance_predicate": 3,
+    "modal_force_scope": 3
+  },
+  "by_dataset": {
+    "asqa": 4,
+    "billsum": 4,
+    "qasper": 4
+  },
+  "by_draft_order": {
+    "confident_first": 6,
+    "hesitant_first": 6
+  },
+  "by_length_direction": {
+    "confident_longer": 6,
+    "hesitant_longer": 6
+  },
+  "by_profile": {
+    "long_complex": 3,
+    "mid_plain": 3,
+    "qualifier_sensitive": 3,
+    "short_simple": 3
+  },
+  "config_sha256": "051361e5968f02244a65364cc34fb0052d4c809c0b4a1cfc2c8524eaaf584e3d",
+  "cue_assignment": {
+    "method": "fixed target counts applied in seeded source-hash order",
+    "target_counts": {
+      "compositional_polarity": 2,
+      "contrastive_commitment": 2,
+      "discourse_level_calibration": 2,
+      "embedded_stance_predicate": 3,
+      "modal_force_scope": 3
+    }
+  },
+  "draft_order_assignment": {
+    "cross_length_direction_count_per_cell": 3,
+    "method": "minimum seeded within-dataset rank cost subject to exact dataset, batch, and length-direction cross-balance",
+    "overall_count_per_order": 6,
+    "within_batch_count_per_order": 2,
+    "within_dataset_count_per_order": 2
+  },
+  "draft_order_by_dataset": {
+    "asqa": {
+      "confident_first": 2,
+      "hesitant_first": 2
+    },
+    "billsum": {
+      "confident_first": 2,
+      "hesitant_first": 2
+    },
+    "qasper": {
+      "confident_first": 2,
+      "hesitant_first": 2
+    }
+  },
+  "draft_order_by_length_direction": {
+    "confident_longer": {
+      "confident_first": 3,
+      "hesitant_first": 3
+    },
+    "hesitant_longer": {
+      "confident_first": 3,
+      "hesitant_first": 3
+    }
+  },
+  "human_pair_review": "pending",
+  "length_assignment": {
+    "method": "minimum seeded within-dataset rank cost subject to exact dataset and batch balance",
+    "overall_count_per_direction": 6,
+    "within_batch_count_per_direction": 2,
+    "within_dataset_count_per_direction": 2
+  },
+  "length_direction_by_dataset": {
+    "asqa": {
+      "confident_longer": 2,
+      "hesitant_longer": 2
+    },
+    "billsum": {
+      "confident_longer": 2,
+      "hesitant_longer": 2
+    },
+    "qasper": {
+      "confident_longer": 2,
+      "hesitant_longer": 2
+    }
+  },
+  "planned_pair_count": 12,
+  "planned_rewritten_text_count": 24,
+  "private_text_committed": false,
+  "probe_fit": false,
+  "public_canary_manifest_sha256": "8b0c0da55150ea677dd2d6b74bb98e66eb5fa91e72f1b49281db0d6edc6c3562",
+  "public_source_manifest_sha256": "d51846305f0aabf9063e4951e98083e7bc5cfebd1cd727f737cae8c7b18b82ed",
+  "qualifier_handling": {
+    "protected_qualifiers": "semantic review descriptors; not assumed to be literal source text",
+    "protected_spans": "case-insensitive exact descriptor matches recovered from original_response; text kept private"
+  },
+  "seed": 20261017,
+  "selection_rule": {
+    "distance": "sum((feature - target)^2), rounded to 8 decimals",
+    "eligible_rows": "selection_role == core; exactly 40 per dataset",
+    "features": [
+      "word_count_empirical_midrank",
+      "sentence_count_empirical_midrank",
+      "protected_qualifier_count_empirical_midrank"
+    ],
+    "midrank_formula": "(count_less + (count_equal + 1) / 2) / n",
+    "outcome_information_used": false,
+    "profile_order": [
+      "short_simple",
+      "mid_plain",
+      "long_complex",
+      "qualifier_sensitive"
+    ],
+    "profile_targets": {
+      "long_complex": [
+        0.8,
+        0.8,
+        0.5
+      ],
+      "mid_plain": [
+        0.45,
+        0.45,
+        0.2
+      ],
+      "qualifier_sensitive": [
+        0.55,
+        0.6,
+        0.9
+      ],
+      "short_simple": [
+        0.2,
+        0.2,
+        0.2
+      ]
+    },
+    "tie_break": "ascending SHA256('20261017|rewrite-canary-v1|dataset|profile|source_id')"
+  },
+  "source_count": 12,
+  "status": "rewrite_generation_not_run",
+  "version": "factual-rewrite-canary-v1",
+  "writer_output_fields": [
+    "source_id",
+    "source_hash",
+    "original_response_sha256",
+    "dataset",
+    "cue_family",
+    "length_direction",
+    "draft_order",
+    "confident_response",
+    "hesitant_response",
+    "issues"
+  ]
+}

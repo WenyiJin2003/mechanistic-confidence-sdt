@@ -9,8 +9,14 @@ data.
 
 **Source selection is now complete:** 120 core records and 24 backups passed
 the locked primary review plus a recomputed secondary sample audit. See
-`results/SOURCE_SELECTION_RESULTS.md`. No certainty rewriting or activation
-scoring has been run on these sources.
+`results/SOURCE_SELECTION_RESULTS.md`.
+
+**The next gate is frozen but not yet passed:** a deterministic 12-source
+rewrite canary selects 4 ASQA, 4 QASPER, and 4 BillSum responses and assigns
+balanced confident/hesitant construction conditions. The full design and hard
+pass criteria are in [`REWRITE_CANARY_PROTOCOL.md`](REWRITE_CANARY_PROTOCOL.md).
+Preparing this canary does not authorize activation scoring; all 12 pairs must
+first pass mechanical checks and blind content review.
 
 This decision follows a locked, model-assisted review of 10 candidates per
 dataset. The review found that real-source answers still require explicit
@@ -63,6 +69,11 @@ certainty rewrites.
 Full source text stays under ignored `private_data/`. No rewrite model is
 called, no Qwen activations are extracted, and no probe is trained.
 
+The canary preparation script writes three private four-source prompt batches,
+a frozen private source file, and a text-free public manifest. It separates
+semantic qualifier descriptions from literal protected spans, so descriptive
+review notes are not incorrectly treated as exact quotations.
+
 The [source acceptance protocol](SOURCE_ACCEPTANCE_PROTOCOL.md) fixes the
 review order, decision meanings, dataset-specific checks, stopping rule, and
 validation boundary before the expanded pool is reviewed.
@@ -98,6 +109,16 @@ BillSum, plus 50 FeTaQA short-form candidates. Mechanical screening retained
 all 100 ASQA records, all 100 QASPER records, and 89/100 BillSum records. These
 counts only define the review queue; they do not certify evidence support.
 
+Prepare the deterministic 12-source rewrite canary with:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/prepare_factual_rewrite_canary.py
+```
+
+The frozen design is in `configs/rewrite_canary_v1.json`. The public outputs
+contain identifiers, hashes, allocations, and counts only; the question,
+source response, qualifier text, and rewrite prompts remain private.
+
 Build the deterministic review order with:
 
 ```bash
@@ -127,6 +148,8 @@ python3 experiments/factual_source_canary_v1/src/build_review_queue.py \
 | `results/selected_core_sources_v1_manifest.jsonl` | public | Text-free 120-core and 24-backup selection |
 | `results/source_selection_v1_summary.json` | public | Review counts, hashes, and completed-gate status |
 | `results/SOURCE_SELECTION_RESULTS.md` | public | Final source-selection conclusion and limitations |
+| `results/rewrite_canary_v1_source_manifest.jsonl` | public | Text-free 12-source rewrite-canary allocation |
+| `results/rewrite_canary_v1_freeze_summary.json` | public | Frozen balance checks and private-artifact hashes |
 
 ## Decision boundary
 

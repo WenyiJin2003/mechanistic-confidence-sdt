@@ -1,0 +1,89 @@
+{
+  "version": "factual-rewrite-canary-v1",
+  "seed": 20261017,
+  "selection": {
+    "datasets": ["asqa", "qasper", "billsum"],
+    "key_namespace": "rewrite-canary-v1",
+    "eligible_role": "core",
+    "expected_core_per_dataset": 40,
+    "profiles": [
+      {"name": "short_simple", "target": [0.2, 0.2, 0.2]},
+      {"name": "mid_plain", "target": [0.45, 0.45, 0.2]},
+      {"name": "long_complex", "target": [0.8, 0.8, 0.5]},
+      {"name": "qualifier_sensitive", "target": [0.55, 0.6, 0.9]}
+    ],
+    "features": [
+      "word_count_empirical_midrank",
+      "sentence_count_empirical_midrank",
+      "protected_qualifier_count_empirical_midrank"
+    ],
+    "midrank_formula": "(count_less + (count_equal + 1) / 2) / n",
+    "distance": "squared_euclidean",
+    "distance_round_digits": 8,
+    "tie_key": "{seed}|{key_namespace}|{dataset}|{profile}|{source_id}",
+    "expected_selected_per_dataset": 4
+  },
+  "cue_assignment": {
+    "hash_key": "{seed}|{version}|cue-family|{source_id}",
+    "target_counts": [
+      {"name": "embedded_stance_predicate", "count": 3},
+      {"name": "modal_force_scope", "count": 3},
+      {"name": "compositional_polarity", "count": 2},
+      {"name": "discourse_level_calibration", "count": 2},
+      {"name": "contrastive_commitment", "count": 2}
+    ]
+  },
+  "length_assignment": {
+    "directions": ["confident_longer", "hesitant_longer"],
+    "hash_key": "{seed}|{version}|length-direction|{dataset}|{source_id}",
+    "overall_count_per_direction": 6,
+    "per_dataset_count_per_direction": 2,
+    "per_batch_count_per_direction": 2,
+    "assignment_method": "minimum seeded within-dataset rank cost subject to exact dataset and batch balance"
+  },
+  "draft_order_assignment": {
+    "orders": ["confident_first", "hesitant_first"],
+    "hash_key": "{seed}|{version}|draft-order|{dataset}|{source_id}",
+    "overall_count_per_order": 6,
+    "per_dataset_count_per_order": 2,
+    "per_batch_count_per_order": 2,
+    "cross_length_direction_count_per_cell": 3,
+    "assignment_method": "minimum seeded within-dataset rank cost subject to exact dataset, batch, and length-direction cross-balance"
+  },
+  "batching": {
+    "batch_size": 4,
+    "layout": [
+      [["asqa", "short_simple"], ["qasper", "mid_plain"], ["billsum", "long_complex"], ["asqa", "qualifier_sensitive"]],
+      [["qasper", "short_simple"], ["billsum", "mid_plain"], ["asqa", "long_complex"], ["qasper", "qualifier_sensitive"]],
+      [["billsum", "short_simple"], ["asqa", "mid_plain"], ["qasper", "long_complex"], ["billsum", "qualifier_sensitive"]]
+    ]
+  },
+  "fields": {
+    "private_source_fields": [
+      "source_id", "dataset", "group_id", "source_hash",
+      "original_response_sha256", "profile", "prompt", "original_response",
+      "protected_qualifiers", "protected_spans", "cue_family",
+      "length_direction", "draft_order", "generation_order"
+    ],
+    "writer_output_fields": [
+      "source_id", "source_hash", "original_response_sha256", "dataset",
+      "cue_family", "length_direction", "draft_order", "confident_response",
+      "hesitant_response", "issues"
+    ],
+    "legacy_output_alias": "hedged_response"
+  },
+  "gates": {
+    "pair_token_gap_rule": "absolute gap <= max(5 tokens, 5% of pair mean)",
+    "pair_token_gap_floor": 5,
+    "pair_token_gap_mean_fraction": 0.05,
+    "max_pair_token_ratio": 1.08,
+    "min_arm_source_token_ratio": 0.85,
+    "max_arm_source_token_ratio": 1.15,
+    "require_both_complete_rewrites": true,
+    "require_literal_protected_spans_in_both": true,
+    "require_semantic_qualifier_preservation": true,
+    "allow_source_correction": false,
+    "allow_detachable_certainty_sentence": false,
+    "human_blind_review_required_before_scale_up": true
+  }
+}
