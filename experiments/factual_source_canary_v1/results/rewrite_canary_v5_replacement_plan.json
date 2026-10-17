@@ -1,13 +1,15 @@
 {
   "artifact_bindings": {
-    "config_sha256": "4cc7bf9adb5b37eddebe4e62e6dee994662c73a87f971bd513eb6555392c5874",
+    "config_sha256": "2d964ebb8d573d231d40278320d408a28335104f74dc4020a4744853b8c6b29c",
     "frozen_slots_sha256": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
     "post_repair_validator_sha256": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a",
     "private_independent_audit_artifact_sha256": "f7ece077c9600770f9ea310253c9b6bb8083c067d43c2ff62ef96b633f8c28cd",
     "private_metadata_ledger_sha256": "799e3f3cf4458fa9155cbdd51e71076e87b09e884c87c7d0a79041303e965a63",
-    "source_pool_sha256": "d3d716ee71635873ba0db10ed6df9c1f39de96e5aad368870c3a651b79f4ff69"
+    "source_pool_sha256": "d3d716ee71635873ba0db10ed6df9c1f39de96e5aad368870c3a651b79f4ff69",
+    "v4_freeze_manifest_sha256": "fb7e4c112e2ca340d5afbe0a66392d0353ab62a6e0070ceb539fa2d096fe63b6"
   },
   "artifact_role": "public_text_free_replacement_plan",
+  "assignment_input_sha256": "28123f5fa96927fb2af35e8c95500b26f632cf04dd50214c55c4043747a18f24",
   "assignments": [
     {
       "dataset": "asqa",
@@ -102,11 +104,11 @@
       "replacement_features": [
         0.09756097561,
         0.085365853659,
-        0.329268292683
+        0.341463414634
       ],
       "replacement_source_hash": "d8b5359e69c36b97b1f04d17eaa22562806c5e1a13316695f7dacfb8cab7ba05",
       "replacement_source_id": "qasper-paper:1712.09127",
-      "squared_distance_to_slot_target": 0.04034503
+      "squared_distance_to_slot_target": 0.04364664
     },
     {
       "dataset": "asqa",
@@ -201,11 +203,11 @@
       "replacement_features": [
         0.536585365854,
         0.987804878049,
-        0.80487804878
+        0.817073170732
       ],
       "replacement_source_hash": "68a17b1a3479d737d6857b739d992c0c2a31b70cde2a5b5bf49d63e3f28f9bcb",
       "replacement_source_id": "billsum:4256aad1fff88860",
-      "squared_distance_to_slot_target": 0.15962076
+      "squared_distance_to_slot_target": 0.15744943
     }
   ],
   "authorization": {
@@ -229,13 +231,13 @@
     "billsum": {
       "accepted_unused_backups": 4,
       "failed_slots": 1,
-      "minimum_total_squared_distance": 0.15962076,
+      "minimum_total_squared_distance": 0.15744943,
       "winning_full_mapping_tie_break_sha256": "776fd7e9086c4e11afa92010b7bef5eda44410b89a5d1e89c3810fc9c3e7d312"
     },
     "qasper": {
       "accepted_unused_backups": 7,
       "failed_slots": 1,
-      "minimum_total_squared_distance": 0.04034503,
+      "minimum_total_squared_distance": 0.04364664,
       "winning_full_mapping_tie_break_sha256": "bd97b4c67417a38a0badd8439c3567702ff392707dddb6a5133dbc24725af70a"
     }
   },
@@ -249,7 +251,7 @@
       "corrected_qualifier_count_candidate_included_midrank"
     ],
     "full_mapping_hash_tie_break": true,
-    "reference_pool": "the same dataset's 40 frozen accepted core rows plus the candidate itself, after audited metadata corrections",
+    "reference_pool": "the same dataset's 40 frozen accepted core rows plus the candidate itself; selected-core qualifier counts come from the hash-bound frozen v4 rows, and backup qualifier counts come from the audited v5 ledger",
     "same_dataset": true
   },
   "plan_revision": "v5",

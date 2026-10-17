@@ -44,7 +44,9 @@ unused backups and froze the exact mapping produced by the profile-aware v5
 rule. This is not human certification. For each eligible backup, word count,
 sentence count, and corrected qualifier count are recomputed as midranks in a
 candidate-specific 41-row pool: the dataset's 40 accepted core rows plus that
-candidate. A global
+candidate. Backup qualifier counts come from the audited v5 ledger; qualifier
+counts for the 12 selected core rows come from the hash-bound v4 freeze, so its
+three pre-existing reviewer-metadata corrections are retained. A global
 same-dataset, one-to-one assignment then minimizes total squared distance to the
 six failed slots' frozen profile targets, with a deterministic full-mapping hash
 tie-break. The resulting text-free artifact reports `status: verified_plan`
@@ -61,12 +63,22 @@ to 120 sources, activation extraction, probe fitting, and SDT loss training
 remain blocked.
 
 The verified status is deliberately narrow: the mapping is reproducible and
-globally optimal within the accepted backup pool, but no absolute
-profile-distance threshold was preregistered. Two selected backups have much
-larger distances to their slot targets than the original source-selection
-distances (0.4006 versus 0.0483, and 0.1596 versus 0.0178). Replacement
-generation therefore stays on hold until a separate adequacy rule is defined
-without looking at generated rewrites.
+globally optimal within the accepted backup pool, but no profile-adequacy rule
+was frozen. Two selected backups remain visibly off-target in the v5 feature
+space: their squared distances are 0.4006 and 0.1574, with largest coordinate
+errors of 0.6171 and 0.3878. Original source-selection distances used a
+different 40-row reference and are therefore not direct thresholds for these
+candidate-specific 41-row scores. Replacement generation stays on hold while a
+separate, metadata-only adequacy rule and the final failed-slot set are frozen.
+
+An earlier v5 planning checkpoint omitted three reviewer-only qualifier-count
+corrections that already existed in the v4 freeze. This was detected before any
+replacement generation. The planner now binds the private v4 freeze manifest,
+overlays all 12 selected-core counts, and freezes both the mapping hash and a
+hash of every assignment input. The six source IDs did not change; the
+corrected QASPER and BillSum costs did. This corrected artifact supersedes the
+earlier planning checkpoint without invalidating any generated data, because
+none was generated from it.
 
 This decision follows a locked, model-assisted review of 10 candidates per
 dataset. The review found that real-source answers still require explicit

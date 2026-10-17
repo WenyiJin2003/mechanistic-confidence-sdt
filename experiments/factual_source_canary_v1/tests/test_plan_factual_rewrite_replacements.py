@@ -83,6 +83,19 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
         source_path.write_bytes(jsonl_bytes(rows))
         frozen_path.write_bytes(jsonl_bytes(slots))
         validator_path.write_text(json.dumps(validator, sort_keys=True), encoding="utf-8")
+        freeze_manifest = {
+            "source_set_revision": "v4",
+            "source_count": len(slots),
+            "source_file_sha256": MODULE.sha256_bytes(source_path.read_bytes()),
+            "frozen_sources_sha256": MODULE.sha256_bytes(frozen_path.read_bytes()),
+            "reviewer_metadata_corrections": {
+                "writer_visible_artifacts_unchanged": True
+            },
+        }
+        freeze_manifest_path = directory / "freeze_manifest.json"
+        freeze_manifest_path.write_text(
+            json.dumps(freeze_manifest, sort_keys=True), encoding="utf-8"
+        )
 
         backup_audits = [
             {
@@ -179,9 +192,13 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             },
             "failed_slots": {
                 "expected_count": 2,
+                "expected_total_frozen_slots": 2,
                 "expected_source_ids": ["demo:s1", "demo:s2"],
                 "frozen_slots_expected_sha256": MODULE.sha256_bytes(
                     frozen_path.read_bytes()
+                ),
+                "freeze_manifest_expected_sha256": MODULE.sha256_bytes(
+                    freeze_manifest_path.read_bytes()
                 ),
                 "post_repair_validator_expected_sha256": MODULE.sha256_bytes(
                     validator_path.read_bytes()
@@ -227,6 +244,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             },
             "expected_mapping": {
                 "audit_complete": True,
+                "assignment_input_sha256": None,
                 "mapping_sha256": MODULE.mapping_sha256(expected_mapping),
                 "failed_to_replacement": expected_mapping,
             },
@@ -237,6 +255,31 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
                 "sdt_training": False,
             },
         }
+        corrected_counts = {
+            row["source_id"]: len(row["protected_qualifiers"]) for row in rows
+        }
+        corrected_counts = MODULE.apply_frozen_core_qualifier_counts(
+            corrected_counts,
+            slots,
+            {row["source_id"]: row for row in rows},
+            core_role="core",
+        )
+        core_rows = [row for row in rows if row["selection_role"] == "core"]
+        candidates = [row for row in rows if row["selection_role"] == "backup"]
+        features_by_id = {
+            row["source_id"]: MODULE.candidate_features(
+                row, core_rows + [row], corrected_counts
+            )
+            for row in candidates
+        }
+        config["expected_mapping"]["assignment_input_sha256"] = (
+            MODULE.assignment_input_sha256(
+                config=config,
+                slots=slots,
+                candidates=candidates,
+                features_by_id=features_by_id,
+            )
+        )
         config_path = directory / "config.json"
         config_path.write_text(json.dumps(config, sort_keys=True), encoding="utf-8")
         return {
@@ -247,6 +290,8 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             "config_path": config_path,
             "source_path": source_path,
             "frozen_path": frozen_path,
+            "freeze_manifest": freeze_manifest,
+            "freeze_manifest_path": freeze_manifest_path,
             "validator_path": validator_path,
             "ledger_path": ledger_path,
             "audit_artifact": audit_artifact,
@@ -258,6 +303,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             config_path=fixture["config_path"],
             source_pool_path=fixture["source_path"],
             frozen_slots_path=fixture["frozen_path"],
+            freeze_manifest_path=fixture["freeze_manifest_path"],
             validator_path=fixture["validator_path"],
             ledger_path=fixture["ledger_path"],
             audit_artifact_path=fixture["audit_artifact_path"],
@@ -283,6 +329,73 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             fixture["audit_artifact_path"].read_bytes()
         )
         self.rebind_ledger(fixture)
+
+    def rebind_frozen_manifest(self, fixture):
+        fixture["freeze_manifest"]["frozen_sources_sha256"] = MODULE.sha256_bytes(
+            fixture["frozen_path"].read_bytes()
+        )
+        fixture["freeze_manifest_path"].write_text(
+            json.dumps(fixture["freeze_manifest"], sort_keys=True), encoding="utf-8"
+        )
+        fixture["config"]["failed_slots"]["frozen_slots_expected_sha256"] = (
+            MODULE.sha256_bytes(fixture["frozen_path"].read_bytes())
+        )
+        fixture["config"]["failed_slots"]["freeze_manifest_expected_sha256"] = (
+            MODULE.sha256_bytes(fixture["freeze_manifest_path"].read_bytes())
+        )
+        fixture["config_path"].write_text(
+            json.dumps(fixture["config"], sort_keys=True), encoding="utf-8"
+        )
+
+    def rebind_assignment_input(self, fixture):
+        source_by_id = {row["source_id"]: row for row in fixture["rows"]}
+        corrected_counts = {
+            source_id: len(row["protected_qualifiers"])
+            for source_id, row in source_by_id.items()
+        }
+        for correction in fixture["ledger"]["qualifier_corrections"]:
+            corrected_counts[correction["source_id"]] = len(
+                correction["corrected_protected_qualifiers"]
+            )
+        corrected_counts = MODULE.apply_frozen_core_qualifier_counts(
+            corrected_counts,
+            fixture["slots"],
+            source_by_id,
+            core_role="core",
+        )
+        accepted_ids = {
+            row["source_id"]
+            for row in fixture["ledger"]["backup_audits"]
+            if row["source_accepted"] is True
+        }
+        frozen_ids = {row["source_id"] for row in fixture["slots"]}
+        candidates = [
+            row
+            for row in fixture["rows"]
+            if row["selection_role"] == "backup"
+            and row["source_id"] in accepted_ids
+            and row["source_id"] not in frozen_ids
+        ]
+        core_rows = [
+            row for row in fixture["rows"] if row["selection_role"] == "core"
+        ]
+        features_by_id = {
+            row["source_id"]: MODULE.candidate_features(
+                row, core_rows + [row], corrected_counts
+            )
+            for row in candidates
+        }
+        fixture["config"]["expected_mapping"]["assignment_input_sha256"] = (
+            MODULE.assignment_input_sha256(
+                config=fixture["config"],
+                slots=fixture["slots"],
+                candidates=candidates,
+                features_by_id=features_by_id,
+            )
+        )
+        fixture["config_path"].write_text(
+            json.dumps(fixture["config"], sort_keys=True), encoding="utf-8"
+        )
 
     def test_verified_plan_is_global_same_dataset_and_preserves_every_slot_field(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -442,6 +555,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             config["metadata_correction_ledger"]["expected_sha256"] = None
             config["expected_mapping"] = {
                 "audit_complete": False,
+                "assignment_input_sha256": None,
                 "mapping_sha256": None,
                 "failed_to_replacement": {},
             }
@@ -468,6 +582,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             fixture = self.make_fixture(Path(temporary))
             fixture["config"]["expected_mapping"] = {
                 "audit_complete": False,
+                "assignment_input_sha256": None,
                 "mapping_sha256": None,
                 "failed_to_replacement": {},
             }
@@ -499,6 +614,18 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             wrong = {"demo:s1": "demo:b2", "demo:s2": "demo:b1"}
             fixture = self.make_fixture(directory, mapping=wrong)
             with self.assertRaisesRegex(ValueError, "mapping drifted"):
+                self.build(fixture)
+
+    def test_assignment_input_drift_fails_closed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(Path(temporary))
+            fixture["config"]["expected_mapping"]["assignment_input_sha256"] = (
+                "0" * 64
+            )
+            fixture["config_path"].write_text(
+                json.dumps(fixture["config"], sort_keys=True), encoding="utf-8"
+            )
+            with self.assertRaisesRegex(ValueError, "assignment-input hash drifted"):
                 self.build(fixture)
 
     def test_correction_that_changes_global_optimum_triggers_mapping_drift(self):
@@ -602,6 +729,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
                 "expected_accepted_unused_backups_by_dataset"
             ] = {"demo": 2}
             self.rebind_audit_artifact(fixture)
+            self.rebind_assignment_input(fixture)
             plan = self.build(fixture)
         self.assertEqual(plan["status"], "verified_plan")
         self.assertEqual(plan["counts"]["accepted_unused_backups"], 2)
@@ -657,14 +785,43 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             frozen_rows = fixture["slots"]
             frozen_rows[0]["source_hash"] = MODULE.sha256_text("different source")
             fixture["frozen_path"].write_bytes(jsonl_bytes(frozen_rows))
-            fixture["config"]["failed_slots"]["frozen_slots_expected_sha256"] = (
-                MODULE.sha256_bytes(fixture["frozen_path"].read_bytes())
+            self.rebind_frozen_manifest(fixture)
+            with self.assertRaisesRegex(ValueError, "source_hash disagrees"):
+                self.build(fixture)
+
+    def test_validator_must_cover_each_frozen_source_once(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(Path(temporary))
+            validator = json.loads(fixture["validator_path"].read_text())
+            validator["rows"][1]["source_id"] = validator["rows"][0]["source_id"]
+            fixture["validator_path"].write_text(
+                json.dumps(validator, sort_keys=True), encoding="utf-8"
             )
+            fixture["config"]["failed_slots"][
+                "post_repair_validator_expected_sha256"
+            ] = MODULE.sha256_bytes(fixture["validator_path"].read_bytes())
             fixture["config_path"].write_text(
                 json.dumps(fixture["config"], sort_keys=True), encoding="utf-8"
             )
-            with self.assertRaisesRegex(ValueError, "source_hash disagrees"):
+            with self.assertRaisesRegex(ValueError, "one unique row"):
                 self.build(fixture)
+
+    def test_frozen_core_qualifier_count_supersedes_pre_v4_pool_count(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(Path(temporary))
+            source_counts = {
+                row["source_id"]: len(row["protected_qualifiers"])
+                for row in fixture["rows"]
+            }
+            fixture["slots"][0]["protected_qualifiers"] = ["corrected qualifier"]
+            corrected = MODULE.apply_frozen_core_qualifier_counts(
+                source_counts,
+                fixture["slots"],
+                {row["source_id"]: row for row in fixture["rows"]},
+                core_role="core",
+            )
+            self.assertEqual(corrected["demo:s1"], 1)
+            self.assertEqual(corrected["demo:s2"], 3)
 
     def test_public_slot_values_are_schema_checked_before_publication(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -672,12 +829,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             frozen_rows = fixture["slots"]
             frozen_rows[0]["profile"] = "private source text"
             fixture["frozen_path"].write_bytes(jsonl_bytes(frozen_rows))
-            fixture["config"]["failed_slots"]["frozen_slots_expected_sha256"] = (
-                MODULE.sha256_bytes(fixture["frozen_path"].read_bytes())
-            )
-            fixture["config_path"].write_text(
-                json.dumps(fixture["config"], sort_keys=True), encoding="utf-8"
-            )
+            self.rebind_frozen_manifest(fixture)
             with self.assertRaisesRegex(ValueError, "public-safe profile"):
                 self.build(fixture)
 
@@ -697,6 +849,23 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
                 fixture["source_path"].read_bytes() + b"\n"
             )
             with self.assertRaisesRegex(ValueError, "source pool SHA-256 drifted"):
+                self.build(fixture)
+
+    def test_freeze_manifest_must_bind_frozen_slots(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = self.make_fixture(Path(temporary))
+            fixture["freeze_manifest"]["frozen_sources_sha256"] = "0" * 64
+            fixture["freeze_manifest_path"].write_text(
+                json.dumps(fixture["freeze_manifest"], sort_keys=True),
+                encoding="utf-8",
+            )
+            fixture["config"]["failed_slots"]["freeze_manifest_expected_sha256"] = (
+                MODULE.sha256_bytes(fixture["freeze_manifest_path"].read_bytes())
+            )
+            fixture["config_path"].write_text(
+                json.dumps(fixture["config"], sort_keys=True), encoding="utf-8"
+            )
+            with self.assertRaisesRegex(ValueError, "does not bind frozen v4 slots"):
                 self.build(fixture)
 
     def test_public_plan_does_not_leak_private_text_or_qualifiers(self):
@@ -720,6 +889,7 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
             MODULE.DEFAULT_CONFIG,
             MODULE.DEFAULT_SOURCE_POOL,
             MODULE.DEFAULT_FROZEN_SLOTS,
+            MODULE.DEFAULT_FREEZE_MANIFEST,
             MODULE.DEFAULT_VALIDATOR,
             MODULE.DEFAULT_LEDGER,
             MODULE.DEFAULT_AUDIT_ARTIFACT,
@@ -737,6 +907,10 @@ class PlanFactualRewriteReplacementsTests(unittest.TestCase):
         self.assertEqual(
             plan["mapping_sha256"],
             "39f92cc98bfae1d66f55bf8dc7dbdebc8887b159b9232efed3b338edaa7e22ba",
+        )
+        self.assertEqual(
+            plan["assignment_input_sha256"],
+            "28123f5fa96927fb2af35e8c95500b26f632cf04dd50214c55c4043747a18f24",
         )
         self.assertEqual(
             {

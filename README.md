@@ -24,10 +24,10 @@ probe fitting, and scale-up remain unauthorized.** This is a data-construction
 checkpoint, not evidence for a confidence representation.
 
 The mapping is the deterministic optimum within the accepted backup pool; it
-does not yet establish that every replacement is absolutely close enough to
-its original profile target. Two assignments have notably larger profile
-distances than the sources they would replace. An explicit replacement-distance
-adequacy gate is therefore required before any generation decision.
+does not yet establish that every replacement is close enough to its intended
+profile target. Two assignments remain visibly off-target in the v5 feature
+space. A profile-adequacy gate is therefore required before any generation
+decision.
 
 [v4 generation-and-repair checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) ·
 [Verified v5 replacement plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) ·

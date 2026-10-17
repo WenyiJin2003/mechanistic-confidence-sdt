@@ -34,6 +34,7 @@
   },
   "failed_slots": {
     "expected_count": 6,
+    "expected_total_frozen_slots": 12,
     "expected_source_ids": [
       "asqa:5767411579190718767",
       "asqa:-9159547197550283952",
@@ -43,6 +44,7 @@
       "billsum:1b0226a63ea123f1"
     ],
     "frozen_slots_expected_sha256": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
+    "freeze_manifest_expected_sha256": "fb7e4c112e2ca340d5afbe0a66392d0353ab62a6e0070ceb539fa2d096fe63b6",
     "post_repair_validator_expected_sha256": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a"
   },
   "features": {
@@ -51,7 +53,7 @@
       "sentence_count_candidate_included_midrank",
       "corrected_qualifier_count_candidate_included_midrank"
     ],
-    "reference_pool": "the same dataset's 40 frozen accepted core rows plus the candidate itself, after audited metadata corrections",
+    "reference_pool": "the same dataset's 40 frozen accepted core rows plus the candidate itself; selected-core qualifier counts come from the hash-bound frozen v4 rows, and backup qualifier counts come from the audited v5 ledger",
     "midrank_formula": "(count_less + (count_equal + 1) / 2) / n",
     "bounded_interval": "(0, 1]",
     "distance": "squared_euclidean",
@@ -85,6 +87,7 @@
   },
   "expected_mapping": {
     "audit_complete": true,
+    "assignment_input_sha256": "28123f5fa96927fb2af35e8c95500b26f632cf04dd50214c55c4043747a18f24",
     "mapping_sha256": "39f92cc98bfae1d66f55bf8dc7dbdebc8887b159b9232efed3b338edaa7e22ba",
     "failed_to_replacement": {
       "asqa:5767411579190718767": "asqa:5634464892410080253",

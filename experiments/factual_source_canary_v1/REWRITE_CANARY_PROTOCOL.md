@@ -43,7 +43,9 @@ exact mapping, which were then frozen. This review is not human certification.
 For each eligible backup candidate, word count, sentence count, and corrected
 qualifier count are recomputed as candidate-included midranks over a 41-row
 reference pool: the same dataset's 40 frozen accepted core rows plus that
-candidate. The assignment is then solved
+candidate. Backup qualifier counts come from the audited v5 ledger. The 12
+selected core rows take their qualifier counts from the hash-bound v4 freeze,
+preserving all three pre-existing reviewer-metadata corrections. The assignment is then solved
 globally within each dataset as a one-to-one minimum-total-squared-distance
 match between candidate features and failed slots' preregistered profile
 targets. A hash of the complete mapping provides the deterministic tie-break.
@@ -58,11 +60,19 @@ and preregistered experimental slot. This artifact authorizes no model call:
 **replacement generation remains unauthorized and has not started.**
 
 `verified_plan` means that the inputs, method, and exact optimum mapping are
-hash-bound and reproducible. It does not certify absolute profile-match
-quality. Because no absolute distance threshold was preregistered and two
-assignments are substantially farther from their targets than the original
-selected sources, a separate distance-adequacy gate is required before any
-replacement generation decision.
+hash-bound and reproducible. Both the source mapping and the complete
+assignment input table have frozen hashes. It does not certify profile-match
+adequacy. Two assignments remain visibly off-target in the v5 feature space,
+and the old 40-row source-selection distances are not direct thresholds for
+the candidate-specific 41-row scores. A separate adequacy gate is required
+before any replacement generation decision.
+
+The first v5 planning checkpoint omitted three qualifier-count corrections
+already present in the v4 freeze. The omission was found before replacement
+generation, the mapping freeze was reset, and the corrected calculation was
+independently recomputed and refrozen. The selected source IDs did not change;
+the QASPER and BillSum costs did. The corrected artifact supersedes that
+planning checkpoint, and no generated pair depends on the earlier distances.
 
 The restored 12-source freeze remains the explicit v4 source-set revision.
 Preparation writes

@@ -30,6 +30,9 @@ PRIVATE = ROOT / "private_data"
 DEFAULT_CONFIG = ROOT / "configs" / "rewrite_canary_v5_replacement.json"
 DEFAULT_SOURCE_POOL = PRIVATE / "expanded_pool_v2" / "selected_core_sources_v1.jsonl"
 DEFAULT_FROZEN_SLOTS = PRIVATE / "rewrite_canary_v1" / "frozen_sources_v4.jsonl"
+DEFAULT_FREEZE_MANIFEST = (
+    PRIVATE / "rewrite_canary_v1" / "FREEZE_MANIFEST_PRIVATE_V4.json"
+)
 DEFAULT_VALIDATOR = (
     PRIVATE
     / "rewrite_canary_v1"
@@ -78,7 +81,8 @@ SAFE_DRAFT_ORDERS = {"confident_first", "hesitant_first"}
 SAFE_BATCH_IDS = {"batch_01", "batch_02", "batch_03"}
 REFERENCE_POOL_TEMPLATE = (
     "the same dataset's {core_count} frozen accepted core rows plus the "
-    "candidate itself, after audited metadata corrections"
+    "candidate itself; selected-core qualifier counts come from the hash-bound "
+    "frozen v4 rows, and backup qualifier counts come from the audited v5 ledger"
 )
 TIE_BREAK_DESCRIPTION = (
     "sha256 of seed, namespace, dataset, and the canonical full mapping"
@@ -175,6 +179,9 @@ def validate_config(config: Mapping[str, Any]) -> None:
         raise ValueError("unexpected replacement-plan config schema")
     if config.get("plan_revision") != "v5":
         raise ValueError("replacement plan must target revision v5")
+    seed = config.get("seed")
+    if isinstance(seed, bool) or not isinstance(seed, int):
+        raise ValueError("replacement-plan seed must be an integer")
     source = config.get("source_pool")
     failed = config.get("failed_slots")
     features = config.get("features")
@@ -199,8 +206,16 @@ def validate_config(config: Mapping[str, Any]) -> None:
         or len(failed_ids) != len(set(failed_ids))
     ):
         raise ValueError("failed-slot IDs must be unique and match expected_count")
+    expected_total_frozen = failed.get("expected_total_frozen_slots")
+    if (
+        isinstance(expected_total_frozen, bool)
+        or not isinstance(expected_total_frozen, int)
+        or expected_total_frozen < len(failed_ids)
+    ):
+        raise ValueError("expected_total_frozen_slots must cover all failed slots")
     for field in (
         "frozen_slots_expected_sha256",
+        "freeze_manifest_expected_sha256",
         "post_repair_validator_expected_sha256",
     ):
         if not is_sha256(failed.get(field)):
@@ -255,6 +270,22 @@ def validate_config(config: Mapping[str, Any]) -> None:
         raise ValueError("private audit artifact filename must be a plain JSON filename")
     if expected.get("audit_complete") not in (True, False):
         raise ValueError("expected_mapping.audit_complete must be boolean")
+    if expected["audit_complete"] is True:
+        if not is_sha256(expected.get("mapping_sha256")):
+            raise ValueError("frozen expected mapping requires a valid mapping SHA-256")
+        if not is_sha256(expected.get("assignment_input_sha256")):
+            raise ValueError(
+                "frozen expected mapping requires a valid assignment-input SHA-256"
+            )
+        frozen_mapping = expected.get("failed_to_replacement")
+        if not isinstance(frozen_mapping, dict) or set(frozen_mapping) != set(failed_ids):
+            raise ValueError("frozen expected mapping must cover every failed slot")
+    elif (
+        expected.get("mapping_sha256") is not None
+        or expected.get("assignment_input_sha256") is not None
+        or expected.get("failed_to_replacement") != {}
+    ):
+        raise ValueError("unfrozen expected mapping must not contain frozen values")
     expected_counts = source.get("expected_accepted_unused_backups_by_dataset")
     if (
         not isinstance(expected_counts, dict)
@@ -383,6 +414,19 @@ def failed_slot_rows(
     validator_rows = validator.get("rows")
     if not isinstance(validator_rows, list):
         raise ValueError("post-repair validator is missing rows")
+    expected_total = int(config["failed_slots"]["expected_total_frozen_slots"])
+    validator_ids = [
+        row.get("source_id") for row in validator_rows if isinstance(row, dict)
+    ]
+    if (
+        len(validator_rows) != expected_total
+        or len(validator_ids) != expected_total
+        or any(not isinstance(source_id, str) or not source_id for source_id in validator_ids)
+        or len(set(validator_ids)) != expected_total
+    ):
+        raise ValueError(
+            "post-repair validator must contain one unique row per frozen source"
+        )
     actual_failed = {
         row.get("source_id")
         for row in validator_rows
@@ -395,6 +439,8 @@ def failed_slot_rows(
     frozen_by_id = {row.get("source_id"): row for row in frozen_rows}
     if len(frozen_by_id) != len(frozen_rows):
         raise ValueError("frozen v4 slots contain duplicate source IDs")
+    if set(validator_ids) != set(frozen_by_id):
+        raise ValueError("post-repair validator and frozen v4 source sets differ")
     preserved = config["assignment"]["preserved_slot_fields"]
     slots: list[dict[str, Any]] = []
     for source_id in expected_ids:
@@ -451,6 +497,40 @@ def failed_slot_rows(
     return sorted(slots, key=lambda row: int(row["generation_order"])), set(frozen_by_id)
 
 
+def apply_frozen_core_qualifier_counts(
+    corrected_counts: Mapping[str, int],
+    frozen_rows: Sequence[Mapping[str, Any]],
+    source_by_id: Mapping[str, Mapping[str, Any]],
+    *,
+    core_role: str,
+) -> dict[str, int]:
+    """Use the hash-bound v4 metadata for selected core rows.
+
+    The source-selection pool predates three reviewer-only qualifier corrections
+    applied during the v4 freeze. Word/sentence metadata and source identity must
+    remain identical; only the qualifier list may differ.
+    """
+    result = dict(corrected_counts)
+    seen: set[str] = set()
+    for frozen in frozen_rows:
+        source_id = frozen.get("source_id")
+        if not isinstance(source_id, str) or not source_id or source_id in seen:
+            raise ValueError("frozen v4 rows contain an invalid or duplicate source_id")
+        seen.add(source_id)
+        source = source_by_id.get(source_id)
+        if source is None:
+            raise ValueError(f"{source_id}: frozen v4 row is absent from the source pool")
+        if source.get("selection_role") != core_role:
+            raise ValueError(f"{source_id}: frozen v4 row is not a core source")
+        for field in ("dataset", "source_hash", "word_count", "sentence_count"):
+            if frozen.get(field) != source.get(field):
+                raise ValueError(
+                    f"{source_id}: frozen v4 {field} disagrees with source pool"
+                )
+        result[source_id] = len(normalize_descriptors(frozen))
+    return result
+
+
 def audit_pending_artifact(
     *,
     config: Mapping[str, Any],
@@ -458,6 +538,7 @@ def audit_pending_artifact(
     config_sha256: str,
     source_pool_sha256: str,
     frozen_slots_sha256: str,
+    freeze_manifest_sha256: str,
     validator_sha256: str,
     failed_slots: Sequence[Mapping[str, Any]],
     ledger_sha256: str | None = None,
@@ -486,6 +567,7 @@ def audit_pending_artifact(
             "config_sha256": config_sha256,
             "source_pool_sha256": source_pool_sha256,
             "frozen_slots_sha256": frozen_slots_sha256,
+            "v4_freeze_manifest_sha256": freeze_manifest_sha256,
             "post_repair_validator_sha256": validator_sha256,
             "private_metadata_ledger_sha256": ledger_sha256,
         },
@@ -789,6 +871,51 @@ def mapping_sha256(mapping: Mapping[str, str]) -> str:
     return sha256_text(canonical_json(mapping_payload(mapping)))
 
 
+def assignment_input_sha256(
+    *,
+    config: Mapping[str, Any],
+    slots: Sequence[Mapping[str, Any]],
+    candidates: Sequence[Mapping[str, Any]],
+    features_by_id: Mapping[str, Sequence[float]],
+) -> str:
+    """Bind every public-safe target and corrected candidate feature."""
+    payload = {
+        "method": {
+            "seed": config["seed"],
+            "feature_names": list(config["features"]["names"]),
+            "reference_pool": config["features"]["reference_pool"],
+            "distance": config["features"]["distance"],
+            "distance_round_digits": config["features"]["distance_round_digits"],
+            "assignment": config["assignment"]["method"],
+            "tie_breaker": config["assignment"]["tie_breaker"],
+            "key_namespace": config["assignment"]["key_namespace"],
+            "same_dataset_required": config["assignment"]["same_dataset_required"],
+        },
+        "slots": [
+            {
+                "source_id": row["source_id"],
+                "source_hash": row["source_hash"],
+                "dataset": row["dataset"],
+                "selection_target": [float(value) for value in row["selection_target"]],
+            }
+            for row in sorted(slots, key=lambda item: str(item["source_id"]))
+        ],
+        "candidates": [
+            {
+                "source_id": row["source_id"],
+                "source_hash": row["source_hash"],
+                "dataset": row["dataset"],
+                "features": [
+                    round(float(value), 12)
+                    for value in features_by_id[row["source_id"]]
+                ],
+            }
+            for row in sorted(candidates, key=lambda item: str(item["source_id"]))
+        ],
+    }
+    return sha256_text(canonical_json(payload))
+
+
 def solve_dataset_assignment(
     *,
     dataset: str,
@@ -875,6 +1002,12 @@ def build_verified_plan(
         features_by_id[candidate["source_id"]] = candidate_features(
             candidate, reference, corrected_counts
         )
+    actual_assignment_input_hash = assignment_input_sha256(
+        config=config,
+        slots=slots,
+        candidates=candidates,
+        features_by_id=features_by_id,
+    )
 
     full_mapping: dict[str, str] = {}
     full_edge_costs: dict[tuple[str, str], float] = {}
@@ -920,6 +1053,8 @@ def build_verified_plan(
             raise ValueError("computed replacement mapping drifted from the frozen mapping")
         if expected.get("mapping_sha256") != actual_mapping_hash:
             raise ValueError("computed replacement mapping hash drifted")
+        if expected.get("assignment_input_sha256") != actual_assignment_input_hash:
+            raise ValueError("computed assignment-input hash drifted")
 
     preserved = config["assignment"]["preserved_slot_fields"]
     slot_by_id = {row["source_id"]: row for row in slots}
@@ -967,6 +1102,7 @@ def build_verified_plan(
         },
         "dataset_assignment_summary": dataset_summaries,
         "mapping_sha256": actual_mapping_hash,
+        "assignment_input_sha256": actual_assignment_input_hash,
         "assignments": assignments,
         "artifact_bindings": dict(bindings),
         "authorization": {
@@ -992,6 +1128,7 @@ def build_plan(
     config_path: Path = DEFAULT_CONFIG,
     source_pool_path: Path = DEFAULT_SOURCE_POOL,
     frozen_slots_path: Path = DEFAULT_FROZEN_SLOTS,
+    freeze_manifest_path: Path = DEFAULT_FREEZE_MANIFEST,
     validator_path: Path = DEFAULT_VALIDATOR,
     ledger_path: Path = DEFAULT_LEDGER,
     audit_artifact_path: Path = DEFAULT_AUDIT_ARTIFACT,
@@ -1000,6 +1137,9 @@ def build_plan(
     validate_config(config)
     source_rows, source_raw = read_jsonl_bytes(source_pool_path)
     frozen_rows, frozen_raw = read_jsonl_bytes(frozen_slots_path)
+    freeze_manifest, freeze_manifest_raw = read_json_object_bytes(
+        freeze_manifest_path
+    )
     validator, validator_raw = read_json_object_bytes(validator_path)
 
     source_sha = validate_bound_bytes(
@@ -1010,6 +1150,29 @@ def build_plan(
         config["failed_slots"]["frozen_slots_expected_sha256"],
         "frozen v4 slots",
     )
+    freeze_manifest_sha = validate_bound_bytes(
+        freeze_manifest_raw,
+        config["failed_slots"]["freeze_manifest_expected_sha256"],
+        "private v4 freeze manifest",
+    )
+    if freeze_manifest.get("source_set_revision") != "v4":
+        raise ValueError("private freeze manifest must bind source-set revision v4")
+    if freeze_manifest.get("frozen_sources_sha256") != frozen_sha:
+        raise ValueError("private freeze manifest does not bind frozen v4 slots")
+    if freeze_manifest.get("source_file_sha256") != source_sha:
+        raise ValueError("private freeze manifest does not bind the source pool")
+    expected_frozen_count = int(config["failed_slots"]["expected_total_frozen_slots"])
+    if (
+        freeze_manifest.get("source_count") != expected_frozen_count
+        or len(frozen_rows) != expected_frozen_count
+    ):
+        raise ValueError("private freeze manifest must bind the complete v4 grid")
+    correction_provenance = freeze_manifest.get("reviewer_metadata_corrections")
+    if (
+        not isinstance(correction_provenance, dict)
+        or correction_provenance.get("writer_visible_artifacts_unchanged") is not True
+    ):
+        raise ValueError("private freeze manifest lacks correction provenance")
     validator_sha = validate_bound_bytes(
         validator_raw,
         config["failed_slots"]["post_repair_validator_expected_sha256"],
@@ -1019,24 +1182,11 @@ def build_plan(
     slots, frozen_selected_ids = failed_slot_rows(
         frozen_rows, validator, config
     )
-    for slot in slots:
-        source_row = source_by_id.get(slot["source_id"])
-        if source_row is None:
-            raise ValueError(
-                f"{slot['source_id']}: frozen slot is absent from the source pool"
-            )
-        if slot.get("dataset") != source_row.get("dataset"):
-            raise ValueError(
-                f"{slot['source_id']}: frozen slot dataset disagrees with source pool"
-            )
-        if slot.get("source_hash") != source_row.get("source_hash"):
-            raise ValueError(
-                f"{slot['source_id']}: frozen slot source_hash disagrees with source pool"
-            )
     bindings = {
         "config_sha256": sha256_bytes(config_raw),
         "source_pool_sha256": source_sha,
         "frozen_slots_sha256": frozen_sha,
+        "v4_freeze_manifest_sha256": freeze_manifest_sha,
         "post_repair_validator_sha256": validator_sha,
     }
 
@@ -1060,6 +1210,7 @@ def build_plan(
             config_sha256=bindings["config_sha256"],
             source_pool_sha256=source_sha,
             frozen_slots_sha256=frozen_sha,
+            freeze_manifest_sha256=freeze_manifest_sha,
             validator_sha256=validator_sha,
             failed_slots=slots,
         )
@@ -1075,6 +1226,7 @@ def build_plan(
             config_sha256=bindings["config_sha256"],
             source_pool_sha256=source_sha,
             frozen_slots_sha256=frozen_sha,
+            freeze_manifest_sha256=freeze_manifest_sha,
             validator_sha256=validator_sha,
             failed_slots=slots,
             ledger_sha256=ledger_sha,
@@ -1092,6 +1244,12 @@ def build_plan(
             audit_artifact=audit_artifact,
             audit_artifact_sha256=audit_artifact_sha,
             audit_artifact_filename=Path(audit_artifact_path).name,
+        )
+        corrected_counts = apply_frozen_core_qualifier_counts(
+            corrected_counts,
+            frozen_rows,
+            source_by_id,
+            core_role=str(config["source_pool"]["core_role"]),
         )
         bindings["private_metadata_ledger_sha256"] = ledger_sha
         bindings["private_independent_audit_artifact_sha256"] = (
@@ -1123,6 +1281,7 @@ def build_plan(
             config_sha256=bindings["config_sha256"],
             source_pool_sha256=source_sha,
             frozen_slots_sha256=frozen_sha,
+            freeze_manifest_sha256=freeze_manifest_sha,
             validator_sha256=validator_sha,
             failed_slots=slots,
             ledger_sha256=ledger_sha,
@@ -1134,6 +1293,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--source-pool", type=Path, default=DEFAULT_SOURCE_POOL)
     parser.add_argument("--frozen-slots", type=Path, default=DEFAULT_FROZEN_SLOTS)
+    parser.add_argument(
+        "--freeze-manifest", type=Path, default=DEFAULT_FREEZE_MANIFEST
+    )
     parser.add_argument("--post-repair-validator", type=Path, default=DEFAULT_VALIDATOR)
     parser.add_argument("--metadata-ledger", type=Path, default=DEFAULT_LEDGER)
     parser.add_argument(
@@ -1151,6 +1313,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         config_path=args.config,
         source_pool_path=args.source_pool,
         frozen_slots_path=args.frozen_slots,
+        freeze_manifest_path=args.freeze_manifest,
         validator_path=args.post_repair_validator,
         ledger_path=args.metadata_ledger,
         audit_artifact_path=args.independent_audit_artifact,
