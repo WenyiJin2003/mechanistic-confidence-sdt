@@ -92,7 +92,7 @@ def pre_review(decision: str = "pass") -> dict:
 
 def blind_manifest() -> dict:
     return {
-        "schema": "factual-rewrite-blind-review-v1",
+        "schema": "factual-rewrite-blind-review-v2",
         "pair_count": 12,
         "packet_sha256": "3" * 64,
         "blinded": True,
@@ -105,6 +105,7 @@ def blind_manifest() -> dict:
 def completed_blind_results() -> dict:
     fields = {
         "source_fidelity": "both_preserve",
+        "pair_content_equivalence": "equivalent",
         "qualifier_preservation": "both_preserve",
         "speaker_level_scope": "both_speaker_level",
         "certainty_a": "2",
@@ -116,6 +117,11 @@ def completed_blind_results() -> dict:
         "shortcut_concern": "none",
     }
     return {
+        "schema": "factual-rewrite-blind-review-results-v2",
+        "artifact_role": "final_12_pair_human_review_form",
+        "pair_count": 12,
+        "final_canary_certification": False,
+        "human_review_certified": False,
         "packet_sha256": "3" * 64,
         "blinded": True,
         "reviews": [

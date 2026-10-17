@@ -1,0 +1,49 @@
+{
+  "answer_key_public": false,
+  "artifact_role": "interim_failure_discovery_packet",
+  "authorization": {
+    "activation_extraction": false,
+    "probe_fitting": false,
+    "replacement_generation": false,
+    "sdt_training": false
+  },
+  "blinded": true,
+  "config_sha256": "2ce6781c20d526663b11f15f065aee68541e4fdcd91fb172b644cd8f181631c9",
+  "current_review_summary": "rewrite_canary_v4_clean_six_model_review_summary.json",
+  "final_canary_certification": false,
+  "full_pair_count": 12,
+  "human_review_certified": false,
+  "input_sha256": {
+    "freeze_manifest_v4": "fb7e4c112e2ca340d5afbe0a66392d0353ab62a6e0070ceb539fa2d096fe63b6",
+    "frozen_sources_v4": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
+    "post_repair_pairs_v4": "4b1167d803e4ba99d6d0ea458a5dc25bf78643f752ade4801d889e748c2a2046",
+    "post_repair_provenance_v4": "d94e5398d498ae0d70c93a78ec99b8a076860603afe23be36a154a5232fcb439",
+    "post_repair_validator_v4": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a"
+  },
+  "next_action": "Use the separate model-review summary for current review results; human adjudication remains required before freezing the final failed-slot set.",
+  "packet_sha256": "05709d7f4e0515ef7ee4d473b1c630cb39ce96e76219ae0e352a1dac95e1abc5",
+  "review_completion_tracked_here": false,
+  "review_fields": [
+    "source_fidelity",
+    "pair_content_equivalence",
+    "qualifier_preservation",
+    "speaker_level_scope",
+    "certainty_a",
+    "certainty_b",
+    "stronger_certainty",
+    "naturalness_a",
+    "naturalness_b",
+    "formatting_mismatch",
+    "shortcut_concern",
+    "notes"
+  ],
+  "schema": "factual-rewrite-clean-subset-packet-summary-v1",
+  "selected_dataset_counts": {
+    "billsum": 3,
+    "qasper": 3
+  },
+  "selected_pair_count": 6,
+  "selection_rule": "validator row has an empty failure_flags list",
+  "source_set_revision": "v4",
+  "status": "packet_prepared"
+}

@@ -18,7 +18,19 @@ construction conditions. Fresh isolated generation produced 2/12 mechanically
 clean pairs. Each of the ten initial failures then received exactly one
 writer-safe full-pair repair; this raised the clean count to 6/12. The other
 6/12 still fail frozen mechanical rules, and none qualifies for the narrowly
-allowed final length-only repair. The reproducible, text-free current ledger is
+allowed final length-only repair. A separate, deterministic blind-review packet
+was prepared for the six mechanically clean pairs. It is an interim
+failure-discovery step, not the final 12-pair review or human certification.
+Two independent blinded model-assisted reviewers have now completed that
+interim review. They agreed on **0/6 strict passes**: three pairs fail the
+content/qualifier/scope gate, and the other three fail at least one direction,
+naturalness, or shortcut gate. See
+[`results/CLEAN_SIX_MODEL_REVIEW.md`](results/CLEAN_SIX_MODEL_REVIEW.md).
+The text-free packet-generation record is
+[`results/rewrite_canary_v4_clean_six_packet_summary.json`](results/rewrite_canary_v4_clean_six_packet_summary.json).
+Current review results are tracked separately in
+[`results/rewrite_canary_v4_clean_six_model_review_summary.json`](results/rewrite_canary_v4_clean_six_model_review_summary.json).
+The reproducible, text-free current ledger is
 [`results/rewrite_canary_v4_current_checkpoint.json`](results/rewrite_canary_v4_current_checkpoint.json),
 and its aggregate validator projection is in
 [`results/rewrite_canary_v4_post_repair_validation_summary.json`](results/rewrite_canary_v4_post_repair_validation_summary.json).
@@ -37,7 +49,9 @@ it is not the Qwen model that will later be probed. The failed initial pairs
 received one repair attempt each, generated in three fresh isolated repair
 contexts from the frozen source and generic length rules only; prior candidate
 text and reviewer-only semantic metadata were withheld. Six pairs remain
-eligible for blind content review. For the other six, the rank-only backup rule
+eligible for blind content review, and their private packet has received two
+model-assisted reviews. Human adjudication remains pending. For the other six,
+the rank-only backup rule
 was rejected because it could substantially change the frozen
 length/complexity profile. A model-assisted independent re-review accepted 18
 unused backups and froze the exact mapping produced by the profile-aware v5
@@ -61,6 +75,13 @@ source freeze, rather than current progress ledgers. **This is a data-quality
 and pipeline result, not evidence of a confidence representation.** Expansion
 to 120 sources, activation extraction, probe fitting, and SDT loss training
 remain blocked.
+
+The v5 mapping covers only the six original mechanical failures. If human
+adjudication confirms the clean-six review, the final failure set will expand
+and v5 must be recomputed before any replacement generation. Because the new
+failures include semantic drift, weak contrast, and shortcut language, source
+replacement alone may not be sufficient; the rewrite recipe itself may need to
+change.
 
 The verified status is deliberately narrow: the mapping is reproducible and
 globally optimal within the accepted backup pool, but no profile-adequacy rule
@@ -247,6 +268,22 @@ correction, same-dataset constraint, slot field, and frozen mapping agrees. A
 `verified_plan` still leaves replacement generation and every downstream
 authorization set to `false`.
 
+Build the current interim review packet for only the six mechanically clean v4
+pairs with:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/build_factual_rewrite_clean_subset_review.py --overwrite
+```
+
+The script first verifies all 12 frozen sources, pairs, validation rows, input
+hashes, and the full artifact binding. It then selects only rows with no
+mechanical failure flags. The six-row A/B order is deterministic and balanced
+3/3 overall, with the closest possible balance across dataset, length direction,
+and writer order. Only
+`private_data/rewrite_canary_v1/blind_review_clean6_v4/reviewer_only/BLIND_REVIEW.html`
+should be given to a reviewer; the A/B key is stored separately under
+`private_key/`. The packet cannot be imported as the final 12-pair review.
+
 Build the deterministic review order with:
 
 ```bash
@@ -281,7 +318,12 @@ python3 experiments/factual_source_canary_v1/src/build_review_queue.py \
 | `results/rewrite_canary_v1_revision_adjudication.json` | public | Historical as-of-v4-freeze v2/v3 supersession and pair-provenance snapshot |
 | `results/rewrite_canary_v4_current_checkpoint.json` | public | Reproducible v4 generation-and-repair counts, writer-context metadata, decisions, and artifact hashes |
 | `results/rewrite_canary_v4_post_repair_validation_summary.json` | public | Aggregate mechanical result after one repair attempt for each of ten initial failures |
+| `results/rewrite_canary_v4_clean_six_packet_summary.json` | public | Text-free record of how the separate six-pair interim blind-review packet was generated; current results are tracked separately and no downstream work is authorized |
+| `results/rewrite_canary_v4_clean_six_model_review_summary.json` | public | Aggregate, text-free adjudication of two independent blinded model reviews; 0/6 strict passes and human adjudication pending |
+| `results/CLEAN_SIX_MODEL_REVIEW.md` | public | Concise conclusion, method, aggregate gate results, and implications of the clean-six review |
 | `results/rewrite_canary_v5_replacement_plan.json` | public | Verified text-free six-source replacement plan, model-assisted review provenance, profile-aware assignment method, artifact bindings, and explicit no-generation authorization; not human-certified |
+| `private_data/rewrite_canary_v1/blind_review_clean6_v4/reviewer_only/BLIND_REVIEW.html` | local only | Label-blind reviewer page for the mechanically clean six; interim failure discovery only |
+| `private_data/rewrite_canary_v1/blind_review_clean6_v4/private_key/BLIND_REVIEW_KEY.json` | local only | Separate A/B answer key; never distribute with the reviewer page |
 | `private_data/rewrite_canary_v1/SOURCE_SET_ADJUDICATION_V4.json` | local only | Detailed invalid-run quarantine and source-set correction ledger |
 | `private_data/rewrite_canary_v1/REPLACEMENT_SOURCE_SEMANTIC_AUDIT_V5.json` | local only | Model-assisted accept/hold decisions for all 24 backup sources; not human certification |
 | `private_data/rewrite_canary_v1/REPLACEMENT_METADATA_CORRECTIONS_V5.json` | local only | Hash-bound qualifier corrections and audit provenance used by the v5 planner |

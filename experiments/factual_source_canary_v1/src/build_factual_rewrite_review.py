@@ -27,6 +27,7 @@ DEFAULT_CONFIG = BASE / "configs" / "rewrite_canary_v1.json"
 EXPECTED_PAIRS = 12
 REQUIRED_REVIEW_FIELDS = (
     "source_fidelity",
+    "pair_content_equivalence",
     "qualifier_preservation",
     "speaker_level_scope",
     "certainty_a",
@@ -233,17 +234,26 @@ def balanced_a_roles(rows: Sequence[dict[str, Any]], seed: int) -> dict[str, str
     return roles
 
 
-def build_blinded_rows(
-    rows: Sequence[dict[str, Any]], seed: int
+def materialize_blinded_rows(
+    rows: Sequence[dict[str, Any]],
+    a_roles: Mapping[str, str],
+    seed: int,
+    *,
+    review_prefix: str = "R",
+    order_purpose: str = "factual-review-packet-order",
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]]]:
-    """Return reviewer-visible rows and a separate private answer key."""
-    if len(rows) != EXPECTED_PAIRS:
-        raise ValueError(f"expected exactly {EXPECTED_PAIRS} joined rows")
-    a_roles = balanced_a_roles(rows, seed)
+    """Materialize blinded text using a caller-validated Version-A assignment."""
+    source_ids = {str(row.get("source_id")) for row in rows}
+    if set(a_roles) != source_ids or any(
+        role not in {"confident", "hesitant"} for role in a_roles.values()
+    ):
+        raise ValueError("A-role mapping must cover every row exactly once")
+    if not review_prefix or not review_prefix.isalnum():
+        raise ValueError("review_prefix must be nonempty and alphanumeric")
     ordered = sorted(
         rows,
         key=lambda row: _stable_digest(
-            seed, "factual-review-packet-order", str(row["source_id"])
+            seed, order_purpose, str(row["source_id"])
         ),
     )
     blinded: list[dict[str, str]] = []
@@ -256,7 +266,7 @@ def build_blinded_rows(
             "confident": str(row["confident_response"]),
             "hesitant": str(row["hesitant_response"]),
         }
-        review_id = f"R{index:03d}"
+        review_id = f"{review_prefix}{index:03d}"
         blinded.append({
             "review_id": review_id,
             "question": str(row["prompt"]),
@@ -281,6 +291,15 @@ def build_blinded_rows(
     return blinded, answer_key
 
 
+def build_blinded_rows(
+    rows: Sequence[dict[str, Any]], seed: int
+) -> tuple[list[dict[str, str]], list[dict[str, Any]]]:
+    """Return reviewer-visible rows and a separate private answer key."""
+    if len(rows) != EXPECTED_PAIRS:
+        raise ValueError(f"expected exactly {EXPECTED_PAIRS} joined rows")
+    return materialize_blinded_rows(rows, balanced_a_roles(rows, seed), seed)
+
+
 def _select(field: str, options: Iterable[tuple[str, str]]) -> str:
     option_html = '<option value="">Not reviewed</option>' + "".join(
         f'<option value="{html.escape(value, quote=True)}">{html.escape(label)}</option>'
@@ -289,7 +308,25 @@ def _select(field: str, options: Iterable[tuple[str, str]]) -> str:
     return f'<select data-field="{html.escape(field, quote=True)}">{option_html}</select>'
 
 
-def render_html(rows: Sequence[dict[str, str]], packet_sha256: str) -> str:
+def render_html(
+    rows: Sequence[dict[str, str]],
+    packet_sha256: str,
+    *,
+    page_title: str = "Factual rewrite blind review",
+    intro: str = (
+        "Each card shows one frozen source response and two complete rewrites "
+        "in randomized order. Compare both versions with the source before "
+        "judging their certainty."
+    ),
+    notice: str = (
+        "Both versions must preserve the same factual content and "
+        "proposition-level qualifiers. Their difference should concern only "
+        "the speaker's commitment, remain natural, and not rely on a "
+        "detachable label sentence."
+    ),
+    export_name: str | None = None,
+    export_metadata: Mapping[str, Any] | None = None,
+) -> str:
     """Render a self-contained page that contains no role or source key."""
     def esc(value: Any) -> str:
         return html.escape(str(value), quote=True)
@@ -313,7 +350,12 @@ def render_html(rows: Sequence[dict[str, str]], packet_sha256: str) -> str:
     ('both_drift', 'Both drift from the source'),
     ('uncertain', 'Uncertain'),
 ])}</label>
-<label>2. Qualifier preservation{_select('qualifier_preservation', [
+<label>2. Pair content equivalence{_select('pair_content_equivalence', [
+    ('equivalent', 'A and B express the same factual content'),
+    ('different', 'A and B differ in factual content, scope, or implication'),
+    ('uncertain', 'Uncertain'),
+])}</label>
+<label>3. Qualifier preservation{_select('qualifier_preservation', [
     ('both_preserve', 'Both preserve qualifiers, scope, conditions, and exceptions'),
     ('a_changes', 'A changes qualifier meaning or scope'),
     ('b_changes', 'B changes qualifier meaning or scope'),
@@ -321,40 +363,40 @@ def render_html(rows: Sequence[dict[str, str]], packet_sha256: str) -> str:
     ('not_applicable', 'No meaningful qualifier in the source'),
     ('uncertain', 'Uncertain'),
 ])}</label>
-<label>3. Speaker-level scope{_select('speaker_level_scope', [
+<label>4. Speaker-level scope{_select('speaker_level_scope', [
     ('both_speaker_level', 'Both vary only the speaker’s commitment'),
     ('a_object_level_shift', 'A changes evidence, probability, causality, or obligation'),
     ('b_object_level_shift', 'B changes evidence, probability, causality, or obligation'),
     ('both_object_level_shift', 'Both change object-level force'),
     ('uncertain', 'Uncertain'),
 ])}</label>
-<label>4. Certainty of A (1–5){_select('certainty_a', [
+<label>5. Certainty of A (1–5){_select('certainty_a', [
     ('1', '1 — strongly hesitant'), ('2', '2 — hesitant'),
     ('3', '3 — neutral/mixed'), ('4', '4 — certain'),
     ('5', '5 — strongly certain'),
 ])}</label>
-<label>5. Certainty of B (1–5){_select('certainty_b', [
+<label>6. Certainty of B (1–5){_select('certainty_b', [
     ('1', '1 — strongly hesitant'), ('2', '2 — hesitant'),
     ('3', '3 — neutral/mixed'), ('4', '4 — certain'),
     ('5', '5 — strongly certain'),
 ])}</label>
-<label>6. Which version is more certain?{_select('stronger_certainty', [
+<label>7. Which version is more certain?{_select('stronger_certainty', [
     ('a', 'A'), ('b', 'B'), ('tie', 'Tie / no clear difference'),
     ('uncertain', 'Uncertain'),
 ])}</label>
-<label>7. Naturalness of A{_select('naturalness_a', [
+<label>8. Naturalness of A{_select('naturalness_a', [
     ('natural', 'Natural'), ('minor', 'Minor awkwardness'),
     ('unnatural', 'Unnatural'), ('uncertain', 'Uncertain'),
 ])}</label>
-<label>8. Naturalness of B{_select('naturalness_b', [
+<label>9. Naturalness of B{_select('naturalness_b', [
     ('natural', 'Natural'), ('minor', 'Minor awkwardness'),
     ('unnatural', 'Unnatural'), ('uncertain', 'Uncertain'),
 ])}</label>
-<label>9. Formatting mismatch{_select('formatting_mismatch', [
+<label>10. Formatting mismatch{_select('formatting_mismatch', [
     ('none', 'None'), ('a', 'A only'), ('b', 'B only'),
     ('both', 'Both'), ('uncertain', 'Uncertain'),
 ])}</label>
-<label>10. Shortcut concern{_select('shortcut_concern', [
+<label>11. Shortcut concern{_select('shortcut_concern', [
     ('none', 'None; both read as complete rewrites'),
     ('a', 'A relies on a detachable or formulaic cue'),
     ('b', 'B relies on a detachable or formulaic cue'),
@@ -367,10 +409,22 @@ def render_html(rows: Sequence[dict[str, str]], packet_sha256: str) -> str:
 
     identities_json = json.dumps(identities, ensure_ascii=False).replace("<", "\\u003c")
     required_json = json.dumps(REQUIRED_REVIEW_FIELDS)
-    export_name = f"factual_rewrite_blind_review_{len(rows)}.json"
+    if export_name is None:
+        export_name = f"factual_rewrite_blind_review_{len(rows)}.json"
+    if export_metadata is None:
+        export_metadata = {
+            "schema": "factual-rewrite-blind-review-results-v2",
+            "artifact_role": "final_12_pair_human_review_form",
+            "pair_count": len(rows),
+            "final_canary_certification": False,
+            "human_review_certified": False,
+        }
+    export_metadata_json = json.dumps(
+        dict(export_metadata), ensure_ascii=False, sort_keys=True
+    ).replace("<", "\\u003c")
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Factual rewrite blind review</title>
+<title>{esc(page_title)}</title>
 <style>
 body{{margin:0;background:#f5f6f8;color:#17202b;font:16px/1.55 system-ui,-apple-system,sans-serif}}
 main{{max-width:1500px;margin:auto;padding:24px}}h1{{font-size:27px;margin:0 0 8px}}.intro{{max-width:1080px}}
@@ -385,15 +439,15 @@ h2{{font-size:17px;margin:0 0 8px}}.review-grid{{display:grid;grid-template-colu
 .review-grid label{{display:flex;flex-direction:column;gap:6px}}.notes{{display:block;margin-top:14px}}textarea{{width:100%;min-height:82px;box-sizing:border-box;font:inherit;padding:8px}}
 #progress{{font-weight:650}}@media(max-width:900px){{.versions,.review-grid{{grid-template-columns:1fr}}.toolbar{{position:static}}}}
 </style></head><body><main>
-<header><h1>Factual rewrite blind review</h1>
-<p class="intro">Each card shows one frozen source response and two complete rewrites in randomized order. Compare both versions with the source before judging their certainty.</p>
-<p class="notice"><strong>Main check:</strong> both versions must preserve the same factual content and proposition-level qualifiers. Their difference should concern only the speaker’s commitment, remain natural, and not rely on a detachable label sentence.</p></header>
+<header><h1>{esc(page_title)}</h1>
+<p class="intro">{esc(intro)}</p>
+<p class="notice"><strong>Main check:</strong> {esc(notice)}</p></header>
 <nav class="toolbar"><button id="prev">Previous</button><span id="position"></span><button id="next">Next</button>
 <label>Jump <select id="jump"></select></label><span id="progress"></span>
 <button class="primary" id="export">Download review JSON</button><span id="save-status"></span></nav>
 {''.join(cards)}
 </main><script>
-const packetHash={json.dumps(packet_sha256)};const identities={identities_json};const required={required_json};
+const packetHash={json.dumps(packet_sha256)};const identities={identities_json};const required={required_json};const exportMetadata={export_metadata_json};
 const storageKey='factual-rewrite-blind-review-'+packetHash;let reviews={{}};let current=0;let storageAvailable=true;
 try{{reviews=JSON.parse(localStorage.getItem(storageKey)||'{{}}')}}catch(e){{storageAvailable=false}}
 const cards=[...document.querySelectorAll('.card')];const jump=document.getElementById('jump');
@@ -402,7 +456,7 @@ function progress(){{const complete=identities.filter(m=>required.every(k=>(revi
 cards.forEach((card,i)=>card.querySelectorAll('[data-field]').forEach(el=>{{el.value=(reviews[identities[i].review_id]||{{}})[el.dataset.field]||'';el.addEventListener('input',()=>{{const id=identities[i].review_id;reviews[id]||={{}};reviews[id][el.dataset.field]=el.value;reviews[id].updated_at=new Date().toISOString();try{{localStorage.setItem(storageKey,JSON.stringify(reviews))}}catch(e){{storageAvailable=false}}progress()}})}}));
 function show(i){{current=Math.max(0,Math.min(cards.length-1,i));cards.forEach((card,n)=>card.hidden=n!==current);jump.value=current;document.getElementById('position').textContent=(current+1)+' / '+cards.length;document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===cards.length-1;window.scrollTo(0,0)}}
 document.getElementById('prev').onclick=()=>show(current-1);document.getElementById('next').onclick=()=>show(current+1);jump.onchange=()=>show(Number(jump.value));
-document.getElementById('export').onclick=()=>{{const payload={{packet_sha256:packetHash,blinded:true,reviews:identities.map(m=>({{...m,...(reviews[m.review_id]||{{}})}}))}};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{{type:'application/json'}}));const a=document.createElement('a');a.href=url;a.download={json.dumps(export_name)};a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}};
+document.getElementById('export').onclick=()=>{{const payload={{...exportMetadata,packet_sha256:packetHash,blinded:true,reviews:identities.map(m=>({{...m,...(reviews[m.review_id]||{{}})}}))}};const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{{type:'application/json'}}));const a=document.createElement('a');a.href=url;a.download={json.dumps(export_name)};a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}};
 show(0);progress();
 </script></body></html>'''
 
@@ -448,14 +502,14 @@ def write_review_bundle(
         )
     paths["html"].write_text(html_text, encoding="utf-8")
     key_payload = {
-        "schema": "factual-rewrite-blind-key-v1",
+        "schema": "factual-rewrite-blind-key-v2",
         "seed": seed,
         "packet_sha256": packet_sha256,
         "rows": answer_key,
     }
     _write_json(paths["answer_key"], key_payload)
     manifest = {
-        "schema": "factual-rewrite-blind-review-v1",
+        "schema": "factual-rewrite-blind-review-v2",
         "seed": seed,
         "pair_count": len(blinded),
         "packet_sha256": packet_sha256,

@@ -225,6 +225,11 @@ class FactualRewriteReviewBuilderTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "source_hash identity mismatch"):
             MODULE.join_sources_and_pairs(sources, pairs)
 
+    def test_final_review_contract_still_rejects_partial_sets(self) -> None:
+        joined = self.joined()[:6]
+        with self.assertRaisesRegex(ValueError, "expected exactly 12"):
+            MODULE.build_blinded_rows(joined, seed=20261017)
+
 
 if __name__ == "__main__":
     unittest.main()

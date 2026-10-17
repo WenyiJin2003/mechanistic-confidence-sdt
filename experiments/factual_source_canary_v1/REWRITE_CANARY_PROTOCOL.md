@@ -183,6 +183,7 @@ The reviewer sees only the frozen source, Version A, and Version B. The role
 key is stored separately. For each pair the reviewer records:
 
 - source fidelity;
+- whether A and B remain mutually content-equivalent;
 - protected-qualifier preservation, using the private reviewer-only semantic
   descriptors after generation;
 - whether the contrast is speaker-level;
@@ -205,6 +206,17 @@ call. Outputs
 produced under a discovered prompt-schema defect are rejected as invalid
 pipeline runs rather than counted as source-specific repairs.
 
+The six v4 pairs with no mechanical failure flags use a separate interim
+review packet before the failed-slot set is finalized. This packet is derived
+only after verifying the complete 12-row validator and artifact binding. Its
+schema, `C6R` review IDs, visible warning, and export metadata mark it as
+`interim_failure_discovery_only`; it cannot be consumed by the final 12-pair
+status importer. Version A is balanced 3/3 across intended roles, with the
+closest possible balance across dataset, length direction, draft order, and
+repeated cue family. The reviewer-only HTML and the A/B key are stored in
+separate private directories. Completing this review may add failed slots; it
+cannot certify the canary or authorize replacement generation.
+
 ## Current v4 checkpoint
 
 Fresh isolated generation yielded 2 mechanically clean pairs out of 12. There
@@ -219,7 +231,10 @@ confirmed the profile-aware v5 rule, corrected backup metadata, and exact
 six-source mapping. They were then frozen in a verified, text-free plan for six
 same-dataset replacements. This is not human certification. Replacement
 generation is still unauthorized and has not started. The six mechanically
-clean pairs still require blind content review and are not yet certified. This
+clean pairs now have a hash-bound interim blind-review packet. Two independent
+blinded model-assisted reviewers found 0/6 strict passes: three content/scope
+failures and three failures of at least one direction, naturalness, or shortcut
+gate. Human adjudication remains pending, and the pairs are not certified. This
 checkpoint is generated and hash-bound by
 `src/build_factual_rewrite_current_checkpoint.py`; it records three isolated
 initial contexts and three isolated repair contexts, GPT-6 Luna at low

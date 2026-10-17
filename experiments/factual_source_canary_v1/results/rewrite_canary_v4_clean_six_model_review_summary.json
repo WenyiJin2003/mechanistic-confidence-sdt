@@ -1,0 +1,58 @@
+{
+  "agreement_counts": {
+    "binary_content": 6,
+    "binary_direction_gap": 6,
+    "binary_formatting": 6,
+    "binary_intended_selected": 6,
+    "binary_natural": 6,
+    "binary_no_shortcut": 4,
+    "binary_strict_pass": 6,
+    "pair_content_equivalence": 6,
+    "stronger_certainty": 6
+  },
+  "artifact_role": "interim_failure_discovery_only",
+  "authorization": {
+    "activation_extraction": false,
+    "probe_fitting": false,
+    "replacement_generation": false,
+    "sdt_training": false
+  },
+  "final_canary_certification": false,
+  "human_review_certified": false,
+  "input_sha256": {
+    "answer_key": "ac534ac27de3496aea13d9bbc4ca0dcc66adca466d8295e8ed71e817da7e96d5",
+    "manifest": "74cbb12229010e50cb89651d7db8b939b62acb25caf4e91f8cef0b3dbc0228a6",
+    "model_reviews": [
+      "2b3f4eff3c7cdb4ccfc8afbd27c0b7754269733c12d86e331d05b363d9f20858",
+      "27afcdbdf8b71683886da0f7b8ff36c0dca5f65275bb636e2e2471fbc55bc790"
+    ]
+  },
+  "interpretation": "The two blinded model reviewers agreed that none of the six pairs passes every frozen content, direction, naturalness, and shortcut gate.",
+  "next_action": "Human-adjudicate the six pairs before freezing the final failed-slot set; do not extend the v5 replacement plan or generate replacements yet.",
+  "packet_sha256": "05709d7f4e0515ef7ee4d473b1c630cb39ce96e76219ae0e352a1dac95e1abc5",
+  "pair_count": 6,
+  "preliminary_outcome": {
+    "all_six_ready_for_final_canary": false,
+    "content_or_scope_failure_pairs": 3,
+    "content_pass_but_other_gate_failure_pairs": 3,
+    "strict_pass_pairs": 0
+  },
+  "review_type": "independent_blinded_model_assisted",
+  "reviewer_count": 2,
+  "reviewer_strict_pass_counts": [
+    0,
+    0
+  ],
+  "schema": "factual-rewrite-clean-subset-model-review-summary-v1",
+  "source_set_revision": "v4",
+  "status": "model_assisted_review_complete_pending_human_adjudication",
+  "unanimous_gate_pass_counts": {
+    "content": 3,
+    "direction_gap": 2,
+    "formatting": 6,
+    "intended_selected": 5,
+    "natural": 3,
+    "no_shortcut": 0,
+    "strict_pass": 0
+  }
+}

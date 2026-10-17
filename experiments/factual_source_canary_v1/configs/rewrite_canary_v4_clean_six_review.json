@@ -1,0 +1,26 @@
+{
+  "schema_version": "factual-rewrite-clean-subset-review-config-v1",
+  "seed": 20261017,
+  "source_set_revision": "v4",
+  "full_pair_count": 12,
+  "selected_pair_count": 6,
+  "selection_rule": "validator row has an empty failure_flags list",
+  "expected_selected_dataset_counts": {
+    "billsum": 3,
+    "qasper": 3
+  },
+  "input_sha256": {
+    "frozen_sources_v4": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
+    "post_repair_pairs_v4": "4b1167d803e4ba99d6d0ea458a5dc25bf78643f752ade4801d889e748c2a2046",
+    "post_repair_validator_v4": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a",
+    "post_repair_provenance_v4": "d94e5398d498ae0d70c93a78ec99b8a076860603afe23be36a154a5232fcb439",
+    "freeze_manifest_v4": "fb7e4c112e2ca340d5afbe0a66392d0353ab62a6e0070ceb539fa2d096fe63b6"
+  },
+  "artifact_role": "interim_failure_discovery_only",
+  "final_canary_certification": false,
+  "human_review_certified": false,
+  "replacement_generation_authorized": false,
+  "activation_extraction_authorized": false,
+  "probe_fitting_authorized": false,
+  "sdt_training_authorized": false
+}

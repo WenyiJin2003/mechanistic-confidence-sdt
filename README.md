@@ -9,7 +9,13 @@ one full-pair repair, raising the clean count to 6/12. The other six still fail
 the frozen mechanical rules, and none qualifies for the narrowly allowed final
 length-only repair.
 
-The six mechanically clean pairs now require blind content review. For the six
+The six mechanically clean pairs were then evaluated by two independent,
+label-blind model-assisted reviewers. The reviewers agreed that **3/6 have
+content, qualifier, or scope drift**, while the other **3/6 preserve content but
+fail at least one certainty-direction, naturalness, or shortcut gate**. Under
+the frozen strict rule, **0/6 pass all gates**. This is not human certification,
+but it shows that mechanical validity alone is insufficient and keeps the
+rewrite recipe blocked. For the six
 failed slots, a model-assisted independent re-review accepted 18 unused backup
 sources and froze an exact six-source, same-dataset mapping. Each eligible
 backup candidate is scored with candidate-specific midranks over 41 rows (the
@@ -29,7 +35,15 @@ profile target. Two assignments remain visibly off-target in the v5 feature
 space. A profile-adequacy gate is therefore required before any generation
 decision.
 
+If human adjudication confirms the clean-six review, the final failed-slot set
+will be larger than the six slots covered by v5. The current mapping must then
+be recomputed or replaced; it must not be used as if it covered the expanded
+failure set. The review also points to a recipe-level problem, so changing
+sources alone may not solve the failure mode.
+
 [v4 generation-and-repair checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) ·
+[Clean-six review packet](experiments/factual_source_canary_v1/results/rewrite_canary_v4_clean_six_packet_summary.json) ·
+[Clean-six model-review result](experiments/factual_source_canary_v1/results/CLEAN_SIX_MODEL_REVIEW.md) ·
 [Verified v5 replacement plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) ·
 [Rewrite-canary protocol](experiments/factual_source_canary_v1/REWRITE_CANARY_PROTOCOL.md) ·
 [Source-audit decision](experiments/factual_source_canary_v1/results/MODEL_ASSISTED_SOURCE_REVIEW.md) ·
@@ -163,7 +177,7 @@ reproducibility. The research sequence is:
 | Completed gate | Ordinary-Chat direct-pair replication on 50 score-exposed sources | Can ordinary Chat reproduce the direct full-pair construction workflow? | 50/50 mechanical passes and 50/50 shortcut-screen passes; single-researcher screen broadly acceptable | [Construction report](experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md) | Recipe provisionally frozen; data-construction gate only, no new probe claim |
 | Completed decision | Advisor review | What should replace the score-exposed construction set? | Prioritize stronger confident/hesitant contrast and higher-quality factual sources | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Feedback incorporated into the factual-source canary |
 | Completed gate | Factual source selection | Can we freeze 120 evidence-audited sources without silently admitting source or qualifier errors? | 120 core sources and 24 backups frozen; final secondary samples 12/12 confirmed in each dataset | [Selection result](experiments/factual_source_canary_v1/results/SOURCE_SELECTION_RESULTS.md) | Model-assisted data gate; not a probe result |
-| **Current** | **Factual rewrite canary v4 + replacement plan v5** | **Can direct full-pair rewrites create a strong certainty contrast while preserving every frozen claim and qualifier?** | **12 fresh pairs: 2 initially clean; after one repair for each of 10 failures, 6/12 are mechanically clean. A model-assisted, text-free v5 plan freezes same-dataset backups for the six failed slots; this is not human certification.** | **[v4 generation-and-repair checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) · [v5 replacement plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) · [Rewrite protocol](experiments/factual_source_canary_v1/REWRITE_CANARY_PROTOCOL.md)** | **Blind-review the clean six; replacement generation requires a separate explicit decision and has not started; no activation, probe, or scale-up authorization** |
+| **Current** | **Factual rewrite canary v4 + replacement plan v5** | **Can direct full-pair rewrites create a strong certainty contrast while preserving every frozen claim and qualifier?** | **After repair, 6/12 are mechanically clean, but two independent blinded model reviewers found 0/6 strict passes: three content/scope failures and three other quality-gate failures. The v5 source mapping covers only the original six mechanical failures.** | **[v4 checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) · [clean-six review](experiments/factual_source_canary_v1/results/CLEAN_SIX_MODEL_REVIEW.md) · [v5 replacement plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) · [protocol](experiments/factual_source_canary_v1/REWRITE_CANARY_PROTOCOL.md)** | **Human-adjudicate the clean six, then freeze the final failed-slot set and reconsider the rewrite recipe; no replacement generation, activation, probe, or scale-up authorization** |
 | Conditional next | Fresh unscored factual-pair comparison | Does the signal survive human review, source holdout, cue controls, and comparison across every layer? | Not yet tested | [Source plan](experiments/factual_source_canary_v1/configs/source_selection_plan_v1.json) | Start only after the factual pair gate passes |
 | Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Conditional on the fresh unscored result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
@@ -185,10 +199,11 @@ flowchart LR
     A --> F["Factual source audit<br/>120 core sources frozen"]
     F --> W["v4 factual rewrite canary<br/>12 fresh pairs"]
     W --> P["One repair for 10 failures<br/>6/12 mechanically clean"]
-    P --> B["Six clean pairs<br/>blind review pending"]
+    P --> B["Six clean pairs<br/>two blind model reviews"]
+    B --> J["0/6 strict passes<br/>human adjudication pending"]
     P --> G["Six failed pairs<br/>no final repair eligible"]
     G --> Q["Verified v5 same-dataset plan<br/>model-assisted; no generation"]
-    B --> M["Conditional 12/12<br/>factual-pair gate"]
+    J --> M["Conditional 12/12<br/>factual-pair gate"]
     Q --> M
     M --> Y["All-layer comparison<br/>only after gates pass"]
     Y --> Z["Conditional 300 / 700<br/>expansion"]

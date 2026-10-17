@@ -31,6 +31,7 @@ RESULTS = BASE / "results"
 EXPECTED_PAIRS = 12
 REQUIRED_BLIND_REVIEW_FIELDS = (
     "source_fidelity",
+    "pair_content_equivalence",
     "qualifier_preservation",
     "speaker_level_scope",
     "certainty_a",
@@ -56,6 +57,7 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 BLIND_REVIEW_ENUMS = {
     "source_fidelity": {"both_preserve", "a_drift", "b_drift", "both_drift", "uncertain"},
+    "pair_content_equivalence": {"equivalent", "different", "uncertain"},
     "qualifier_preservation": {
         "both_preserve", "a_changes", "b_changes", "both_change",
         "not_applicable", "uncertain",
@@ -401,7 +403,7 @@ def summarize_blind_review(
             "complete_review_rows": 0,
             "human_review_certified": False,
         }
-    if manifest.get("schema") != "factual-rewrite-blind-review-v1":
+    if manifest.get("schema") != "factual-rewrite-blind-review-v2":
         raise ValueError("unrecognized blind-review manifest")
     binding = validate_artifact_binding(manifest.get("artifact_binding"))
     pair_count = _nonnegative_int(manifest.get("pair_count"), "pair_count")
@@ -419,6 +421,17 @@ def summarize_blind_review(
     submitted = 0
     complete = 0
     if results is not None:
+        if results.get("schema") != "factual-rewrite-blind-review-results-v2":
+            raise ValueError("unrecognized blind-review results")
+        if results.get("artifact_role") != "final_12_pair_human_review_form":
+            raise ValueError("blind-review results have the wrong artifact role")
+        if results.get("pair_count") != pair_count:
+            raise ValueError("blind-review result pair count does not match manifest")
+        if (
+            results.get("final_canary_certification") is not False
+            or results.get("human_review_certified") is not False
+        ):
+            raise ValueError("blind-review results cannot self-certify")
         if results.get("blinded") is not True:
             raise ValueError("blind-review results must retain blinded=true")
         packet_hash = results.get("packet_sha256")
