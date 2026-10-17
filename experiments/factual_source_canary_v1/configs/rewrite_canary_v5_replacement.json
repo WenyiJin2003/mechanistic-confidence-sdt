@@ -1,0 +1,104 @@
+{
+  "schema_version": "factual-rewrite-replacement-plan-config-v1",
+  "plan_revision": "v5",
+  "seed": 20261017,
+  "source_pool": {
+    "expected_sha256": "d3d716ee71635873ba0db10ed6df9c1f39de96e5aad368870c3a651b79f4ff69",
+    "datasets": [
+      "asqa",
+      "qasper",
+      "billsum"
+    ],
+    "core_role": "core",
+    "candidate_role": "backup",
+    "acceptance_requirements": {
+      "model_review_decision": "accept",
+      "heuristic_pass": true,
+      "blocking_flags": []
+    },
+    "expected_core_per_dataset": 40,
+    "expected_accepted_unused_backups_by_dataset": {
+      "asqa": 7,
+      "qasper": 7,
+      "billsum": 4
+    },
+    "expected_hold_source_ids": [
+      "billsum:ce6b881322435d0d",
+      "billsum:b22c1ada7ea12420",
+      "billsum:c47c26e2beabd89d",
+      "billsum:750261d14b4e6703",
+      "asqa:-536561900476217586",
+      "qasper-paper:1608.06111"
+    ],
+    "used_backup_source_ids": []
+  },
+  "failed_slots": {
+    "expected_count": 6,
+    "expected_source_ids": [
+      "asqa:5767411579190718767",
+      "asqa:-9159547197550283952",
+      "qasper-paper:1702.03274",
+      "asqa:-4867406118701628228",
+      "asqa:2074116551547919110",
+      "billsum:1b0226a63ea123f1"
+    ],
+    "frozen_slots_expected_sha256": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
+    "post_repair_validator_expected_sha256": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a"
+  },
+  "features": {
+    "names": [
+      "word_count_candidate_included_midrank",
+      "sentence_count_candidate_included_midrank",
+      "corrected_qualifier_count_candidate_included_midrank"
+    ],
+    "reference_pool": "the same dataset's 40 frozen accepted core rows plus the candidate itself, after audited metadata corrections",
+    "midrank_formula": "(count_less + (count_equal + 1) / 2) / n",
+    "bounded_interval": "(0, 1]",
+    "distance": "squared_euclidean",
+    "distance_round_digits": 8
+  },
+  "assignment": {
+    "method": "global_one_to_one_minimum_total_distance_per_dataset",
+    "tie_breaker": "sha256 of seed, namespace, dataset, and the canonical full mapping",
+    "key_namespace": "factual-rewrite-v5-profile-aware-replacement",
+    "same_dataset_required": true,
+    "preserved_slot_fields": [
+      "profile",
+      "selection_features",
+      "selection_target",
+      "selection_distance",
+      "cue_family",
+      "length_direction",
+      "draft_order",
+      "batch_id",
+      "batch_position",
+      "generation_order"
+    ]
+  },
+  "metadata_correction_ledger": {
+    "required": true,
+    "private_filename": "REPLACEMENT_METADATA_CORRECTIONS_V5.json",
+    "private_audit_artifact_filename": "REPLACEMENT_SOURCE_SEMANTIC_AUDIT_V5.json",
+    "required_schema_version": "factual-rewrite-replacement-metadata-ledger-v1",
+    "expected_sha256": "799e3f3cf4458fa9155cbdd51e71076e87b09e884c87c7d0a79041303e965a63",
+    "audit_complete_required": true
+  },
+  "expected_mapping": {
+    "audit_complete": true,
+    "mapping_sha256": "39f92cc98bfae1d66f55bf8dc7dbdebc8887b159b9232efed3b338edaa7e22ba",
+    "failed_to_replacement": {
+      "asqa:5767411579190718767": "asqa:5634464892410080253",
+      "asqa:-9159547197550283952": "asqa:-6693893977926520813",
+      "qasper-paper:1702.03274": "qasper-paper:1712.09127",
+      "asqa:-4867406118701628228": "asqa:-5199777322387956321",
+      "asqa:2074116551547919110": "asqa:5446132515703113969",
+      "billsum:1b0226a63ea123f1": "billsum:4256aad1fff88860"
+    }
+  },
+  "authorization": {
+    "generation_on_verified_plan": false,
+    "activation_extraction": false,
+    "probe_fitting": false,
+    "sdt_training": false
+  }
+}

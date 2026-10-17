@@ -1,0 +1,268 @@
+{
+  "artifact_bindings": {
+    "config_sha256": "4cc7bf9adb5b37eddebe4e62e6dee994662c73a87f971bd513eb6555392c5874",
+    "frozen_slots_sha256": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
+    "post_repair_validator_sha256": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a",
+    "private_independent_audit_artifact_sha256": "f7ece077c9600770f9ea310253c9b6bb8083c067d43c2ff62ef96b633f8c28cd",
+    "private_metadata_ledger_sha256": "799e3f3cf4458fa9155cbdd51e71076e87b09e884c87c7d0a79041303e965a63",
+    "source_pool_sha256": "d3d716ee71635873ba0db10ed6df9c1f39de96e5aad368870c3a651b79f4ff69"
+  },
+  "artifact_role": "public_text_free_replacement_plan",
+  "assignments": [
+    {
+      "dataset": "asqa",
+      "failed_source_hash": "0b113bf5d141032ff2c71ab72ab79c77013804d237e0481ed1182d953c67ab74",
+      "failed_source_id": "asqa:5767411579190718767",
+      "preserved_slot": {
+        "batch_id": "batch_01",
+        "batch_position": 1,
+        "cue_family": "contrastive_commitment",
+        "draft_order": "hesitant_first",
+        "generation_order": 1,
+        "length_direction": "confident_longer",
+        "profile": "short_simple",
+        "selection_distance": 0.04828125,
+        "selection_features": [
+          0.225,
+          0.1125,
+          0.4
+        ],
+        "selection_target": [
+          0.2,
+          0.2,
+          0.2
+        ]
+      },
+      "replacement_features": [
+        0.317073170732,
+        0.121951219512,
+        0.817073170732
+      ],
+      "replacement_source_hash": "d15c98115c9bff25775a0398b6a5424aebe68e12f85b73e73f29f6aebdab4c66",
+      "replacement_source_id": "asqa:5634464892410080253",
+      "squared_distance_to_slot_target": 0.40057704
+    },
+    {
+      "dataset": "asqa",
+      "failed_source_hash": "e9e3c4e65af57e07957dd1ea9fd2d530caccd2941000a61490f83d656304f8f5",
+      "failed_source_id": "asqa:-9159547197550283952",
+      "preserved_slot": {
+        "batch_id": "batch_01",
+        "batch_position": 4,
+        "cue_family": "contrastive_commitment",
+        "draft_order": "hesitant_first",
+        "generation_order": 4,
+        "length_direction": "hesitant_longer",
+        "profile": "qualifier_sensitive",
+        "selection_distance": 0.02828125,
+        "selection_features": [
+          0.5625,
+          0.45,
+          0.825
+        ],
+        "selection_target": [
+          0.55,
+          0.6,
+          0.9
+        ]
+      },
+      "replacement_features": [
+        0.707317073171,
+        0.792682926829,
+        0.817073170732
+      ],
+      "replacement_source_hash": "9bf9bb4013e542587694f3ce6572cfbf463a673646c4f76599c98a2100d4c4b8",
+      "replacement_source_id": "asqa:-6693893977926520813",
+      "squared_distance_to_slot_target": 0.06875223
+    },
+    {
+      "dataset": "qasper",
+      "failed_source_hash": "dbe86584284c951b9fe8b94bc1990af7f469bd24ee764d26c63a764cb874c49f",
+      "failed_source_id": "qasper-paper:1702.03274",
+      "preserved_slot": {
+        "batch_id": "batch_02",
+        "batch_position": 1,
+        "cue_family": "compositional_polarity",
+        "draft_order": "confident_first",
+        "generation_order": 5,
+        "length_direction": "hesitant_longer",
+        "profile": "short_simple",
+        "selection_distance": 0.02703125,
+        "selection_features": [
+          0.1,
+          0.1625,
+          0.325
+        ],
+        "selection_target": [
+          0.2,
+          0.2,
+          0.2
+        ]
+      },
+      "replacement_features": [
+        0.09756097561,
+        0.085365853659,
+        0.329268292683
+      ],
+      "replacement_source_hash": "d8b5359e69c36b97b1f04d17eaa22562806c5e1a13316695f7dacfb8cab7ba05",
+      "replacement_source_id": "qasper-paper:1712.09127",
+      "squared_distance_to_slot_target": 0.04034503
+    },
+    {
+      "dataset": "asqa",
+      "failed_source_hash": "92481f59bceb8aa668b5ccbd1b8b9073c4c7c134b2eb3b19b8476e75752c51f7",
+      "failed_source_id": "asqa:-4867406118701628228",
+      "preserved_slot": {
+        "batch_id": "batch_02",
+        "batch_position": 3,
+        "cue_family": "modal_force_scope",
+        "draft_order": "confident_first",
+        "generation_order": 7,
+        "length_direction": "confident_longer",
+        "profile": "long_complex",
+        "selection_distance": 0.0125,
+        "selection_features": [
+          0.75,
+          0.8,
+          0.4
+        ],
+        "selection_target": [
+          0.8,
+          0.8,
+          0.5
+        ]
+      },
+      "replacement_features": [
+        0.90243902439,
+        1.0,
+        0.40243902439
+      ],
+      "replacement_source_hash": "747602a50130867b21fa07ef8aeee5d99ce6e4eeaa6cf7a631fd737646e73f47",
+      "replacement_source_id": "asqa:-5199777322387956321",
+      "squared_distance_to_slot_target": 0.0600119
+    },
+    {
+      "dataset": "asqa",
+      "failed_source_hash": "c19235ee746c162b315c0d082715e9791912a866773ec10362d377070067d8fb",
+      "failed_source_id": "asqa:2074116551547919110",
+      "preserved_slot": {
+        "batch_id": "batch_03",
+        "batch_position": 2,
+        "cue_family": "embedded_stance_predicate",
+        "draft_order": "confident_first",
+        "generation_order": 10,
+        "length_direction": "hesitant_longer",
+        "profile": "mid_plain",
+        "selection_distance": 0.0425,
+        "selection_features": [
+          0.4,
+          0.45,
+          0.4
+        ],
+        "selection_target": [
+          0.45,
+          0.45,
+          0.2
+        ]
+      },
+      "replacement_features": [
+        0.463414634146,
+        0.451219512195,
+        0.40243902439
+      ],
+      "replacement_source_hash": "da49183338cb3c836c7eb93005afb522896b4ab204977eab1fdbb98276008693",
+      "replacement_source_id": "asqa:5446132515703113969",
+      "squared_distance_to_slot_target": 0.041163
+    },
+    {
+      "dataset": "billsum",
+      "failed_source_hash": "8041f909e9cdeb2576844ee082482522de118a70ed7330e3cd5a09bb36b3749a",
+      "failed_source_id": "billsum:1b0226a63ea123f1",
+      "preserved_slot": {
+        "batch_id": "batch_03",
+        "batch_position": 4,
+        "cue_family": "discourse_level_calibration",
+        "draft_order": "hesitant_first",
+        "generation_order": 12,
+        "length_direction": "confident_longer",
+        "profile": "qualifier_sensitive",
+        "selection_distance": 0.0178125,
+        "selection_features": [
+          0.6,
+          0.6875,
+          0.8125
+        ],
+        "selection_target": [
+          0.55,
+          0.6,
+          0.9
+        ]
+      },
+      "replacement_features": [
+        0.536585365854,
+        0.987804878049,
+        0.80487804878
+      ],
+      "replacement_source_hash": "68a17b1a3479d737d6857b739d992c0c2a31b70cde2a5b5bf49d63e3f28f9bcb",
+      "replacement_source_id": "billsum:4256aad1fff88860",
+      "squared_distance_to_slot_target": 0.15962076
+    }
+  ],
+  "authorization": {
+    "activation_extraction": false,
+    "probe_fitting": false,
+    "replacement_generation": false,
+    "sdt_training": false
+  },
+  "counts": {
+    "accepted_unused_backups": 18,
+    "failed_slots": 6,
+    "planned_replacements": 6
+  },
+  "dataset_assignment_summary": {
+    "asqa": {
+      "accepted_unused_backups": 7,
+      "failed_slots": 4,
+      "minimum_total_squared_distance": 0.57050417,
+      "winning_full_mapping_tie_break_sha256": "523f931343e30258d22787dae292067958cf0f095f39cdc663f4d9556b22fd73"
+    },
+    "billsum": {
+      "accepted_unused_backups": 4,
+      "failed_slots": 1,
+      "minimum_total_squared_distance": 0.15962076,
+      "winning_full_mapping_tie_break_sha256": "776fd7e9086c4e11afa92010b7bef5eda44410b89a5d1e89c3810fc9c3e7d312"
+    },
+    "qasper": {
+      "accepted_unused_backups": 7,
+      "failed_slots": 1,
+      "minimum_total_squared_distance": 0.04034503,
+      "winning_full_mapping_tie_break_sha256": "bd97b4c67417a38a0badd8439c3567702ff392707dddb6a5133dbc24725af70a"
+    }
+  },
+  "mapping_sha256": "39f92cc98bfae1d66f55bf8dc7dbdebc8887b159b9232efed3b338edaa7e22ba",
+  "method": {
+    "assignment": "global_one_to_one_minimum_total_distance_per_dataset",
+    "distance": "squared_euclidean",
+    "features": [
+      "word_count_candidate_included_midrank",
+      "sentence_count_candidate_included_midrank",
+      "corrected_qualifier_count_candidate_included_midrank"
+    ],
+    "full_mapping_hash_tie_break": true,
+    "reference_pool": "the same dataset's 40 frozen accepted core rows plus the candidate itself, after audited metadata corrections",
+    "same_dataset": true
+  },
+  "plan_revision": "v5",
+  "privacy": {
+    "qualifier_text_included": false,
+    "source_or_rewrite_text_included": false
+  },
+  "reason_codes": [],
+  "review_provenance": {
+    "human_certified": false,
+    "private_ledger_validated": true,
+    "review_type": "model_assisted_independent"
+  },
+  "schema_version": "factual-rewrite-replacement-plan-v1",
+  "status": "verified_plan"
+}

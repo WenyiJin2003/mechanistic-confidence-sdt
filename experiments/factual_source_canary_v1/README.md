@@ -37,12 +37,21 @@ it is not the Qwen model that will later be probed. The failed initial pairs
 received one repair attempt each, generated in three fresh isolated repair
 contexts from the frozen source and generic length rules only; prior candidate
 text and reviewer-only semantic metadata were withheld. Six pairs remain
-eligible for blind content review. The other six are on hold: an audit found
-that the rank-only backup rule preserves dataset labels but can substantially
-change the frozen length/complexity profile. Before any replacement generation,
-a profile-aware same-dataset assignment rule and corrected backup metadata must
-be documented, audited, and frozen while preserving each failed pair's
-preregistered experimental slot. A text-free supersession record
+eligible for blind content review. For the other six, the rank-only backup rule
+was rejected because it could substantially change the frozen
+length/complexity profile. A model-assisted independent re-review accepted 18
+unused backups and froze the exact mapping produced by the profile-aware v5
+rule. This is not human certification. For each eligible backup, word count,
+sentence count, and corrected qualifier count are recomputed as midranks in a
+candidate-specific 41-row pool: the dataset's 40 accepted core rows plus that
+candidate. A global
+same-dataset, one-to-one assignment then minimizes total squared distance to the
+six failed slots' frozen profile targets, with a deterministic full-mapping hash
+tie-break. The resulting text-free artifact reports `status: verified_plan`
+and binds six replacements while preserving every slot allocation:
+[`results/rewrite_canary_v5_replacement_plan.json`](results/rewrite_canary_v5_replacement_plan.json).
+**Replacement generation remains unauthorized and has not started.** A
+text-free supersession record
 for the earlier invalid runs is in
 `results/rewrite_canary_v1_revision_adjudication.json`; that record and the
 freeze summary are explicitly labeled historical snapshots as of the v4
@@ -50,6 +59,14 @@ source freeze, rather than current progress ledgers. **This is a data-quality
 and pipeline result, not evidence of a confidence representation.** Expansion
 to 120 sources, activation extraction, probe fitting, and SDT loss training
 remain blocked.
+
+The verified status is deliberately narrow: the mapping is reproducible and
+globally optimal within the accepted backup pool, but no absolute
+profile-distance threshold was preregistered. Two selected backups have much
+larger distances to their slot targets than the original source-selection
+distances (0.4006 versus 0.0483, and 0.1596 versus 0.0178). Replacement
+generation therefore stays on hold until a separate adequacy rule is defined
+without looking at generated rewrites.
 
 This decision follows a locked, model-assisted review of 10 candidates per
 dataset. The review found that real-source answers still require explicit
@@ -206,6 +223,18 @@ The builder verifies that the repairs cover each of the ten initial failures
 exactly once and that the public validator summary is the exact row-free
 projection of the bound private validator output.
 
+Rebuild the text-free v5 replacement plan from the frozen v4 slots, the
+post-repair validator, and the two private v5 audit inputs with:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/plan_factual_rewrite_replacements.py
+```
+
+The planner fails closed unless every input hash, source decision, qualifier
+correction, same-dataset constraint, slot field, and frozen mapping agrees. A
+`verified_plan` still leaves replacement generation and every downstream
+authorization set to `false`.
+
 Build the deterministic review order with:
 
 ```bash
@@ -238,9 +267,12 @@ python3 experiments/factual_source_canary_v1/src/build_review_queue.py \
 | `results/rewrite_canary_v1_source_manifest.jsonl` | public | Text-free 12-source rewrite-canary allocation |
 | `results/rewrite_canary_v1_freeze_summary.json` | public | Historical v4-freeze balance/provenance snapshot and private-artifact hashes |
 | `results/rewrite_canary_v1_revision_adjudication.json` | public | Historical as-of-v4-freeze v2/v3 supersession and pair-provenance snapshot |
-| `results/rewrite_canary_v4_current_checkpoint.json` | public | Reproducible current counts, writer-context metadata, decisions, and artifact hashes |
+| `results/rewrite_canary_v4_current_checkpoint.json` | public | Reproducible v4 generation-and-repair counts, writer-context metadata, decisions, and artifact hashes |
 | `results/rewrite_canary_v4_post_repair_validation_summary.json` | public | Aggregate mechanical result after one repair attempt for each of ten initial failures |
+| `results/rewrite_canary_v5_replacement_plan.json` | public | Verified text-free six-source replacement plan, model-assisted review provenance, profile-aware assignment method, artifact bindings, and explicit no-generation authorization; not human-certified |
 | `private_data/rewrite_canary_v1/SOURCE_SET_ADJUDICATION_V4.json` | local only | Detailed invalid-run quarantine and source-set correction ledger |
+| `private_data/rewrite_canary_v1/REPLACEMENT_SOURCE_SEMANTIC_AUDIT_V5.json` | local only | Model-assisted accept/hold decisions for all 24 backup sources; not human certification |
+| `private_data/rewrite_canary_v1/REPLACEMENT_METADATA_CORRECTIONS_V5.json` | local only | Hash-bound qualifier corrections and audit provenance used by the v5 planner |
 | `results/factual_rewrite_canary_status.json` | public | Aggregate gate and review status, with no record identities or text |
 | `results/FACTUAL_REWRITE_CANARY_STATUS.md` | public | Plain-language canary status and decision boundary |
 

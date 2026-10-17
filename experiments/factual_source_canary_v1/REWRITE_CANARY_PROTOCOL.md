@@ -33,16 +33,39 @@ allocations, aggregate checks, and review outcomes.
 
 ## Source-set revision and replacement rule
 
-The earlier rank-only backup rule is paused. An audit found that choosing the
-lowest unused `review_rank` within a dataset can substantially change the
+The earlier rank-only backup rule is superseded. An audit found that choosing
+the lowest unused `review_rank` within a dataset can substantially change the
 frozen length/complexity profile even when the replacement inherits the same
-profile label. Before any replacement generation, backup metadata must be
-corrected where needed and a deterministic profile-aware assignment rule must
-be documented, audited, and frozen. Replacements must remain within the same
-dataset and preserve the failed source's cue family, length direction, draft
-order, batch, position, generation order, and preregistered experimental slot.
+profile label. After the required backup-metadata corrections, a second
+model-assisted review independently confirmed the profile-aware v5 rule and
+exact mapping, which were then frozen. This review is not human certification.
 
-This is an explicit v4 source-set revision. Preparation writes
+For each eligible backup candidate, word count, sentence count, and corrected
+qualifier count are recomputed as candidate-included midranks over a 41-row
+reference pool: the same dataset's 40 frozen accepted core rows plus that
+candidate. The assignment is then solved
+globally within each dataset as a one-to-one minimum-total-squared-distance
+match between candidate features and failed slots' preregistered profile
+targets. A hash of the complete mapping provides the deterministic tie-break.
+This prevents one attractive backup from being reused and avoids letting the
+other backup candidates define a candidate's rank.
+
+The verified, text-free plan assigns six backups and is frozen in
+[`results/rewrite_canary_v5_replacement_plan.json`](results/rewrite_canary_v5_replacement_plan.json).
+Replacements remain within the same dataset and preserve the failed source's
+cue family, length direction, draft order, batch, position, generation order,
+and preregistered experimental slot. This artifact authorizes no model call:
+**replacement generation remains unauthorized and has not started.**
+
+`verified_plan` means that the inputs, method, and exact optimum mapping are
+hash-bound and reproducible. It does not certify absolute profile-match
+quality. Because no absolute distance threshold was preregistered and two
+assignments are substantially farther from their targets than the original
+selected sources, a separate distance-adequacy gate is required before any
+replacement generation decision.
+
+The restored 12-source freeze remains the explicit v4 source-set revision.
+Preparation writes
 `frozen_sources_v4.jsonl`, writer-visible `SOURCE_BATCH_XX_V4.jsonl`,
 reviewer-authoritative `SOURCE_BATCH_XX_VALIDATION_V4.jsonl`, and v4 prompt and
 freeze-manifest files. The private v1, v2, and v3 freezes, batches, prompts,
@@ -164,9 +187,11 @@ complete pair rewrite from the frozen source. One repair attempt is allowed.
 If that repaired pair is content-clean and misses only the preregistered length
 gap by no more than two tokens, one final full-pair length repair is allowed;
 it may not change the content decision. Any remaining failure enters the
-audited same-dataset replacement process described above while preserving the
-failed source's preregistered experimental slot. Replacement generation is not
-authorized until the profile-aware rule is frozen. Outputs
+model-assisted, same-dataset replacement process described above while
+preserving the failed source's preregistered experimental slot. The frozen v5
+plan is a necessary data-design gate, not generation authorization or human
+certification; a separate decision is required before any replacement model
+call. Outputs
 produced under a discovered prompt-schema defect are rejected as invalid
 pipeline runs rather than counted as source-specific repairs.
 
@@ -179,15 +204,21 @@ nonsemantic length-policy failure code. After repair, 6 of 12 pairs are
 mechanically clean and 6 still fail. None of the remaining failures satisfies
 the final-repair exception: the failures include direction, protected-span,
 ratio, or gap deviations greater
-than the allowed two-token margin. Those six sources are now held before
-replacement generation while the profile-aware same-dataset assignment rule
-and backup metadata are audited and frozen. The six mechanically clean pairs
-still require blind content review and are not yet certified. This checkpoint
-is generated and hash-bound by
+than the allowed two-token margin. A second model-assisted review independently
+confirmed the profile-aware v5 rule, corrected backup metadata, and exact
+six-source mapping. They were then frozen in a verified, text-free plan for six
+same-dataset replacements. This is not human certification. Replacement
+generation is still unauthorized and has not started. The six mechanically
+clean pairs still require blind content review and are not yet certified. This
+checkpoint is generated and hash-bound by
 `src/build_factual_rewrite_current_checkpoint.py`; it records three isolated
 initial contexts and three isolated repair contexts, GPT-6 Luna at low
 reasoning effort, and no authorization for activation extraction or probe
 fitting.
+
+The checkpoint's `next_action` records the audit hold at the end of v4
+generation and repair. The verified v5 replacement-plan artifact supersedes
+that historical next-action field; it does not alter the v4 execution record.
 
 ## Scale boundary
 
