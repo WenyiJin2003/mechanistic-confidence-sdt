@@ -2,6 +2,25 @@
 
 ## Current data-construction decision
 
+**17 October update: preserve the factual core while deliberately varying
+epistemic commitment.** Natural hedges such as “might have” are allowed when
+they express uncertainty about the same proposition. The researcher found
+the v4 contrasts too weak and several constructions unnatural. We are revising
+the same six inspected sources as a small development preview before further
+data expansion. The six complete-response drafts are ready for researcher
+feedback; they remain close to source wording and repeat some hedges, so this
+is not yet a validated diverse-rewrite dataset. See the
+[revised rewrite rule](experiments/factual_source_canary_v1/EPISTEMIC_REWRITE_UPDATE.md)
+and [preview status](experiments/factual_source_canary_v1/results/epistemic_preview_v1_status.json).
+
+The **0/6** result below remains the historical result under the v4 rubric.
+Some of that rubric's content constraints were too restrictive about the
+epistemic change the experiment intends to create. It does not establish that
+paired-confidence probing cannot work. The new preview requires its own review
+and does not supply a new probe result.
+
+### Preserved v4 checkpoint
+
 **The factual rewrite canary is not yet ready for activation analysis or
 scale-up.** We generated 12 fresh factual pairs in isolated writer contexts.
 Only 2/12 were mechanically clean initially. Each of the ten failures received
@@ -177,7 +196,8 @@ reproducibility. The research sequence is:
 | Completed gate | Ordinary-Chat direct-pair replication on 50 score-exposed sources | Can ordinary Chat reproduce the direct full-pair construction workflow? | 50/50 mechanical passes and 50/50 shortcut-screen passes; single-researcher screen broadly acceptable | [Construction report](experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md) | Recipe provisionally frozen; data-construction gate only, no new probe claim |
 | Completed decision | Advisor review | What should replace the score-exposed construction set? | Prioritize stronger confident/hesitant contrast and higher-quality factual sources | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Feedback incorporated into the factual-source canary |
 | Completed gate | Factual source selection | Can we freeze 120 evidence-audited sources without silently admitting source or qualifier errors? | 120 core sources and 24 backups frozen; final secondary samples 12/12 confirmed in each dataset | [Selection result](experiments/factual_source_canary_v1/results/SOURCE_SELECTION_RESULTS.md) | Model-assisted data gate; not a probe result |
-| **Current** | **Factual rewrite canary v4 + replacement plan v5** | **Can direct full-pair rewrites create a strong certainty contrast while preserving every frozen claim and qualifier?** | **After repair, 6/12 are mechanically clean, but two independent blinded model reviewers found 0/6 strict passes: three content/scope failures and three other quality-gate failures. The v5 source mapping covers only the original six mechanical failures.** | **[v4 checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) · [clean-six review](experiments/factual_source_canary_v1/results/CLEAN_SIX_MODEL_REVIEW.md) · [v5 replacement plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) · [protocol](experiments/factual_source_canary_v1/REWRITE_CANARY_PROTOCOL.md)** | **Human-adjudicate the clean six, then freeze the final failed-slot set and reconsider the rewrite recipe; no replacement generation, activation, probe, or scale-up authorization** |
+| Historical checkpoint | Factual rewrite canary v4 + replacement plan v5 | Can the v4 recipe create a strong contrast under its frozen rules? | After repair, 6/12 were mechanically clean; two blinded model reviews found 0/6 strict passes under the old rubric. | [v4 checkpoint](experiments/factual_source_canary_v1/results/rewrite_canary_v4_current_checkpoint.json) · [review](experiments/factual_source_canary_v1/results/CLEAN_SIX_MODEL_REVIEW.md) · [v5 plan](experiments/factual_source_canary_v1/results/rewrite_canary_v5_replacement_plan.json) | Retain as history; the new epistemic rule is evaluated separately. |
+| **Current** | **Six-source epistemic rewrite preview** | **Can stronger natural hedging vary commitment while preserving the factual core?** | **Six new development drafts are saved. They remain close to source wording and repeat some hedges; researcher feedback is pending.** | **[Revised rule](experiments/factual_source_canary_v1/EPISTEMIC_REWRITE_UPDATE.md) · [preview status](experiments/factual_source_canary_v1/results/epistemic_preview_v1_status.json)** | **Review the new contrast and factual core, then finalize the recipe before expanding data or comparing layers.** |
 | Conditional next | Fresh unscored factual-pair comparison | Does the signal survive human review, source holdout, cue controls, and comparison across every layer? | Not yet tested | [Source plan](experiments/factual_source_canary_v1/configs/source_selection_plan_v1.json) | Start only after the factual pair gate passes |
 | Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Conditional on the fresh unscored result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
@@ -203,8 +223,10 @@ flowchart LR
     B --> J["0/6 strict passes<br/>human adjudication pending"]
     P --> G["Six failed pairs<br/>no final repair eligible"]
     G --> Q["Verified v5 same-dataset plan<br/>model-assisted; no generation"]
-    J --> M["Conditional 12/12<br/>factual-pair gate"]
-    Q --> M
+    J --> R["Researcher feedback<br/>allow intended epistemic hedges"]
+    R --> D["Six new development drafts<br/>researcher review pending"]
+    D --> M["Conditional reviewed<br/>factual-pair set"]
+    Q -.-> M
     M --> Y["All-layer comparison<br/>only after gates pass"]
     Y --> Z["Conditional 300 / 700<br/>expansion"]
     Z -. "only after a new decision" .-> T

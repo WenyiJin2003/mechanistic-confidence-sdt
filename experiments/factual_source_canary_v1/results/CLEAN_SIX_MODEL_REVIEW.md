@@ -1,5 +1,12 @@
 # Clean-Six Interim Blind Review
 
+> **Interpretation update, 17 October:** this is the result under the original
+> v4 rubric. Researcher feedback identified weak contrasts and an overly tight
+> constraint on epistemic qualification. [The revised rule](../EPISTEMIC_REWRITE_UPDATE.md)
+> permits uncertainty about the same factual core while protecting substantive
+> evidence and legal scope. These six pairs are development material; **0/6**
+> is not evidence that the overall paired-confidence approach fails.
+
 ## Conclusion
 
 **The current factual-rewrite recipe has not passed the data-quality gate.**

@@ -1,5 +1,11 @@
 # Factual Rewrite Canary Protocol
 
+> **Historical v4 protocol.** On 17 October the researcher identified weak
+> contrasts and an overly restrictive implementation of epistemic change.
+> The [rewrite update](EPISTEMIC_REWRITE_UPDATE.md) governs the new six-source
+> development preview. The frozen v4 results below are retained under their
+> original rules; they are not retrospectively rescored or certified.
+
 ## Decision rule
 
 **Do not scale the factual rewrite set unless all 12 canary pairs pass.** A

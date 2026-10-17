@@ -1,0 +1,30 @@
+{
+  "activation_extraction_started": false,
+  "artifact_role": "development_preview",
+  "development_limitations": [
+    "Six previously inspected sources; not a held-out evaluation.",
+    "The drafts remain close to source wording and repeat several hedges.",
+    "No automatic strict-pass count or probe-performance claim."
+  ],
+  "draft_sha256": "e80aa30f9acc6a807db5c6db8fbc3359f31e35faf256a036adab68a665e57185",
+  "editorial_clarification_count": 1,
+  "human_review_certified": false,
+  "old_v4_repair_budget_modified": false,
+  "packet_sha256": "0e2a3b919c1c06229b06b4820fc80642412f9faf3661387f761b22b280ce656e",
+  "pair_count": 6,
+  "previously_inspected_sources": true,
+  "probe_fitting_started": false,
+  "quality_review_status": "researcher_feedback_pending",
+  "rewrite_rule_sha256": "939b61c17e420b5fc1a747b97a226535003a1a8776f24b1aeca7882c16b2a4b8",
+  "schema": "epistemic-rewrite-development-preview-v1",
+  "sdt_training_started": false,
+  "source_sha256": "38869458a57be7ae1e8e8ba8d8209c850599fe2b32620bb16f883c8632c48a1d",
+  "status": "draft_pending_researcher_review",
+  "writer": {
+    "exact_backend_version": "not exposed",
+    "model_family": "GPT-6",
+    "provider": "Codex session",
+    "role": "independent source-only subagent",
+    "sampling_parameters": "session-managed; not explicitly set"
+  }
+}

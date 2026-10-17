@@ -2,6 +2,20 @@
 
 ## Current decision
 
+**17 October: the rewrite rule is being corrected.** Epistemic “might,” “may”
+and similar hedges can vary commitment to the same factual core. Legal
+permission, enactment status and a study's stated evidence strength remain
+protected. The researcher found weak and unnatural contrasts in the six v4
+examples; a separate six-source development preview is ready for feedback under
+[the revised rule](EPISTEMIC_REWRITE_UPDATE.md). The v4 counts and artifacts
+below remain historical results under the previous rubric.
+
+The [preview status](results/epistemic_preview_v1_status.json) contains hashes
+and provenance only. The six new drafts and a compact review page remain
+private under `private_data/rewrite_canary_v1/epistemic_preview_v1/`.
+Run `python3 src/prepare_epistemic_preview.py --render` from this experiment's
+directory to rebuild the page from the saved drafts. No browser is opened.
+
 **The 120-source core will use 40 ASQA responses, 40 QASPER author
 abstracts, and 40 BillSum summaries.** FeTaQA is retained as a separate
 20-source short-form external test, not as core training or layer-selection
