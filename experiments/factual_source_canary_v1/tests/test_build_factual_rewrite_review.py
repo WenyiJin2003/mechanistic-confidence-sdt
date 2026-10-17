@@ -206,6 +206,8 @@ class FactualRewriteReviewBuilderTests(unittest.TestCase):
                 },
             )
             self.assertFalse(manifest["answer_key_embedded_in_html"])
+            expected_binding = MODULE.build_artifact_binding(joined, joined)
+            self.assertEqual(manifest["artifact_binding"], expected_binding)
             for row in key["rows"]:
                 self.assertNotIn(row["source_id"], page)
                 self.assertNotIn(row["source_hash"], page)

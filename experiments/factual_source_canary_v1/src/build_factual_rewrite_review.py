@@ -10,9 +10,15 @@ import argparse
 import hashlib
 import html
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
+
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+from canary_binding import build_artifact_binding
 
 
 BASE = Path(__file__).resolve().parents[1]
@@ -468,6 +474,7 @@ def write_review_bundle(
         "blinded": True,
         "answer_key_embedded_in_html": False,
         "human_review_certified": False,
+        "artifact_binding": build_artifact_binding(joined_rows, joined_rows),
     }
     _write_json(paths["manifest"], manifest)
     return {

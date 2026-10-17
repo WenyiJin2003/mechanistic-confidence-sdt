@@ -108,6 +108,9 @@ class ValidateFactualRewritesTests(unittest.TestCase):
             report["length_direction_counts"],
             {"confident_longer": 6, "hesitant_longer": 6},
         )
+        self.assertEqual(report["artifact_binding"]["source_count"], 12)
+        self.assertEqual(report["artifact_binding"]["pair_count"], 12)
+        self.assertEqual(len(report["artifact_binding"]["pair_set_sha256"]), 64)
 
     def test_semantic_qualifier_is_manual_not_literal_check(self):
         sources, pairs = make_batch()
@@ -217,6 +220,18 @@ class ValidateFactualRewritesTests(unittest.TestCase):
         self.assertIn(
             "pair_source_id_unknown",
             row_for(report, "unknown-source")["failure_flags"],
+        )
+
+    def test_missing_pair_text_returns_failed_report_instead_of_raising(self):
+        sources, pairs = make_batch()
+        del pairs[0]["confident_response"]
+        report = validator.validate_factual_rewrites(sources, pairs, self.tokenizer)
+        self.assertFalse(report["mechanical_gate_pass"])
+        self.assertIsNone(report["artifact_binding"])
+        self.assertIn("artifact_binding_unavailable", report["global_failure_flags"])
+        self.assertIn(
+            "confident_response_missing",
+            row_for(report, sources[0]["source_id"])["failure_flags"],
         )
 
     def test_malformed_dataset_is_reported_without_sort_failure(self):

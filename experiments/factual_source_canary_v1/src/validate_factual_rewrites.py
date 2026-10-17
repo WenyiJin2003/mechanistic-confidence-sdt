@@ -20,9 +20,15 @@ import hashlib
 import html
 import json
 import re
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
+
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+from canary_binding import build_artifact_binding
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -618,6 +624,13 @@ def validate_factual_rewrites(
     failure_counts = Counter(flag for row in rows for flag in row["failure_flags"])
     manual_counts = Counter(flag for row in rows for flag in row["manual_review_flags"])
     warning_counts = Counter(flag for row in rows for flag in row["warning_flags"])
+    artifact_binding = None
+    try:
+        artifact_binding = build_artifact_binding(
+            source_rows, pair_rows, require_matching_ids=False
+        )
+    except ValueError:
+        global_flags.append("artifact_binding_unavailable")
     global_flags = sorted(set(global_flags))
     report = {
         "schema_version": 1,
@@ -656,6 +669,7 @@ def validate_factual_rewrites(
             "model": "Qwen/Qwen2.5-1.5B-Instruct",
             "snapshot_id": TOKENIZER_SNAPSHOT_ID,
         },
+        "artifact_binding": artifact_binding,
         "rows": rows,
         "semantic_equivalence_certified": False,
         "naturalness_certified": False,

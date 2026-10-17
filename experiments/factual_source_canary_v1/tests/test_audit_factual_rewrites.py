@@ -257,12 +257,16 @@ class FactualRewriteAuditTests(unittest.TestCase):
             "A tentative reconstruction provisionally states the same factual result.",
         )
         audits, batch_flags, diagnostics = MODULE.audit_factual_rewrites([src], [row])
-        summary = MODULE.aggregate_summary(audits, batch_flags, diagnostics, 1, 1)
+        binding = MODULE.build_artifact_binding([src], [row])
+        summary = MODULE.aggregate_summary(
+            audits, batch_flags, diagnostics, 1, 1, artifact_binding=binding
+        )
         encoded = json.dumps(summary)
         self.assertNotIn("secret-source", encoded)
         self.assertNotIn("Secret factual", encoded)
         self.assertFalse(summary["decision"]["semantic_equivalence_certified"])
         self.assertFalse(summary["decision"]["activation_scoring_authorized"])
+        self.assertEqual(summary["artifact_binding"], binding)
 
     def test_reads_jsonl_and_pairs_object(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

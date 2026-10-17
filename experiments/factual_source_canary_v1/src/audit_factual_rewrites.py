@@ -16,11 +16,17 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
+
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+from canary_binding import build_artifact_binding
 
 
 BASE = Path(__file__).resolve().parents[1]
@@ -668,6 +674,7 @@ def aggregate_summary(
     diagnostics: Mapping[str, Any],
     source_count: int,
     writer_count: int,
+    artifact_binding: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     status_counts = Counter(str(row.get("shortcut_status")) for row in audit_rows)
     flag_counts = Counter(
@@ -696,6 +703,7 @@ def aggregate_summary(
             "writer_rows": writer_count,
             "audit_rows": len(audit_rows),
         },
+        "artifact_binding": dict(artifact_binding) if artifact_binding else None,
         "status_counts": dict(sorted(status_counts.items())),
         "flag_counts": dict(sorted(flag_counts.items())),
         "warning_counts": dict(sorted(warning_counts.items())),
@@ -746,8 +754,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     sources = read_records(args.sources)
     writers = [row for path in args.rewrites for row in read_records(path)]
     rows, batch_flags, diagnostics = audit_factual_rewrites(sources, writers)
+    artifact_binding = None
+    try:
+        artifact_binding = build_artifact_binding(
+            sources, writers, require_matching_ids=False
+        )
+    except ValueError:
+        batch_flags = sorted(set((*batch_flags, "artifact_binding_unavailable")))
     summary = aggregate_summary(
-        rows, batch_flags, diagnostics, len(sources), len(writers)
+        rows,
+        batch_flags,
+        diagnostics,
+        len(sources),
+        len(writers),
+        artifact_binding=artifact_binding,
     )
     _write_json(args.private_output, {
         "audit": summary["audit"],

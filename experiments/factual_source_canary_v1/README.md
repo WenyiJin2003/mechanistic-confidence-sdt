@@ -119,6 +119,46 @@ The frozen design is in `configs/rewrite_canary_v1.json`. The public outputs
 contain identifiers, hashes, allocations, and counts only; the question,
 source response, qualifier text, and rewrite prompts remain private.
 
+After the final 12 pairs have been validated, build the private blind-review
+packet from the same frozen source and pair files:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/build_factual_rewrite_review.py \
+  --sources experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/frozen_sources_v2.jsonl \
+  --pairs experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/WRITER_CANARY_12_FINAL.jsonl \
+  --output-dir experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/blind_review
+```
+
+The model-assisted pre-review ledger is also private. Its top-level schema is
+`factual-rewrite-model-assisted-pre-review-v1`; it records
+`review_type: model_assisted`, `blinded: true`, the exact `artifact_binding`
+copied from the final validator summary, and 12 uniquely identified records
+whose decisions are `pass`, `repair`, or `reject`. The public status builder
+verifies that this binding matches the validator, shortcut-audit, and blind
+packet bindings before combining any results.
+
+Then build one concise public status page from the aggregate gate summaries
+and private review metadata:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/build_public_canary_status.py \
+  --validation-summary experiments/factual_source_canary_v1/results/rewrite_canary_12_validation_summary.json \
+  --shortcut-summary experiments/factual_source_canary_v1/results/factual_rewrite_shortcut_audit_summary.json \
+  --pre-review experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/MODEL_ASSISTED_PRE_REVIEW.json \
+  --blind-review-manifest experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/blind_review/BLIND_REVIEW_MANIFEST.json
+```
+
+The generated JSON and Markdown include only aggregate counts and input hashes.
+They never copy source IDs, source text, rewrites, reviewer notes, or row-level
+decisions. A completed blind-review form is reported as awaiting validated
+import and adjudication; this status builder cannot claim human certification,
+authorize activation scoring, or establish a confidence representation.
+
+The final pair filename in the commands above is the planned merge target; use
+the exact path recorded by the final merge provenance if it differs. All four
+stage artifacts must contain the same canonical source/pair binding, so results
+from different runs cannot be combined accidentally.
+
 Build the deterministic review order with:
 
 ```bash
@@ -150,6 +190,8 @@ python3 experiments/factual_source_canary_v1/src/build_review_queue.py \
 | `results/SOURCE_SELECTION_RESULTS.md` | public | Final source-selection conclusion and limitations |
 | `results/rewrite_canary_v1_source_manifest.jsonl` | public | Text-free 12-source rewrite-canary allocation |
 | `results/rewrite_canary_v1_freeze_summary.json` | public | Frozen balance checks and private-artifact hashes |
+| `results/factual_rewrite_canary_status.json` | public | Aggregate gate and review status, with no record identities or text |
+| `results/FACTUAL_REWRITE_CANARY_STATUS.md` | public | Plain-language canary status and decision boundary |
 
 ## Decision boundary
 
