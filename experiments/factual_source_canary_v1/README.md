@@ -18,6 +18,13 @@ pass criteria are in [`REWRITE_CANARY_PROTOCOL.md`](REWRITE_CANARY_PROTOCOL.md).
 Preparing this canary does not authorize activation scoring; all 12 pairs must
 first pass mechanical checks and blind content review.
 
+The active source set is revision v3. It retains 10 core sources and uses the
+deterministic next BillSum and QASPER backups for two sources that exhausted
+their pair-repair budgets. The QASPER backup passed qualifier review, but it is
+shorter than the inherited `long_complex` slot; this revision therefore does
+not establish long-form QASPER coverage. Private v1/v2 artifacts remain intact,
+and a committed checksum inventory guards the preserved v2 writer inputs.
+
 This decision follows a locked, model-assisted review of 10 candidates per
 dataset. The review found that real-source answers still require explicit
 contradiction, provenance, missing-evidence, and qualifier checks. It did not
@@ -124,7 +131,7 @@ packet from the same frozen source and pair files:
 
 ```bash
 python3 experiments/factual_source_canary_v1/src/build_factual_rewrite_review.py \
-  --sources experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/frozen_sources_v2.jsonl \
+  --sources experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/frozen_sources_v3.jsonl \
   --pairs experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/WRITER_CANARY_12_FINAL.jsonl \
   --output-dir experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/blind_review
 ```

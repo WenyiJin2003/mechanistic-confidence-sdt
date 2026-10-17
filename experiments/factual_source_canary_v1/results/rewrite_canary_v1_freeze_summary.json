@@ -28,7 +28,7 @@
     "qualifier_sensitive": 3,
     "short_simple": 3
   },
-  "config_sha256": "ff5fc1e864048cfc51a1f6800ce8c17dd1b6caadaa4ed2bbbb1339cb9fd66574",
+  "config_sha256": "c05a1e6a3b6b7b5b417f612ebd69f6e57f45115bf1fc949bd7b98f5517fe53cd",
   "cue_assignment": {
     "method": "fixed target counts applied in seeded source-hash order",
     "target_counts": {
@@ -93,14 +93,17 @@
   },
   "planned_pair_count": 12,
   "planned_rewritten_text_count": 24,
-  "preserved_private_artifact_revision": "v1",
+  "preserved_private_artifact_revisions": [
+    "v1",
+    "v2"
+  ],
   "private_text_committed": false,
   "probe_fit": false,
-  "public_canary_manifest_sha256": "53595ae09fe504d0c829068b4eb7720390f83712c4d591dbb1e3c6d657bceee1",
+  "public_canary_manifest_sha256": "b3359c694fde562382e87ec08a3abae6a24d74407c40135b1f247653c3783a55",
   "public_source_manifest_sha256": "d51846305f0aabf9063e4951e98083e7bc5cfebd1cd727f737cae8c7b18b82ed",
   "qualifier_handling": {
     "content_authority": "original_response only",
-    "protected_qualifiers": "review-only semantic descriptors retained in frozen_sources_v2.jsonl and never exposed to the writer",
+    "protected_qualifiers": "review-only semantic descriptors retained in frozen_sources_v3.jsonl and never exposed to the writer",
     "protected_spans": "case-insensitive exact descriptor matches recovered from original_response and supplied to the writer"
   },
   "reviewer_metadata_corrections": {
@@ -157,30 +160,6 @@
       {
         "action": "remove_descriptor_sha256",
         "field": "protected_qualifiers",
-        "new_count": 2,
-        "new_descriptor_sha256": [
-          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
-          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
-        ],
-        "old_count": 3,
-        "old_descriptor_sha256": [
-          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
-          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea",
-          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
-        ],
-        "outcome_information_used": false,
-        "reason": "Independent semantic pre-review found that one reviewer descriptor was not licensed by the frozen response; the remaining descriptors were retained.",
-        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
-        "removed_descriptor_sha256": [
-          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea"
-        ],
-        "source_hash": "846c9c0556b9b16bcc108dde69434520ab8bfd8f59b41c7996db17c39451e34e",
-        "source_id": "qasper-paper:2001.06286",
-        "stage": "post_selection_pre_final_review"
-      },
-      {
-        "action": "remove_descriptor_sha256",
-        "field": "protected_qualifiers",
         "new_count": 3,
         "new_descriptor_sha256": [
           "b26d153bd954163245319e411209ce048a6a4fc7bd9799c473116337b3e08743",
@@ -205,9 +184,9 @@
         "stage": "post_selection_pre_final_review"
       }
     ],
-    "count": 4,
+    "count": 3,
     "outcome_information_used": false,
-    "rule": "Apply only configured reviewer-metadata corrections after source selection and experimental-slot assignment; fail closed unless the private pre-correction descriptor count and hashes match exactly.",
+    "rule": "Apply only configured reviewer-metadata corrections after source selection and experimental-slot assignment; fail closed unless the private pre-correction descriptor count and hashes match exactly and every writer-visible batch, prompt, and replacement payload remains byte-for-byte identical before and after correction.",
     "stage": "post_selection_pre_final_review",
     "writer_visible_artifacts_unchanged": true
   },
@@ -254,7 +233,7 @@
   },
   "source_count": 12,
   "source_replacements": {
-    "count": 1,
+    "count": 2,
     "eligible_role": "backup",
     "mappings": [
       {
@@ -288,6 +267,38 @@
         "replacement_source_hash": "6655de696e9b3f3695eb0bf834f2c0dca343f48ccb1e2d8e2aeae1cb2275d753",
         "replacement_source_id": "billsum:fa9b594a589c0757",
         "rule": "For each configured failed selected source, choose the unused same-dataset selection_role=backup row with the smallest integer review_rank, breaking ties by source_id; preserve the failed source's preregistered experimental slot."
+      },
+      {
+        "dataset": "qasper",
+        "failed_review_rank": 26,
+        "failed_source_hash": "846c9c0556b9b16bcc108dde69434520ab8bfd8f59b41c7996db17c39451e34e",
+        "failed_source_id": "qasper-paper:2001.06286",
+        "preserved_slot": {
+          "batch_id": "batch_03",
+          "batch_position": 3,
+          "cue_family": "modal_force_scope",
+          "draft_order": "hesitant_first",
+          "generation_order": 11,
+          "length_direction": "hesitant_longer",
+          "profile": "long_complex",
+          "selection_distance": 0.036875,
+          "selection_features": [
+            0.875,
+            0.775,
+            0.325
+          ],
+          "selection_target": [
+            0.8,
+            0.8,
+            0.5
+          ]
+        },
+        "reason": "The source did not produce a pair satisfying all preregistered pair-level gates within the allowed repair budget.",
+        "reason_code": "pair_validation_failed_after_allowed_repairs",
+        "replacement_review_rank": 61,
+        "replacement_source_hash": "30abd5f2cbbbfee5a9886b36c6760fbf60efe60f2ab0f1ca2e3a076c9e1c7d49",
+        "replacement_source_id": "qasper-paper:1910.11204",
+        "rule": "For each configured failed selected source, choose the unused same-dataset selection_role=backup row with the smallest integer review_rank, breaking ties by source_id; preserve the failed source's preregistered experimental slot."
       }
     ],
     "preserved_slot_fields": [
@@ -304,7 +315,7 @@
     ],
     "rule": "For each configured failed selected source, choose the unused same-dataset selection_role=backup row with the smallest integer review_rank, breaking ties by source_id; preserve the failed source's preregistered experimental slot."
   },
-  "source_set_revision": "v2",
+  "source_set_revision": "v3",
   "status": "rewrite_generation_not_run",
   "version": "factual-rewrite-canary-v1",
   "writer_output_fields": [

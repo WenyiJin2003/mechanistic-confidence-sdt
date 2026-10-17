@@ -59,6 +59,16 @@ def configure(config: dict[str, Any]) -> None:
     global CUE_FAMILY_TARGETS, LENGTH_DIRECTIONS, DRAFT_ORDERS, BATCH_LAYOUT
 
     selection = config["selection"]
+    artifact_revision = str(config["artifact_revision"])
+    preserved_revisions = [
+        str(value) for value in config["preserved_private_artifact_revisions"]
+    ]
+    if len(preserved_revisions) != len(set(preserved_revisions)):
+        raise ValueError("preserved private artifact revisions must be unique")
+    if artifact_revision in preserved_revisions:
+        raise ValueError(
+            "current artifact revision cannot overwrite a preserved revision"
+        )
     profiles = tuple(
         (str(item["name"]), tuple(float(value) for value in item["target"]))
         for item in selection["profiles"]
@@ -139,9 +149,14 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 def write_jsonl(path: Path, rows: Iterable[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", encoding="utf-8") as handle:
-        for row in rows:
-            handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
+    path.write_text(jsonl_text(rows), encoding="utf-8")
+
+
+def jsonl_text(rows: Iterable[dict[str, Any]]) -> str:
+    """Serialize JSONL exactly as the private artifact writer does."""
+    return "".join(
+        json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in rows
+    )
 
 
 def sha256_text(text: str) -> str:
@@ -681,28 +696,6 @@ def apply_reviewer_metadata_overrides(
     return corrected_batches, corrections
 
 
-def verify_writer_artifact_hash_stability(
-    source_batch_hashes: dict[str, str],
-    prompt_batch_hashes: dict[str, str],
-    replacement_source_hashes: dict[str, str],
-    replacement_prompt_hashes: dict[str, str],
-) -> None:
-    """Fail if a reviewer-only correction changes any writer-visible artifact."""
-    expected = DESIGN["reviewer_metadata_overrides"][
-        "expected_unchanged_writer_artifact_sha256"
-    ]
-    actual = {
-        "source_batch_sha256": source_batch_hashes,
-        "prompt_batch_sha256": prompt_batch_hashes,
-        "replacement_source_sha256": replacement_source_hashes,
-        "replacement_prompt_sha256": replacement_prompt_hashes,
-    }
-    if actual != expected:
-        raise ValueError(
-            "reviewer-only metadata correction changed writer-visible artifacts"
-        )
-
-
 def freeze_record(row: dict[str, Any]) -> dict[str, Any]:
     original = row.get("original_response")
     prompt = row.get("question")
@@ -827,6 +820,90 @@ INPUT_RECORDS_JSON
 """
 
 
+def writer_visible_artifact_snapshot(
+    batches: Sequence[Sequence[dict[str, Any]]],
+) -> dict[str, Any]:
+    """Return exact writer-visible content for a pre/post-correction check.
+
+    The snapshot is revision-independent: it compares the bytes that would be
+    written for every batch, prompt, and one-record replacement artifact. This
+    allows a new source-set revision while still failing closed if a
+    reviewer-only metadata correction changes anything exposed to the writer.
+    """
+    frozen_batches = [[freeze_record(row) for row in batch] for batch in batches]
+    source_batches = [
+        jsonl_text(writer_payload_record(row) for row in batch)
+        for batch in frozen_batches
+    ]
+    prompts = [
+        writer_prompt(batch, number, len(frozen_batches))
+        for number, batch in enumerate(frozen_batches, 1)
+    ]
+    replacement_rows = [
+        row
+        for batch in frozen_batches
+        for row in batch
+        if row["replacement_for_source_id"] is not None
+    ]
+    replacement_sources = [
+        jsonl_text([writer_payload_record(row)]) for row in replacement_rows
+    ]
+    replacement_prompts = [
+        writer_prompt([row], number, len(replacement_rows))
+        for number, row in enumerate(replacement_rows, 1)
+    ]
+    return {
+        "source_batches": source_batches,
+        "prompts": prompts,
+        "replacement_sources": replacement_sources,
+        "replacement_prompts": replacement_prompts,
+    }
+
+
+def verify_writer_visible_artifact_stability(
+    before: dict[str, Any], after: dict[str, Any]
+) -> None:
+    """Fail if a reviewer-only correction changes writer-visible bytes."""
+    if before != after:
+        raise ValueError(
+            "reviewer-only metadata correction changed writer-visible artifacts"
+        )
+
+
+def verify_preserved_writer_artifacts(private_output_dir: Path) -> None:
+    """Fail closed if a present preserved revision has drifted or is incomplete.
+
+    A clean checkout may not contain ignored private artifacts. In that case the
+    guard is a no-op. Once any anchored artifact from a preserved revision is
+    present, however, the complete committed checksum inventory must be present
+    and byte-identical before a new revision is written.
+    """
+    inventories = DESIGN.get("preserved_writer_artifact_sha256", {})
+    for revision, grouped_hashes in inventories.items():
+        expected = {
+            name: digest
+            for hashes in grouped_hashes.values()
+            for name, digest in hashes.items()
+        }
+        present = [name for name in expected if (private_output_dir / name).exists()]
+        if not present:
+            continue
+        missing = sorted(name for name in expected if name not in present)
+        if missing:
+            raise ValueError(
+                f"preserved {revision} writer artifacts are incomplete: {missing}"
+            )
+        mismatched = sorted(
+            name
+            for name, digest in expected.items()
+            if sha256_file(private_output_dir / name) != digest
+        )
+        if mismatched:
+            raise ValueError(
+                f"preserved {revision} writer artifacts changed: {mismatched}"
+            )
+
+
 def count_fields(rows: Sequence[dict[str, Any]], field: str) -> dict[str, int]:
     return dict(sorted(Counter(str(row[field]) for row in rows).items()))
 
@@ -945,6 +1022,7 @@ def prepare(
 ) -> dict[str, Any]:
     load_config(config_path)
     private_output_dir = require_private_output(private_output_dir)
+    verify_preserved_writer_artifacts(private_output_dir)
     source_rows = read_jsonl(source_path)
     public_source_rows = read_jsonl(public_source_path)
     selected = select_canary_sources(source_rows)
@@ -956,7 +1034,12 @@ def prepare(
     raw_batches, replacement_mappings = apply_configured_replacements(
         raw_batches, source_rows
     )
+    writer_visible_before_correction = writer_visible_artifact_snapshot(raw_batches)
     raw_batches, metadata_corrections = apply_reviewer_metadata_overrides(raw_batches)
+    writer_visible_after_correction = writer_visible_artifact_snapshot(raw_batches)
+    verify_writer_visible_artifact_stability(
+        writer_visible_before_correction, writer_visible_after_correction
+    )
     verify_against_public_manifest(
         [row for batch in raw_batches for row in batch], public_source_rows
     )
@@ -1002,27 +1085,24 @@ def prepare(
             "configured replacement count does not match frozen replacement rows"
         )
     for number, row in enumerate(replacement_rows, 1):
-        source_path = (
+        replacement_source_path = (
             private_output_dir
             / f"SOURCE_REPLACEMENT_{number:02d}_{artifact_suffix}.jsonl"
         )
-        prompt_path = (
+        replacement_prompt_path = (
             private_output_dir
             / f"PROMPT_REPLACEMENT_{number:02d}_{artifact_suffix}.txt"
         )
-        write_jsonl(source_path, [writer_payload_record(row)])
-        prompt_path.write_text(
+        write_jsonl(replacement_source_path, [writer_payload_record(row)])
+        replacement_prompt_path.write_text(
             writer_prompt([row], number, len(replacement_rows)), encoding="utf-8"
         )
-        replacement_source_hashes[source_path.name] = sha256_file(source_path)
-        replacement_prompt_hashes[prompt_path.name] = sha256_file(prompt_path)
-
-    verify_writer_artifact_hash_stability(
-        batch_hashes,
-        prompt_hashes,
-        replacement_source_hashes,
-        replacement_prompt_hashes,
-    )
+        replacement_source_hashes[replacement_source_path.name] = sha256_file(
+            replacement_source_path
+        )
+        replacement_prompt_hashes[replacement_prompt_path.name] = sha256_file(
+            replacement_prompt_path
+        )
 
     public_rows = [public_record(row) for row in frozen_rows]
     write_jsonl(public_manifest_path, public_rows)
@@ -1030,8 +1110,8 @@ def prepare(
     public_summary = {
         "version": VERSION,
         "source_set_revision": artifact_revision,
-        "preserved_private_artifact_revision": DESIGN[
-            "preserved_private_artifact_revision"
+        "preserved_private_artifact_revisions": DESIGN[
+            "preserved_private_artifact_revisions"
         ],
         "seed": SEED,
         "status": "rewrite_generation_not_run",

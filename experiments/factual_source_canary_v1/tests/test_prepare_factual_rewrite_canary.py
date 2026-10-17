@@ -35,11 +35,19 @@ BASE_EXPECTED_IDS = {
     },
 }
 
-EXPECTED_IDS = {
+V2_EXPECTED_IDS = {
     **BASE_EXPECTED_IDS,
     "billsum": {
         **BASE_EXPECTED_IDS["billsum"],
         "long_complex": "billsum:fa9b594a589c0757",
+    },
+}
+
+EXPECTED_IDS = {
+    **V2_EXPECTED_IDS,
+    "qasper": {
+        **V2_EXPECTED_IDS["qasper"],
+        "long_complex": "qasper-paper:1910.11204",
     },
 }
 
@@ -52,6 +60,7 @@ def prompt_row() -> dict:
         "source_hash": "a" * 64,
         "original_response_sha256": "b" * 64,
         "profile": "short_simple",
+        "question": "What is the answer?",
         "prompt": "What is the answer?",
         "original_response": "The measured result may be five.",
         "protected_qualifiers": ["may be five", "conditional estimate"],
@@ -67,6 +76,8 @@ def prompt_row() -> dict:
         "selection_features": [0.2, 0.2, 0.2],
         "selection_target": [0.2, 0.2, 0.2],
         "selection_distance": 0.0,
+        "selection_role": "core",
+        "review_rank": 1,
         "source_selection_role": "core",
         "source_review_rank": 1,
         "replacement_for_source_id": None,
@@ -110,7 +121,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         }
         self.assertEqual(actual, BASE_EXPECTED_IDS)
 
-    def test_failed_source_uses_next_ranked_backup_and_preserves_slot(self) -> None:
+    def test_failed_sources_use_next_ranked_backups_and_preserve_slots(self) -> None:
         if not MODULE.DEFAULT_SOURCE.exists():
             self.skipTest("ignored private frozen-source file is unavailable")
         source_rows = MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
@@ -119,50 +130,51 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         MODULE.assign_length_directions(selected)
         MODULE.assign_draft_orders(selected)
         batches = MODULE.order_batches(selected)
-        failed = next(
-            row
+        failed_by_id = {
+            row["source_id"]: row
             for batch in batches
             for row in batch
-            if row["source_id"] == "billsum:a6050ac8d28cdeb0"
-        )
+            if row["source_id"]
+            in {"billsum:a6050ac8d28cdeb0", "qasper-paper:2001.06286"}
+        }
         replaced, mappings = MODULE.apply_configured_replacements(
             batches, source_rows
         )
         effective_rows = [row for batch in replaced for row in batch]
-        replacement = next(
-            row
-            for row in effective_rows
-            if row["source_id"] == "billsum:fa9b594a589c0757"
-        )
-        eligible = sorted(
-            (
-                row
-                for row in source_rows
-                if row["dataset"] == "billsum"
-                and row["selection_role"] == "backup"
-                and row["source_id"] not in {
-                    candidate["source_id"]
-                    for batch in batches
-                    for candidate in batch
-                }
-            ),
-            key=lambda row: (int(row["review_rank"]), row["source_id"]),
-        )
-        self.assertEqual(replacement["source_id"], eligible[0]["source_id"])
-        self.assertNotIn(
-            "billsum:a6050ac8d28cdeb0",
-            {row["source_id"] for row in effective_rows},
-        )
-        for field in MODULE.DESIGN["source_replacement"]["preserved_slot_fields"]:
-            self.assertEqual(replacement[field], failed[field])
-        self.assertEqual(len(mappings), 1)
-        self.assertEqual(
-            mappings[0]["replacement_source_id"], "billsum:fa9b594a589c0757"
-        )
-        self.assertEqual(
-            mappings[0]["reason_code"],
-            "pair_validation_failed_after_allowed_repairs",
-        )
+        expected = {
+            "billsum:a6050ac8d28cdeb0": "billsum:fa9b594a589c0757",
+            "qasper-paper:2001.06286": "qasper-paper:1910.11204",
+        }
+        self.assertEqual(len(mappings), 2)
+        mapping_by_failed = {item["failed_source_id"]: item for item in mappings}
+        for failed_id, replacement_id in expected.items():
+            failed = failed_by_id[failed_id]
+            replacement = next(
+                row for row in effective_rows if row["source_id"] == replacement_id
+            )
+            eligible = sorted(
+                (
+                    row
+                    for row in source_rows
+                    if row["dataset"] == failed["dataset"]
+                    and row["selection_role"] == "backup"
+                    and row["source_id"]
+                    not in {
+                        candidate["source_id"]
+                        for batch in batches
+                        for candidate in batch
+                    }
+                ),
+                key=lambda row: (int(row["review_rank"]), row["source_id"]),
+            )
+            self.assertEqual(replacement_id, eligible[0]["source_id"])
+            self.assertNotIn(failed_id, {row["source_id"] for row in effective_rows})
+            for field in MODULE.DESIGN["source_replacement"]["preserved_slot_fields"]:
+                self.assertEqual(replacement[field], failed[field])
+            self.assertEqual(
+                mapping_by_failed[failed_id]["reason_code"],
+                "pair_validation_failed_after_allowed_repairs",
+            )
 
     def test_effective_default_canary_reproduces_locked_replacement_ids(self) -> None:
         if not MODULE.DEFAULT_SOURCE.exists():
@@ -214,7 +226,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         )
         after_frozen = MODULE.freeze_record(after)
 
-        self.assertEqual(len(corrections), 4)
+        self.assertEqual(len(corrections), 3)
         correction = next(item for item in corrections if item["source_id"] == source_id)
         self.assertEqual(correction["source_id"], source_id)
         self.assertEqual(correction["old_count"], 2)
@@ -261,10 +273,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         corrected_batches, corrections = MODULE.apply_reviewer_metadata_overrides(
             batches
         )
-        cases = {
-            "qasper-paper:2001.06286": (3, 2, 3),
-            "billsum:1b0226a63ea123f1": (4, 3, 4),
-        }
+        cases = {"billsum:1b0226a63ea123f1": (4, 3, 4)}
         for source_id, (old_count, new_count, batch_position) in cases.items():
             before = next(
                 row
@@ -470,6 +479,58 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             ["may be five", "conditional estimate"],
         )
 
+    def test_writer_visible_snapshot_ignores_only_nonliteral_reviewer_metadata(self) -> None:
+        before_row = prompt_row()
+        after_row = prompt_row()
+        after_row["protected_qualifiers"] = ["may be five"]
+        before = MODULE.writer_visible_artifact_snapshot([[before_row]])
+        after = MODULE.writer_visible_artifact_snapshot([[after_row]])
+        MODULE.verify_writer_visible_artifact_stability(before, after)
+
+    def test_writer_visible_snapshot_rejects_visible_drift(self) -> None:
+        before_row = prompt_row()
+        after_row = prompt_row()
+        after_row["original_response"] = "The measured result may instead be six."
+        before = MODULE.writer_visible_artifact_snapshot([[before_row]])
+        after = MODULE.writer_visible_artifact_snapshot([[after_row]])
+        with self.assertRaisesRegex(ValueError, "writer-visible artifacts"):
+            MODULE.verify_writer_visible_artifact_stability(before, after)
+
+    def test_preserved_writer_artifact_guard_rejects_drift(self) -> None:
+        inventory = MODULE.DESIGN["preserved_writer_artifact_sha256"]
+        expected_files = {
+            name: digest
+            for hashes in inventory["v2"].values()
+            for name, digest in hashes.items()
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            private_output = Path(directory)
+            for name in expected_files:
+                (private_output / name).write_text("changed\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "preserved v2.*changed"):
+                MODULE.verify_preserved_writer_artifacts(private_output)
+
+    def test_preserved_v2_writer_hash_inventory_matches_private_files(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        inventory = MODULE.DESIGN["preserved_writer_artifact_sha256"]["v2"]
+        expected = {
+            name: digest
+            for hashes in inventory.values()
+            for name, digest in hashes.items()
+        }
+        if not any((output / name).exists() for name in expected):
+            self.skipTest("preserved private v2 writer artifacts are unavailable")
+        MODULE.verify_preserved_writer_artifacts(output)
+        for name, digest in expected.items():
+            self.assertEqual(MODULE.sha256_file(output / name), digest)
+
+    def test_current_revision_cannot_overwrite_preserved_private_revisions(self) -> None:
+        config = json.loads(MODULE.DEFAULT_CONFIG.read_text(encoding="utf-8"))
+        config["artifact_revision"] = "v2"
+        with self.assertRaisesRegex(ValueError, "cannot overwrite"):
+            MODULE.configure(config)
+        MODULE.load_config(MODULE.DEFAULT_CONFIG)
+
     def test_private_output_guard_rejects_public_directory(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "private_data"
@@ -486,9 +547,15 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         rows = MODULE.read_jsonl(path)
         self.assertEqual(len(rows), 12)
         self.assertTrue(all(MODULE.PRIVATE_TEXT_FIELDS.isdisjoint(row) for row in rows))
+        revisions = {row["source_set_revision"] for row in rows}
+        self.assertEqual(revisions, {"v3"})
         self.assertEqual(
             {row["source_id"] for row in rows},
-            {source_id for mapping in EXPECTED_IDS.values() for source_id in mapping.values()},
+            {
+                source_id
+                for mapping in EXPECTED_IDS.values()
+                for source_id in mapping.values()
+            },
         )
         replacement = next(
             row for row in rows if row["source_id"] == "billsum:fa9b594a589c0757"
@@ -506,14 +573,18 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(corrected["protected_qualifier_count"], 0)
         self.assertEqual(corrected["batch_id"], "batch_02")
         self.assertEqual(corrected["batch_position"], 2)
-        qasper_batch3 = next(
-            row for row in rows if row["source_id"] == "qasper-paper:2001.06286"
-        )
         billsum_batch3 = next(
             row for row in rows if row["source_id"] == "billsum:1b0226a63ea123f1"
         )
-        self.assertEqual(qasper_batch3["protected_qualifier_count"], 2)
         self.assertEqual(billsum_batch3["protected_qualifier_count"], 3)
+        qasper_batch3 = next(
+            row for row in rows if row["source_id"] == "qasper-paper:1910.11204"
+        )
+        self.assertEqual(qasper_batch3["protected_qualifier_count"], 4)
+        self.assertEqual(
+            qasper_batch3["replacement_for_source_id"],
+            "qasper-paper:2001.06286",
+        )
 
     def test_v2_writer_and_validation_batches_separate_private_review_fields(self) -> None:
         output = ROOT / "private_data" / "rewrite_canary_v1"
@@ -591,17 +662,20 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             {prompt_name: MODULE.sha256_file(output / prompt_name)},
         )
 
-    def test_v2_writer_artifact_hashes_unchanged_after_metadata_correction(self) -> None:
+    def test_v2_writer_artifact_hashes_still_match_preserved_files(self) -> None:
         output = ROOT / "private_data" / "rewrite_canary_v1"
         manifest_path = output / "FREEZE_MANIFEST_PRIVATE_V2.json"
         if not manifest_path.exists():
             self.skipTest("generated private v2 freeze manifest is unavailable")
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        expected = MODULE.DESIGN["reviewer_metadata_overrides"][
-            "expected_unchanged_writer_artifact_sha256"
-        ]
-        for key, expected_hashes in expected.items():
-            self.assertEqual(manifest[key], expected_hashes)
+        for key in (
+            "source_batch_sha256",
+            "prompt_batch_sha256",
+            "replacement_source_sha256",
+            "replacement_prompt_sha256",
+        ):
+            for name, expected_hash in manifest[key].items():
+                self.assertEqual(MODULE.sha256_file(output / name), expected_hash)
 
     def test_v2_validation_freeze_contains_corrected_reviewer_metadata(self) -> None:
         output = ROOT / "private_data" / "rewrite_canary_v1"
@@ -660,26 +734,81 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             self.assertEqual(correction["new_count"], new_count)
             self.assertEqual(len(correction["removed_descriptor_sha256"]), 1)
 
-    def test_public_summary_records_v2_replacement_provenance(self) -> None:
+    def test_v3_qasper_replacement_preserves_slot_without_metadata_override(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        frozen_path = output / "frozen_sources_v3.jsonl"
+        writer_path = output / "SOURCE_BATCH_03_V3.jsonl"
+        validation_path = output / "SOURCE_BATCH_03_VALIDATION_V3.jsonl"
+        if not frozen_path.exists() or not writer_path.exists() or not validation_path.exists():
+            self.skipTest("generated private v3 canary artifacts are unavailable")
+        source_id = "qasper-paper:1910.11204"
+        frozen = next(
+            row for row in MODULE.read_jsonl(frozen_path) if row["source_id"] == source_id
+        )
+        writer = next(
+            row for row in MODULE.read_jsonl(writer_path) if row["source_id"] == source_id
+        )
+        validation = next(
+            row for row in MODULE.read_jsonl(validation_path) if row["source_id"] == source_id
+        )
+        self.assertEqual(frozen, validation)
+        self.assertEqual(frozen["source_set_revision"], "v3")
+        self.assertEqual(frozen["replacement_for_source_id"], "qasper-paper:2001.06286")
+        self.assertEqual(frozen["source_selection_role"], "backup")
+        self.assertEqual(frozen["source_review_rank"], 61)
+        self.assertEqual(frozen["profile"], "long_complex")
+        self.assertEqual(frozen["batch_id"], "batch_03")
+        self.assertEqual(frozen["batch_position"], 3)
+        self.assertEqual(frozen["generation_order"], 11)
+        self.assertEqual(len(frozen["protected_qualifiers"]), 4)
+        self.assertEqual(len(frozen["protected_spans"]), 3)
+        self.assertIsNone(frozen["reviewer_metadata_correction"])
+        self.assertNotIn("protected_qualifiers", writer)
+        self.assertEqual(writer, MODULE.writer_payload_record(frozen))
+
+    def test_v3_private_manifest_hashes_both_replacement_artifacts(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        manifest_path = output / "FREEZE_MANIFEST_PRIVATE_V3.json"
+        if not manifest_path.exists():
+            self.skipTest("generated private v3 freeze manifest is unavailable")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        self.assertEqual(manifest["source_replacements"]["count"], 2)
+        self.assertEqual(
+            manifest["source_file_sha256"],
+            MODULE.sha256_file(MODULE.DEFAULT_SOURCE),
+        )
+        for key in ("replacement_source_sha256", "replacement_prompt_sha256"):
+            self.assertEqual(len(manifest[key]), 2)
+            for name, expected_hash in manifest[key].items():
+                self.assertEqual(MODULE.sha256_file(output / name), expected_hash)
+
+    def test_public_summary_records_v3_replacement_provenance(self) -> None:
         path = ROOT / "results" / "rewrite_canary_v1_freeze_summary.json"
         if not path.exists():
             self.skipTest("generated public canary summary is unavailable")
         summary = json.loads(path.read_text(encoding="utf-8"))
-        self.assertEqual(summary["source_set_revision"], "v2")
+        self.assertEqual(summary["source_set_revision"], "v3")
+        self.assertEqual(summary["preserved_private_artifact_revisions"], ["v1", "v2"])
         replacements = summary["source_replacements"]
-        self.assertEqual(replacements["count"], 1)
-        mapping = replacements["mappings"][0]
+        self.assertEqual(replacements["count"], 2)
+        mapping_by_failed = {
+            item["failed_source_id"]: item for item in replacements["mappings"]
+        }
         self.assertEqual(
-            mapping["failed_source_id"], "billsum:a6050ac8d28cdeb0"
+            mapping_by_failed["billsum:a6050ac8d28cdeb0"]["replacement_source_id"],
+            "billsum:fa9b594a589c0757",
         )
         self.assertEqual(
-            mapping["replacement_source_id"], "billsum:fa9b594a589c0757"
+            mapping_by_failed["qasper-paper:2001.06286"]["replacement_source_id"],
+            "qasper-paper:1910.11204",
         )
-        self.assertEqual(
-            mapping["reason_code"], "pair_validation_failed_after_allowed_repairs"
-        )
+        for mapping in mapping_by_failed.values():
+            self.assertEqual(
+                mapping["reason_code"],
+                "pair_validation_failed_after_allowed_repairs",
+            )
         corrections = summary["reviewer_metadata_corrections"]
-        self.assertEqual(corrections["count"], 4)
+        self.assertEqual(corrections["count"], 3)
         self.assertTrue(corrections["writer_visible_artifacts_unchanged"])
         self.assertFalse(corrections["outcome_information_used"])
         correction = next(
@@ -701,24 +830,26 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(len(replacement_correction["removed_descriptor_sha256"]), 2)
         self.assertEqual(len(replacement_correction["new_descriptor_sha256"]), 3)
         self.assertNotIn("protected_qualifiers", replacement_correction)
-        batch3_corrections = {
+        corrections_by_source = {
             item["source_id"]: item for item in corrections["corrections"]
         }
+        self.assertNotIn("qasper-paper:2001.06286", corrections_by_source)
+        self.assertNotIn("qasper-paper:1910.11204", corrections_by_source)
         self.assertEqual(
-            batch3_corrections["qasper-paper:2001.06286"]["new_count"], 2
+            corrections_by_source["billsum:1b0226a63ea123f1"]["new_count"], 3
         )
         self.assertEqual(
-            batch3_corrections["billsum:1b0226a63ea123f1"]["new_count"], 3
+            len(
+                corrections_by_source["billsum:1b0226a63ea123f1"][
+                    "removed_descriptor_sha256"
+                ]
+            ),
+            1,
         )
-        for source_id in (
-            "qasper-paper:2001.06286",
-            "billsum:1b0226a63ea123f1",
-        ):
-            self.assertEqual(
-                len(batch3_corrections[source_id]["removed_descriptor_sha256"]),
-                1,
-            )
-            self.assertNotIn("protected_qualifiers", batch3_corrections[source_id])
+        self.assertNotIn(
+            "protected_qualifiers",
+            corrections_by_source["billsum:1b0226a63ea123f1"],
+        )
 
     def test_config_declares_canonical_writer_fields(self) -> None:
         config = json.loads(MODULE.DEFAULT_CONFIG.read_text(encoding="utf-8"))
@@ -733,17 +864,24 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             config["fields"]["review_only_fields"], ["protected_qualifiers"]
         )
         self.assertEqual(config["fields"]["legacy_output_alias"], "hedged_response")
+        self.assertEqual(config["artifact_revision"], "v3")
+        self.assertEqual(config["preserved_private_artifact_revisions"], ["v1", "v2"])
         replacement = config["source_replacement"]
         self.assertEqual(replacement["eligible_role"], "backup")
+        failed = {item["source_id"]: item for item in replacement["failed_sources"]}
         self.assertEqual(
-            replacement["failed_sources"][0]["expected_replacement_source_id"],
+            failed["billsum:a6050ac8d28cdeb0"]["expected_replacement_source_id"],
             "billsum:fa9b594a589c0757",
+        )
+        self.assertEqual(
+            failed["qasper-paper:2001.06286"]["expected_replacement_source_id"],
+            "qasper-paper:1910.11204",
         )
         override = config["reviewer_metadata_overrides"]
         self.assertFalse(override["outcome_information_used"])
         self.assertEqual(override["overrides"][0]["expected_old_count"], 2)
         self.assertEqual(override["overrides"][0]["expected_new_count"], 0)
-        self.assertEqual(len(override["overrides"]), 4)
+        self.assertEqual(len(override["overrides"]), 3)
         for item in override["overrides"]:
             self.assertNotIn("protected_qualifiers", item)
         partial = override["overrides"][1]
@@ -752,12 +890,9 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(partial["expected_new_count"], 3)
         self.assertEqual(len(partial["remove_descriptor_sha256"]), 2)
         batch3 = {item["source_id"]: item for item in override["overrides"]}
-        self.assertEqual(batch3["qasper-paper:2001.06286"]["expected_new_count"], 2)
+        self.assertNotIn("qasper-paper:2001.06286", batch3)
+        self.assertNotIn("qasper-paper:1910.11204", batch3)
         self.assertEqual(batch3["billsum:1b0226a63ea123f1"]["expected_new_count"], 3)
-        self.assertEqual(
-            len(batch3["qasper-paper:2001.06286"]["remove_descriptor_sha256"]),
-            1,
-        )
         self.assertEqual(
             len(batch3["billsum:1b0226a63ea123f1"]["remove_descriptor_sha256"]),
             1,

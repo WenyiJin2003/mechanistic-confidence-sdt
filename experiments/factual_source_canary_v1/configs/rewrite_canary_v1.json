@@ -1,7 +1,27 @@
 {
   "version": "factual-rewrite-canary-v1",
-  "artifact_revision": "v2",
-  "preserved_private_artifact_revision": "v1",
+  "artifact_revision": "v3",
+  "preserved_private_artifact_revisions": ["v1", "v2"],
+  "preserved_writer_artifact_sha256": {
+    "v2": {
+      "source_batch_sha256": {
+        "SOURCE_BATCH_01_V2.jsonl": "92d78b0fd0ed91363417bedb222540653dfb5334a873982951c75a605605263e",
+        "SOURCE_BATCH_02_V2.jsonl": "5df0e28bf418be37ecdf8e9feac1a0ecf584cb3227b905f85fdef3d094e9795d",
+        "SOURCE_BATCH_03_V2.jsonl": "62199335db77c6eeb97a175a7b4e2cbdd05ffea323c23f6e5ef3660c394dd4a9"
+      },
+      "prompt_batch_sha256": {
+        "PROMPT_BATCH_01_V2.txt": "325b59575a1dc8a194ff0167948784ed9519919bf16e41d3f586aee017facbcc",
+        "PROMPT_BATCH_02_V2.txt": "69e851fc955217e492b4e984e01be4f2131b2aeb75d5dfe35b8897608763a264",
+        "PROMPT_BATCH_03_V2.txt": "f048675f493eddb7d23598fb5e0c45a63e5e30c328b1685777dc94c6d7180b7c"
+      },
+      "replacement_source_sha256": {
+        "SOURCE_REPLACEMENT_01_V2.jsonl": "fdbbce2b37b92e2bdf4a1a4fd3a33962b03bb674c7cf0095a1e7aaa1cbbfea44"
+      },
+      "replacement_prompt_sha256": {
+        "PROMPT_REPLACEMENT_01_V2.txt": "9f26ae1f4223953cdc34afa628a0f106e39bee6d2fcd66c3cae6619354063bc5"
+      }
+    }
+  },
   "seed": 20261017,
   "selection": {
     "datasets": ["asqa", "qasper", "billsum"],
@@ -46,31 +66,19 @@
         "expected_replacement_source_id": "billsum:fa9b594a589c0757",
         "reason_code": "pair_validation_failed_after_allowed_repairs",
         "reason": "The source did not produce a pair satisfying both content and preregistered length-direction gates within the allowed repair budget."
+      },
+      {
+        "source_id": "qasper-paper:2001.06286",
+        "expected_replacement_source_id": "qasper-paper:1910.11204",
+        "reason_code": "pair_validation_failed_after_allowed_repairs",
+        "reason": "The source did not produce a pair satisfying all preregistered pair-level gates within the allowed repair budget."
       }
     ]
   },
   "reviewer_metadata_overrides": {
     "stage": "post_selection_pre_final_review",
     "outcome_information_used": false,
-    "rule": "Apply only configured reviewer-metadata corrections after source selection and experimental-slot assignment; fail closed unless the private pre-correction descriptor count and hashes match exactly.",
-    "expected_unchanged_writer_artifact_sha256": {
-      "source_batch_sha256": {
-        "SOURCE_BATCH_01_V2.jsonl": "92d78b0fd0ed91363417bedb222540653dfb5334a873982951c75a605605263e",
-        "SOURCE_BATCH_02_V2.jsonl": "5df0e28bf418be37ecdf8e9feac1a0ecf584cb3227b905f85fdef3d094e9795d",
-        "SOURCE_BATCH_03_V2.jsonl": "62199335db77c6eeb97a175a7b4e2cbdd05ffea323c23f6e5ef3660c394dd4a9"
-      },
-      "prompt_batch_sha256": {
-        "PROMPT_BATCH_01_V2.txt": "325b59575a1dc8a194ff0167948784ed9519919bf16e41d3f586aee017facbcc",
-        "PROMPT_BATCH_02_V2.txt": "69e851fc955217e492b4e984e01be4f2131b2aeb75d5dfe35b8897608763a264",
-        "PROMPT_BATCH_03_V2.txt": "f048675f493eddb7d23598fb5e0c45a63e5e30c328b1685777dc94c6d7180b7c"
-      },
-      "replacement_source_sha256": {
-        "SOURCE_REPLACEMENT_01_V2.jsonl": "fdbbce2b37b92e2bdf4a1a4fd3a33962b03bb674c7cf0095a1e7aaa1cbbfea44"
-      },
-      "replacement_prompt_sha256": {
-        "PROMPT_REPLACEMENT_01_V2.txt": "9f26ae1f4223953cdc34afa628a0f106e39bee6d2fcd66c3cae6619354063bc5"
-      }
-    },
+    "rule": "Apply only configured reviewer-metadata corrections after source selection and experimental-slot assignment; fail closed unless the private pre-correction descriptor count and hashes match exactly and every writer-visible batch, prompt, and replacement payload remains byte-for-byte identical before and after correction.",
     "overrides": [
       {
         "source_id": "billsum:44172515b22eaae0",
@@ -110,27 +118,6 @@
         ],
         "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
         "reason": "Independent semantic pre-review found that two reviewer descriptors were not licensed by the frozen response; the remaining descriptors were retained."
-      },
-      {
-        "source_id": "qasper-paper:2001.06286",
-        "field": "protected_qualifiers",
-        "expected_old_count": 3,
-        "expected_old_descriptor_sha256": [
-          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
-          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea",
-          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
-        ],
-        "action": "remove_descriptor_sha256",
-        "remove_descriptor_sha256": [
-          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea"
-        ],
-        "expected_new_count": 2,
-        "expected_new_descriptor_sha256": [
-          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
-          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
-        ],
-        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
-        "reason": "Independent semantic pre-review found that one reviewer descriptor was not licensed by the frozen response; the remaining descriptors were retained."
       },
       {
         "source_id": "billsum:1b0226a63ea123f1",
