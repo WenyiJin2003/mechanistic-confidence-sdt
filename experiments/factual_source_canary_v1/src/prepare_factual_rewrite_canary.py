@@ -874,6 +874,31 @@ def prepare(
         validation_batch_hashes[validation_path.name] = sha256_file(validation_path)
         prompt_hashes[prompt_path.name] = sha256_file(prompt_path)
 
+    replacement_source_hashes: dict[str, str] = {}
+    replacement_prompt_hashes: dict[str, str] = {}
+    replacement_rows = [
+        row for row in frozen_rows if row["replacement_for_source_id"] is not None
+    ]
+    if len(replacement_rows) != len(replacement_mappings):
+        raise ValueError(
+            "configured replacement count does not match frozen replacement rows"
+        )
+    for number, row in enumerate(replacement_rows, 1):
+        source_path = (
+            private_output_dir
+            / f"SOURCE_REPLACEMENT_{number:02d}_{artifact_suffix}.jsonl"
+        )
+        prompt_path = (
+            private_output_dir
+            / f"PROMPT_REPLACEMENT_{number:02d}_{artifact_suffix}.txt"
+        )
+        write_jsonl(source_path, [writer_payload_record(row)])
+        prompt_path.write_text(
+            writer_prompt([row], number, len(replacement_rows)), encoding="utf-8"
+        )
+        replacement_source_hashes[source_path.name] = sha256_file(source_path)
+        replacement_prompt_hashes[prompt_path.name] = sha256_file(prompt_path)
+
     public_rows = [public_record(row) for row in frozen_rows]
     write_jsonl(public_manifest_path, public_rows)
     source_count = len(frozen_rows)
@@ -1010,6 +1035,8 @@ def prepare(
         "source_batch_sha256": batch_hashes,
         "validation_source_batch_sha256": validation_batch_hashes,
         "prompt_batch_sha256": prompt_hashes,
+        "replacement_source_sha256": replacement_source_hashes,
+        "replacement_prompt_sha256": replacement_prompt_hashes,
         "public_summary_sha256": sha256_file(public_summary_path),
     }
     (private_output_dir / f"FREEZE_MANIFEST_PRIVATE_{artifact_suffix}.json").write_text(

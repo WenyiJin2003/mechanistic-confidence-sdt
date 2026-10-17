@@ -317,6 +317,59 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             [row["source_id"] for row in validation_rows],
         )
 
+    def test_v2_replacement_prompt_contains_one_writer_safe_source_and_slot(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        source_path = output / "SOURCE_REPLACEMENT_01_V2.jsonl"
+        prompt_path = output / "PROMPT_REPLACEMENT_01_V2.txt"
+        frozen_path = output / "frozen_sources_v2.jsonl"
+        if not source_path.exists() or not prompt_path.exists() or not frozen_path.exists():
+            self.skipTest("generated private v2 replacement prompt is unavailable")
+        source_rows = MODULE.read_jsonl(source_path)
+        self.assertEqual(len(source_rows), 1)
+        source = source_rows[0]
+        self.assertEqual(source["source_id"], "billsum:fa9b594a589c0757")
+        self.assertNotIn("protected_qualifiers", source)
+
+        prompt_text = prompt_path.read_text(encoding="utf-8")
+        prompt_rows = json.loads(
+            prompt_text.split("INPUT_RECORDS_JSON\n", 1)[1]
+        )
+        self.assertEqual(prompt_rows, source_rows)
+        self.assertNotIn("protected_qualifiers", prompt_rows[0])
+
+        frozen = next(
+            row
+            for row in MODULE.read_jsonl(frozen_path)
+            if row["source_id"] == "billsum:fa9b594a589c0757"
+        )
+        for field in (
+            "profile",
+            "cue_family",
+            "length_direction",
+            "draft_order",
+            "generation_order",
+        ):
+            self.assertEqual(source[field], frozen[field])
+        self.assertEqual(frozen["batch_id"], "batch_01")
+        self.assertEqual(frozen["batch_position"], 3)
+
+    def test_v2_private_manifest_hashes_replacement_prompt_and_source(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        manifest_path = output / "FREEZE_MANIFEST_PRIVATE_V2.json"
+        if not manifest_path.exists():
+            self.skipTest("generated private v2 freeze manifest is unavailable")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        source_name = "SOURCE_REPLACEMENT_01_V2.jsonl"
+        prompt_name = "PROMPT_REPLACEMENT_01_V2.txt"
+        self.assertEqual(
+            manifest["replacement_source_sha256"],
+            {source_name: MODULE.sha256_file(output / source_name)},
+        )
+        self.assertEqual(
+            manifest["replacement_prompt_sha256"],
+            {prompt_name: MODULE.sha256_file(output / prompt_name)},
+        )
+
     def test_public_summary_records_v2_replacement_provenance(self) -> None:
         path = ROOT / "results" / "rewrite_canary_v1_freeze_summary.json"
         if not path.exists():
