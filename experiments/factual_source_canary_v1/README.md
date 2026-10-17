@@ -11,19 +11,45 @@ data.
 the locked primary review plus a recomputed secondary sample audit. See
 `results/SOURCE_SELECTION_RESULTS.md`.
 
-**The next gate is frozen but not yet passed:** a deterministic 12-source
-rewrite canary selects 4 ASQA, 4 QASPER, and 4 BillSum responses and assigns
-balanced confident/hesitant construction conditions. The full design and hard
-pass criteria are in [`REWRITE_CANARY_PROTOCOL.md`](REWRITE_CANARY_PROTOCOL.md).
-Preparing this canary does not authorize activation scoring; all 12 pairs must
-first pass mechanical checks and blind content review.
+**The first v4 generation-and-repair cycle is complete, but the 12-source
+rewrite canary has not passed.** It contains
+4 ASQA, 4 QASPER, and 4 BillSum responses with balanced confident/hesitant
+construction conditions. Fresh isolated generation produced 2/12 mechanically
+clean pairs. Each of the ten initial failures then received exactly one
+writer-safe full-pair repair; this raised the clean count to 6/12. The other
+6/12 still fail frozen mechanical rules, and none qualifies for the narrowly
+allowed final length-only repair. The reproducible, text-free current ledger is
+[`results/rewrite_canary_v4_current_checkpoint.json`](results/rewrite_canary_v4_current_checkpoint.json),
+and its aggregate validator projection is in
+[`results/rewrite_canary_v4_post_repair_validation_summary.json`](results/rewrite_canary_v4_post_repair_validation_summary.json).
 
-The active source set is revision v3. It retains 10 core sources and uses the
-deterministic next BillSum and QASPER backups for two sources that exhausted
-their pair-repair budgets. The QASPER backup passed qualifier review, but it is
-shorter than the inherited `long_complex` slot; this revision therefore does
-not establish long-form QASPER coverage. Private v1/v2 artifacts remain intact,
-and a committed checksum inventory guards the preserved v2 writer inputs.
+The active source set is revision v4. It restores all 12 originally selected
+core sources and contains no source replacements. A provenance audit found
+that both earlier replacement triggers depended on repair prompts that exposed
+reviewer-only semantic descriptors to the writer, so those runs are invalid
+and do not consume repair budgets. This correction does not certify the
+restored sources or their pairs. Private v1/v2/v3 artifacts remain intact, and
+the preserved v2/v3 freeze artifacts are checksum-guarded.
+
+The v4 pairs were regenerated with GPT-6 Luna at low reasoning effort, using
+one isolated writer context per batch. This writer only constructs the data;
+it is not the Qwen model that will later be probed. The failed initial pairs
+received one repair attempt each, generated in three fresh isolated repair
+contexts from the frozen source and generic length rules only; prior candidate
+text and reviewer-only semantic metadata were withheld. Six pairs remain
+eligible for blind content review. The other six are on hold: an audit found
+that the rank-only backup rule preserves dataset labels but can substantially
+change the frozen length/complexity profile. Before any replacement generation,
+a profile-aware same-dataset assignment rule and corrected backup metadata must
+be documented, audited, and frozen while preserving each failed pair's
+preregistered experimental slot. A text-free supersession record
+for the earlier invalid runs is in
+`results/rewrite_canary_v1_revision_adjudication.json`; that record and the
+freeze summary are explicitly labeled historical snapshots as of the v4
+source freeze, rather than current progress ledgers. **This is a data-quality
+and pipeline result, not evidence of a confidence representation.** Expansion
+to 120 sources, activation extraction, probe fitting, and SDT loss training
+remain blocked.
 
 This decision follows a locked, model-assisted review of 10 candidates per
 dataset. The review found that real-source answers still require explicit
@@ -73,8 +99,10 @@ or *suggests* are review flags, not automatic failures. They express part of
 the underlying proposition and must remain unchanged in both eventual
 certainty rewrites.
 
-Full source text stays under ignored `private_data/`. No rewrite model is
-called, no Qwen activations are extracted, and no probe is trained.
+During the source-selection and canary-preparation substage, full source text
+stays under ignored `private_data/`. Those preparation scripts do not call a
+rewrite model, extract Qwen activations, or train a probe; the later v4 rewrite
+generation is recorded separately above.
 
 The canary preparation script writes three private four-source prompt batches,
 a frozen private source file, and a text-free public manifest. It separates
@@ -131,7 +159,7 @@ packet from the same frozen source and pair files:
 
 ```bash
 python3 experiments/factual_source_canary_v1/src/build_factual_rewrite_review.py \
-  --sources experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/frozen_sources_v3.jsonl \
+  --sources experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/frozen_sources_v4.jsonl \
   --pairs experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/WRITER_CANARY_12_FINAL.jsonl \
   --output-dir experiments/factual_source_canary_v1/private_data/rewrite_canary_v1/blind_review
 ```
@@ -166,6 +194,18 @@ the exact path recorded by the final merge provenance if it differs. All four
 stage artifacts must contain the same canonical source/pair binding, so results
 from different runs cannot be combined accidentally.
 
+Rebuild the current text-free v4 execution checkpoint from the three initial
+validator summaries, three repair manifests, the full post-repair validator,
+and its bound pair artifact with:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/build_factual_rewrite_current_checkpoint.py
+```
+
+The builder verifies that the repairs cover each of the ten initial failures
+exactly once and that the public validator summary is the exact row-free
+projection of the bound private validator output.
+
 Build the deterministic review order with:
 
 ```bash
@@ -196,7 +236,11 @@ python3 experiments/factual_source_canary_v1/src/build_review_queue.py \
 | `results/source_selection_v1_summary.json` | public | Review counts, hashes, and completed-gate status |
 | `results/SOURCE_SELECTION_RESULTS.md` | public | Final source-selection conclusion and limitations |
 | `results/rewrite_canary_v1_source_manifest.jsonl` | public | Text-free 12-source rewrite-canary allocation |
-| `results/rewrite_canary_v1_freeze_summary.json` | public | Frozen balance checks and private-artifact hashes |
+| `results/rewrite_canary_v1_freeze_summary.json` | public | Historical v4-freeze balance/provenance snapshot and private-artifact hashes |
+| `results/rewrite_canary_v1_revision_adjudication.json` | public | Historical as-of-v4-freeze v2/v3 supersession and pair-provenance snapshot |
+| `results/rewrite_canary_v4_current_checkpoint.json` | public | Reproducible current counts, writer-context metadata, decisions, and artifact hashes |
+| `results/rewrite_canary_v4_post_repair_validation_summary.json` | public | Aggregate mechanical result after one repair attempt for each of ten initial failures |
+| `private_data/rewrite_canary_v1/SOURCE_SET_ADJUDICATION_V4.json` | local only | Detailed invalid-run quarantine and source-set correction ledger |
 | `results/factual_rewrite_canary_status.json` | public | Aggregate gate and review status, with no record identities or text |
 | `results/FACTUAL_REWRITE_CANARY_STATUS.md` | public | Plain-language canary status and decision boundary |
 

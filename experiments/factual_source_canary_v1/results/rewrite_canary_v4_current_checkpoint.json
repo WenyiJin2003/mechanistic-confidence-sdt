@@ -1,0 +1,92 @@
+{
+  "artifact_bindings": {
+    "execution_metadata": {
+      "artifact": "rewrite_canary_v4_execution.json",
+      "sha256": "5666028652f06076a1fc401b2748b136ba56e0461c27751f4ef0201cefc2e92f"
+    },
+    "initial_validation_summaries": [
+      {
+        "artifact": "BATCH_01_V4_INITIAL_VALIDATION.jsonl",
+        "pair_count": 4,
+        "pair_set_sha256": "f14826ea25881d3fece97618731bdbad5ae01d6530b831aebaa248cb3eae253d",
+        "sha256": "365ca935b8e958daad02cf062439d91143ac9ff9f196a7f8fd502f4b4defd241"
+      },
+      {
+        "artifact": "BATCH_02_V4_INITIAL_VALIDATION.jsonl",
+        "pair_count": 4,
+        "pair_set_sha256": "e104070abc95b3db88164ea089cad6ae1f52dff7f1629aa0eb9165fe11180bc8",
+        "sha256": "6134be7d0aeb277acf03de6b01b3f24b3fb53d92d9e5d04a4353bfbcd73a7e9f"
+      },
+      {
+        "artifact": "BATCH_03_V4_INITIAL_VALIDATION.jsonl",
+        "pair_count": 4,
+        "pair_set_sha256": "9c8a493fc67cc59c1e816b30e4d9c523e1f6ff5d0880cafefc16c6963476cd91",
+        "sha256": "0e3b89837db72190905a7d912363a68b69a88b05584eccb68a48ab03ddd27dd5"
+      }
+    ],
+    "post_repair_pair_artifact": {
+      "pair_count": 12,
+      "sha256": "4b1167d803e4ba99d6d0ea458a5dc25bf78643f752ade4801d889e748c2a2046"
+    },
+    "post_repair_pair_provenance": {
+      "sha256": "d94e5398d498ae0d70c93a78ec99b8a076860603afe23be36a154a5232fcb439"
+    },
+    "post_repair_validator": {
+      "full_artifact_sha256": "d9a0e1f20770b35432dbb721f2c2f9bf5dcd6bf9bed9e4a6623d9901a922683a",
+      "pair_count": 12,
+      "pair_set_sha256": "04f4e2f7fe801d76a1bc45e5e351e9c3264165d21929bcc499bc8428903e44dc",
+      "public_summary_sha256": "a824880051949caacd891f4d0b9d093c36a61e449665097678dd81dc3f026b58"
+    },
+    "repair_manifests": [
+      {
+        "artifact": "PROMPT_BATCH_01_LENGTH_REPAIR_V4.manifest.json",
+        "sha256": "74459c552a43ae971cb0c34e7b2be27db51535bd247ac2dc2685c0253714c1a6",
+        "target_count": 3
+      },
+      {
+        "artifact": "PROMPT_BATCH_02_LENGTH_REPAIR_V4.manifest.json",
+        "sha256": "7e297de047c2fb1f5b9db73402e1a8d72304bf7c17c9fbef262d41dc6a34552e",
+        "target_count": 4
+      },
+      {
+        "artifact": "PROMPT_BATCH_03_LENGTH_REPAIR_V4.manifest.json",
+        "sha256": "3675249cbf1ed48433e447898c21b090da21fff575649690229aada0c4a37ad3",
+        "target_count": 3
+      }
+    ]
+  },
+  "artifact_role": "current_progress_checkpoint",
+  "authorization": {
+    "activation_extraction": false,
+    "probe_fitting": false,
+    "scale_up_to_120_sources": false
+  },
+  "checkpoint_stage": "post_initial_generation_and_one_repair_per_initial_failure",
+  "counts": {
+    "final_length_repair_eligible": 0,
+    "initial_mechanical_failures": 10,
+    "initial_mechanically_clean": 2,
+    "post_repair_mechanical_failures": 6,
+    "post_repair_mechanically_clean": 6,
+    "repaired_pairs": 10,
+    "source_pairs": 12
+  },
+  "human_pair_review": "pending_for_mechanically_clean_pairs",
+  "next_action": {
+    "action": "audit_and_freeze_profile_aware_same_dataset_replacement_rule",
+    "preserve_preregistered_experimental_slot": true,
+    "replacement_generation_authorized": false,
+    "same_dataset_required": true,
+    "source_count": 6
+  },
+  "private_text_committed": false,
+  "schema_version": "factual-rewrite-canary-current-checkpoint-v1",
+  "scope_note": "Mechanical data-quality progress only; this checkpoint does not establish semantic equivalence, naturalness, a confidence representation, probe performance, or a causal result.",
+  "source_set_revision": "v4",
+  "writer": {
+    "initial_isolated_context_count": 3,
+    "reasoning_effort": "low",
+    "repair_isolated_context_count": 3,
+    "writer_model": "gpt-6-luna"
+  }
+}

@@ -28,6 +28,9 @@ DEFAULT_PUBLIC_SOURCE = ROOT / "results" / "selected_core_sources_v1_manifest.js
 DEFAULT_PRIVATE_OUTPUT = PRIVATE_ROOT / "rewrite_canary_v1"
 DEFAULT_PUBLIC_MANIFEST = ROOT / "results" / "rewrite_canary_v1_source_manifest.jsonl"
 DEFAULT_PUBLIC_SUMMARY = ROOT / "results" / "rewrite_canary_v1_freeze_summary.json"
+DEFAULT_PUBLIC_ADJUDICATION = (
+    ROOT / "results" / "rewrite_canary_v1_revision_adjudication.json"
+)
 
 DESIGN: dict[str, Any]
 VERSION: str
@@ -69,6 +72,15 @@ def configure(config: dict[str, Any]) -> None:
         raise ValueError(
             "current artifact revision cannot overwrite a preserved revision"
         )
+    adjudication = config.get("revision_adjudication", {})
+    superseded = adjudication.get("superseded_revisions", [])
+    superseded_names = [str(item["revision"]) for item in superseded]
+    if len(superseded_names) != len(set(superseded_names)):
+        raise ValueError("superseded revision records must be unique")
+    if any(name not in preserved_revisions for name in superseded_names):
+        raise ValueError("every superseded revision must also be preserved")
+    if any(str(item.get("superseded_by")) != artifact_revision for item in superseded):
+        raise ValueError("superseded revision records must target the active revision")
     profiles = tuple(
         (str(item["name"]), tuple(float(value) for value in item["target"]))
         for item in selection["profiles"]
@@ -89,6 +101,19 @@ def configure(config: dict[str, Any]) -> None:
         str(value) for value in config["draft_order_assignment"]["orders"]
     )
     selected_count = len(datasets) * len(profiles)
+    pair_provenance = adjudication.get("pair_provenance", {})
+    clean_count = int(pair_provenance.get("clean_reusable_pair_count", 0))
+    pending_count = int(
+        pair_provenance.get("fresh_initial_generation_pending_count", 0)
+    )
+    clean_ids = [
+        str(value)
+        for value in pair_provenance.get("clean_reusable_source_ids", [])
+    ]
+    if clean_count != len(clean_ids) or clean_count + pending_count != selected_count:
+        raise ValueError("pair-provenance counts must cover the frozen canary exactly")
+    if pair_provenance.get("prior_outputs_consume_repair_budget") is not False:
+        raise ValueError("invalid-context prior outputs cannot consume repair budget")
     if sum(count for _, count in cue_targets) != selected_count:
         raise ValueError("cue-family target counts must cover every selected source")
     if len(directions) != 2:
@@ -132,6 +157,9 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--private-output-dir", type=Path, default=DEFAULT_PRIVATE_OUTPUT)
     parser.add_argument("--public-manifest", type=Path, default=DEFAULT_PUBLIC_MANIFEST)
     parser.add_argument("--public-summary", type=Path, default=DEFAULT_PUBLIC_SUMMARY)
+    parser.add_argument(
+        "--public-adjudication", type=Path, default=DEFAULT_PUBLIC_ADJUDICATION
+    )
     return parser.parse_args(argv)
 
 
@@ -870,7 +898,7 @@ def verify_writer_visible_artifact_stability(
         )
 
 
-def verify_preserved_writer_artifacts(private_output_dir: Path) -> None:
+def verify_preserved_private_artifacts(private_output_dir: Path) -> None:
     """Fail closed if a present preserved revision has drifted or is incomplete.
 
     A clean checkout may not contain ignored private artifacts. In that case the
@@ -878,7 +906,7 @@ def verify_preserved_writer_artifacts(private_output_dir: Path) -> None:
     present, however, the complete committed checksum inventory must be present
     and byte-identical before a new revision is written.
     """
-    inventories = DESIGN.get("preserved_writer_artifact_sha256", {})
+    inventories = DESIGN.get("preserved_private_artifact_sha256", {})
     for revision, grouped_hashes in inventories.items():
         expected = {
             name: digest
@@ -891,7 +919,7 @@ def verify_preserved_writer_artifacts(private_output_dir: Path) -> None:
         missing = sorted(name for name in expected if name not in present)
         if missing:
             raise ValueError(
-                f"preserved {revision} writer artifacts are incomplete: {missing}"
+                f"preserved {revision} private artifacts are incomplete: {missing}"
             )
         mismatched = sorted(
             name
@@ -900,8 +928,49 @@ def verify_preserved_writer_artifacts(private_output_dir: Path) -> None:
         )
         if mismatched:
             raise ValueError(
-                f"preserved {revision} writer artifacts changed: {mismatched}"
+                f"preserved {revision} private artifacts changed: {mismatched}"
             )
+
+
+def verify_revision_adjudication_ledger(private_output_dir: Path) -> tuple[Path, str]:
+    """Bind the public supersession record to its detailed private ledger."""
+    design = DESIGN["revision_adjudication"]
+    ledger_path = private_output_dir / str(design["private_ledger_filename"])
+    if not ledger_path.exists():
+        raise ValueError(f"missing private revision-adjudication ledger: {ledger_path.name}")
+    actual = sha256_file(ledger_path)
+    expected = str(design["expected_private_ledger_sha256"])
+    if actual != expected:
+        raise ValueError("private revision-adjudication ledger changed")
+    ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
+    if ledger.get("active_revision") != DESIGN["artifact_revision"]:
+        raise ValueError("private adjudication ledger targets the wrong revision")
+    return ledger_path, actual
+
+
+def build_public_revision_adjudication(private_ledger_sha256: str) -> dict[str, Any]:
+    """Return the text-free revision decision as it stood at the v4 freeze."""
+    design = DESIGN["revision_adjudication"]
+    return {
+        "schema_version": design["schema_version"],
+        "artifact_role": "historical_provenance_snapshot",
+        "snapshot_stage": "v4_source_freeze_before_fresh_generation",
+        "active_revision": DESIGN["artifact_revision"],
+        "status_as_of_v4_freeze": design["current_status"],
+        "data_provenance_audit_status_as_of_v4_freeze": design[
+            "data_provenance_audit_status"
+        ],
+        "blanket_existing_pair_reuse_authorized_as_of_v4_freeze": design[
+            "blanket_existing_pair_reuse_authorized"
+        ],
+        "superseded_revisions": design["superseded_revisions"],
+        "pair_provenance_as_of_v4_freeze": design["pair_provenance"],
+        "current_progress_artifact": "rewrite_canary_v4_current_checkpoint.json",
+        "private_ledger_sha256": private_ledger_sha256,
+        "private_text_committed": False,
+        "human_pair_review_as_of_v4_freeze": "pending",
+        "activation_scoring_authorized_as_of_v4_freeze": False,
+    }
 
 
 def count_fields(rows: Sequence[dict[str, Any]], field: str) -> dict[str, int]:
@@ -1019,10 +1088,14 @@ def prepare(
     private_output_dir: Path,
     public_manifest_path: Path,
     public_summary_path: Path,
+    public_adjudication_path: Path = DEFAULT_PUBLIC_ADJUDICATION,
 ) -> dict[str, Any]:
     load_config(config_path)
     private_output_dir = require_private_output(private_output_dir)
-    verify_preserved_writer_artifacts(private_output_dir)
+    verify_preserved_private_artifacts(private_output_dir)
+    _, private_adjudication_sha256 = verify_revision_adjudication_ledger(
+        private_output_dir
+    )
     source_rows = read_jsonl(source_path)
     public_source_rows = read_jsonl(public_source_path)
     selected = select_canary_sources(source_rows)
@@ -1106,15 +1179,43 @@ def prepare(
 
     public_rows = [public_record(row) for row in frozen_rows]
     write_jsonl(public_manifest_path, public_rows)
+    public_adjudication = build_public_revision_adjudication(
+        private_adjudication_sha256
+    )
+    public_adjudication_path.parent.mkdir(parents=True, exist_ok=True)
+    public_adjudication_path.write_text(
+        json.dumps(public_adjudication, ensure_ascii=False, indent=2, sort_keys=True)
+        + "\n",
+        encoding="utf-8",
+    )
     source_count = len(frozen_rows)
     public_summary = {
         "version": VERSION,
+        "artifact_role": "historical_provenance_snapshot",
+        "snapshot_stage": "v4_source_freeze_before_fresh_generation",
+        "current_progress_artifact": "rewrite_canary_v4_current_checkpoint.json",
         "source_set_revision": artifact_revision,
         "preserved_private_artifact_revisions": DESIGN[
             "preserved_private_artifact_revisions"
         ],
         "seed": SEED,
-        "status": "rewrite_generation_not_run",
+        "status_as_of_v4_freeze": DESIGN["revision_adjudication"][
+            "current_status"
+        ],
+        "data_provenance_audit_status_as_of_v4_freeze": DESIGN[
+            "revision_adjudication"
+        ][
+            "data_provenance_audit_status"
+        ],
+        "blanket_existing_pair_reuse_authorized_as_of_v4_freeze": DESIGN[
+            "revision_adjudication"
+        ]["blanket_existing_pair_reuse_authorized"],
+        "pair_provenance_as_of_v4_freeze": DESIGN["revision_adjudication"][
+            "pair_provenance"
+        ],
+        "superseded_revisions": DESIGN["revision_adjudication"][
+            "superseded_revisions"
+        ],
         "source_count": source_count,
         "planned_pair_count": source_count,
         "planned_rewritten_text_count": source_count * 2,
@@ -1153,6 +1254,10 @@ def prepare(
         "source_replacements": {
             "count": len(replacement_mappings),
             "eligible_role": DESIGN["source_replacement"]["eligible_role"],
+            "rule_status": DESIGN["source_replacement"]["rule_status"],
+            "replacement_generation_authorized": DESIGN["source_replacement"][
+                "replacement_generation_authorized"
+            ],
             "rule": DESIGN["source_replacement"]["rule"],
             "preserved_slot_fields": DESIGN["source_replacement"][
                 "preserved_slot_fields"
@@ -1232,10 +1337,13 @@ def prepare(
         "config_sha256": sha256_file(config_path),
         "public_source_manifest_sha256": sha256_file(public_source_path),
         "public_canary_manifest_sha256": sha256_file(public_manifest_path),
+        "public_revision_adjudication_sha256": sha256_file(
+            public_adjudication_path
+        ),
         "private_text_committed": False,
-        "human_pair_review": "pending",
-        "activations_inspected": False,
-        "probe_fit": False,
+        "human_pair_review_as_of_v4_freeze": "pending",
+        "activations_inspected_as_of_v4_freeze": False,
+        "probe_fit_as_of_v4_freeze": False,
     }
     public_summary_path.parent.mkdir(parents=True, exist_ok=True)
     public_summary_path.write_text(
@@ -1252,6 +1360,10 @@ def prepare(
         "prompt_batch_sha256": prompt_hashes,
         "replacement_source_sha256": replacement_source_hashes,
         "replacement_prompt_sha256": replacement_prompt_hashes,
+        "private_revision_adjudication_sha256": private_adjudication_sha256,
+        "public_revision_adjudication_sha256": sha256_file(
+            public_adjudication_path
+        ),
         "public_summary_sha256": sha256_file(public_summary_path),
     }
     (private_output_dir / f"FREEZE_MANIFEST_PRIVATE_{artifact_suffix}.json").write_text(
@@ -1270,6 +1382,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         args.private_output_dir,
         args.public_manifest.resolve(),
         args.public_summary.resolve(),
+        args.public_adjudication.resolve(),
     )
     print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
     return 0

@@ -1,13 +1,21 @@
 {
   "version": "factual-rewrite-canary-v1",
-  "artifact_revision": "v3",
-  "preserved_private_artifact_revisions": ["v1", "v2"],
-  "preserved_writer_artifact_sha256": {
+  "artifact_revision": "v4",
+  "preserved_private_artifact_revisions": ["v1", "v2", "v3"],
+  "preserved_private_artifact_sha256": {
     "v2": {
+      "frozen_source_sha256": {
+        "frozen_sources_v2.jsonl": "bf914f20ecdacfb1f72b0b1b33bcdb2b119be01e631fa1de8e390ead5660745f"
+      },
       "source_batch_sha256": {
         "SOURCE_BATCH_01_V2.jsonl": "92d78b0fd0ed91363417bedb222540653dfb5334a873982951c75a605605263e",
         "SOURCE_BATCH_02_V2.jsonl": "5df0e28bf418be37ecdf8e9feac1a0ecf584cb3227b905f85fdef3d094e9795d",
         "SOURCE_BATCH_03_V2.jsonl": "62199335db77c6eeb97a175a7b4e2cbdd05ffea323c23f6e5ef3660c394dd4a9"
+      },
+      "validation_source_batch_sha256": {
+        "SOURCE_BATCH_01_VALIDATION_V2.jsonl": "40aa897376fa2ac5406ca86b547bd67c779431977c6f1c80e0e12e350852bacc",
+        "SOURCE_BATCH_02_VALIDATION_V2.jsonl": "50355db1e0ce620558425f0bb067348cbaf73be987fa4b54d7f151fd6d3c3102",
+        "SOURCE_BATCH_03_VALIDATION_V2.jsonl": "540690ec561e7103fb0d1fed3a7c5d1df4bea6827a5b7fb1f2fa8579c6517a23"
       },
       "prompt_batch_sha256": {
         "PROMPT_BATCH_01_V2.txt": "325b59575a1dc8a194ff0167948784ed9519919bf16e41d3f586aee017facbcc",
@@ -19,7 +27,86 @@
       },
       "replacement_prompt_sha256": {
         "PROMPT_REPLACEMENT_01_V2.txt": "9f26ae1f4223953cdc34afa628a0f106e39bee6d2fcd66c3cae6619354063bc5"
+      },
+      "freeze_manifest_sha256": {
+        "FREEZE_MANIFEST_PRIVATE_V2.json": "74d58d9cfa29ce8b302cc51347bd2cd3404a6a8355f3c6f71a43e6513922907c"
       }
+    },
+    "v3": {
+      "frozen_source_sha256": {
+        "frozen_sources_v3.jsonl": "a3d52dff2299cd603e29055c80ba77cfc98b5ca516829dfaca909021815d8680"
+      },
+      "source_batch_sha256": {
+        "SOURCE_BATCH_01_V3.jsonl": "92d78b0fd0ed91363417bedb222540653dfb5334a873982951c75a605605263e",
+        "SOURCE_BATCH_02_V3.jsonl": "5df0e28bf418be37ecdf8e9feac1a0ecf584cb3227b905f85fdef3d094e9795d",
+        "SOURCE_BATCH_03_V3.jsonl": "b8693f6c6fdf73aa29fdf03ace7be2fbb51c86fde7cad64767859265116cb4c4"
+      },
+      "validation_source_batch_sha256": {
+        "SOURCE_BATCH_01_VALIDATION_V3.jsonl": "9e2c520121c62143c4f062d0d64474479b6e1e5d2c2d577cd1b2c75c668dd5fc",
+        "SOURCE_BATCH_02_VALIDATION_V3.jsonl": "649427437b0a3037cf957123c668bfc705bb2fd9ca4eefa99f2edefe38cda54c",
+        "SOURCE_BATCH_03_VALIDATION_V3.jsonl": "fe10dd003d7ba1798dbc44a66b65e8cb8b496754cd987a5cb3b9d258ac271c57"
+      },
+      "prompt_batch_sha256": {
+        "PROMPT_BATCH_01_V3.txt": "325b59575a1dc8a194ff0167948784ed9519919bf16e41d3f586aee017facbcc",
+        "PROMPT_BATCH_02_V3.txt": "69e851fc955217e492b4e984e01be4f2131b2aeb75d5dfe35b8897608763a264",
+        "PROMPT_BATCH_03_V3.txt": "9ca2f92e53fb13ee12cbb4f555520d3462dc9e62dda87b23a3d043f633fd14cf"
+      },
+      "replacement_source_sha256": {
+        "SOURCE_REPLACEMENT_01_V3.jsonl": "fdbbce2b37b92e2bdf4a1a4fd3a33962b03bb674c7cf0095a1e7aaa1cbbfea44",
+        "SOURCE_REPLACEMENT_02_V3.jsonl": "97c0bd5a26cf505760d492272c76cebaab2ee74290ad1c11b23765327ffe5d25"
+      },
+      "replacement_prompt_sha256": {
+        "PROMPT_REPLACEMENT_01_V3.txt": "ac5227c09497dd41d51f3de2446dad84eb84c377f3827112e73f86ae273fb686",
+        "PROMPT_REPLACEMENT_02_V3.txt": "67d2663a22bb685a3a6fbb293ba6be7ebe609ae38550fd7831a53718281bb216"
+      },
+      "freeze_manifest_sha256": {
+        "FREEZE_MANIFEST_PRIVATE_V3.json": "8ef3905c8e0f05300e0fb3c21760c66fcbb8e3d233cf7e7f0853227217502ebc"
+      }
+    }
+  },
+  "revision_adjudication": {
+    "schema_version": "factual-rewrite-source-set-adjudication-v1",
+    "current_status": "fresh_generation_pending_in_new_isolated_writer_context",
+    "data_provenance_audit_status": "complete_all_prior_outputs_invalid_context",
+    "blanket_existing_pair_reuse_authorized": false,
+    "private_ledger_filename": "SOURCE_SET_ADJUDICATION_V4.json",
+    "expected_private_ledger_sha256": "48c6f46949223193c11ed777a26db8228c987acff267c569bfdc3cba36a312d7",
+    "superseded_revisions": [
+      {
+        "revision": "v2",
+        "status": "superseded_after_invalid_context_generation",
+        "superseded_by": "v4",
+        "generation_from_revision_started": true,
+        "source_freeze_artifacts_preserved": true,
+        "decision_scope": "billsum_source_replacement",
+        "reason_code": "replacement_trigger_invalidated_by_independent_adjudication",
+        "restored_source_ids": ["billsum:a6050ac8d28cdeb0"],
+        "withdrawn_replacement_source_ids": ["billsum:fa9b594a589c0757"]
+      },
+      {
+        "revision": "v3",
+        "status": "superseded_pre_generation",
+        "superseded_by": "v4",
+        "generation_from_revision_started": false,
+        "source_freeze_artifacts_preserved": true,
+        "decision_scope": "all_source_replacements",
+        "reason_code": "replacement_triggers_invalidated_by_independent_adjudication",
+        "restored_source_ids": [
+          "billsum:a6050ac8d28cdeb0",
+          "qasper-paper:2001.06286"
+        ],
+        "withdrawn_replacement_source_ids": [
+          "billsum:fa9b594a589c0757",
+          "qasper-paper:1910.11204"
+        ]
+      }
+    ],
+    "pair_provenance": {
+      "clean_reusable_pair_count": 0,
+      "fresh_initial_generation_pending_count": 12,
+      "clean_reusable_source_ids": [],
+      "prior_outputs_consume_repair_budget": false,
+      "required_writer_context": "new_isolated_context"
     }
   },
   "seed": 20261017,
@@ -47,6 +134,8 @@
   },
   "source_replacement": {
     "eligible_role": "backup",
+    "rule_status": "historical_rank_only_rule_paused_for_current_use",
+    "replacement_generation_authorized": false,
     "rule": "For each configured failed selected source, choose the unused same-dataset selection_role=backup row with the smallest integer review_rank, breaking ties by source_id; preserve the failed source's preregistered experimental slot.",
     "preserved_slot_fields": [
       "profile",
@@ -60,20 +149,7 @@
       "batch_position",
       "generation_order"
     ],
-    "failed_sources": [
-      {
-        "source_id": "billsum:a6050ac8d28cdeb0",
-        "expected_replacement_source_id": "billsum:fa9b594a589c0757",
-        "reason_code": "pair_validation_failed_after_allowed_repairs",
-        "reason": "The source did not produce a pair satisfying both content and preregistered length-direction gates within the allowed repair budget."
-      },
-      {
-        "source_id": "qasper-paper:2001.06286",
-        "expected_replacement_source_id": "qasper-paper:1910.11204",
-        "reason_code": "pair_validation_failed_after_allowed_repairs",
-        "reason": "The source did not produce a pair satisfying all preregistered pair-level gates within the allowed repair budget."
-      }
-    ]
+    "failed_sources": []
   },
   "reviewer_metadata_overrides": {
     "stage": "post_selection_pre_final_review",
@@ -95,29 +171,25 @@
         "reason": "Independent semantic pre-review found that the reviewer descriptors were not licensed by the frozen response."
       },
       {
-        "source_id": "billsum:fa9b594a589c0757",
+        "source_id": "qasper-paper:2001.06286",
         "field": "protected_qualifiers",
-        "expected_old_count": 5,
+        "expected_old_count": 3,
         "expected_old_descriptor_sha256": [
-          "da9857c14ebfeea63f27dd14009cb7551ea2305f319c2ebe78bf23cb9df89911",
-          "f3bfc11320a9801879b697d75ee856a89ef876bb6fd4406e3e75511e93a98895",
-          "450d7d805950a68e8d8288faa652bb486c115cccaf4555750c49a3c20b7dd982",
-          "19f76aec763dd26703c019aaa10e1ce5f1b8e6aa9e3ac125fad9e3e8a9141240",
-          "1b432c0daf307e69e9aa1c8185759d938f549c5bdb17f113cfbdd385c2bfa87d"
+          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
+          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea",
+          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
         ],
         "action": "remove_descriptor_sha256",
         "remove_descriptor_sha256": [
-          "da9857c14ebfeea63f27dd14009cb7551ea2305f319c2ebe78bf23cb9df89911",
-          "450d7d805950a68e8d8288faa652bb486c115cccaf4555750c49a3c20b7dd982"
+          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea"
         ],
-        "expected_new_count": 3,
+        "expected_new_count": 2,
         "expected_new_descriptor_sha256": [
-          "f3bfc11320a9801879b697d75ee856a89ef876bb6fd4406e3e75511e93a98895",
-          "19f76aec763dd26703c019aaa10e1ce5f1b8e6aa9e3ac125fad9e3e8a9141240",
-          "1b432c0daf307e69e9aa1c8185759d938f549c5bdb17f113cfbdd385c2bfa87d"
+          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
+          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
         ],
         "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
-        "reason": "Independent semantic pre-review found that two reviewer descriptors were not licensed by the frozen response; the remaining descriptors were retained."
+        "reason": "Independent semantic pre-review found that one reviewer descriptor was not licensed by the frozen response; the remaining descriptors were retained."
       },
       {
         "source_id": "billsum:1b0226a63ea123f1",

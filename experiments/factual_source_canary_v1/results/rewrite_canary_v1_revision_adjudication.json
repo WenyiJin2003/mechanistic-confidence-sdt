@@ -1,0 +1,55 @@
+{
+  "activation_scoring_authorized_as_of_v4_freeze": false,
+  "active_revision": "v4",
+  "artifact_role": "historical_provenance_snapshot",
+  "blanket_existing_pair_reuse_authorized_as_of_v4_freeze": false,
+  "current_progress_artifact": "rewrite_canary_v4_current_checkpoint.json",
+  "data_provenance_audit_status_as_of_v4_freeze": "complete_all_prior_outputs_invalid_context",
+  "human_pair_review_as_of_v4_freeze": "pending",
+  "pair_provenance_as_of_v4_freeze": {
+    "clean_reusable_pair_count": 0,
+    "clean_reusable_source_ids": [],
+    "fresh_initial_generation_pending_count": 12,
+    "prior_outputs_consume_repair_budget": false,
+    "required_writer_context": "new_isolated_context"
+  },
+  "private_ledger_sha256": "48c6f46949223193c11ed777a26db8228c987acff267c569bfdc3cba36a312d7",
+  "private_text_committed": false,
+  "schema_version": "factual-rewrite-source-set-adjudication-v1",
+  "snapshot_stage": "v4_source_freeze_before_fresh_generation",
+  "status_as_of_v4_freeze": "fresh_generation_pending_in_new_isolated_writer_context",
+  "superseded_revisions": [
+    {
+      "decision_scope": "billsum_source_replacement",
+      "generation_from_revision_started": true,
+      "reason_code": "replacement_trigger_invalidated_by_independent_adjudication",
+      "restored_source_ids": [
+        "billsum:a6050ac8d28cdeb0"
+      ],
+      "revision": "v2",
+      "source_freeze_artifacts_preserved": true,
+      "status": "superseded_after_invalid_context_generation",
+      "superseded_by": "v4",
+      "withdrawn_replacement_source_ids": [
+        "billsum:fa9b594a589c0757"
+      ]
+    },
+    {
+      "decision_scope": "all_source_replacements",
+      "generation_from_revision_started": false,
+      "reason_code": "replacement_triggers_invalidated_by_independent_adjudication",
+      "restored_source_ids": [
+        "billsum:a6050ac8d28cdeb0",
+        "qasper-paper:2001.06286"
+      ],
+      "revision": "v3",
+      "source_freeze_artifacts_preserved": true,
+      "status": "superseded_pre_generation",
+      "superseded_by": "v4",
+      "withdrawn_replacement_source_ids": [
+        "billsum:fa9b594a589c0757",
+        "qasper-paper:1910.11204"
+      ]
+    }
+  ]
+}

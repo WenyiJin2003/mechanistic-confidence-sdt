@@ -1,0 +1,67 @@
+{
+  "artifact_binding": {
+    "pair_count": 12,
+    "pair_set_sha256": "04f4e2f7fe801d76a1bc45e5e351e9c3264165d21929bcc499bc8428903e44dc",
+    "schema": "factual-rewrite-artifact-binding-v1",
+    "source_count": 12,
+    "source_ids_sha256": "064c4864ccc74df7cbbc8a34794821afa1dc649151101ef82b5be408691806b4",
+    "source_set_sha256": "546f63d38bd0f7ca6b364b5b58337995f25e154cae4f182e08af75c9d20e40a6"
+  },
+  "audit_rows": 12,
+  "dataset_counts": {
+    "asqa": 4,
+    "billsum": 4,
+    "qasper": 4
+  },
+  "draft_order_counts": {
+    "confident_first": 6,
+    "hesitant_first": 6
+  },
+  "expected_source_count": 12,
+  "failure_flag_counts": {
+    "confident_protected_span_1_count_changed": 1,
+    "hesitant_protected_span_1_count_changed": 1,
+    "length_direction_incorrect": 2,
+    "pair_token_gap_over_limit": 5,
+    "pair_token_ratio_over_limit": 2
+  },
+  "global_failure_flags": [],
+  "length_direction_counts": {
+    "confident_longer": 6,
+    "hesitant_longer": 6
+  },
+  "length_policy": {
+    "arm_to_source_ratio": [
+      0.85,
+      1.15
+    ],
+    "maximum_absolute_gap": "max(5, 0.05 * pair_mean)",
+    "maximum_full_input_tokens": 1024,
+    "maximum_pair_ratio": 1.08,
+    "maximum_response_tokens": 512
+  },
+  "manual_review_flag_counts": {
+    "semantic_protected_qualifiers_require_manual_review": 8
+  },
+  "manual_review_required": true,
+  "mechanical_gate_pass": false,
+  "naturalness_certified": false,
+  "pair_rows": 12,
+  "schema_version": 1,
+  "semantic_equivalence_certified": false,
+  "source_rows": 12,
+  "speaker_confidence_direction_certified": false,
+  "status_counts": {
+    "fail": 6,
+    "manual_review": 5,
+    "pass": 1
+  },
+  "tokenizer": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "snapshot_id": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306"
+  },
+  "validator": "factual_direct_pair_rewrite_validator",
+  "warning_flag_counts": {
+    "source_hash_not_recomputed_without_evidence": 12
+  }
+}

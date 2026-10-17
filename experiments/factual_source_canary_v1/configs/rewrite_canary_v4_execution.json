@@ -1,0 +1,28 @@
+{
+  "initial_generation": {
+    "isolated_context_labels": [
+      "initial_batch_01",
+      "initial_batch_02",
+      "initial_batch_03"
+    ]
+  },
+  "repair_generation": {
+    "isolated_context_labels": [
+      "repair_batch_01",
+      "repair_batch_02",
+      "repair_batch_03"
+    ],
+    "policy": "one_full_pair_repair_for_each_initial_mechanical_failure"
+  },
+  "replacement_plan": {
+    "action": "audit_and_freeze_profile_aware_same_dataset_replacement_rule",
+    "preserve_preregistered_experimental_slot": true,
+    "replacement_generation_authorized": false,
+    "same_dataset_required": true,
+    "source_count": 6
+  },
+  "reasoning_effort": "low",
+  "schema_version": "factual-rewrite-writer-execution-v1",
+  "source_set_revision": "v4",
+  "writer_model": "gpt-6-luna"
+}
