@@ -14,7 +14,7 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(MODULE)
 
 
-EXPECTED_IDS = {
+BASE_EXPECTED_IDS = {
     "asqa": {
         "short_simple": "asqa:5767411579190718767",
         "mid_plain": "asqa:2074116551547919110",
@@ -32,6 +32,14 @@ EXPECTED_IDS = {
         "mid_plain": "billsum:44172515b22eaae0",
         "long_complex": "billsum:a6050ac8d28cdeb0",
         "qualifier_sensitive": "billsum:1b0226a63ea123f1",
+    },
+}
+
+EXPECTED_IDS = {
+    **BASE_EXPECTED_IDS,
+    "billsum": {
+        **BASE_EXPECTED_IDS["billsum"],
+        "long_complex": "billsum:fa9b594a589c0757",
     },
 }
 
@@ -59,6 +67,14 @@ def prompt_row() -> dict:
         "selection_features": [0.2, 0.2, 0.2],
         "selection_target": [0.2, 0.2, 0.2],
         "selection_distance": 0.0,
+        "source_selection_role": "core",
+        "source_review_rank": 1,
+        "replacement_for_source_id": None,
+        "replacement_reason_code": None,
+        "replacement_reason": None,
+        "replacement_rule": None,
+        "replaced_source_hash": None,
+        "replaced_source_review_rank": None,
     }
 
 
@@ -80,7 +96,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             ["Results Suggest", "may rise"],
         )
 
-    def test_default_private_source_reproduces_locked_twelve_ids(self) -> None:
+    def test_default_private_source_reproduces_locked_base_twelve_ids(self) -> None:
         if not MODULE.DEFAULT_SOURCE.exists():
             self.skipTest("ignored private frozen-source file is unavailable")
         selected = MODULE.select_canary_sources(MODULE.read_jsonl(MODULE.DEFAULT_SOURCE))
@@ -92,6 +108,83 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             }
             for row in selected
         }
+        self.assertEqual(actual, BASE_EXPECTED_IDS)
+
+    def test_failed_source_uses_next_ranked_backup_and_preserves_slot(self) -> None:
+        if not MODULE.DEFAULT_SOURCE.exists():
+            self.skipTest("ignored private frozen-source file is unavailable")
+        source_rows = MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
+        selected = MODULE.select_canary_sources(source_rows)
+        MODULE.assign_cue_families(selected)
+        MODULE.assign_length_directions(selected)
+        MODULE.assign_draft_orders(selected)
+        batches = MODULE.order_batches(selected)
+        failed = next(
+            row
+            for batch in batches
+            for row in batch
+            if row["source_id"] == "billsum:a6050ac8d28cdeb0"
+        )
+        replaced, mappings = MODULE.apply_configured_replacements(
+            batches, source_rows
+        )
+        effective_rows = [row for batch in replaced for row in batch]
+        replacement = next(
+            row
+            for row in effective_rows
+            if row["source_id"] == "billsum:fa9b594a589c0757"
+        )
+        eligible = sorted(
+            (
+                row
+                for row in source_rows
+                if row["dataset"] == "billsum"
+                and row["selection_role"] == "backup"
+                and row["source_id"] not in {
+                    candidate["source_id"]
+                    for batch in batches
+                    for candidate in batch
+                }
+            ),
+            key=lambda row: (int(row["review_rank"]), row["source_id"]),
+        )
+        self.assertEqual(replacement["source_id"], eligible[0]["source_id"])
+        self.assertNotIn(
+            "billsum:a6050ac8d28cdeb0",
+            {row["source_id"] for row in effective_rows},
+        )
+        for field in MODULE.DESIGN["source_replacement"]["preserved_slot_fields"]:
+            self.assertEqual(replacement[field], failed[field])
+        self.assertEqual(len(mappings), 1)
+        self.assertEqual(
+            mappings[0]["replacement_source_id"], "billsum:fa9b594a589c0757"
+        )
+        self.assertEqual(
+            mappings[0]["reason_code"],
+            "pair_validation_failed_after_allowed_repairs",
+        )
+
+    def test_effective_default_canary_reproduces_locked_replacement_ids(self) -> None:
+        if not MODULE.DEFAULT_SOURCE.exists():
+            self.skipTest("ignored private frozen-source file is unavailable")
+        source_rows = MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
+        selected = MODULE.select_canary_sources(source_rows)
+        MODULE.assign_cue_families(selected)
+        MODULE.assign_length_directions(selected)
+        MODULE.assign_draft_orders(selected)
+        batches, _ = MODULE.apply_configured_replacements(
+            MODULE.order_batches(selected), source_rows
+        )
+        actual = {
+            row["dataset"]: {
+                candidate["profile"]: candidate["source_id"]
+                for batch in batches
+                for candidate in batch
+                if candidate["dataset"] == row["dataset"]
+            }
+            for batch in batches
+            for row in batch
+        }
         self.assertEqual(actual, EXPECTED_IDS)
 
     def test_assignments_are_balanced_and_batches_cover_grid(self) -> None:
@@ -101,7 +194,9 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         MODULE.assign_cue_families(selected)
         MODULE.assign_length_directions(selected)
         MODULE.assign_draft_orders(selected)
-        batches = MODULE.order_batches(selected)
+        batches, _ = MODULE.apply_configured_replacements(
+            MODULE.order_batches(selected), MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
+        )
         frozen = [[MODULE.freeze_record(row) for row in batch] for batch in batches]
         rows = [row for batch in frozen for row in batch]
         MODULE.validate_design(rows, frozen)
@@ -144,6 +239,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         public = MODULE.public_record(prompt_row())
         self.assertEqual(public["protected_qualifier_count"], 2)
         self.assertEqual(public["protected_span_count"], 1)
+        self.assertEqual(public["source_selection_role"], "core")
         self.assertTrue(MODULE.PRIVATE_TEXT_FIELDS.isdisjoint(public))
 
     def test_writer_prompt_uses_canonical_hesitant_response_field(self) -> None:
@@ -188,6 +284,57 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             {row["source_id"] for row in rows},
             {source_id for mapping in EXPECTED_IDS.values() for source_id in mapping.values()},
         )
+        replacement = next(
+            row for row in rows if row["source_id"] == "billsum:fa9b594a589c0757"
+        )
+        self.assertEqual(
+            replacement["replacement_for_source_id"],
+            "billsum:a6050ac8d28cdeb0",
+        )
+        self.assertEqual(replacement["source_selection_role"], "backup")
+        self.assertTrue(replacement["replacement_rule"])
+
+    def test_v2_writer_and_validation_batches_separate_private_review_fields(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        writer_path = output / "SOURCE_BATCH_01_V2.jsonl"
+        validation_path = output / "SOURCE_BATCH_01_VALIDATION_V2.jsonl"
+        if not writer_path.exists() or not validation_path.exists():
+            self.skipTest("generated private v2 canary batches are unavailable")
+        writer_rows = MODULE.read_jsonl(writer_path)
+        validation_rows = MODULE.read_jsonl(validation_path)
+        self.assertEqual(len(writer_rows), len(validation_rows))
+        self.assertTrue(
+            all("protected_qualifiers" not in row for row in writer_rows)
+        )
+        self.assertTrue(
+            all("protected_qualifiers" in row for row in validation_rows)
+        )
+        self.assertTrue(
+            all(row["source_set_revision"] == "v2" for row in validation_rows)
+        )
+        self.assertEqual(
+            [row["source_id"] for row in writer_rows],
+            [row["source_id"] for row in validation_rows],
+        )
+
+    def test_public_summary_records_v2_replacement_provenance(self) -> None:
+        path = ROOT / "results" / "rewrite_canary_v1_freeze_summary.json"
+        if not path.exists():
+            self.skipTest("generated public canary summary is unavailable")
+        summary = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(summary["source_set_revision"], "v2")
+        replacements = summary["source_replacements"]
+        self.assertEqual(replacements["count"], 1)
+        mapping = replacements["mappings"][0]
+        self.assertEqual(
+            mapping["failed_source_id"], "billsum:a6050ac8d28cdeb0"
+        )
+        self.assertEqual(
+            mapping["replacement_source_id"], "billsum:fa9b594a589c0757"
+        )
+        self.assertEqual(
+            mapping["reason_code"], "pair_validation_failed_after_allowed_repairs"
+        )
 
     def test_config_declares_canonical_writer_fields(self) -> None:
         config = json.loads(MODULE.DEFAULT_CONFIG.read_text(encoding="utf-8"))
@@ -202,6 +349,12 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             config["fields"]["review_only_fields"], ["protected_qualifiers"]
         )
         self.assertEqual(config["fields"]["legacy_output_alias"], "hedged_response")
+        replacement = config["source_replacement"]
+        self.assertEqual(replacement["eligible_role"], "backup")
+        self.assertEqual(
+            replacement["failed_sources"][0]["expected_replacement_source_id"],
+            "billsum:fa9b594a589c0757",
+        )
 
 
 if __name__ == "__main__":

@@ -469,6 +469,124 @@ def order_batches(rows: Sequence[dict[str, Any]]) -> list[list[dict[str, Any]]]:
     return batches
 
 
+def apply_configured_replacements(
+    batches: Sequence[Sequence[dict[str, Any]]],
+    source_rows: Sequence[dict[str, Any]],
+) -> tuple[list[list[dict[str, Any]]], list[dict[str, Any]]]:
+    """Replace failed sources with the next frozen backup, without re-randomizing.
+
+    Replacement is deliberately applied only after every experimental condition
+    and record position has been assigned.  The replacement therefore inherits
+    the failed source's slot while its own source identity and source-level
+    metadata remain unchanged.
+    """
+    replacement_design = DESIGN.get("source_replacement", {})
+    failures = replacement_design.get("failed_sources", [])
+    if not failures:
+        return [[dict(row) for row in batch] for batch in batches], []
+
+    eligible_role = str(replacement_design["eligible_role"])
+    preserved_fields = tuple(
+        str(field) for field in replacement_design["preserved_slot_fields"]
+    )
+    rule = str(replacement_design["rule"])
+    source_by_id = {str(row.get("source_id")): row for row in source_rows}
+    if len(source_by_id) != len(source_rows):
+        raise ValueError("duplicate source IDs in frozen source pool")
+
+    replaced_batches = [[dict(row) for row in batch] for batch in batches]
+    selected_ids = {
+        str(row["source_id"]) for batch in replaced_batches for row in batch
+    }
+    failed_ids = [str(item["source_id"]) for item in failures]
+    if len(set(failed_ids)) != len(failed_ids):
+        raise ValueError("configured failed source IDs must be unique")
+
+    mappings: list[dict[str, Any]] = []
+    for failure in failures:
+        failed_id = str(failure["source_id"])
+        locations = [
+            (batch_index, row_index, row)
+            for batch_index, batch in enumerate(replaced_batches)
+            for row_index, row in enumerate(batch)
+            if row["source_id"] == failed_id
+        ]
+        if len(locations) != 1:
+            raise ValueError(
+                f"configured failed source must occupy exactly one canary slot: {failed_id}"
+            )
+        batch_index, row_index, failed_row = locations[0]
+        dataset = str(failed_row["dataset"])
+
+        def backup_rank(row: dict[str, Any]) -> tuple[int, str]:
+            try:
+                rank = int(row["review_rank"])
+            except (KeyError, TypeError, ValueError) as error:
+                raise ValueError(
+                    f"{row.get('source_id')}: backup is missing an integer review_rank"
+                ) from error
+            return rank, str(row["source_id"])
+
+        candidates = [
+            row
+            for row in source_rows
+            if row.get("dataset") == dataset
+            and row.get("selection_role") == eligible_role
+            and str(row.get("source_id")) not in selected_ids
+            and str(row.get("source_id")) not in failed_ids
+        ]
+        if not candidates:
+            raise ValueError(
+                f"{failed_id}: no unused {eligible_role} backup remains for {dataset}"
+            )
+        replacement_source = min(candidates, key=backup_rank)
+        replacement_id = str(replacement_source["source_id"])
+        expected_id = failure.get("expected_replacement_source_id")
+        if expected_id is not None and replacement_id != str(expected_id):
+            raise ValueError(
+                f"{failed_id}: next eligible backup drifted; expected {expected_id}, "
+                f"found {replacement_id}"
+            )
+
+        replacement = dict(replacement_source)
+        for field in preserved_fields:
+            if field not in failed_row:
+                raise ValueError(f"{failed_id}: missing preserved slot field {field}")
+            replacement[field] = failed_row[field]
+        replacement.update(
+            {
+                "replacement_for_source_id": failed_id,
+                "replacement_reason_code": str(failure["reason_code"]),
+                "replacement_reason": str(failure["reason"]),
+                "replacement_rule": rule,
+                "replaced_source_hash": failed_row["source_hash"],
+                "replaced_source_review_rank": int(failed_row["review_rank"]),
+            }
+        )
+        replaced_batches[batch_index][row_index] = replacement
+        selected_ids.remove(failed_id)
+        selected_ids.add(replacement_id)
+
+        mappings.append(
+            {
+                "failed_source_id": failed_id,
+                "replacement_source_id": replacement_id,
+                "dataset": dataset,
+                "failed_source_hash": failed_row["source_hash"],
+                "replacement_source_hash": replacement_source["source_hash"],
+                "failed_review_rank": int(failed_row["review_rank"]),
+                "replacement_review_rank": int(replacement_source["review_rank"]),
+                "reason_code": str(failure["reason_code"]),
+                "reason": str(failure["reason"]),
+                "rule": rule,
+                "preserved_slot": {
+                    field: failed_row[field] for field in preserved_fields
+                },
+            }
+        )
+    return replaced_batches, mappings
+
+
 def freeze_record(row: dict[str, Any]) -> dict[str, Any]:
     original = row.get("original_response")
     prompt = row.get("question")
@@ -500,6 +618,15 @@ def freeze_record(row: dict[str, Any]) -> dict[str, Any]:
         "selection_features": [round(value, 8) for value in row["selection_features"]],
         "selection_target": list(row["selection_target"]),
         "selection_distance": row["selection_distance"],
+        "source_selection_role": row["selection_role"],
+        "source_review_rank": int(row["review_rank"]),
+        "replacement_for_source_id": row.get("replacement_for_source_id"),
+        "replacement_reason_code": row.get("replacement_reason_code"),
+        "replacement_reason": row.get("replacement_reason"),
+        "replacement_rule": row.get("replacement_rule"),
+        "replaced_source_hash": row.get("replaced_source_hash"),
+        "replaced_source_review_rank": row.get("replaced_source_review_rank"),
+        "source_set_revision": DESIGN["artifact_revision"],
     }
 
 
@@ -524,6 +651,15 @@ def public_record(row: dict[str, Any]) -> dict[str, Any]:
         "selection_features": row["selection_features"],
         "selection_target": row["selection_target"],
         "selection_distance": row["selection_distance"],
+        "source_selection_role": row["source_selection_role"],
+        "source_review_rank": row["source_review_rank"],
+        "replacement_for_source_id": row["replacement_for_source_id"],
+        "replacement_reason_code": row["replacement_reason_code"],
+        "replacement_reason": row["replacement_reason"],
+        "replacement_rule": row["replacement_rule"],
+        "replaced_source_hash": row["replaced_source_hash"],
+        "replaced_source_review_rank": row["replaced_source_review_rank"],
+        "source_set_revision": DESIGN["artifact_revision"],
     }
     if PRIVATE_TEXT_FIELDS.intersection(public):
         raise AssertionError("private source text leaked into public canary record")
@@ -700,23 +836,42 @@ def prepare(
     assign_length_directions(selected)
     assign_draft_orders(selected)
     raw_batches = order_batches(selected)
+    raw_batches, replacement_mappings = apply_configured_replacements(
+        raw_batches, source_rows
+    )
+    verify_against_public_manifest(
+        [row for batch in raw_batches for row in batch], public_source_rows
+    )
     frozen_batches = [[freeze_record(row) for row in batch] for batch in raw_batches]
     frozen_rows = [row for batch in frozen_batches for row in batch]
     validate_design(frozen_rows, frozen_batches)
 
     private_output_dir.mkdir(parents=True, exist_ok=True)
-    frozen_path = private_output_dir / "frozen_sources.jsonl"
+    artifact_revision = str(DESIGN["artifact_revision"])
+    artifact_suffix = artifact_revision.upper()
+    frozen_path = private_output_dir / f"frozen_sources_{artifact_revision}.jsonl"
     write_jsonl(frozen_path, frozen_rows)
     batch_hashes: dict[str, str] = {}
+    validation_batch_hashes: dict[str, str] = {}
     prompt_hashes: dict[str, str] = {}
     for number, batch in enumerate(frozen_batches, 1):
-        batch_path = private_output_dir / f"SOURCE_BATCH_{number:02d}.jsonl"
-        prompt_path = private_output_dir / f"PROMPT_BATCH_{number:02d}.txt"
+        batch_path = (
+            private_output_dir / f"SOURCE_BATCH_{number:02d}_{artifact_suffix}.jsonl"
+        )
+        validation_path = (
+            private_output_dir
+            / f"SOURCE_BATCH_{number:02d}_VALIDATION_{artifact_suffix}.jsonl"
+        )
+        prompt_path = (
+            private_output_dir / f"PROMPT_BATCH_{number:02d}_{artifact_suffix}.txt"
+        )
         write_jsonl(batch_path, (writer_payload_record(row) for row in batch))
+        write_jsonl(validation_path, batch)
         prompt_path.write_text(
             writer_prompt(batch, number, len(frozen_batches)), encoding="utf-8"
         )
         batch_hashes[batch_path.name] = sha256_file(batch_path)
+        validation_batch_hashes[validation_path.name] = sha256_file(validation_path)
         prompt_hashes[prompt_path.name] = sha256_file(prompt_path)
 
     public_rows = [public_record(row) for row in frozen_rows]
@@ -724,6 +879,10 @@ def prepare(
     source_count = len(frozen_rows)
     public_summary = {
         "version": VERSION,
+        "source_set_revision": artifact_revision,
+        "preserved_private_artifact_revision": DESIGN[
+            "preserved_private_artifact_revision"
+        ],
         "seed": SEED,
         "status": "rewrite_generation_not_run",
         "source_count": source_count,
@@ -760,6 +919,15 @@ def prepare(
                 "draft_order",
             )
             for direction in LENGTH_DIRECTIONS
+        },
+        "source_replacements": {
+            "count": len(replacement_mappings),
+            "eligible_role": DESIGN["source_replacement"]["eligible_role"],
+            "rule": DESIGN["source_replacement"]["rule"],
+            "preserved_slot_fields": DESIGN["source_replacement"][
+                "preserved_slot_fields"
+            ],
+            "mappings": replacement_mappings,
         },
         "selection_rule": {
             "eligible_rows": (
@@ -815,7 +983,7 @@ def prepare(
             ]["cross_length_direction_count_per_cell"],
         },
         "qualifier_handling": {
-            "protected_qualifiers": "review-only semantic descriptors retained in frozen_sources.jsonl and never exposed to the writer",
+            "protected_qualifiers": f"review-only semantic descriptors retained in frozen_sources_{artifact_revision}.jsonl and never exposed to the writer",
             "protected_spans": "case-insensitive exact descriptor matches recovered from original_response and supplied to the writer",
             "content_authority": "original_response only",
         },
@@ -840,10 +1008,11 @@ def prepare(
         "source_file_sha256": sha256_file(source_path),
         "frozen_sources_sha256": sha256_file(frozen_path),
         "source_batch_sha256": batch_hashes,
+        "validation_source_batch_sha256": validation_batch_hashes,
         "prompt_batch_sha256": prompt_hashes,
         "public_summary_sha256": sha256_file(public_summary_path),
     }
-    (private_output_dir / "FREEZE_MANIFEST_PRIVATE.json").write_text(
+    (private_output_dir / f"FREEZE_MANIFEST_PRIVATE_{artifact_suffix}.json").write_text(
         json.dumps(private_manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )

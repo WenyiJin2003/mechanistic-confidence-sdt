@@ -1,5 +1,7 @@
 {
   "version": "factual-rewrite-canary-v1",
+  "artifact_revision": "v2",
+  "preserved_private_artifact_revision": "v1",
   "seed": 20261017,
   "selection": {
     "datasets": ["asqa", "qasper", "billsum"],
@@ -22,6 +24,30 @@
     "distance_round_digits": 8,
     "tie_key": "{seed}|{key_namespace}|{dataset}|{profile}|{source_id}",
     "expected_selected_per_dataset": 4
+  },
+  "source_replacement": {
+    "eligible_role": "backup",
+    "rule": "For each configured failed selected source, choose the unused same-dataset selection_role=backup row with the smallest integer review_rank, breaking ties by source_id; preserve the failed source's preregistered experimental slot.",
+    "preserved_slot_fields": [
+      "profile",
+      "selection_features",
+      "selection_target",
+      "selection_distance",
+      "cue_family",
+      "length_direction",
+      "draft_order",
+      "batch_id",
+      "batch_position",
+      "generation_order"
+    ],
+    "failed_sources": [
+      {
+        "source_id": "billsum:a6050ac8d28cdeb0",
+        "expected_replacement_source_id": "billsum:fa9b594a589c0757",
+        "reason_code": "pair_validation_failed_after_allowed_repairs",
+        "reason": "The source did not produce a pair satisfying both content and preregistered length-direction gates within the allowed repair budget."
+      }
+    ]
   },
   "cue_assignment": {
     "hash_key": "{seed}|{version}|cue-family|{source_id}",
@@ -63,7 +89,11 @@
       "source_id", "dataset", "group_id", "source_hash",
       "original_response_sha256", "profile", "prompt", "original_response",
       "protected_qualifiers", "protected_spans", "cue_family",
-      "length_direction", "draft_order", "generation_order"
+      "length_direction", "draft_order", "generation_order",
+      "source_selection_role", "source_review_rank",
+      "replacement_for_source_id", "replacement_reason_code",
+      "replacement_reason", "replacement_rule", "replaced_source_hash",
+      "replaced_source_review_rank", "source_set_revision"
     ],
     "writer_prompt_fields": [
       "source_id", "dataset", "group_id", "source_hash",

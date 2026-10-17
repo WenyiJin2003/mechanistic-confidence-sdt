@@ -11,7 +11,10 @@ or establish that a confidence representation exists.
 
 ## Frozen design
 
-- 12 previously accepted core sources: 4 ASQA, 4 QASPER, and 4 BillSum.
+- 12 frozen sources: 4 ASQA, 4 QASPER, and 4 BillSum. Source-set revision
+  v2 retains 11 original core sources and substitutes one frozen BillSum backup
+  after the original source exhausted the allowed repair budget without passing
+  both content and preregistered length-direction gates.
 - Four deterministic coverage profiles per source family: short/simple,
   mid-length/plain, long/complex, and qualifier-sensitive.
 - Five established rewrite strategies are allocated before generation.
@@ -27,6 +30,24 @@ or establish that a confidence representation exists.
 Full third-party source text and generated pairs remain under ignored
 `private_data/`. Public artifacts contain only identifiers, hashes,
 allocations, aggregate checks, and review outcomes.
+
+## Source-set revision and replacement rule
+
+A failed selected source is replaced only by the unused backup from the same
+dataset with the smallest frozen integer `review_rank` (ties break by
+`source_id`). The configured expected replacement ID is an integrity check, so
+preparation fails rather than silently drifting if the frozen pool changes.
+The replacement inherits the failed source's profile, cue family, length
+direction, draft order, batch, position, and generation order. No other source
+or assignment is reselected.
+
+This is an explicit v2 source-set revision. Preparation writes
+`frozen_sources_v2.jsonl`, writer-visible `SOURCE_BATCH_XX_V2.jsonl`,
+reviewer-authoritative `SOURCE_BATCH_XX_VALIDATION_V2.jsonl`, and v2 prompt and
+freeze-manifest files. The original private v1 freeze and batches are retained
+unchanged. Validation batches contain the full frozen records, including the
+reviewer-only semantic qualifier descriptors; writer batches continue to
+withhold those descriptors.
 
 ## Pair-level hard gates
 
@@ -84,9 +105,14 @@ key is stored separately. For each pair the reviewer records:
 - concise notes.
 
 Any content, qualifier, scope, direction, or formatting failure triggers a
-complete pair rewrite from the frozen source. One repair attempt is allowed;
-otherwise the source is replaced by the next frozen backup from the same
-dataset and the design is rebalanced.
+complete pair rewrite from the frozen source. One repair attempt is allowed.
+If that repaired pair is content-clean and misses only the preregistered length
+gap by no more than two tokens, one final full-pair length repair is allowed;
+it may not change the content decision. Any remaining failure replaces the
+source with the next frozen backup from the same dataset under the rule above
+while preserving the failed source's preregistered experimental slot. Outputs
+produced under a discovered prompt-schema defect are rejected as invalid
+pipeline runs rather than counted as source-specific repairs.
 
 ## Scale boundary
 
