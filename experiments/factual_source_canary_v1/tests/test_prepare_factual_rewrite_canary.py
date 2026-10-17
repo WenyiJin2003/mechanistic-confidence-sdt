@@ -187,6 +187,136 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         }
         self.assertEqual(actual, EXPECTED_IDS)
 
+    def test_post_selection_metadata_override_preserves_source_slot_and_writer_payload(self) -> None:
+        if not MODULE.DEFAULT_SOURCE.exists():
+            self.skipTest("ignored private frozen-source file is unavailable")
+        source_rows = MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
+        selected = MODULE.select_canary_sources(source_rows)
+        MODULE.assign_cue_families(selected)
+        MODULE.assign_length_directions(selected)
+        MODULE.assign_draft_orders(selected)
+        batches, _ = MODULE.apply_configured_replacements(
+            MODULE.order_batches(selected), source_rows
+        )
+        source_id = "billsum:44172515b22eaae0"
+        before = next(
+            row for batch in batches for row in batch if row["source_id"] == source_id
+        )
+        before_frozen = MODULE.freeze_record(before)
+        corrected_batches, corrections = MODULE.apply_reviewer_metadata_overrides(
+            batches
+        )
+        after = next(
+            row
+            for batch in corrected_batches
+            for row in batch
+            if row["source_id"] == source_id
+        )
+        after_frozen = MODULE.freeze_record(after)
+
+        self.assertEqual(len(corrections), 2)
+        correction = next(item for item in corrections if item["source_id"] == source_id)
+        self.assertEqual(correction["source_id"], source_id)
+        self.assertEqual(correction["old_count"], 2)
+        self.assertEqual(correction["new_count"], 0)
+        self.assertEqual(
+            correction["old_descriptor_sha256"],
+            MODULE.DESIGN["reviewer_metadata_overrides"]["overrides"][0][
+                "expected_old_descriptor_sha256"
+            ],
+        )
+        self.assertFalse(correction["outcome_information_used"])
+        self.assertEqual(after["protected_qualifiers"], [])
+        self.assertEqual(before_frozen["protected_spans"], [])
+        self.assertEqual(after_frozen["protected_spans"], [])
+        self.assertEqual(
+            MODULE.writer_payload_record(before_frozen),
+            MODULE.writer_payload_record(after_frozen),
+        )
+        for field in (
+            "source_id",
+            "source_hash",
+            "original_response_sha256",
+            "profile",
+            "cue_family",
+            "length_direction",
+            "draft_order",
+            "batch_id",
+            "batch_position",
+            "generation_order",
+        ):
+            self.assertEqual(before_frozen[field], after_frozen[field])
+
+    def test_partial_metadata_override_removes_only_configured_hashes(self) -> None:
+        if not MODULE.DEFAULT_SOURCE.exists():
+            self.skipTest("ignored private frozen-source file is unavailable")
+        source_rows = MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
+        selected = MODULE.select_canary_sources(source_rows)
+        MODULE.assign_cue_families(selected)
+        MODULE.assign_length_directions(selected)
+        MODULE.assign_draft_orders(selected)
+        batches, _ = MODULE.apply_configured_replacements(
+            MODULE.order_batches(selected), source_rows
+        )
+        source_id = "billsum:fa9b594a589c0757"
+        before = next(
+            row for batch in batches for row in batch if row["source_id"] == source_id
+        )
+        before_frozen = MODULE.freeze_record(before)
+        corrected_batches, corrections = MODULE.apply_reviewer_metadata_overrides(
+            batches
+        )
+        after = next(
+            row
+            for batch in corrected_batches
+            for row in batch
+            if row["source_id"] == source_id
+        )
+        after_frozen = MODULE.freeze_record(after)
+        config = next(
+            item
+            for item in MODULE.DESIGN["reviewer_metadata_overrides"]["overrides"]
+            if item["source_id"] == source_id
+        )
+        correction = next(
+            item for item in corrections if item["source_id"] == source_id
+        )
+
+        self.assertEqual(correction["action"], "remove_descriptor_sha256")
+        self.assertEqual(correction["old_count"], 5)
+        self.assertEqual(correction["new_count"], 3)
+        self.assertEqual(
+            correction["removed_descriptor_sha256"],
+            config["remove_descriptor_sha256"],
+        )
+        self.assertEqual(
+            correction["new_descriptor_sha256"],
+            config["expected_new_descriptor_sha256"],
+        )
+        self.assertEqual(
+            [MODULE.sha256_text(value) for value in after["protected_qualifiers"]],
+            config["expected_new_descriptor_sha256"],
+        )
+        self.assertEqual(before_frozen["protected_spans"], after_frozen["protected_spans"])
+        self.assertEqual(
+            MODULE.writer_payload_record(before_frozen),
+            MODULE.writer_payload_record(after_frozen),
+        )
+        for field in (
+            "source_id",
+            "source_hash",
+            "original_response_sha256",
+            "profile",
+            "cue_family",
+            "length_direction",
+            "draft_order",
+            "batch_id",
+            "batch_position",
+            "generation_order",
+            "replacement_for_source_id",
+        ):
+            self.assertEqual(before_frozen[field], after_frozen[field])
+
     def test_assignments_are_balanced_and_batches_cover_grid(self) -> None:
         if not MODULE.DEFAULT_SOURCE.exists():
             self.skipTest("ignored private frozen-source file is unavailable")
@@ -293,6 +423,13 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         )
         self.assertEqual(replacement["source_selection_role"], "backup")
         self.assertTrue(replacement["replacement_rule"])
+        self.assertEqual(replacement["protected_qualifier_count"], 3)
+        corrected = next(
+            row for row in rows if row["source_id"] == "billsum:44172515b22eaae0"
+        )
+        self.assertEqual(corrected["protected_qualifier_count"], 0)
+        self.assertEqual(corrected["batch_id"], "batch_02")
+        self.assertEqual(corrected["batch_position"], 2)
 
     def test_v2_writer_and_validation_batches_separate_private_review_fields(self) -> None:
         output = ROOT / "private_data" / "rewrite_canary_v1"
@@ -370,6 +507,59 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             {prompt_name: MODULE.sha256_file(output / prompt_name)},
         )
 
+    def test_v2_writer_artifact_hashes_unchanged_after_metadata_correction(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        manifest_path = output / "FREEZE_MANIFEST_PRIVATE_V2.json"
+        if not manifest_path.exists():
+            self.skipTest("generated private v2 freeze manifest is unavailable")
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        expected = MODULE.DESIGN["reviewer_metadata_overrides"][
+            "expected_unchanged_writer_artifact_sha256"
+        ]
+        for key, expected_hashes in expected.items():
+            self.assertEqual(manifest[key], expected_hashes)
+
+    def test_v2_validation_freeze_contains_corrected_reviewer_metadata(self) -> None:
+        output = ROOT / "private_data" / "rewrite_canary_v1"
+        frozen_path = output / "frozen_sources_v2.jsonl"
+        validation_path = output / "SOURCE_BATCH_02_VALIDATION_V2.jsonl"
+        if not frozen_path.exists() or not validation_path.exists():
+            self.skipTest("generated private v2 validation artifacts are unavailable")
+        source_id = "billsum:44172515b22eaae0"
+        frozen = next(
+            row for row in MODULE.read_jsonl(frozen_path) if row["source_id"] == source_id
+        )
+        validation = next(
+            row
+            for row in MODULE.read_jsonl(validation_path)
+            if row["source_id"] == source_id
+        )
+        self.assertEqual(frozen, validation)
+        self.assertEqual(frozen["protected_qualifiers"], [])
+        self.assertEqual(frozen["protected_spans"], [])
+        correction = frozen["reviewer_metadata_correction"]
+        self.assertEqual(correction["old_count"], 2)
+        self.assertEqual(correction["new_count"], 0)
+        self.assertEqual(
+            correction["reason_code"],
+            "inaccurate_unlicensed_reviewer_metadata",
+        )
+        replacement = next(
+            row
+            for row in MODULE.read_jsonl(
+                output / "SOURCE_BATCH_01_VALIDATION_V2.jsonl"
+            )
+            if row["source_id"] == "billsum:fa9b594a589c0757"
+        )
+        replacement_correction = replacement["reviewer_metadata_correction"]
+        self.assertEqual(len(replacement["protected_qualifiers"]), 3)
+        self.assertEqual(replacement_correction["old_count"], 5)
+        self.assertEqual(replacement_correction["new_count"], 3)
+        self.assertEqual(
+            replacement_correction["reason_code"],
+            "partially_inaccurate_unlicensed_reviewer_metadata",
+        )
+
     def test_public_summary_records_v2_replacement_provenance(self) -> None:
         path = ROOT / "results" / "rewrite_canary_v1_freeze_summary.json"
         if not path.exists():
@@ -388,6 +578,29 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(
             mapping["reason_code"], "pair_validation_failed_after_allowed_repairs"
         )
+        corrections = summary["reviewer_metadata_corrections"]
+        self.assertEqual(corrections["count"], 2)
+        self.assertTrue(corrections["writer_visible_artifacts_unchanged"])
+        self.assertFalse(corrections["outcome_information_used"])
+        correction = next(
+            item
+            for item in corrections["corrections"]
+            if item["source_id"] == "billsum:44172515b22eaae0"
+        )
+        self.assertEqual(correction["source_id"], "billsum:44172515b22eaae0")
+        self.assertEqual(correction["old_count"], 2)
+        self.assertEqual(correction["new_count"], 0)
+        self.assertNotIn("protected_qualifiers", correction)
+        replacement_correction = next(
+            item
+            for item in corrections["corrections"]
+            if item["source_id"] == "billsum:fa9b594a589c0757"
+        )
+        self.assertEqual(replacement_correction["old_count"], 5)
+        self.assertEqual(replacement_correction["new_count"], 3)
+        self.assertEqual(len(replacement_correction["removed_descriptor_sha256"]), 2)
+        self.assertEqual(len(replacement_correction["new_descriptor_sha256"]), 3)
+        self.assertNotIn("protected_qualifiers", replacement_correction)
 
     def test_config_declares_canonical_writer_fields(self) -> None:
         config = json.loads(MODULE.DEFAULT_CONFIG.read_text(encoding="utf-8"))
@@ -408,6 +621,18 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             replacement["failed_sources"][0]["expected_replacement_source_id"],
             "billsum:fa9b594a589c0757",
         )
+        override = config["reviewer_metadata_overrides"]
+        self.assertFalse(override["outcome_information_used"])
+        self.assertEqual(override["overrides"][0]["expected_old_count"], 2)
+        self.assertEqual(override["overrides"][0]["expected_new_count"], 0)
+        self.assertEqual(len(override["overrides"]), 2)
+        for item in override["overrides"]:
+            self.assertNotIn("protected_qualifiers", item)
+        partial = override["overrides"][1]
+        self.assertEqual(partial["action"], "remove_descriptor_sha256")
+        self.assertEqual(partial["expected_old_count"], 5)
+        self.assertEqual(partial["expected_new_count"], 3)
+        self.assertEqual(len(partial["remove_descriptor_sha256"]), 2)
 
 
 if __name__ == "__main__":

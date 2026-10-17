@@ -49,6 +49,70 @@
       }
     ]
   },
+  "reviewer_metadata_overrides": {
+    "stage": "post_selection_pre_final_review",
+    "outcome_information_used": false,
+    "rule": "Apply only configured reviewer-metadata corrections after source selection and experimental-slot assignment; fail closed unless the private pre-correction descriptor count and hashes match exactly.",
+    "expected_unchanged_writer_artifact_sha256": {
+      "source_batch_sha256": {
+        "SOURCE_BATCH_01_V2.jsonl": "92d78b0fd0ed91363417bedb222540653dfb5334a873982951c75a605605263e",
+        "SOURCE_BATCH_02_V2.jsonl": "5df0e28bf418be37ecdf8e9feac1a0ecf584cb3227b905f85fdef3d094e9795d",
+        "SOURCE_BATCH_03_V2.jsonl": "62199335db77c6eeb97a175a7b4e2cbdd05ffea323c23f6e5ef3660c394dd4a9"
+      },
+      "prompt_batch_sha256": {
+        "PROMPT_BATCH_01_V2.txt": "325b59575a1dc8a194ff0167948784ed9519919bf16e41d3f586aee017facbcc",
+        "PROMPT_BATCH_02_V2.txt": "69e851fc955217e492b4e984e01be4f2131b2aeb75d5dfe35b8897608763a264",
+        "PROMPT_BATCH_03_V2.txt": "f048675f493eddb7d23598fb5e0c45a63e5e30c328b1685777dc94c6d7180b7c"
+      },
+      "replacement_source_sha256": {
+        "SOURCE_REPLACEMENT_01_V2.jsonl": "fdbbce2b37b92e2bdf4a1a4fd3a33962b03bb674c7cf0095a1e7aaa1cbbfea44"
+      },
+      "replacement_prompt_sha256": {
+        "PROMPT_REPLACEMENT_01_V2.txt": "9f26ae1f4223953cdc34afa628a0f106e39bee6d2fcd66c3cae6619354063bc5"
+      }
+    },
+    "overrides": [
+      {
+        "source_id": "billsum:44172515b22eaae0",
+        "field": "protected_qualifiers",
+        "expected_old_count": 2,
+        "expected_old_descriptor_sha256": [
+          "89e56e0b1a960289f36dec53d8082e7e2cdbac01ab358638ed9f2ba366864a17",
+          "bf976bcaccb0c69db807fcaa36c247333718481cf930a24991f5493d942d3b40"
+        ],
+        "action": "set_empty_list",
+        "expected_new_count": 0,
+        "expected_new_descriptor_sha256": [],
+        "reason_code": "inaccurate_unlicensed_reviewer_metadata",
+        "reason": "Independent semantic pre-review found that the reviewer descriptors were not licensed by the frozen response."
+      },
+      {
+        "source_id": "billsum:fa9b594a589c0757",
+        "field": "protected_qualifiers",
+        "expected_old_count": 5,
+        "expected_old_descriptor_sha256": [
+          "da9857c14ebfeea63f27dd14009cb7551ea2305f319c2ebe78bf23cb9df89911",
+          "f3bfc11320a9801879b697d75ee856a89ef876bb6fd4406e3e75511e93a98895",
+          "450d7d805950a68e8d8288faa652bb486c115cccaf4555750c49a3c20b7dd982",
+          "19f76aec763dd26703c019aaa10e1ce5f1b8e6aa9e3ac125fad9e3e8a9141240",
+          "1b432c0daf307e69e9aa1c8185759d938f549c5bdb17f113cfbdd385c2bfa87d"
+        ],
+        "action": "remove_descriptor_sha256",
+        "remove_descriptor_sha256": [
+          "da9857c14ebfeea63f27dd14009cb7551ea2305f319c2ebe78bf23cb9df89911",
+          "450d7d805950a68e8d8288faa652bb486c115cccaf4555750c49a3c20b7dd982"
+        ],
+        "expected_new_count": 3,
+        "expected_new_descriptor_sha256": [
+          "f3bfc11320a9801879b697d75ee856a89ef876bb6fd4406e3e75511e93a98895",
+          "19f76aec763dd26703c019aaa10e1ce5f1b8e6aa9e3ac125fad9e3e8a9141240",
+          "1b432c0daf307e69e9aa1c8185759d938f549c5bdb17f113cfbdd385c2bfa87d"
+        ],
+        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
+        "reason": "Independent semantic pre-review found that two reviewer descriptors were not licensed by the frozen response; the remaining descriptors were retained."
+      }
+    ]
+  },
   "cue_assignment": {
     "hash_key": "{seed}|{version}|cue-family|{source_id}",
     "target_counts": [
@@ -93,7 +157,8 @@
       "source_selection_role", "source_review_rank",
       "replacement_for_source_id", "replacement_reason_code",
       "replacement_reason", "replacement_rule", "replaced_source_hash",
-      "replaced_source_review_rank", "source_set_revision"
+      "replaced_source_review_rank", "source_set_revision",
+      "reviewer_metadata_correction"
     ],
     "writer_prompt_fields": [
       "source_id", "dataset", "group_id", "source_hash",

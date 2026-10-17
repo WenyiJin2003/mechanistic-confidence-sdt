@@ -587,6 +587,122 @@ def apply_configured_replacements(
     return replaced_batches, mappings
 
 
+def apply_reviewer_metadata_overrides(
+    batches: Sequence[Sequence[dict[str, Any]]],
+) -> tuple[list[list[dict[str, Any]]], list[dict[str, Any]]]:
+    """Apply fail-closed reviewer-only metadata corrections after selection.
+
+    These overrides cannot change source identity, source text, experimental
+    assignments, or writer-visible fields.  Private descriptor text is checked
+    only through preregistered hashes and is never copied into public metadata.
+    """
+    design = DESIGN.get("reviewer_metadata_overrides", {})
+    overrides = design.get("overrides", [])
+    corrected_batches = [[dict(row) for row in batch] for batch in batches]
+    if not overrides:
+        return corrected_batches, []
+    source_ids = [str(item["source_id"]) for item in overrides]
+    if len(set(source_ids)) != len(source_ids):
+        raise ValueError("reviewer metadata override source IDs must be unique")
+
+    corrections: list[dict[str, Any]] = []
+    for override in overrides:
+        source_id = str(override["source_id"])
+        if override.get("field") != "protected_qualifiers":
+            raise ValueError(f"{source_id}: unsupported reviewer metadata field")
+        action = str(override.get("action"))
+        if action not in {"set_empty_list", "remove_descriptor_sha256"}:
+            raise ValueError(f"{source_id}: unsupported reviewer metadata action")
+        locations = [
+            row
+            for batch in corrected_batches
+            for row in batch
+            if row["source_id"] == source_id
+        ]
+        if len(locations) != 1:
+            raise ValueError(
+                f"reviewer metadata override source must occupy one canary slot: {source_id}"
+            )
+        row = locations[0]
+        old_descriptors = qualifier_descriptors(row)
+        old_hashes = [sha256_text(descriptor) for descriptor in old_descriptors]
+        expected_hashes = [
+            str(value) for value in override["expected_old_descriptor_sha256"]
+        ]
+        if len(old_descriptors) != int(override["expected_old_count"]):
+            raise ValueError(f"{source_id}: reviewer descriptor count drifted")
+        if old_hashes != expected_hashes:
+            raise ValueError(f"{source_id}: reviewer descriptor hashes drifted")
+
+        if action == "set_empty_list":
+            removed_hashes = old_hashes
+            new_descriptors: list[str] = []
+        else:
+            removed_hashes = [
+                str(value) for value in override["remove_descriptor_sha256"]
+            ]
+            if len(set(removed_hashes)) != len(removed_hashes):
+                raise ValueError(f"{source_id}: duplicate removal descriptor hashes")
+            if not set(removed_hashes).issubset(old_hashes):
+                raise ValueError(f"{source_id}: removal descriptor hashes drifted")
+            new_descriptors = [
+                descriptor
+                for descriptor, descriptor_hash in zip(old_descriptors, old_hashes)
+                if descriptor_hash not in set(removed_hashes)
+            ]
+            if len(old_descriptors) - len(new_descriptors) != len(removed_hashes):
+                raise ValueError(f"{source_id}: descriptor removal count drifted")
+        new_hashes = [sha256_text(descriptor) for descriptor in new_descriptors]
+        expected_new_hashes = [
+            str(value) for value in override["expected_new_descriptor_sha256"]
+        ]
+        if new_hashes != expected_new_hashes:
+            raise ValueError(f"{source_id}: corrected descriptor hashes drifted")
+        row["protected_qualifiers"] = new_descriptors
+        if len(new_descriptors) != int(override["expected_new_count"]):
+            raise ValueError(f"{source_id}: corrected descriptor count drifted")
+        correction = {
+            "source_id": source_id,
+            "source_hash": row["source_hash"],
+            "field": "protected_qualifiers",
+            "stage": str(design["stage"]),
+            "action": action,
+            "old_descriptor_sha256": old_hashes,
+            "old_count": len(old_descriptors),
+            "removed_descriptor_sha256": removed_hashes,
+            "new_descriptor_sha256": new_hashes,
+            "new_count": len(new_descriptors),
+            "reason_code": str(override["reason_code"]),
+            "reason": str(override["reason"]),
+            "outcome_information_used": bool(design["outcome_information_used"]),
+        }
+        row["reviewer_metadata_correction"] = correction
+        corrections.append(correction)
+    return corrected_batches, corrections
+
+
+def verify_writer_artifact_hash_stability(
+    source_batch_hashes: dict[str, str],
+    prompt_batch_hashes: dict[str, str],
+    replacement_source_hashes: dict[str, str],
+    replacement_prompt_hashes: dict[str, str],
+) -> None:
+    """Fail if a reviewer-only correction changes any writer-visible artifact."""
+    expected = DESIGN["reviewer_metadata_overrides"][
+        "expected_unchanged_writer_artifact_sha256"
+    ]
+    actual = {
+        "source_batch_sha256": source_batch_hashes,
+        "prompt_batch_sha256": prompt_batch_hashes,
+        "replacement_source_sha256": replacement_source_hashes,
+        "replacement_prompt_sha256": replacement_prompt_hashes,
+    }
+    if actual != expected:
+        raise ValueError(
+            "reviewer-only metadata correction changed writer-visible artifacts"
+        )
+
+
 def freeze_record(row: dict[str, Any]) -> dict[str, Any]:
     original = row.get("original_response")
     prompt = row.get("question")
@@ -627,6 +743,7 @@ def freeze_record(row: dict[str, Any]) -> dict[str, Any]:
         "replaced_source_hash": row.get("replaced_source_hash"),
         "replaced_source_review_rank": row.get("replaced_source_review_rank"),
         "source_set_revision": DESIGN["artifact_revision"],
+        "reviewer_metadata_correction": row.get("reviewer_metadata_correction"),
     }
 
 
@@ -839,6 +956,7 @@ def prepare(
     raw_batches, replacement_mappings = apply_configured_replacements(
         raw_batches, source_rows
     )
+    raw_batches, metadata_corrections = apply_reviewer_metadata_overrides(raw_batches)
     verify_against_public_manifest(
         [row for batch in raw_batches for row in batch], public_source_rows
     )
@@ -899,6 +1017,13 @@ def prepare(
         replacement_source_hashes[source_path.name] = sha256_file(source_path)
         replacement_prompt_hashes[prompt_path.name] = sha256_file(prompt_path)
 
+    verify_writer_artifact_hash_stability(
+        batch_hashes,
+        prompt_hashes,
+        replacement_source_hashes,
+        replacement_prompt_hashes,
+    )
+
     public_rows = [public_record(row) for row in frozen_rows]
     write_jsonl(public_manifest_path, public_rows)
     source_count = len(frozen_rows)
@@ -953,6 +1078,16 @@ def prepare(
                 "preserved_slot_fields"
             ],
             "mappings": replacement_mappings,
+        },
+        "reviewer_metadata_corrections": {
+            "count": len(metadata_corrections),
+            "stage": DESIGN["reviewer_metadata_overrides"]["stage"],
+            "rule": DESIGN["reviewer_metadata_overrides"]["rule"],
+            "outcome_information_used": DESIGN["reviewer_metadata_overrides"][
+                "outcome_information_used"
+            ],
+            "writer_visible_artifacts_unchanged": True,
+            "corrections": metadata_corrections,
         },
         "selection_rule": {
             "eligible_rows": (
