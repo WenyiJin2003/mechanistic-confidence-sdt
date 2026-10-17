@@ -59,6 +59,11 @@
       ]
     }
   },
+  "secondary_audit": {
+    "sample_size_per_dataset": 12,
+    "hash_prefix": "20261017:secondary:",
+    "require_final_sample_confirmation": true
+  },
   "expansion_rule": "If a core dataset has fewer than 48 accepted sources after reviewing 100 candidates, add the next deterministic block of 20 rather than lowering the gate.",
   "split_rule": "Freeze group-disjoint pair-level splits after source acceptance and before confidence rewriting."
 }

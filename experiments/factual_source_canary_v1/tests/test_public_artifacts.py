@@ -18,6 +18,8 @@ class PublicArtifactTests(unittest.TestCase):
         for filename, expected_count in [
             ("source_candidate_manifest.jsonl", 200),
             ("expanded_pool_v2_candidate_manifest.jsonl", 350),
+            ("expanded_pool_v2_review_queue_manifest.jsonl", 350),
+            ("selected_core_sources_v1_manifest.jsonl", 144),
         ]:
             records = read_jsonl(RESULTS / filename)
             self.assertEqual(len(records), expected_count)
@@ -57,6 +59,20 @@ class PublicArtifactTests(unittest.TestCase):
             counts,
             {"asqa": 100, "billsum": 100, "fetaqa": 50, "qasper": 100},
         )
+
+    def test_source_selection_gate_is_complete(self) -> None:
+        summary = json.loads(
+            (RESULTS / "source_selection_v1_summary.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertTrue(summary["gate_complete"])
+        for dataset in ("asqa", "billsum", "qasper"):
+            values = summary["by_dataset"][dataset]
+            self.assertEqual(values["accepted_count"], 48)
+            self.assertEqual(values["core_selected_count"], 40)
+            self.assertEqual(values["backup_selected_count"], 8)
+            self.assertEqual(values["final_secondary_sample_count"], 12)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,11 @@ abstracts, and 40 BillSum summaries.** FeTaQA is retained as a separate
 20-source short-form external test, not as core training or layer-selection
 data.
 
+**Source selection is now complete:** 120 core records and 24 backups passed
+the locked primary review plus a recomputed secondary sample audit. See
+`results/SOURCE_SELECTION_RESULTS.md`. No certainty rewriting or activation
+scoring has been run on these sources.
+
 This decision follows a locked, model-assisted review of 10 candidates per
 dataset. The review found that real-source answers still require explicit
 contradiction, provenance, missing-evidence, and qualifier checks. It did not
@@ -58,6 +63,10 @@ certainty rewrites.
 Full source text stays under ignored `private_data/`. No rewrite model is
 called, no Qwen activations are extracted, and no probe is trained.
 
+The [source acceptance protocol](SOURCE_ACCEPTANCE_PROTOCOL.md) fixes the
+review order, decision meanings, dataset-specific checks, stopping rule, and
+validation boundary before the expanded pool is reviewed.
+
 The first mechanical pass confirmed that QASPER's annotated QA answers are
 usually too short for the main full-response rewrite. The scientific stratum
 therefore uses author-written abstracts as the source response and the paper
@@ -89,6 +98,17 @@ BillSum, plus 50 FeTaQA short-form candidates. Mechanical screening retained
 all 100 ASQA records, all 100 QASPER records, and 89/100 BillSum records. These
 counts only define the review queue; they do not certify evidence support.
 
+Build the deterministic review order with:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/build_review_queue.py \
+  --candidates experiments/factual_source_canary_v1/private_data/expanded_pool_v2/source_candidates.jsonl \
+  --config experiments/factual_source_canary_v1/configs/source_pool_expansion_v2.json \
+  --private-output experiments/factual_source_canary_v1/private_data/expanded_pool_v2/source_review_queue.jsonl \
+  --public-output experiments/factual_source_canary_v1/results/expanded_pool_v2_review_queue_manifest.jsonl \
+  --batch-size 20
+```
+
 ## Outputs
 
 | Output | Visibility | Contents |
@@ -101,8 +121,12 @@ counts only define the review queue; they do not certify evidence support.
 | `results/model_assisted_review.json` | public | Text-free record decisions and reason codes |
 | `results/MODEL_ASSISTED_SOURCE_REVIEW.md` | public | Review findings and revised selection gate |
 | `results/expanded_pool_v2_candidate_manifest.jsonl` | public | Text-free 350-record expanded-pool manifest |
+| `results/expanded_pool_v2_review_queue_manifest.jsonl` | public | Locked, text-free review order and batches |
 | `results/expanded_pool_v2_summary.json` | public | Expanded-pool aggregate statistics |
 | `results/EXPANDED_POOL_V2_REPORT.md` | public | Expanded-pool mechanical audit |
+| `results/selected_core_sources_v1_manifest.jsonl` | public | Text-free 120-core and 24-backup selection |
+| `results/source_selection_v1_summary.json` | public | Review counts, hashes, and completed-gate status |
+| `results/SOURCE_SELECTION_RESULTS.md` | public | Final source-selection conclusion and limitations |
 
 ## Decision boundary
 

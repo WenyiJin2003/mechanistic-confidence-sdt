@@ -1,0 +1,79 @@
+{
+  "by_dataset": {
+    "asqa": {
+      "accepted_count": 48,
+      "backup_selected_count": 8,
+      "core_selected_count": 40,
+      "decision_counts": {
+        "accept": 51,
+        "reject": 8,
+        "requires_source_repair": 15
+      },
+      "final_secondary_sample_count": 12,
+      "gate_complete": true,
+      "highest_reviewed_rank": 74,
+      "primary_accept_count": 51,
+      "required_accept_count": 48,
+      "reviewed_count": 74,
+      "secondary_audit_counts": {
+        "confirm_accept": 12,
+        "downgrade_repair": 3
+      }
+    },
+    "billsum": {
+      "accepted_count": 48,
+      "backup_selected_count": 8,
+      "core_selected_count": 40,
+      "decision_counts": {
+        "accept": 52,
+        "reject": 1,
+        "requires_source_repair": 35
+      },
+      "final_secondary_sample_count": 12,
+      "gate_complete": true,
+      "highest_reviewed_rank": 88,
+      "primary_accept_count": 52,
+      "required_accept_count": 48,
+      "reviewed_count": 88,
+      "secondary_audit_counts": {
+        "confirm_accept": 12,
+        "downgrade_repair": 4
+      }
+    },
+    "qasper": {
+      "accepted_count": 48,
+      "backup_selected_count": 8,
+      "core_selected_count": 40,
+      "decision_counts": {
+        "accept": 50,
+        "reject": 8,
+        "requires_source_repair": 13
+      },
+      "final_secondary_sample_count": 12,
+      "gate_complete": true,
+      "highest_reviewed_rank": 71,
+      "primary_accept_count": 50,
+      "required_accept_count": 48,
+      "reviewed_count": 71,
+      "secondary_audit_counts": {
+        "confirm_accept": 12,
+        "downgrade_repair": 2
+      }
+    }
+  },
+  "gate_complete": true,
+  "queue_sha256": "072b2718a9aa23c30dfa82fdd12c9f1662ae4c671a34d113fcacd68ce8ce01c5",
+  "review_file_sha256": {
+    "asqa_model_review_v1.jsonl": "475a734dd730049ad869594f873910a334e3b212b8dbc11107bfdfcf9c755c43",
+    "billsum_model_review_v1.jsonl": "9a4f6f9d6669e1503a23f897e3f437dc08b70b29df692fdafcd193fd80c1ed81",
+    "qasper_model_review_v1.jsonl": "f2834c91efabf6f090c3218af4ca7765cad636209f31efa06787c951fdb87b3f"
+  },
+  "reviewer_type": "model_assisted_primary_not_independent_human_review",
+  "secondary_review_file_sha256": {
+    "asqa_secondary_audit_v1.jsonl": "cdcc02247d180cfd1585135064fa9bb50ea1f5b08622b560669246b19aae8275",
+    "billsum_secondary_audit_v1.jsonl": "29e2415706a05ead62c89dbc254caac09935985f935442304b119058b2f4cabc",
+    "qasper_secondary_audit_v1.jsonl": "90169a1a7ca929e9b032f51d88c4efa215b1e11a1e8198735a6789fa0ec28057"
+  },
+  "selection_policy": "first accepted records in locked deterministic review order",
+  "version": "factual-source-core-selection-v1"
+}
