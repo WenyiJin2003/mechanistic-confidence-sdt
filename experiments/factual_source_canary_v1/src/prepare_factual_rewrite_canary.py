@@ -530,24 +530,19 @@ def public_record(row: dict[str, Any]) -> dict[str, Any]:
     return public
 
 
+def writer_payload_record(row: dict[str, Any]) -> dict[str, Any]:
+    fields = tuple(str(field) for field in DESIGN["fields"]["writer_prompt_fields"])
+    forbidden = set(DESIGN["fields"]["review_only_fields"])
+    if forbidden.intersection(fields):
+        raise ValueError("review-only fields cannot be included in writer_prompt_fields")
+    payload = {field: row[field] for field in fields}
+    if forbidden.intersection(payload):
+        raise AssertionError("review-only qualifier descriptors leaked to writer payload")
+    return payload
+
+
 def writer_prompt(batch: Sequence[dict[str, Any]], number: int, total: int) -> str:
-    payload_fields = (
-        "source_id",
-        "dataset",
-        "group_id",
-        "source_hash",
-        "original_response_sha256",
-        "profile",
-        "prompt",
-        "original_response",
-        "protected_qualifiers",
-        "protected_spans",
-        "cue_family",
-        "length_direction",
-        "draft_order",
-        "generation_order",
-    )
-    payload = [{field: row[field] for field in payload_fields} for row in batch]
+    payload = [writer_payload_record(row) for row in batch]
     return f"""FACTUAL DIRECT-PAIR REWRITE CANARY BATCH {number}/{total}.
 
 For every input record, write TWO COMPLETE and natural rewrites of the same full response: one clearly confident and one clearly hesitant. This is a data-construction canary, not a factual correction task.
@@ -564,7 +559,7 @@ NON-NEGOTIABLE RULES
    - compositional_polarity: express commitment through natural negation or scope composition, not one label word.
    - discourse_level_calibration: distribute a concise commitment or reservation through a natural lead-in, parenthetical, or conclusion.
    - contrastive_commitment: use balanced self-qualification to make endorsement settled versus provisional without retracting the answer.
-6. protected_qualifiers are semantic review descriptors and may be paraphrases. Preserve their meaning in both versions, but do not assume they are literal quotations. Every protected_span is an exact source substring and must occur verbatim in both rewrites.
+6. Reviewer-only semantic qualifier descriptors have deliberately been withheld because some are paraphrases rather than source text. The supplied original_response is the sole authority for content: do not infer or add any condition, exception, modality, or qualification that is absent from it. Every supplied protected_span is an exact source substring already present in original_response and must occur verbatim in both rewrites.
 7. Match formatting, detail, helpfulness, and answer quality within the pair. Keep each arm between {float(DESIGN['gates']['min_arm_source_token_ratio']):.2f} and {float(DESIGN['gates']['max_arm_source_token_ratio']):.2f} times the source-token length. The longer/shorter pair ratio must be at most {float(DESIGN['gates']['max_pair_token_ratio']):.2f}, and the absolute within-pair token gap must be no more than max({int(DESIGN['gates']['pair_token_gap_floor'])} tokens, {float(DESIGN['gates']['pair_token_gap_mean_fraction']):.0%} of the pair mean). Respect length_direction: confident_longer means the confident version is slightly longer; hesitant_longer means the hesitant version is slightly longer. Never delete or repeat content to force length.
 8. Respect draft_order when drafting and serializing the response fields. For confident_first, place confident_response before hesitant_response in that pair object. For hesitant_first, place hesitant_response before confident_response. Always echo draft_order exactly.
 9. If a faithful pair is genuinely impossible, return empty response strings and a short issue. Otherwise issues must be [].
@@ -717,7 +712,7 @@ def prepare(
     for number, batch in enumerate(frozen_batches, 1):
         batch_path = private_output_dir / f"SOURCE_BATCH_{number:02d}.jsonl"
         prompt_path = private_output_dir / f"PROMPT_BATCH_{number:02d}.txt"
-        write_jsonl(batch_path, batch)
+        write_jsonl(batch_path, (writer_payload_record(row) for row in batch))
         prompt_path.write_text(
             writer_prompt(batch, number, len(frozen_batches)), encoding="utf-8"
         )
@@ -820,9 +815,11 @@ def prepare(
             ]["cross_length_direction_count_per_cell"],
         },
         "qualifier_handling": {
-            "protected_qualifiers": "semantic review descriptors; not assumed to be literal source text",
-            "protected_spans": "case-insensitive exact descriptor matches recovered from original_response; text kept private",
+            "protected_qualifiers": "review-only semantic descriptors retained in frozen_sources.jsonl and never exposed to the writer",
+            "protected_spans": "case-insensitive exact descriptor matches recovered from original_response and supplied to the writer",
+            "content_authority": "original_response only",
         },
+        "writer_prompt_fields": DESIGN["fields"]["writer_prompt_fields"],
         "writer_output_fields": DESIGN["fields"]["writer_output_fields"],
         "config_sha256": sha256_file(config_path),
         "public_source_manifest_sha256": sha256_file(public_source_path),

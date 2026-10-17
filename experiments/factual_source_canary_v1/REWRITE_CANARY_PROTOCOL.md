@@ -18,8 +18,11 @@ or establish that a confidence representation exists.
 - Confident-longer and hesitant-longer are balanced 6/6 overall and 2/2
   within each source family.
 - The order in which the two versions are generated is balanced separately.
-- The rewrite model sees the frozen question and response, but not the
-  supporting evidence. It must not correct or supplement the source.
+- The rewrite model sees the frozen question, response, and only those
+  protected spans that occur literally in the response. It does not see the
+  supporting evidence or reviewer-written semantic qualifier descriptors.
+  The response is its sole content authority; it must not correct, supplement,
+  or infer qualifications absent from that response.
 
 Full third-party source text and generated pairs remain under ignored
 `private_data/`. Public artifacts contain only identifiers, hashes,
@@ -35,8 +38,9 @@ Each pair must satisfy all of the following:
    condition, exception, comparison, causal scope, citation, and answer.
 3. **Qualifier preservation.** Scientific, temporal, and legal qualifiers keep
    the same meaning and scope. Literal protected spans, when available, occur
-   unchanged in both versions. Semantic qualifier descriptors are reviewed
-   manually rather than treated as literal strings.
+   unchanged in both versions. Semantic qualifier descriptors remain private,
+   are withheld from the writer, and are used only during manual review rather
+   than treated as literal strings or generation instructions.
 4. **Speaker-level contrast.** A blind reviewer selects the intended version
    as more confident and rates it at least two points higher on a five-point
    speaker-certainty scale.
@@ -70,7 +74,8 @@ The reviewer sees only the frozen source, Version A, and Version B. The role
 key is stored separately. For each pair the reviewer records:
 
 - source fidelity;
-- protected-qualifier preservation;
+- protected-qualifier preservation, using the private reviewer-only semantic
+  descriptors after generation;
 - whether the contrast is speaker-level;
 - certainty of A and B on a 1–5 scale;
 - which version is more confident;

@@ -65,6 +65,13 @@
       "protected_qualifiers", "protected_spans", "cue_family",
       "length_direction", "draft_order", "generation_order"
     ],
+    "writer_prompt_fields": [
+      "source_id", "dataset", "group_id", "source_hash",
+      "original_response_sha256", "profile", "prompt", "original_response",
+      "protected_spans", "cue_family", "length_direction", "draft_order",
+      "generation_order"
+    ],
+    "review_only_fields": ["protected_qualifiers"],
     "writer_output_fields": [
       "source_id", "source_hash", "original_response_sha256", "dataset",
       "cue_family", "length_direction", "draft_order", "confident_response",

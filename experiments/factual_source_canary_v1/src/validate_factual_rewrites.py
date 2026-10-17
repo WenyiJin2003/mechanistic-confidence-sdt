@@ -542,7 +542,22 @@ def validate_factual_rewrites(
         if isinstance(row.get("generation_order"), int)
         and not isinstance(row.get("generation_order"), bool)
     ]
-    if sorted(generation_orders) != list(range(1, expected_source_count + 1)):
+    sorted_generation_orders = sorted(generation_orders)
+    if expected_source_count == 4:
+        generation_orders_are_consecutive = (
+            len(sorted_generation_orders) == expected_source_count
+            and len(set(sorted_generation_orders)) == expected_source_count
+            and sorted_generation_orders
+            == list(
+                range(
+                    sorted_generation_orders[0],
+                    sorted_generation_orders[0] + expected_source_count,
+                )
+            )
+        )
+        if not generation_orders_are_consecutive:
+            global_flags.append("generation_order_not_unique_consecutive_sequence")
+    elif sorted_generation_orders != list(range(1, expected_source_count + 1)):
         global_flags.append("generation_order_not_exact_sequence")
 
     draft_counts = Counter(row.get("draft_order") for row in source_rows)
@@ -561,7 +576,7 @@ def validate_factual_rewrites(
     for row in source_rows:
         if isinstance(row.get("dataset"), str) and row["dataset"]:
             by_dataset[row["dataset"]].append(row)
-    for rows in by_dataset.values():
+    for rows in (by_dataset.values() if expected_source_count == 12 else ()):
         if len(rows) != 4:
             global_flags.append("dataset_source_count_not_4")
         if Counter(row.get("draft_order") for row in rows) != Counter(

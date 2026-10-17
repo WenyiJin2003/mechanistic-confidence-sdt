@@ -28,7 +28,7 @@
     "qualifier_sensitive": 3,
     "short_simple": 3
   },
-  "config_sha256": "051361e5968f02244a65364cc34fb0052d4c809c0b4a1cfc2c8524eaaf584e3d",
+  "config_sha256": "1e385aefac8e71ac700ab66961c6affbdb7ccece4b4ed0f37e3b87253a19734e",
   "cue_assignment": {
     "method": "fixed target counts applied in seeded source-hash order",
     "target_counts": {
@@ -98,8 +98,9 @@
   "public_canary_manifest_sha256": "8b0c0da55150ea677dd2d6b74bb98e66eb5fa91e72f1b49281db0d6edc6c3562",
   "public_source_manifest_sha256": "d51846305f0aabf9063e4951e98083e7bc5cfebd1cd727f737cae8c7b18b82ed",
   "qualifier_handling": {
-    "protected_qualifiers": "semantic review descriptors; not assumed to be literal source text",
-    "protected_spans": "case-insensitive exact descriptor matches recovered from original_response; text kept private"
+    "content_authority": "original_response only",
+    "protected_qualifiers": "review-only semantic descriptors retained in frozen_sources.jsonl and never exposed to the writer",
+    "protected_spans": "case-insensitive exact descriptor matches recovered from original_response and supplied to the writer"
   },
   "seed": 20261017,
   "selection_rule": {
@@ -156,5 +157,20 @@
     "confident_response",
     "hesitant_response",
     "issues"
+  ],
+  "writer_prompt_fields": [
+    "source_id",
+    "dataset",
+    "group_id",
+    "source_hash",
+    "original_response_sha256",
+    "profile",
+    "prompt",
+    "original_response",
+    "protected_spans",
+    "cue_family",
+    "length_direction",
+    "draft_order",
+    "generation_order"
   ]
 }

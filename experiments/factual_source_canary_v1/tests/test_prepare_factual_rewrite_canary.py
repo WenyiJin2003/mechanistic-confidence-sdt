@@ -151,9 +151,22 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertIn('"hesitant_response"', text)
         self.assertNotIn('"hedged_response"', text)
         self.assertIn('"draft_order"', text)
-        self.assertIn("semantic review descriptors", text)
+        self.assertIn("Reviewer-only semantic qualifier descriptors", text)
+        self.assertIn("sole authority for content", text)
         self.assertIn("exact source substring", text)
         self.assertIn("max(5 tokens, 5% of the pair mean)", text)
+
+    def test_writer_payload_withholds_descriptor_only_qualifiers(self) -> None:
+        row = prompt_row()
+        text = MODULE.writer_prompt([row], 1, 1)
+        payload = json.loads(text.split("INPUT_RECORDS_JSON\n", 1)[1])
+        self.assertNotIn("protected_qualifiers", payload[0])
+        self.assertNotIn("conditional estimate", text)
+        self.assertEqual(payload[0]["protected_spans"], ["may be five"])
+        self.assertEqual(
+            row["protected_qualifiers"],
+            ["may be five", "conditional estimate"],
+        )
 
     def test_private_output_guard_rejects_public_directory(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -179,9 +192,15 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
     def test_config_declares_canonical_writer_fields(self) -> None:
         config = json.loads(MODULE.DEFAULT_CONFIG.read_text(encoding="utf-8"))
         fields = config["fields"]["writer_output_fields"]
+        prompt_fields = config["fields"]["writer_prompt_fields"]
         self.assertIn("hesitant_response", fields)
         self.assertNotIn("hedged_response", fields)
         self.assertIn("draft_order", fields)
+        self.assertIn("protected_spans", prompt_fields)
+        self.assertNotIn("protected_qualifiers", prompt_fields)
+        self.assertEqual(
+            config["fields"]["review_only_fields"], ["protected_qualifiers"]
+        )
         self.assertEqual(config["fields"]["legacy_output_alias"], "hedged_response")
 
 

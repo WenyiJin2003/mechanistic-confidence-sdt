@@ -248,5 +248,56 @@ class ValidateFactualRewritesTests(unittest.TestCase):
         self.assertEqual(pairs, pair_copy)
 
 
+    def test_valid_four_row_microbatch_uses_only_global_balance_gates(self):
+        sources = [
+            make_source(5, "asqa", 0),
+            make_source(6, "billsum", 1),
+            make_source(7, "billsum", 2),
+            make_source(8, "qasper", 3),
+        ]
+        pairs = [make_pair(source) for source in sources]
+
+        report = validator.validate_factual_rewrites(
+            sources,
+            pairs,
+            self.tokenizer,
+            expected_source_count=4,
+        )
+
+        self.assertTrue(report["mechanical_gate_pass"])
+        self.assertEqual(report["global_failure_flags"], [])
+        self.assertNotIn("dataset_source_count_not_4", report["global_failure_flags"])
+        self.assertNotIn(
+            "draft_order_not_2_2_within_dataset",
+            report["global_failure_flags"],
+        )
+        self.assertNotIn(
+            "length_direction_not_2_2_within_dataset",
+            report["global_failure_flags"],
+        )
+
+    def test_four_row_microbatch_generation_orders_must_be_consecutive(self):
+        sources = [
+            make_source(5, "asqa", 0),
+            make_source(6, "billsum", 1),
+            make_source(7, "billsum", 2),
+            make_source(9, "qasper", 3),
+        ]
+        pairs = [make_pair(source) for source in sources]
+
+        report = validator.validate_factual_rewrites(
+            sources,
+            pairs,
+            self.tokenizer,
+            expected_source_count=4,
+        )
+
+        self.assertFalse(report["mechanical_gate_pass"])
+        self.assertIn(
+            "generation_order_not_unique_consecutive_sequence",
+            report["global_failure_flags"],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
