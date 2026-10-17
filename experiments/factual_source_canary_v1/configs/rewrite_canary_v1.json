@@ -110,6 +110,50 @@
         ],
         "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
         "reason": "Independent semantic pre-review found that two reviewer descriptors were not licensed by the frozen response; the remaining descriptors were retained."
+      },
+      {
+        "source_id": "qasper-paper:2001.06286",
+        "field": "protected_qualifiers",
+        "expected_old_count": 3,
+        "expected_old_descriptor_sha256": [
+          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
+          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea",
+          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
+        ],
+        "action": "remove_descriptor_sha256",
+        "remove_descriptor_sha256": [
+          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea"
+        ],
+        "expected_new_count": 2,
+        "expected_new_descriptor_sha256": [
+          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
+          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
+        ],
+        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
+        "reason": "Independent semantic pre-review found that one reviewer descriptor was not licensed by the frozen response; the remaining descriptors were retained."
+      },
+      {
+        "source_id": "billsum:1b0226a63ea123f1",
+        "field": "protected_qualifiers",
+        "expected_old_count": 4,
+        "expected_old_descriptor_sha256": [
+          "b26d153bd954163245319e411209ce048a6a4fc7bd9799c473116337b3e08743",
+          "dab8286ac25c440afce495102975f4c912f7bfa1fb46151af0c1b68eccb6e3a2",
+          "a719b358f405dfbdcf751bd3ec42ca7d2ca38c8ff40b744c896e713b2676787d",
+          "6c257db7c0f64d5023998991b0af3224c7d244519e630633389809fc951c93c6"
+        ],
+        "action": "remove_descriptor_sha256",
+        "remove_descriptor_sha256": [
+          "a719b358f405dfbdcf751bd3ec42ca7d2ca38c8ff40b744c896e713b2676787d"
+        ],
+        "expected_new_count": 3,
+        "expected_new_descriptor_sha256": [
+          "b26d153bd954163245319e411209ce048a6a4fc7bd9799c473116337b3e08743",
+          "dab8286ac25c440afce495102975f4c912f7bfa1fb46151af0c1b68eccb6e3a2",
+          "6c257db7c0f64d5023998991b0af3224c7d244519e630633389809fc951c93c6"
+        ],
+        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
+        "reason": "Independent semantic pre-review found that one reviewer descriptor was misleading relative to the frozen response; the remaining descriptors were retained."
       }
     ]
   },

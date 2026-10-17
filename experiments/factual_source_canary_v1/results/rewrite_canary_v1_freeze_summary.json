@@ -28,7 +28,7 @@
     "qualifier_sensitive": 3,
     "short_simple": 3
   },
-  "config_sha256": "6269e6d7952d97c8af74f7c61b2bfb869d8a4a39fcc0eee8517a1e443460dc2e",
+  "config_sha256": "ff5fc1e864048cfc51a1f6800ce8c17dd1b6caadaa4ed2bbbb1339cb9fd66574",
   "cue_assignment": {
     "method": "fixed target counts applied in seeded source-hash order",
     "target_counts": {
@@ -96,7 +96,7 @@
   "preserved_private_artifact_revision": "v1",
   "private_text_committed": false,
   "probe_fit": false,
-  "public_canary_manifest_sha256": "2d46c6d3bc0b4027835fb29ea96e9326afc4d47c03c66f8289543447a5f9a44d",
+  "public_canary_manifest_sha256": "53595ae09fe504d0c829068b4eb7720390f83712c4d591dbb1e3c6d657bceee1",
   "public_source_manifest_sha256": "d51846305f0aabf9063e4951e98083e7bc5cfebd1cd727f737cae8c7b18b82ed",
   "qualifier_handling": {
     "content_authority": "original_response only",
@@ -153,9 +153,59 @@
         "source_hash": "6655de696e9b3f3695eb0bf834f2c0dca343f48ccb1e2d8e2aeae1cb2275d753",
         "source_id": "billsum:fa9b594a589c0757",
         "stage": "post_selection_pre_final_review"
+      },
+      {
+        "action": "remove_descriptor_sha256",
+        "field": "protected_qualifiers",
+        "new_count": 2,
+        "new_descriptor_sha256": [
+          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
+          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
+        ],
+        "old_count": 3,
+        "old_descriptor_sha256": [
+          "458d1f288b9de1c49dc5976cce27193bb5765afdb5398452aea7dd26a06d524a",
+          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea",
+          "56acd9373b97e8728d74dd18e7fafe244cceb473af5fdc8b689c59be6586217e"
+        ],
+        "outcome_information_used": false,
+        "reason": "Independent semantic pre-review found that one reviewer descriptor was not licensed by the frozen response; the remaining descriptors were retained.",
+        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
+        "removed_descriptor_sha256": [
+          "60b7514840066637c47df998ba66f91a648a8fdfa25231fa2926b2c5390845ea"
+        ],
+        "source_hash": "846c9c0556b9b16bcc108dde69434520ab8bfd8f59b41c7996db17c39451e34e",
+        "source_id": "qasper-paper:2001.06286",
+        "stage": "post_selection_pre_final_review"
+      },
+      {
+        "action": "remove_descriptor_sha256",
+        "field": "protected_qualifiers",
+        "new_count": 3,
+        "new_descriptor_sha256": [
+          "b26d153bd954163245319e411209ce048a6a4fc7bd9799c473116337b3e08743",
+          "dab8286ac25c440afce495102975f4c912f7bfa1fb46151af0c1b68eccb6e3a2",
+          "6c257db7c0f64d5023998991b0af3224c7d244519e630633389809fc951c93c6"
+        ],
+        "old_count": 4,
+        "old_descriptor_sha256": [
+          "b26d153bd954163245319e411209ce048a6a4fc7bd9799c473116337b3e08743",
+          "dab8286ac25c440afce495102975f4c912f7bfa1fb46151af0c1b68eccb6e3a2",
+          "a719b358f405dfbdcf751bd3ec42ca7d2ca38c8ff40b744c896e713b2676787d",
+          "6c257db7c0f64d5023998991b0af3224c7d244519e630633389809fc951c93c6"
+        ],
+        "outcome_information_used": false,
+        "reason": "Independent semantic pre-review found that one reviewer descriptor was misleading relative to the frozen response; the remaining descriptors were retained.",
+        "reason_code": "partially_inaccurate_unlicensed_reviewer_metadata",
+        "removed_descriptor_sha256": [
+          "a719b358f405dfbdcf751bd3ec42ca7d2ca38c8ff40b744c896e713b2676787d"
+        ],
+        "source_hash": "8041f909e9cdeb2576844ee082482522de118a70ed7330e3cd5a09bb36b3749a",
+        "source_id": "billsum:1b0226a63ea123f1",
+        "stage": "post_selection_pre_final_review"
       }
     ],
-    "count": 2,
+    "count": 4,
     "outcome_information_used": false,
     "rule": "Apply only configured reviewer-metadata corrections after source selection and experimental-slot assignment; fail closed unless the private pre-correction descriptor count and hashes match exactly.",
     "stage": "post_selection_pre_final_review",

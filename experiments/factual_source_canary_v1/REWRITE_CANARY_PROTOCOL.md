@@ -68,6 +68,11 @@ every writer batch, prompt, and replacement prompt retains its preregistered
 hash. The correction is applied before the v2 reviewer-authoritative freeze and
 validation batches are written.
 
+The current v2 correction ledger contains four source-specific entries. The
+two Batch 3 entries each remove one hashed descriptor, retain all other
+descriptors in order, and add no replacement text. Optional coverage-gap
+suggestions are not part of the frozen correction ledger.
+
 ## Pair-level hard gates
 
 Each pair must satisfy all of the following:

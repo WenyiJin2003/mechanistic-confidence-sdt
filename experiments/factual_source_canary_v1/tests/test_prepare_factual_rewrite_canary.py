@@ -214,7 +214,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         )
         after_frozen = MODULE.freeze_record(after)
 
-        self.assertEqual(len(corrections), 2)
+        self.assertEqual(len(corrections), 4)
         correction = next(item for item in corrections if item["source_id"] == source_id)
         self.assertEqual(correction["source_id"], source_id)
         self.assertEqual(correction["old_count"], 2)
@@ -246,6 +246,82 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             "generation_order",
         ):
             self.assertEqual(before_frozen[field], after_frozen[field])
+
+    def test_batch3_partial_metadata_overrides_preserve_writer_payloads(self) -> None:
+        if not MODULE.DEFAULT_SOURCE.exists():
+            self.skipTest("ignored private frozen-source file is unavailable")
+        source_rows = MODULE.read_jsonl(MODULE.DEFAULT_SOURCE)
+        selected = MODULE.select_canary_sources(source_rows)
+        MODULE.assign_cue_families(selected)
+        MODULE.assign_length_directions(selected)
+        MODULE.assign_draft_orders(selected)
+        batches, _ = MODULE.apply_configured_replacements(
+            MODULE.order_batches(selected), source_rows
+        )
+        corrected_batches, corrections = MODULE.apply_reviewer_metadata_overrides(
+            batches
+        )
+        cases = {
+            "qasper-paper:2001.06286": (3, 2, 3),
+            "billsum:1b0226a63ea123f1": (4, 3, 4),
+        }
+        for source_id, (old_count, new_count, batch_position) in cases.items():
+            before = next(
+                row
+                for batch in batches
+                for row in batch
+                if row["source_id"] == source_id
+            )
+            after = next(
+                row
+                for batch in corrected_batches
+                for row in batch
+                if row["source_id"] == source_id
+            )
+            before_frozen = MODULE.freeze_record(before)
+            after_frozen = MODULE.freeze_record(after)
+            correction = next(
+                item for item in corrections if item["source_id"] == source_id
+            )
+            config = next(
+                item
+                for item in MODULE.DESIGN["reviewer_metadata_overrides"][
+                    "overrides"
+                ]
+                if item["source_id"] == source_id
+            )
+
+            self.assertEqual(correction["old_count"], old_count)
+            self.assertEqual(correction["new_count"], new_count)
+            self.assertEqual(len(correction["removed_descriptor_sha256"]), 1)
+            self.assertEqual(
+                correction["new_descriptor_sha256"],
+                config["expected_new_descriptor_sha256"],
+            )
+            self.assertEqual(
+                [MODULE.sha256_text(value) for value in after["protected_qualifiers"]],
+                config["expected_new_descriptor_sha256"],
+            )
+            self.assertEqual(
+                before_frozen["protected_spans"], after_frozen["protected_spans"]
+            )
+            self.assertEqual(
+                MODULE.writer_payload_record(before_frozen),
+                MODULE.writer_payload_record(after_frozen),
+            )
+            self.assertEqual(after_frozen["batch_id"], "batch_03")
+            self.assertEqual(after_frozen["batch_position"], batch_position)
+            for field in (
+                "source_id",
+                "source_hash",
+                "original_response_sha256",
+                "profile",
+                "cue_family",
+                "length_direction",
+                "draft_order",
+                "generation_order",
+            ):
+                self.assertEqual(before_frozen[field], after_frozen[field])
 
     def test_partial_metadata_override_removes_only_configured_hashes(self) -> None:
         if not MODULE.DEFAULT_SOURCE.exists():
@@ -430,6 +506,14 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(corrected["protected_qualifier_count"], 0)
         self.assertEqual(corrected["batch_id"], "batch_02")
         self.assertEqual(corrected["batch_position"], 2)
+        qasper_batch3 = next(
+            row for row in rows if row["source_id"] == "qasper-paper:2001.06286"
+        )
+        billsum_batch3 = next(
+            row for row in rows if row["source_id"] == "billsum:1b0226a63ea123f1"
+        )
+        self.assertEqual(qasper_batch3["protected_qualifier_count"], 2)
+        self.assertEqual(billsum_batch3["protected_qualifier_count"], 3)
 
     def test_v2_writer_and_validation_batches_separate_private_review_fields(self) -> None:
         output = ROOT / "private_data" / "rewrite_canary_v1"
@@ -559,6 +643,22 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             replacement_correction["reason_code"],
             "partially_inaccurate_unlicensed_reviewer_metadata",
         )
+        batch3 = {
+            row["source_id"]: row
+            for row in MODULE.read_jsonl(
+                output / "SOURCE_BATCH_03_VALIDATION_V2.jsonl"
+            )
+        }
+        for source_id, (old_count, new_count) in {
+            "qasper-paper:2001.06286": (3, 2),
+            "billsum:1b0226a63ea123f1": (4, 3),
+        }.items():
+            row = batch3[source_id]
+            self.assertEqual(len(row["protected_qualifiers"]), new_count)
+            correction = row["reviewer_metadata_correction"]
+            self.assertEqual(correction["old_count"], old_count)
+            self.assertEqual(correction["new_count"], new_count)
+            self.assertEqual(len(correction["removed_descriptor_sha256"]), 1)
 
     def test_public_summary_records_v2_replacement_provenance(self) -> None:
         path = ROOT / "results" / "rewrite_canary_v1_freeze_summary.json"
@@ -579,7 +679,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
             mapping["reason_code"], "pair_validation_failed_after_allowed_repairs"
         )
         corrections = summary["reviewer_metadata_corrections"]
-        self.assertEqual(corrections["count"], 2)
+        self.assertEqual(corrections["count"], 4)
         self.assertTrue(corrections["writer_visible_artifacts_unchanged"])
         self.assertFalse(corrections["outcome_information_used"])
         correction = next(
@@ -601,6 +701,24 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(len(replacement_correction["removed_descriptor_sha256"]), 2)
         self.assertEqual(len(replacement_correction["new_descriptor_sha256"]), 3)
         self.assertNotIn("protected_qualifiers", replacement_correction)
+        batch3_corrections = {
+            item["source_id"]: item for item in corrections["corrections"]
+        }
+        self.assertEqual(
+            batch3_corrections["qasper-paper:2001.06286"]["new_count"], 2
+        )
+        self.assertEqual(
+            batch3_corrections["billsum:1b0226a63ea123f1"]["new_count"], 3
+        )
+        for source_id in (
+            "qasper-paper:2001.06286",
+            "billsum:1b0226a63ea123f1",
+        ):
+            self.assertEqual(
+                len(batch3_corrections[source_id]["removed_descriptor_sha256"]),
+                1,
+            )
+            self.assertNotIn("protected_qualifiers", batch3_corrections[source_id])
 
     def test_config_declares_canonical_writer_fields(self) -> None:
         config = json.loads(MODULE.DEFAULT_CONFIG.read_text(encoding="utf-8"))
@@ -625,7 +743,7 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertFalse(override["outcome_information_used"])
         self.assertEqual(override["overrides"][0]["expected_old_count"], 2)
         self.assertEqual(override["overrides"][0]["expected_new_count"], 0)
-        self.assertEqual(len(override["overrides"]), 2)
+        self.assertEqual(len(override["overrides"]), 4)
         for item in override["overrides"]:
             self.assertNotIn("protected_qualifiers", item)
         partial = override["overrides"][1]
@@ -633,6 +751,17 @@ class PrepareFactualRewriteCanaryTests(unittest.TestCase):
         self.assertEqual(partial["expected_old_count"], 5)
         self.assertEqual(partial["expected_new_count"], 3)
         self.assertEqual(len(partial["remove_descriptor_sha256"]), 2)
+        batch3 = {item["source_id"]: item for item in override["overrides"]}
+        self.assertEqual(batch3["qasper-paper:2001.06286"]["expected_new_count"], 2)
+        self.assertEqual(batch3["billsum:1b0226a63ea123f1"]["expected_new_count"], 3)
+        self.assertEqual(
+            len(batch3["qasper-paper:2001.06286"]["remove_descriptor_sha256"]),
+            1,
+        )
+        self.assertEqual(
+            len(batch3["billsum:1b0226a63ea123f1"]["remove_descriptor_sha256"]),
+            1,
+        )
 
 
 if __name__ == "__main__":
