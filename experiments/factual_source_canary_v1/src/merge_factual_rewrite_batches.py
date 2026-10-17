@@ -26,6 +26,7 @@ IDENTITY_FIELDS = (
     "length_direction",
     "draft_order",
 )
+DEFAULT_PRIVATE_ROOT = Path(__file__).resolve().parents[1] / "private_data"
 
 
 class MergeValidationError(ValueError):
@@ -70,8 +71,15 @@ def _read_json_rows(path: Path) -> list[dict[str, Any]]:
                 payload = json.load(handle)
             if isinstance(payload, list):
                 rows = payload
-            elif isinstance(payload, dict) and isinstance(payload.get("rows"), list):
-                rows = payload["rows"]
+            elif isinstance(payload, dict):
+                row_keys = [
+                    key
+                    for key in ("rows", "pairs", "sources")
+                    if isinstance(payload.get(key), list)
+                ]
+                if len(row_keys) != 1:
+                    raise MergeValidationError([f"json_rows_not_found:{path}"])
+                rows = payload[row_keys[0]]
             else:
                 raise MergeValidationError([f"json_rows_not_found:{path}"])
     except OSError as error:
@@ -106,6 +114,7 @@ def _validate_paths(
     input_paths: Sequence[Path],
     output_path: Path,
     provenance_path: Path,
+    private_root: Path,
     *,
     overwrite: bool,
 ) -> None:
@@ -114,6 +123,14 @@ def _validate_paths(
     resolved_inputs = [path.resolve() for path in input_paths]
     resolved_output = output_path.resolve()
     resolved_provenance = provenance_path.resolve()
+    resolved_private_root = private_root.resolve()
+
+    def is_under_private_root(path: Path) -> bool:
+        try:
+            path.relative_to(resolved_private_root)
+        except ValueError:
+            return False
+        return True
 
     if not input_paths:
         errors.append("no_input_batches")
@@ -126,6 +143,10 @@ def _validate_paths(
         errors.append("provenance_overwrites_input")
     if resolved_output == resolved_provenance:
         errors.append("output_and_provenance_paths_match")
+    if not is_under_private_root(resolved_output):
+        errors.append(f"output_outside_private_data:{output_path}")
+    if not is_under_private_root(resolved_provenance):
+        errors.append(f"provenance_outside_private_data:{provenance_path}")
     if not overwrite and output_path.exists():
         errors.append(f"output_exists:{output_path}")
     if not overwrite and provenance_path.exists():
@@ -239,6 +260,61 @@ def _stage_bytes(path: Path, payload: bytes) -> Path:
     return temporary_path
 
 
+def _reserve_backup_path(path: Path) -> Path:
+    descriptor, backup_name = tempfile.mkstemp(
+        prefix=f".{path.name}.", suffix=".rollback", dir=path.parent
+    )
+    os.close(descriptor)
+    backup_path = Path(backup_name)
+    backup_path.unlink()
+    return backup_path
+
+
+def _commit_staged_files(
+    staged_targets: Sequence[tuple[Path, Path]], *, overwrite: bool
+) -> None:
+    """Commit staged files together, restoring the prior state on ordinary failure."""
+
+    backups: dict[Path, Path] = {}
+    committed_targets: list[Path] = []
+    try:
+        for _, target in staged_targets:
+            if not target.exists():
+                continue
+            if not overwrite:
+                raise FileExistsError(f"refusing to overwrite {target}")
+            backup = _reserve_backup_path(target)
+            os.replace(target, backup)
+            backups[target] = backup
+
+        for staged, target in staged_targets:
+            os.replace(staged, target)
+            committed_targets.append(target)
+    except BaseException as error:
+        rollback_errors: list[str] = []
+        for target in reversed(committed_targets):
+            try:
+                target.unlink(missing_ok=True)
+            except OSError as rollback_error:
+                rollback_errors.append(f"remove_new:{target}:{rollback_error}")
+        for target, backup in reversed(tuple(backups.items())):
+            if not backup.exists():
+                continue
+            try:
+                os.replace(backup, target)
+            except OSError as rollback_error:
+                rollback_errors.append(f"restore_old:{target}:{rollback_error}")
+        if rollback_errors:
+            raise RuntimeError(
+                "merge commit failed and rollback was incomplete: "
+                + "; ".join(rollback_errors)
+            ) from error
+        raise
+    else:
+        for backup in backups.values():
+            backup.unlink(missing_ok=True)
+
+
 def merge_factual_rewrite_batches(
     sources_path: Path | str,
     input_paths: Sequence[Path | str],
@@ -246,6 +322,7 @@ def merge_factual_rewrite_batches(
     provenance_path: Path | str,
     *,
     overwrite: bool = False,
+    private_root: Path | str | None = None,
 ) -> dict[str, Any]:
     """Validate and atomically merge writer rows in frozen generation order."""
 
@@ -253,11 +330,13 @@ def merge_factual_rewrite_batches(
     normalized_inputs = [Path(path) for path in input_paths]
     output_path = Path(output_path)
     provenance_path = Path(provenance_path)
+    private_root = DEFAULT_PRIVATE_ROOT if private_root is None else Path(private_root)
     _validate_paths(
         sources_path,
         normalized_inputs,
         output_path,
         provenance_path,
+        private_root,
         overwrite=overwrite,
     )
 
@@ -298,10 +377,13 @@ def merge_factual_rewrite_batches(
     try:
         staged_output = _stage_bytes(output_path, output_payload)
         staged_provenance = _stage_bytes(provenance_path, provenance_payload)
-        os.replace(staged_output, output_path)
-        staged_output = None
-        os.replace(staged_provenance, provenance_path)
-        staged_provenance = None
+        _commit_staged_files(
+            (
+                (staged_output, output_path),
+                (staged_provenance, provenance_path),
+            ),
+            overwrite=overwrite,
+        )
     finally:
         if staged_output is not None:
             staged_output.unlink(missing_ok=True)

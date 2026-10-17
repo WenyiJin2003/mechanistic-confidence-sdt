@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 MODULE_PATH = (
@@ -61,11 +62,13 @@ class MergeFactualRewriteBatchesTests(unittest.TestCase):
     def setUp(self):
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary_directory.name)
+        self.private_root = self.root / "private_data"
+        self.private_root.mkdir()
         self.sources = [make_source(index) for index in range(1, 5)]
         self.source_path = self.root / "sources.jsonl"
         write_jsonl(self.source_path, self.sources)
-        self.output_path = self.root / "merged.jsonl"
-        self.provenance_path = self.root / "provenance.json"
+        self.output_path = self.private_root / "merged.jsonl"
+        self.provenance_path = self.private_root / "provenance.json"
 
     def tearDown(self):
         self.temporary_directory.cleanup()
@@ -81,6 +84,7 @@ class MergeFactualRewriteBatchesTests(unittest.TestCase):
             inputs,
             self.output_path,
             self.provenance_path,
+            private_root=self.private_root,
         )
 
     def test_duplicate_source_id_across_inputs_is_rejected(self):
@@ -186,8 +190,82 @@ class MergeFactualRewriteBatchesTests(unittest.TestCase):
 
         self.assertFalse(self.output_path.exists())
         self.assertFalse(self.provenance_path.exists())
-        self.assertEqual(list(self.root.glob(".merged.jsonl.*.tmp")), [])
-        self.assertEqual(list(self.root.glob(".provenance.json.*.tmp")), [])
+        self.assertEqual(list(self.private_root.glob(".merged.jsonl.*.tmp")), [])
+        self.assertEqual(list(self.private_root.glob(".provenance.json.*.tmp")), [])
+
+    def test_canonical_pairs_json_wrapper_is_supported(self):
+        batch = self.root / "writer.json"
+        batch.write_text(
+            json.dumps({"pairs": [make_writer(source) for source in self.sources]}),
+            encoding="utf-8",
+        )
+
+        provenance = self.merge([batch])
+
+        self.assertEqual(provenance["output"]["row_count"], 4)
+        self.assertTrue(self.output_path.is_file())
+
+    def test_outputs_outside_private_root_are_rejected(self):
+        batch = self.write_batch(
+            "batch.jsonl", [make_writer(source) for source in self.sources]
+        )
+        unsafe_output = self.root / "results" / "merged.jsonl"
+        unsafe_provenance = self.root / "results" / "provenance.json"
+
+        with self.assertRaises(merger.MergeValidationError) as caught:
+            merger.merge_factual_rewrite_batches(
+                self.source_path,
+                [batch],
+                unsafe_output,
+                unsafe_provenance,
+                private_root=self.private_root,
+            )
+
+        self.assertTrue(
+            any("output_outside_private_data" in error for error in caught.exception.errors)
+        )
+        self.assertTrue(
+            any(
+                "provenance_outside_private_data" in error
+                for error in caught.exception.errors
+            )
+        )
+        self.assertFalse(unsafe_output.exists())
+        self.assertFalse(unsafe_provenance.exists())
+
+    def test_second_commit_failure_restores_both_previous_files(self):
+        batch = self.write_batch(
+            "batch.jsonl", [make_writer(source) for source in self.sources]
+        )
+        old_output = b"old merged output\n"
+        old_provenance = b'{"old": true}\n'
+        self.output_path.write_bytes(old_output)
+        self.provenance_path.write_bytes(old_provenance)
+        real_replace = merger.os.replace
+        replace_count = 0
+
+        def fail_on_second_commit(source, destination):
+            nonlocal replace_count
+            replace_count += 1
+            if replace_count == 4:
+                raise OSError("simulated provenance commit failure")
+            return real_replace(source, destination)
+
+        with mock.patch.object(merger.os, "replace", side_effect=fail_on_second_commit):
+            with self.assertRaises(OSError):
+                merger.merge_factual_rewrite_batches(
+                    self.source_path,
+                    [batch],
+                    self.output_path,
+                    self.provenance_path,
+                    overwrite=True,
+                    private_root=self.private_root,
+                )
+
+        self.assertEqual(self.output_path.read_bytes(), old_output)
+        self.assertEqual(self.provenance_path.read_bytes(), old_provenance)
+        self.assertEqual(list(self.private_root.glob("*.tmp")), [])
+        self.assertEqual(list(self.private_root.glob("*.rollback")), [])
 
 
 if __name__ == "__main__":
