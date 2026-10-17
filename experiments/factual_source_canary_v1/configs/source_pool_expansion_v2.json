@@ -1,0 +1,61 @@
+{
+  "version": "source-pool-expansion-v2",
+  "seed": 20261017,
+  "candidate_limit_per_dataset": 100,
+  "candidate_limit_by_dataset": {
+    "fetaqa": 50
+  },
+  "provisional_final_targets": {
+    "asqa": 40,
+    "fetaqa": 0,
+    "qasper": 40,
+    "billsum": 40
+  },
+  "external_control_targets": {
+    "fetaqa": 20
+  },
+  "screen": {
+    "minimum_words": 40,
+    "maximum_words": 220,
+    "minimum_sentences": 2,
+    "require_evidence": true
+  },
+  "datasets": {
+    "asqa": {
+      "hub_id": "din0s/asqa",
+      "config": "default",
+      "split": "train",
+      "license": "Upstream ASQA terms; Wikipedia-derived evidence requires source attribution",
+      "homepage": "https://github.com/google-research/language/tree/master/language/asqa",
+      "chunk_count": 6,
+      "chunk_length": 25
+    },
+    "fetaqa": {
+      "hub_id": "DongfuJiang/FeTaQA",
+      "config": "default",
+      "split": "train",
+      "license": "CC BY-SA 4.0",
+      "homepage": "https://github.com/Yale-LILY/FeTaQA",
+      "chunk_count": 4,
+      "chunk_length": 25
+    },
+    "qasper": {
+      "hub_id": "allenai/qasper",
+      "config": "qasper",
+      "split": "train",
+      "license": "CC BY 4.0",
+      "homepage": "https://huggingface.co/datasets/allenai/qasper",
+      "chunk_count": 8,
+      "chunk_length": 20
+    },
+    "billsum": {
+      "hub_id": "FiscalNote/billsum",
+      "config": "default",
+      "split": "train",
+      "license": "Public-source U.S. legislation and human-written summaries; retain upstream provenance",
+      "homepage": "https://github.com/FiscalNote/BillSum",
+      "chunk_count": 6,
+      "chunk_length": 25
+    }
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "review_version": "model-assisted-source-review-v1",
+  "candidate_file_sha256": "7a75d6cf6f6f94c90f55274e8fcf96d414e32b66be4f5b5239c585fc35e95945",
+  "selection": "First 10 records per dataset in the locked deterministic candidate file",
+  "reviewer_type": "model_assisted_diagnostic_not_independent_human_review",
+  "decision_definitions": {
+    "accept": "Suitable for the main rewrite queue without substantive source repair",
+    "requires_source_repair": "Potentially usable only after a documented source-level correction or evidence check",
+    "short_control": "Grounded but too short for the long-form core; retain only as an external short-response diagnostic",
+    "reject": "Exclude from this canary"
+  },
+  "aggregate": {
+    "asqa": {
+      "accept": 5,
+      "requires_source_repair": 3,
+      "short_control": 0,
+      "reject": 2
+    },
+    "billsum": {
+      "accept": 6,
+      "requires_source_repair": 4,
+      "short_control": 0,
+      "reject": 0
+    },
+    "fetaqa": {
+      "accept": 0,
+      "requires_source_repair": 0,
+      "short_control": 8,
+      "reject": 2
+    },
+    "qasper": {
+      "accept": 5,
+      "requires_source_repair": 3,
+      "short_control": 0,
+      "reject": 2
+    }
+  },
+  "records": [
+    {
+      "id": "asqa:-1960798380924242840",
+      "dataset": "asqa",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_SELF_CONTAINED_TIMELINE"
+    },
+    {
+      "id": "asqa:-2237911914399266353",
+      "dataset": "asqa",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_CHRONOLOGY"
+    },
+    {
+      "id": "asqa:-2540822501399275666",
+      "dataset": "asqa",
+      "decision": "requires_source_repair",
+      "reason_code": "MALFORMED_PHRASE_AND_THIN_RESPONSE"
+    },
+    {
+      "id": "asqa:-257332148698311015",
+      "dataset": "asqa",
+      "decision": "reject",
+      "reason_code": "ANSWER_EVIDENCE_CONTRADICTION"
+    },
+    {
+      "id": "asqa:-258742810134157933",
+      "dataset": "asqa",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_MULTIEVENT_TIMELINE"
+    },
+    {
+      "id": "asqa:-2639660647813019469",
+      "dataset": "asqa",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_DATES_WITH_TIME_SENSITIVE_PROMPT"
+    },
+    {
+      "id": "asqa:-3139712300447252950",
+      "dataset": "asqa",
+      "decision": "reject",
+      "reason_code": "PROVENANCE_MISMATCH"
+    },
+    {
+      "id": "asqa:-329460616484752893",
+      "dataset": "asqa",
+      "decision": "requires_source_repair",
+      "reason_code": "AMBIGUOUS_ATTRIBUTION_AND_GRAMMAR"
+    },
+    {
+      "id": "asqa:-3582047784487750233",
+      "dataset": "asqa",
+      "decision": "requires_source_repair",
+      "reason_code": "SEASON_YEAR_AMBIGUITY"
+    },
+    {
+      "id": "asqa:-3870279300380071206",
+      "dataset": "asqa",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_DISTINGUISHED_MILESTONES"
+    },
+    {
+      "id": "billsum:0071816b970c4686",
+      "dataset": "billsum",
+      "decision": "requires_source_repair",
+      "reason_code": "PARTIALLY_TRACEABLE_SCOPE"
+    },
+    {
+      "id": "billsum:011bab25c020975a",
+      "dataset": "billsum",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_PROVISIONS"
+    },
+    {
+      "id": "billsum:0151c1a68fab48d0",
+      "dataset": "billsum",
+      "decision": "requires_source_repair",
+      "reason_code": "LONG_NESTED_LEGAL_CONDITIONS"
+    },
+    {
+      "id": "billsum:03a05906a2878f22",
+      "dataset": "billsum",
+      "decision": "requires_source_repair",
+      "reason_code": "LONG_NESTED_ENUMERATION"
+    },
+    {
+      "id": "billsum:0aaaf313a0d5095c",
+      "dataset": "billsum",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_WITH_PRESERVED_QUALIFIERS"
+    },
+    {
+      "id": "billsum:0b60a23d9192edc7",
+      "dataset": "billsum",
+      "decision": "requires_source_repair",
+      "reason_code": "INCORPORATED_LAW_NOT_IN_EVIDENCE"
+    },
+    {
+      "id": "billsum:0ebfb15a3fefe417",
+      "dataset": "billsum",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_FACT_DENSE_PROVISIONS"
+    },
+    {
+      "id": "billsum:103d90f155a1cb76",
+      "dataset": "billsum",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_CONCISE_PROVISIONS"
+    },
+    {
+      "id": "billsum:1b0226a63ea123f1",
+      "dataset": "billsum",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_MULTIPROVISION_SUMMARY"
+    },
+    {
+      "id": "billsum:29807eecc16b64b0",
+      "dataset": "billsum",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_WITH_MECHANICAL_TYPO"
+    },
+    {
+      "id": "fetaqa:10570",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_BUT_SHORT"
+    },
+    {
+      "id": "fetaqa:11453",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_DENSE_NUMERIC_BUT_SHORT"
+    },
+    {
+      "id": "fetaqa:11734",
+      "dataset": "fetaqa",
+      "decision": "reject",
+      "reason_code": "PARTIAL_EVIDENCE_TEMPORAL_SALES_CLAIM"
+    },
+    {
+      "id": "fetaqa:12530",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_RANGE_BUT_SHORT"
+    },
+    {
+      "id": "fetaqa:12639",
+      "dataset": "fetaqa",
+      "decision": "reject",
+      "reason_code": "UNSUPPORTED_LEAGUE_LEADER_CLAIM"
+    },
+    {
+      "id": "fetaqa:13077",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_MULTI_MAPPING_BUT_SHORT"
+    },
+    {
+      "id": "fetaqa:13286",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_COUNT_BUT_ULTRASHORT"
+    },
+    {
+      "id": "fetaqa:13313",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_TWO_EVENT_MAPPING_BUT_SHORT"
+    },
+    {
+      "id": "fetaqa:13498",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_THREE_TITLE_YEAR_FACTS_BUT_SHORT"
+    },
+    {
+      "id": "fetaqa:13504",
+      "dataset": "fetaqa",
+      "decision": "short_control",
+      "reason_code": "SUPPORTED_SINGLE_FACT_BUT_ULTRASHORT"
+    },
+    {
+      "id": "qasper-paper:1603.01417",
+      "dataset": "qasper",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_METHOD_AND_RESULTS"
+    },
+    {
+      "id": "qasper-paper:1603.07044",
+      "dataset": "qasper",
+      "decision": "requires_source_repair",
+      "reason_code": "TABLE_DEPENDENT_EXACT_RESULT"
+    },
+    {
+      "id": "qasper-paper:1608.06111",
+      "dataset": "qasper",
+      "decision": "requires_source_repair",
+      "reason_code": "TABLE_DEPENDENT_METRIC_COMPARISON"
+    },
+    {
+      "id": "qasper-paper:1702.06378",
+      "dataset": "qasper",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_METHOD_AND_GAINS"
+    },
+    {
+      "id": "qasper-paper:1705.09665",
+      "dataset": "qasper",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_WITH_CAUSALITY_QUALIFIERS"
+    },
+    {
+      "id": "qasper-paper:1707.03904",
+      "dataset": "qasper",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_DATASET_AND_RESULT_CLAIMS"
+    },
+    {
+      "id": "qasper-paper:1708.02267",
+      "dataset": "qasper",
+      "decision": "requires_source_repair",
+      "reason_code": "GRAMMAR_AND_QUALIFIER_PRESERVATION"
+    },
+    {
+      "id": "qasper-paper:1710.01492",
+      "dataset": "qasper",
+      "decision": "reject",
+      "reason_code": "SURVEY_BACKGROUND_NOT_PAPER_FINDING"
+    },
+    {
+      "id": "qasper-paper:1810.04528",
+      "dataset": "qasper",
+      "decision": "reject",
+      "reason_code": "AIM_ONLY_NOT_FACT_RICH"
+    },
+    {
+      "id": "qasper-paper:1811.00942",
+      "dataset": "qasper",
+      "decision": "accept",
+      "reason_code": "SUPPORTED_DEVICE_SPECIFIC_TRADEOFFS"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "by_dataset": {
+    "asqa": {
+      "blocking_flag_counts": {},
+      "candidate_count": 50,
+      "fetched_source_rows": 100,
+      "flag_counts": {
+        "preserve_source_qualification": 5
+      },
+      "heuristic_pass_count": 50,
+      "heuristic_pass_rate": 1.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 40,
+      "response_words": {
+        "max": 178,
+        "median": 71.0,
+        "min": 42,
+        "p25": 54.25,
+        "p75": 104.25
+      },
+      "review_flag_counts": {
+        "preserve_source_qualification": 5
+      },
+      "unique_group_count": 50
+    },
+    "billsum": {
+      "blocking_flag_counts": {},
+      "candidate_count": 50,
+      "fetched_source_rows": 100,
+      "flag_counts": {
+        "preserve_source_qualification": 10
+      },
+      "heuristic_pass_count": 50,
+      "heuristic_pass_rate": 1.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 40,
+      "response_words": {
+        "max": 213,
+        "median": 144.5,
+        "min": 40,
+        "p25": 106.0,
+        "p75": 174.5
+      },
+      "review_flag_counts": {
+        "preserve_source_qualification": 10
+      },
+      "unique_group_count": 50
+    },
+    "fetaqa": {
+      "blocking_flag_counts": {
+        "short_response": 50,
+        "single_sentence": 48
+      },
+      "candidate_count": 50,
+      "fetched_source_rows": 100,
+      "flag_counts": {
+        "short_response": 50,
+        "single_sentence": 48
+      },
+      "heuristic_pass_count": 0,
+      "heuristic_pass_rate": 0.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 0,
+      "response_words": {
+        "max": 39,
+        "median": 17.0,
+        "min": 9,
+        "p25": 14.0,
+        "p75": 22.0
+      },
+      "review_flag_counts": {},
+      "unique_group_count": 50
+    },
+    "qasper": {
+      "blocking_flag_counts": {},
+      "candidate_count": 50,
+      "fetched_source_rows": 60,
+      "flag_counts": {
+        "preserve_source_qualification": 12
+      },
+      "heuristic_pass_count": 50,
+      "heuristic_pass_rate": 1.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 40,
+      "response_words": {
+        "max": 220,
+        "median": 136.0,
+        "min": 45,
+        "p25": 116.25,
+        "p75": 160.75
+      },
+      "review_flag_counts": {
+        "preserve_source_qualification": 12
+      },
+      "unique_group_count": 50
+    }
+  },
+  "candidate_count": 200,
+  "full_text_location": "private_data/source_candidates.jsonl",
+  "human_review_status": "pending",
+  "interpretation": "Heuristic screening describes source suitability only. It does not certify content preservation, confidence labels, or a confidence representation.",
+  "seed": 20261017,
+  "version": "source-audit-v1"
+}

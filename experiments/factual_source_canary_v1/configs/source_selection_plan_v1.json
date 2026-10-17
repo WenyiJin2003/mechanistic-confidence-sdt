@@ -1,0 +1,64 @@
+{
+  "version": "source-selection-plan-v1",
+  "core": {
+    "source_count": 120,
+    "rewritten_text_count": 240,
+    "quota_by_dataset": {
+      "asqa": 40,
+      "qasper": 40,
+      "billsum": 40
+    },
+    "candidate_pool_target_by_dataset": {
+      "asqa": 100,
+      "qasper": 100,
+      "billsum": 100
+    },
+    "rewrite_ready_target_by_dataset": 48,
+    "selected_target_by_dataset": 40,
+    "backup_target_by_dataset": 8
+  },
+  "external_control": {
+    "dataset": "fetaqa",
+    "source_count": 20,
+    "rewritten_text_count": 40,
+    "use": "short_form_table_grounded_evaluation_only",
+    "excluded_from": [
+      "probe_training",
+      "layer_selection",
+      "headline_core_result"
+    ]
+  },
+  "eligibility_gate": {
+    "required_final_status": "accept",
+    "conditional_policy": "A conditional source becomes eligible only after a documented repair or evidence check and a second review.",
+    "freeze_before_rewrite": [
+      "source_id",
+      "response_hash",
+      "evidence_hash",
+      "protected_proposition_qualifiers"
+    ],
+    "dataset_specific_checks": {
+      "asqa": [
+        "answer_evidence_contradiction",
+        "provenance_alignment",
+        "question_ambiguity"
+      ],
+      "qasper": [
+        "table_and_formula_evidence_availability",
+        "paper_specific_findings",
+        "scientific_qualifier_preservation"
+      ],
+      "billsum": [
+        "incorporated_law_definition_availability",
+        "manageable_clause_complexity",
+        "statutory_qualifier_preservation"
+      ],
+      "fetaqa": [
+        "complete_table_support",
+        "no_model_expansion_of_short_answer"
+      ]
+    }
+  },
+  "expansion_rule": "If a core dataset has fewer than 48 accepted sources after reviewing 100 candidates, add the next deterministic block of 20 rather than lowering the gate.",
+  "split_rule": "Freeze group-disjoint pair-level splits after source acceptance and before confidence rewriting."
+}

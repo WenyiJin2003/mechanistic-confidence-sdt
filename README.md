@@ -1,5 +1,26 @@
 # Mechanistic Confidence for Synthetic Fact Learning
 
+## Current data-construction decision
+
+**The next experiment will use a fresh, evidence-audited factual canary rather
+than scaling the earlier score-exposed response set.** The planned core is 120
+sources: 40 ASQA long-form answers, 40 QASPER author abstracts, and 40 BillSum
+summaries. A separate 20-source FeTaQA set will test short-form transfer without
+entering probe training or layer selection.
+
+A locked review of 10 candidates per dataset found that dataset membership is
+not enough: several original answers conflict with their evidence, depend on
+missing tables or legal definitions, or contain scientific qualifiers that a
+confidence rewrite must not alter. The next gate is therefore source acceptance,
+not activation scoring. No new probe result or loss-training claim is made at
+this stage. The deterministic candidate pool is now expanded to 100 records per
+core source; final record review remains.
+
+[Source-audit decision](experiments/factual_source_canary_v1/results/MODEL_ASSISTED_SOURCE_REVIEW.md) ·
+[Source-audit method](experiments/factual_source_canary_v1/README.md) ·
+[Expanded-pool summary](experiments/factual_source_canary_v1/results/expanded_pool_v2_summary.json) ·
+[Text-free review decisions](experiments/factual_source_canary_v1/results/model_assisted_review.json)
+
 ## Current finding
 
 **The independent cue-holdout challenge passed. A layer-14 linear readout trained
@@ -124,8 +145,9 @@ reproducibility. The research sequence is:
 | Completed diagnostic | 100-source review gate | Are the mechanically valid pairs natural enough for activation scoring? | No: content was preserved and a clear certainty contrast was judged in 24/24 diagnostic cases, but A/B direction was not verified and both versions were clearly natural in only 5/24 | [Review gate](experiments/diverse_pairs_multilayer_v1/reports/CHAT_CHECKPOINT_100_REVIEW_GATE.md) | Current rendering not activation-ready |
 | Diagnostic | v3.8 genre-aware canary audit | Does shared-base cue rendering remove the identified shortcuts? | No: the pair members are the same neutral base with only one or two minimal cue substitutions | [Frozen protocol](experiments/diverse_pairs_multilayer_v1/V38_GENRE_AWARE_CANARY.md) | Rejected as main data; retain as cue-only control/provenance |
 | Completed gate | Ordinary-Chat direct-pair replication on 50 score-exposed sources | Can ordinary Chat reproduce the direct full-pair construction workflow? | 50/50 mechanical passes and 50/50 shortcut-screen passes; single-researcher screen broadly acceptable | [Construction report](experiments/cue_holdout_challenge_v1/CHAT_PROVIDER_REPLICATION_50.md) | Recipe provisionally frozen; data-construction gate only, no new probe claim |
-| **Current** | **Advisor review and experiment decision** | **Is the evidence sufficient to invest in one fresh unscored direct-pair evaluation?** | **Discussion pending** | **[Restricted review site](https://mechanistic-confidence-review.wenyijin.chatgpt.site) · [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md)** | **No new generation or activation scoring before the discussion** |
-| Conditional next | Fresh unscored direct-pair comparison | Does the signal survive repeated human review, cue-only controls, cue-family holdout, and comparison across every layer? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Start only after the advisor decision |
+| Completed decision | Advisor review | What should replace the score-exposed construction set? | Prioritize stronger confident/hesitant contrast and higher-quality factual sources | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Feedback incorporated into the factual-source canary |
+| **Current** | **Factual source canary** | **Can we build 120 evidence-audited, content-preserving factual pairs without source or qualifier errors?** | **First fixed source audit and 100-candidate-per-core expansion complete; final record review remains** | **[Audit decision](experiments/factual_source_canary_v1/results/MODEL_ASSISTED_SOURCE_REVIEW.md) · [Pool summary](experiments/factual_source_canary_v1/results/expanded_pool_v2_summary.json)** | **No rewriting or activation scoring until the source gate passes** |
+| Conditional next | Fresh unscored factual-pair comparison | Does the signal survive repeated human review, source holdout, cue controls, and comparison across every layer? | Not yet tested | [Source plan](experiments/factual_source_canary_v1/configs/source_selection_plan_v1.json) | Start after source acceptance and blinded pair review |
 | Later | 300/700-source expansion | How does probe transfer change with additional reviewed sources? | Not yet tested | [Next decision](experiments/diverse_pairs_multilayer_v1/NEXT_DECISION.md) | Conditional on the fresh unscored result |
 | Later | Synthetic-fact training pilot | Does a candidate objective improve recall and retention beyond matched controls? | Not yet tested | [Downstream proposal](docs/experiments/NEXT_EXPERIMENT.md) | Requires a separate decision and preregistration |
 
@@ -142,8 +164,9 @@ flowchart LR
     R --> K["v3.8 shared-base audit<br/>rejected as main data"]
     K --> N["50 direct full-pair rewrites<br/>automated gates passed"]
     N --> V["Single-researcher screen<br/>broadly acceptable"]
-    V --> A["Advisor review<br/>current pause point"]
-    A --> M["Conditional fresh<br/>unscored sources"]
+    V --> A["Advisor feedback<br/>received"]
+    A --> F["Factual source audit<br/>current stage"]
+    F --> M["Conditional fresh<br/>unscored factual pairs"]
     M --> Y["All-layer comparison<br/>only after gates pass"]
     Y --> Z["Conditional 300 / 700<br/>expansion"]
     Z -. "only after a new decision" .-> T

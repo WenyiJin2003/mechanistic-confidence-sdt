@@ -1,0 +1,109 @@
+{
+  "by_dataset": {
+    "asqa": {
+      "blocking_flag_counts": {},
+      "candidate_count": 100,
+      "fetched_source_rows": 150,
+      "flag_counts": {
+        "preserve_source_qualification": 11
+      },
+      "heuristic_pass_count": 100,
+      "heuristic_pass_rate": 1.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 40,
+      "response_words": {
+        "max": 178,
+        "median": 68.5,
+        "min": 40,
+        "p25": 53.75,
+        "p75": 94.25
+      },
+      "review_flag_counts": {
+        "preserve_source_qualification": 11
+      },
+      "unique_group_count": 100
+    },
+    "billsum": {
+      "blocking_flag_counts": {
+        "long_response": 8,
+        "single_sentence": 3
+      },
+      "candidate_count": 100,
+      "fetched_source_rows": 150,
+      "flag_counts": {
+        "long_response": 8,
+        "preserve_source_qualification": 17,
+        "single_sentence": 3
+      },
+      "heuristic_pass_count": 89,
+      "heuristic_pass_rate": 0.89,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 40,
+      "response_words": {
+        "max": 608,
+        "median": 153.5,
+        "min": 40,
+        "p25": 107.25,
+        "p75": 187.5
+      },
+      "review_flag_counts": {
+        "preserve_source_qualification": 17
+      },
+      "unique_group_count": 100
+    },
+    "fetaqa": {
+      "blocking_flag_counts": {
+        "short_response": 50,
+        "single_sentence": 48
+      },
+      "candidate_count": 50,
+      "fetched_source_rows": 100,
+      "flag_counts": {
+        "short_response": 50,
+        "single_sentence": 48
+      },
+      "heuristic_pass_count": 0,
+      "heuristic_pass_rate": 0.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 0,
+      "response_words": {
+        "max": 39,
+        "median": 17.0,
+        "min": 9,
+        "p25": 14.0,
+        "p75": 22.0
+      },
+      "review_flag_counts": {},
+      "unique_group_count": 50
+    },
+    "qasper": {
+      "blocking_flag_counts": {},
+      "candidate_count": 100,
+      "fetched_source_rows": 159,
+      "flag_counts": {
+        "preserve_source_qualification": 24
+      },
+      "heuristic_pass_count": 100,
+      "heuristic_pass_rate": 1.0,
+      "maximum_candidates_per_group": 1,
+      "provisional_target": 40,
+      "response_words": {
+        "max": 220,
+        "median": 141.5,
+        "min": 53,
+        "p25": 114.0,
+        "p75": 167.0
+      },
+      "review_flag_counts": {
+        "preserve_source_qualification": 24
+      },
+      "unique_group_count": 100
+    }
+  },
+  "candidate_count": 350,
+  "full_text_location": "private_data/expanded_pool_v2/source_candidates.jsonl",
+  "human_review_status": "pending",
+  "interpretation": "Heuristic screening describes source suitability only. It does not certify content preservation, confidence labels, or a confidence representation.",
+  "seed": 20261017,
+  "version": "source-pool-expansion-v2"
+}
