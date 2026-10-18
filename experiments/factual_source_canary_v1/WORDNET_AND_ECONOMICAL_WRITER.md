@@ -5,7 +5,57 @@ natural changes in commitment and sentence construction.** Replacing “seems”
 with a list of synonyms would still leave a vocabulary-based shortcut. This
 step prepares a small construction pilot, not a new confidence-probe result.
 
-## Latest: three revised illustrations
+## Latest: ten-source augmentation preview
+
+The researcher found that the three examples still relied too heavily on
+“may”. The [ten-source augmentation prompt](prompts/augmentation_ten_v1.txt)
+therefore explicitly requests **lexical and syntactic augmentation in both
+arms**, not a shared source body with a modal inserted. It asks for at least
+five primary uncertainty constructions, with no primary construction leading
+more than two pairs. Newly added “may” and “might” should each occur in no more
+than three hesitant texts. Direct assertions, varied clause order and ordinary
+paraphrasing supply the confident style; stock intensifiers are not required.
+These are construction targets, not an automatic quality certification.
+
+This preview uses ten previously inspected development sources from the
+frozen v4 set: four ASQA responses, three BillSum summaries and three QASPER
+abstracts. Selection takes the first records of each dataset in frozen order;
+it is not based on rewrite quality or probe scores. Existing reviewer-only cue
+assignments, protected-span annotations, previous drafts and length targets
+are withheld from the writer. A fresh source-only Luna medium context wrote
+one ten-pair batch. Parent review identified six drafts for a bounded
+follow-up: inconsistent whole-response commitment, conditional “would” without
+epistemic doubt, a changed record condition, or uncertainty attached to
+reporting rather than the main finding. A second source-only Luna medium
+context received those six originals plus a
+[generic addendum](prompts/augmentation_ten_repair_addendum.txt), not the
+previous candidates or reviewer-only annotations. The other four drafts are
+unchanged. This is one documented follow-up, not an automatic retry loop or a
+parent rewrite. The initial configuration records the initial one-context
+plan; the execution status records both contexts. Old artifacts are preserved.
+No activation extraction, probe fitting or training is authorized by this step.
+
+**The follow-up is not a quality pass.** Newly added marker presence in the
+final ten drafts is: may 4/10, could 4/10, perhaps 2/10, “one possibility” 2/10,
+“possible that” 1/10 and seem/appear 1/10. Categories overlap, and counts do
+not identify epistemic scope. The may cap of three was missed. Unblinded parent
+inspection flags four pairs on the review page: weak whole-response contrast,
+an omitted full entity name and ambiguous conditional legal wording, a changed
+record condition, and an unsupported extra research aim/scientific-scope
+change. Some problems survived or were introduced by the follow-up. All ten
+remain drafts; **zero pairs are accepted as training data**. No further writer
+calls are made in this step.
+
+All ten drafts are for researcher review, not accepted training data. Vocabulary
+counts are reported separately from writer-reported construction descriptions;
+neither is a validated syntactic-diversity or factual-equivalence measure.
+Later experiments must still keep variants of one source in the same split,
+control length, and test held-out wording families. This preview by itself
+cannot establish that lexical shortcuts have been removed. The
+[execution record](results/augmentation_ten_v1_status.json) reports actual
+marker counts, raw-output hashes and review status, not a probe score.
+
+## Earlier: three revised illustrations
 
 The [v3 prompt](prompts/economical_rewrite_v3.txt) prioritizes factual
 completeness, a clear change in commitment to the main claims, and fluent
@@ -170,6 +220,19 @@ without any generation:
 ```bash
 python3 experiments/factual_source_canary_v1/src/prepare_rewrite_illustrations_v3.py --render
 ```
+
+The ten-example page can likewise be rebuilt without a model call:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/prepare_augmentation_ten.py --render
+```
+
+Omit `--render` only to prepare a new source packet before generation; the
+preparer refuses to overwrite an existing packet. `--prepare-repair` prepares
+the single documented six-source follow-up and refuses a second preparation.
+The separate role key and
+full source/candidate text remain under ignored `private_data/`. No script
+opens a browser.
 
 Each writer reads only its saved private `WRITER_PROMPT.txt`. After saving the
 draft JSON, run the corresponding finalizer, adding `--refinement` for the

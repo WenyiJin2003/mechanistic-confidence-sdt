@@ -1,0 +1,28 @@
+This is ONE bounded source-only follow-up for SIX of the ten development
+sources. The input contains ORIGINALS ONLY, not previous candidates or review
+annotations. Write both versions fresh using the same JSON schema.
+
+Make the uncertainty cover the MAIN ANSWER or MAIN FINDINGS, not just the
+opening clause, the paper's existence, or whether the authors wrote something.
+Later sentences must not unconditionally confirm the very proposition that
+the first sentence treats as uncertain. Preserve reported scientific evidence
+strength and all existing source qualifications; do not assert an inferred
+causal mechanism as established.
+
+"Would" alone describes a proposed/conditional legal provision, NOT epistemic
+hesitation. Both arms must preserve the bill's legal force, enactment status,
+and distinct duties versus permissions; HESITANT must ALSO sound genuinely
+uncertain about the account of its substantive provisions.
+
+Preserve all condition scopes. An unrestricted record is not a record that
+excludes boundary cases. Retain dates, quantities and citations. List item
+numbers are layout, not substantive quantities; source details still all
+need to be present. Numeric word/digit changes should be avoided where easy.
+
+For THIS six-source subset, use at least FIVE distinct primary uncertainty
+constructions. Avoid "perhaps" as the primary opener, since two untouched
+drafts already use it. Newly added may and might should each occur in at most
+TWO of these six hesitant responses. These batch-diversity constraints take
+precedence over the ten-source counts in the base prompt, never over facts.
+Do not just rename a hedge family in metadata; the actual wording and syntax
+must vary. Use ordinary natural English, not self-report or stock disclaimers.

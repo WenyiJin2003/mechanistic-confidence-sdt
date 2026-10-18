@@ -2,7 +2,17 @@
 
 ## Current decision
 
-**18 October:** three new [economical-writer illustrations](WORDNET_AND_ECONOMICAL_WRITER.md#latest-three-revised-illustrations)
+**18 October, latest:** a [ten-source augmentation preview](WORDNET_AND_ECONOMICAL_WRITER.md#latest-ten-source-augmentation-preview)
+replaces the three-example packet as the next researcher-review task. The
+prompt explicitly requests varied vocabulary and sentence construction in
+both confident and hesitant versions, rather than defaulting to “may”. The
+initial Luna medium batch and a bounded six-source follow-up are retained
+separately. These are draft data for review, not new probe results or evidence
+that lexical shortcuts have been eliminated. The follow-up still misses the
+may-frequency target and leaves four pairs flagged for content or contrast
+problems. All ten require review; none is accepted as training data.
+
+Earlier on 18 October, three [economical-writer illustrations](WORDNET_AND_ECONOMICAL_WRITER.md#earlier-three-revised-illustrations)
 are ready for researcher review. GPT-6 Luna at medium effort generated an
 initial batch and one fluency refinement; two technical-scope clarifications
 were then recorded separately. Raw drafts remain intact. The revised prompt

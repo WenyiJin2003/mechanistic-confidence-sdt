@@ -1,0 +1,111 @@
+{
+  "accepted_training_pairs": 0,
+  "activation_extraction_started": false,
+  "artifact_role": "development_preview",
+  "automatic_retries": 0,
+  "bounded_source_only_repair_batches": 1,
+  "dataset_counts": {
+    "asqa": 4,
+    "billsum": 3,
+    "qasper": 3
+  },
+  "editorial_changes": 0,
+  "hesitant_texts_with_added_marker": {
+    "could": 4,
+    "may": 4,
+    "might": 0,
+    "one_possibility": 2,
+    "perhaps": 2,
+    "possible_that": 1,
+    "possibly": 0,
+    "seem_appear": 1
+  },
+  "human_review_certified": false,
+  "independent_blind_review_completed": false,
+  "initial_generation_batches": 1,
+  "input_sha256": {
+    "bindings": "a098175f05560031cae8201b436ed16ac93a03e75c7a2324ac2b03de48a1f1f4",
+    "config": "265a9e5e3ae9909cd3dfdc006385fd7293a9f0df1679277466dc291f48717611",
+    "freeze_manifest": "fb7e4c112e2ca340d5afbe0a66392d0353ab62a6e0070ceb539fa2d096fe63b6",
+    "frozen_sources": "88863b5f414fdc65f379f89eb67e1fe27c4c5839108fc6a0955465e1b01ff21b",
+    "prompt_template": "d07f804e2c8d4f36794b20f9aa48a87d5728196addc7aac7e6e0a4524fa399d2",
+    "sources": "a1bc5ce6159957fa69b2eec0a62acd8262f6044e5e9ed32e1dd6341296799dd7",
+    "writer_prompt": "50b1eea61adb6b4efabed02cb997630da59068243dd6aefb8dfd50695e339f7b"
+  },
+  "length_balanced": false,
+  "limitations": [
+    "Previously inspected development sources; not a held-out evaluation.",
+    "Lexical and syntactic variety does not establish freedom from lexical shortcuts.",
+    "Factual core, certainty contrast and naturalness require researcher review."
+  ],
+  "marker_count_note": "Regex count increases versus the source, not semantic interpretation; may include permission or capability uses.",
+  "numeric_detail_mismatch_pairs": 2,
+  "old_experiments_regenerated": false,
+  "old_v4_budget_modified": false,
+  "original_batch_preserved": true,
+  "packet_sha256": "68323389b8ff4994c76da253b77e62e77c2c8982e03a510ec8bb999d5132d291",
+  "pair_count": 10,
+  "parent_check_blinded": false,
+  "parent_check_note": "Warnings shown on review page; known content issues are not accepted data.",
+  "parent_flagged_pair_count": 4,
+  "parent_warnings_sha256": "3392055d6e28a6a526a4eca63f080b1f06385c081650bbf2259340e3cb360dbf",
+  "probe_fitting_started": false,
+  "raw_draft_sha256": "3a8bf49e1d1edec14d024d5026b3902ae08e9ba428f020fd2c74f1b55e3ba132",
+  "raw_repaired_six_sha256": "905f5e7ac5c465388a2112bb8bf875a38b0a32292af02c40c3215a0379f47168",
+  "reasoning_effort": "medium",
+  "repair_manifest_sha256": "0ba167a52c57ef39df75af3c32033027b93835537643b76cb13de72d15d99821",
+  "requested_may_presence_cap": 3,
+  "requested_may_presence_cap_met": false,
+  "review_pairs_sha256": "b4090d431bd75899405a55cefbc6fafb5c6eaeb30d56ba7fbd19dc88b068a564",
+  "revised_pair_count": 6,
+  "schema": "augmentation-ten-status-v1",
+  "sdt_training_started": false,
+  "status": "drafts_pending_researcher_review",
+  "word_count_unit": "whitespace_words_not_model_tokens",
+  "word_counts": [
+    {
+      "confident": 47,
+      "hesitant": 48
+    },
+    {
+      "confident": 111,
+      "hesitant": 113
+    },
+    {
+      "confident": 154,
+      "hesitant": 159
+    },
+    {
+      "confident": 60,
+      "hesitant": 63
+    },
+    {
+      "confident": 99,
+      "hesitant": 110
+    },
+    {
+      "confident": 103,
+      "hesitant": 104
+    },
+    {
+      "confident": 60,
+      "hesitant": 60
+    },
+    {
+      "confident": 105,
+      "hesitant": 113
+    },
+    {
+      "confident": 50,
+      "hesitant": 51
+    },
+    {
+      "confident": 56,
+      "hesitant": 63
+    }
+  ],
+  "writer_contexts": 2,
+  "writer_model": "gpt-6-luna",
+  "writer_reported_construction_note": "Self-reported labels, not independently verified syntactic families.",
+  "writer_reported_unique_construction_descriptions": 8
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "augmentation-ten-preview-v1",
+  "writer_model": "gpt-6-luna",
+  "reasoning_effort": "medium",
+  "source_count_by_dataset": {"asqa": 4, "qasper": 3, "billsum": 3},
+  "source_selection": "first records per dataset in the existing frozen v4 order; development sources, not held out",
+  "writer_contexts": 1,
+  "generation_batches": 1,
+  "automatic_generation_retries": 0,
+  "review_seed": 20261018,
+  "minimum_requested_primary_constructions": 5,
+  "maximum_requested_pairs_per_primary_construction": 2,
+  "maximum_requested_hesitant_texts_with_added_may_or_might_each": 3,
+  "wordnet_replacement_required": false,
+  "length_quota_required": false,
+  "purpose": "ten diverse construction drafts for researcher review, not accepted training data",
+  "probe_fitting": false,
+  "activation_extraction": false,
+  "sdt_training": false
+}
