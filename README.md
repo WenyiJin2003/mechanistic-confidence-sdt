@@ -2,6 +2,33 @@
 
 ## Current data-construction decision
 
+**Current scope: one or two sentences around a clear factual core.** Long
+abstracts and full bill summaries are no longer the default rewrite unit.
+The next pilot should vary expressed certainty about the same short fact,
+without adding a narrator, changing the answer, or padding the text.
+
+**Recommended source: FEVER 1.0 training claims annotated SUPPORTS.** A local
+audit cached the official 33 MB claims file and counted 80,035 SUPPORTS rows.
+A conservative evidence-location merge leaves 8,803 source positions before
+further content review. These are not certified unique facts: a seeded
+ten-record preview contains generic statements, grammar issues, dated rankings
+and disambiguation concerns. A 1,000–5,000-fact expansion is conditional on
+review yield and coverage, not on raw dataset size alone. The SUPPORTS label
+is only a source-selection aid; it is not a confidence label.
+
+**Next:** audit short source claims, freeze ten suitable originals, then review
+ten confident/hesitant pairs before expansion. The source audit made no writer
+calls, accepted no pairs and extracted no activations. The Wikipedia evidence
+text has not yet been retrieved or verified. Original source groups and
+held-out data must remain separate. The earlier long-text diagnostics and
+their v4 gates remain historical; they do not define the new short-source
+pilot.
+
+[Short-source choice and limitations](experiments/factual_source_canary_v1/README.md) ·
+[Actual feasibility counts](experiments/factual_source_canary_v1/results/short_factual_source_feasibility_v1.json)
+
+### Earlier writer diagnostics
+
 **18 October writer update:** a three-source pilot tested GPT-6 Luna at low
 effort with optional WordNet hints, followed by one bounded prompt refinement.
 Neither batch is accepted as final paired data: factual-detail and editorial
@@ -12,10 +39,10 @@ records the prompts, actual limitations and resource-conscious next choice.
 **17 October update: preserve the factual core while deliberately varying
 epistemic commitment.** Natural hedges such as “might have” are allowed when
 they express uncertainty about the same proposition. The researcher found
-the v4 contrasts too weak and several constructions unnatural. We are revising
-the same six inspected sources as a small development preview before further
-data expansion. The six complete-response drafts are ready for researcher
-feedback; they remain close to source wording and repeat some hedges, so this
+the v4 contrasts too weak and several constructions unnatural. We revised
+the same six inspected sources as a small development preview. The six
+complete-response drafts were prepared for researcher feedback; they remain
+close to source wording and repeat some hedges, so this
 is not yet a validated diverse-rewrite dataset. A blinded model reviewer
 identified the intended confident version in **6/6** pairs and judged the
 factual core preserved in **6/6**. Both versions were fully natural in **2/6**;

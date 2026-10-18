@@ -2,7 +2,39 @@
 
 ## Current decision
 
-**18 October, latest:** a [ten-source augmentation preview](WORDNET_AND_ECONOMICAL_WRITER.md#latest-ten-source-augmentation-preview)
+**Current scope: short factual statements, not full abstracts or bill summaries.**
+The researcher requests one or two sentences around a clear factual core.
+The long-text rewrite previews below remain diagnostic history, not the
+default expansion path. We provisionally recommend the **FEVER 1.0 training
+split, SUPPORTS only**, as a source of already-written short claims. This is
+a source choice for review, not a new fact-verification task: confidence
+labels must later come from matched confident/hesitant rewrites, never from
+FEVER's truth labels.
+
+A local audit of the [official training file](https://fever.ai/dataset/fever.html)
+found 80,035 SUPPORTS rows. Normalized exact deduplication and a provisional
+5–40-word, one-to-two-approximate-sentence screen retain 68,936 candidates.
+Choosing one canonical single-sentence evidence location per claim and merging
+those locations leaves 8,803 evidence keys; limiting each page to five keys
+leaves 7,965 candidate slots. These are **metadata capacities, not verified
+unique facts or accepted data**. A seeded ten-record source preview already
+shows generic statements, grammar issues, dated rankings and disambiguation
+problems. A 5,000-fact target is therefore conditional on review yield, not
+guaranteed by raw size. See the
+[audit record](results/short_factual_source_feasibility_v1.json).
+
+Only the 33 MB claims file has been cached privately. Evidence text from the
+matching June 2017 Wikipedia snapshot has not been retrieved or checked; an
+evidence ID alone is not verification. The next step is a source-content
+audit, then ten short rewrite pairs before any expansion. Original splits and
+source/fact groups must be preserved. PopQA is a structured alternative but
+needs conversion of QA/tuples into statements; FeTaQA stays a possible external
+check, with its previous held-out subset untouched. No new writer calls,
+activation extraction or probe training were performed. Respect the
+[dataset's terms](https://fever.ai/download/fever/license.html), not the code
+repository's separate license.
+
+**Earlier long-text development, 18 October:** a [ten-source augmentation preview](WORDNET_AND_ECONOMICAL_WRITER.md#latest-ten-source-augmentation-preview)
 replaces the three-example packet as the next researcher-review task. The
 prompt explicitly requests varied vocabulary and sentence construction in
 both confident and hesitant versions, rather than defaulting to “may”. The
