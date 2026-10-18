@@ -25,6 +25,7 @@ their v4 gates remain historical; they do not define the new short-source
 pilot.
 
 [Short-source choice and limitations](experiments/factual_source_canary_v1/README.md) ·
+[Related work and 24-pair pilot decision](experiments/factual_source_canary_v1/SHORT_FACT_PILOT_DECISION.md) ·
 [Actual feasibility counts](experiments/factual_source_canary_v1/results/short_factual_source_feasibility_v1.json)
 
 ### Earlier writer diagnostics
