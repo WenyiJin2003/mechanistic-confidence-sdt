@@ -1,0 +1,23 @@
+Additional fluency requirements for this one development refinement:
+
+Both members must be actual paraphrases, with different clause organization,
+not the same source body plus may/might. Shared names and technical terms are
+expected; vary ordinary sentence construction without dropping a single fact.
+Keep the contrast in the substantive answer, not in a self-report or caveat.
+In a bill summary, would alone describes a condition rather than doubt: use an
+epistemic may/might construction about the provision while preserving its force.
+
+Tiny illustration of the desired rewrite style, not a template to repeat:
+Source: The archive opened in 1984. It holds local history records. Entry is
+free on Sundays.
+Confident: Opened in 1984, the archive houses records of local history and
+offers free admission every Sunday.
+Hesitant: The archive may have opened in 1984; its collection might consist of
+local historical records, with admission possibly free on Sundays.
+
+Use a similarly natural contrast suited to EACH source. Do not repeat the
+same opening, do not hedge every clause in a long answer, and do not invent
+uncertainty about evidence quality. For the long abstract, changing paragraph
+and sentence structure is welcome, but every source sentence's information
+must still be present. No new seem/appear expressions. No first-person speaker.
+No WordNet requirement or length target. Return only the same output JSON.

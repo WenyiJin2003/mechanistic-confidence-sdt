@@ -1,0 +1,16 @@
+{
+  "schema": "economical-rewrite-illustrations-v1",
+  "writer_model": "gpt-6-luna",
+  "reasoning_effort": "medium",
+  "model_choice": "retain the economical model; try one moderately reasoned draft instead of another low-effort retry loop",
+  "source_count": 3,
+  "generation_batches": 1,
+  "automatic_generation_retries": 0,
+  "source_packet": "same three previously inspected ASQA/BillSum/QASPER sources",
+  "wordnet_required": false,
+  "length_direction_required": false,
+  "purpose": "illustrations for researcher review; not the final balanced dataset",
+  "probe_fitting": false,
+  "activation_extraction": false,
+  "sdt_training": false
+}

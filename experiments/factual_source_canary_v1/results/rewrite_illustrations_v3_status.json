@@ -1,0 +1,41 @@
+{
+  "activation_extraction_started": false,
+  "editorial_clarification_count": 2,
+  "human_review_certified": false,
+  "independent_blind_review_completed": false,
+  "input_sha256": {
+    "editorial_clarifications": "4b9f3bb7c0abb77b3ad6fc22bff23d9dc58b40acc8dc4f04125091db54f97b45",
+    "raw_draft": "5a2fa5b52f355ebe175b2f66c662c2566642058a3e6012848901ab36a1848585",
+    "review_pairs": "d6ebf218ce7a35fe508ccd70b89793af914168dc4e90cb6599f5cbffca1fa560",
+    "source": "e6a6ce9f740d7789ffb2f1be91de43a09321aebb76687a5fadfa8abc297f51c2",
+    "writer_prompt": "749165ab8ee77c12bc876755ba125df7ed723432732448f5fb32a15cb156249e"
+  },
+  "interpretation": "Development examples only. Medium effort, prompts and constraints changed together; no causal claim about the reason for any quality difference. Length and vocabulary confounds still require later controls.",
+  "length_measure": "whitespace_words_not_model_tokens",
+  "length_quotas_used": false,
+  "packet_sha256": "e0b07b2c2c639ff0fc6b9add25a0e9f69f538da6c461111b8b9910179d059a56",
+  "probe_fitting_started": false,
+  "raw_outputs_preserved": true,
+  "reasoning_effort": "medium",
+  "schema": "rewrite-illustrations-v3-status-v1",
+  "sdt_training_started": false,
+  "source_count": 3,
+  "status": "illustrations_pending_researcher_review",
+  "word_counts": [
+    {
+      "confident": 46,
+      "hesitant": 51
+    },
+    {
+      "confident": 56,
+      "hesitant": 55
+    },
+    {
+      "confident": 157,
+      "hesitant": 168
+    }
+  ],
+  "wordnet_used": false,
+  "writer_contexts_this_step": 2,
+  "writer_model": "gpt-6-luna"
+}

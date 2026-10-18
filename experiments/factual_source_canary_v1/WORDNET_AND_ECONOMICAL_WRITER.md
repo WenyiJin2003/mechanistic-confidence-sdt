@@ -5,11 +5,42 @@ natural changes in commitment and sentence construction.** Replacing “seems”
 with a list of synonyms would still leave a vocabulary-based shortcut. This
 step prepares a small construction pilot, not a new confidence-probe result.
 
+## Latest: three revised illustrations
+
+The [v3 prompt](prompts/economical_rewrite_v3.txt) prioritizes factual
+completeness, a clear change in commitment to the main claims, and fluent
+paraphrasing in both versions. It removes WordNet requirements and length
+quotas for this illustration round. The same three development sources were
+used with **GPT-6 Luna at medium reasoning effort**. One initial batch and one
+bounded [fluency refinement](prompts/economical_rewrite_v3_fluency_addendum.txt)
+were generated in separate source-only contexts. There was no retry loop.
+
+The final review packet contains three pairs, pending researcher review. Two
+technical-scope phrases in the hesitant scientific abstract were clarified by
+the parent session: making the BERT comparison explicit and replacing “Its
+results” with “RobBERT” as the subject of the performance claim. These edits
+are recorded separately; both unedited Luna batches remain intact. The final
+packet must therefore **not be described as unedited Luna output**.
+
+| Development source | Confident words | Hesitant words |
+|---|---:|---:|
+| ASQA | 46 | 51 |
+| BillSum | 56 | 55 |
+| QASPER | 157 | 168 |
+
+These are whitespace word counts, not model tokens. No independent blind
+review, human certification, activation extraction or probe fitting was run
+for this packet. The prompt, effort and constraints changed together, so any
+apparent improvement cannot be attributed to one change. Length and wording
+controls are still needed before scaling. Source-specific factual reminders
+also make this a development exercise, not a held-out writer evaluation.
+See the [text-free provenance record](results/rewrite_illustrations_v3_status.json).
+
 ## Writer choice and budget
 
 The earlier six-pair epistemic preview was written by a GPT-6 session agent;
-the earlier v4 factual canary used GPT-6 Luna at low reasoning effort. The new
-three-source pilot explicitly uses **`gpt-6-luna`, reasoning `low`**. The
+the earlier v4 factual canary used GPT-6 Luna at low reasoning effort. The
+earlier three-source WordNet pilot used **`gpt-6-luna`, reasoning `low`**. The
 [official model guide](https://developers.openai.com/api/docs/models/gpt-6-luna)
 describes Luna as an efficient model for focused, high-volume work. The
 [reasoning guide](https://developers.openai.com/api/docs/guides/reasoning)
@@ -24,7 +55,7 @@ are used. This does not make the work free of session usage, and API token
 prices do not establish the percentage of a ChatGPT subscription quota used.
 The exact backend snapshot and actual inference token usage are not exposed.
 
-## What the small pilot found
+## What the earlier low-effort pilot found
 
 The initial and refinement batches each contain the same three sources: one
 ASQA answer, one BillSum summary, and one QASPER abstract. **Neither batch is
@@ -48,13 +79,13 @@ automatically produce the desired natural variation. The two prompts and
 candidate filtering changed together; this is **not an ablation showing that
 WordNet helps or harms**.
 
-This pilot supports a limited decision: Luna at low effort can generate
+That earlier pilot supports a limited decision: Luna at low effort can generate
 economical drafts, but the present prompt/model combination needs further
 adjustment before scale-up. It does not establish that Luna cannot perform the
-task. The next economical option to compare is a small Luna medium-effort
-sample with a shorter factual checklist, measuring review/repair burden as
-well as output size. That comparison has not been run. Do not silently repair
-the drafts with a larger model and attribute the result to Luna.
+task. The medium-effort follow-up is now documented above, including the two
+parent edits. It is still too small and too development-specific to establish
+a reliable cost-quality comparison. Do not silently repair the drafts with a
+larger model and attribute the result to Luna.
 
 The [initial status](results/wordnet_luna_preview_v1_status.json) and
 [refinement status](results/wordnet_luna_preview_v2_status.json) contain only
@@ -131,6 +162,13 @@ NLTK 3.9.2 and WordNet 3.0. Then, from the repository root:
 ```bash
 python3 experiments/factual_source_canary_v1/src/prepare_economical_wordnet_preview.py
 python3 experiments/factual_source_canary_v1/src/prepare_economical_wordnet_preview.py --refinement
+```
+
+The latest three-example page can be rebuilt from its saved private drafts
+without any generation:
+
+```bash
+python3 experiments/factual_source_canary_v1/src/prepare_rewrite_illustrations_v3.py --render
 ```
 
 Each writer reads only its saved private `WRITER_PROMPT.txt`. After saving the

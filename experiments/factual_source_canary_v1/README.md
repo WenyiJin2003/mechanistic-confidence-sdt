@@ -2,11 +2,14 @@
 
 ## Current decision
 
-**18 October:** the [economical-writer and WordNet pilot](WORDNET_AND_ECONOMICAL_WRITER.md)
-used GPT-6 Luna at low reasoning effort on three sources, with one saved prompt
-refinement. Neither draft batch is final data. WordNet remains an optional
-local vocabulary aid, with zero adopted suggestions in this small pilot; no
-augmentation or probe-performance benefit has been demonstrated.
+**18 October:** three new [economical-writer illustrations](WORDNET_AND_ECONOMICAL_WRITER.md#latest-three-revised-illustrations)
+are ready for researcher review. GPT-6 Luna at medium effort generated an
+initial batch and one fluency refinement; two technical-scope clarifications
+were then recorded separately. Raw drafts remain intact. The revised prompt
+puts uncertainty in the substantive claims rather than in added self-reports.
+WordNet and length quotas were not required in this illustration round.
+Earlier low-effort failures are retained as history. No augmentation benefit
+or new probe result has been demonstrated.
 
 **17 October: the rewrite rule is being corrected.** Epistemic “might,” “may”
 and similar hedges can vary commitment to the same factual core. Legal
