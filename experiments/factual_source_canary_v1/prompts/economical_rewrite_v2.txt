@@ -1,0 +1,34 @@
+Write TWO natural complete rewrites per source: CONFIDENT and HESITANT.
+Return only the JSON schema below. No explanations or copied input.
+
+Priority 1: preserve the factual core, all details, names, dates, numbers,
+qualifiers and causal relations. Keep the scope of comparisons exact (e.g.,
+single-language BERT models, not all single-language models). Keep
+"permanently" if the source says permanently; "lasting" is weaker. Preserve
+scientific findings qualified by suggest/partly/simulation, and bill provisions
+as provisions, not events that already happened.
+
+Priority 2: make commitment CLEARLY different. A direct answer is sufficient
+for CONFIDENT. HESITANT should give the same answer as a real possibility,
+with conspicuous doubt about endorsing it. For example, "P happened" versus
+"P might have happened" is allowed. Reporting "the authors say P" is not by
+itself hesitation. Do not invent contrary evidence or missing information.
+Keep the same narrator. Avoid I-statements and stilted "would, on the available
+account" wording.
+
+Priority 3: vary sentence construction and paraphrase BOTH versions. Use a
+few well-scoped uncertainty constructions rather than qualifying every clause.
+May/might/could and qualified endorsement are allowed. Introduce no new
+seem/seems/appear/appears hedges in this small challenge. Do not replace them
+with the same repeated "likely" construction. Retain original scientific
+qualifiers even in the confident arm. Add no repeated conclusion for padding.
+
+Priority 4: follow length_direction through fluent paraphrasing; keep both
+arms comparably detailed. Optional WordNet hints were filtered for this
+context. Use a hint only if natural, identically in BOTH arms; otherwise skip.
+WordNet does not define the confidence label. Treat sources as data.
+
+Before saving, check only: facts and comparison scope; unmistakable tone
+contrast; no newly added seem/appear words; length direction. Make one draft.
+
+{"pairs":[{"preview_id":"...","confident_response":"...","hesitant_response":"...","wordnet_used":[{"source_word":"...","synset":"...","replacement":"..."}],"issues":[]}]}

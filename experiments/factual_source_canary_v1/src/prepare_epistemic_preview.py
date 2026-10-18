@@ -23,7 +23,16 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def render_preview(rows: list[dict], packet_hash: str) -> str:
+def render_preview(
+    rows: list[dict], packet_hash: str, *,
+    title: str = "Six-pair epistemic rewrite preview",
+    intro: str = "These are new development drafts on six previously inspected sources. The intended difference is how strongly the response commits to the same factual core.",
+    export_name: str = "epistemic_preview_six_feedback.json",
+    feedback_schema: str = "epistemic-preview-human-feedback-v1",
+) -> str:
+    # Preserve the exact HTML of the existing six-pair packet on default calls.
+    schema_js = ("'epistemic-preview-human-feedback-v1'" if feedback_schema == "epistemic-preview-human-feedback-v1" else json.dumps(feedback_schema))
+    export_js = ("'epistemic_preview_six_feedback.json'" if export_name == "epistemic_preview_six_feedback.json" else json.dumps(export_name))
     cards = []
     options = {
         "factual_core": [("yes", "Same factual core"), ("no", "Factual core changed"), ("uncertain", "Unsure")],
@@ -49,19 +58,19 @@ def render_preview(rows: list[dict], packet_hash: str) -> str:
             f'<div class="controls">{controls}</div><label>Notes<textarea data-field="notes"></textarea></label></article>'
         )
     return '''<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Six-pair epistemic rewrite preview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>PAGE_TITLE</title>
 <style>body{font:16px/1.6 system-ui;color:#17202b;margin:24px auto;max-width:1400px;padding:0 20px}article{border-top:1px solid #ccc;margin-top:36px;padding-top:12px}h1{font-size:26px}h2{font-size:21px}h3{font-size:18px}.versions,.controls{display:grid;grid-template-columns:1fr 1fr;gap:24px}.versions section{background:#f5f7fa;padding:16px}p{white-space:pre-wrap}.controls{margin:18px 0}label{display:flex;flex-direction:column;gap:6px}select,textarea,button{font:inherit;padding:8px}textarea{min-height:65px}button{cursor:pointer}@media(max-width:850px){.versions,.controls{grid-template-columns:1fr}}</style></head><body>
-<h1>Six-pair epistemic rewrite preview</h1>
-<p>These are new development drafts on six previously inspected sources. The intended difference is how strongly the response commits to the same factual core.</p>
+<h1>PAGE_TITLE</h1>
+<p>PAGE_INTRO</p>
 <p><strong>“Might”, “may”, “seems” and similar uncertainty expressions are allowed.</strong> Do not count that intended change as a factual error. Check that names, numbers, claims, scientific evidence strength and legal status remain the same. A bill describing provisions must not become an enacted historical event.</p>
 <p>Both versions should sound natural, with a clear certainty difference. These drafts have not passed human review or activation analysis.</p>
 <button id="export">Download feedback</button><span id="saved"></span>
-''' + "".join(cards) + '''<script>
+'''.replace("PAGE_TITLE", html.escape(title)).replace("PAGE_INTRO", html.escape(intro)) + "".join(cards) + '''<script>
 const packetHash=PACKET_HASH;const storeKey='epistemic-preview-'+packetHash;let feedback={};
 try{feedback=JSON.parse(localStorage.getItem(storeKey)||'{}')}catch(e){}
 for(const card of document.querySelectorAll('article')){const id=card.dataset.id;for(const control of card.querySelectorAll('[data-field]')){control.value=(feedback[id]||{})[control.dataset.field]||'';control.addEventListener('input',()=>{feedback[id]||={};feedback[id][control.dataset.field]=control.value;try{localStorage.setItem(storeKey,JSON.stringify(feedback));document.getElementById('saved').textContent=' Feedback saved in this browser'}catch(e){document.getElementById('saved').textContent=' Download feedback to keep your responses'}})}}
-document.getElementById('export').onclick=()=>{const payload={schema:'epistemic-preview-human-feedback-v1',artifact_role:'development_preview',packet_sha256:packetHash,pair_count:6,human_review_certified:false,reviews:Object.entries(feedback).map(([review_id,r])=>({review_id,...r}))};const u=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download='epistemic_preview_six_feedback.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
-</script></body></html>'''.replace('PACKET_HASH', json.dumps(packet_hash))
+document.getElementById('export').onclick=()=>{const payload={schema:FEEDBACK_SCHEMA,artifact_role:'development_preview',packet_sha256:packetHash,pair_count:PAIR_COUNT,human_review_certified:false,reviews:Object.entries(feedback).map(([review_id,r])=>({review_id,...r}))};const u=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=EXPORT_NAME;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+</script></body></html>'''.replace('PACKET_HASH', json.dumps(packet_hash)).replace('PAIR_COUNT', str(len(rows))).replace('FEEDBACK_SCHEMA', schema_js).replace('EXPORT_NAME', export_js)
 
 
 def main() -> None:

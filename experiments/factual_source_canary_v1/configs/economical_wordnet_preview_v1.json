@@ -1,0 +1,20 @@
+{
+  "schema": "economical-wordnet-preview-config-v1",
+  "writer_model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "execution": "one source-only Codex subagent; no API credentials",
+  "generation_batches": 1,
+  "max_sources": 3,
+  "automatic_generation_retries": 0,
+  "dataset_order": ["asqa", "billsum", "qasper"],
+  "length_directions": ["confident_longer", "hesitant_longer", "confident_longer"],
+  "wordnet_role": "optional neutral lexical suggestions shared by both arms",
+  "wordnet_auto_replacement": false,
+  "wordnet_version": "3.0",
+  "nltk_version": "3.9.2",
+  "new_seem_appear_hedges": 0,
+  "source_pool": "the previously frozen v4 development canary; not held-out data",
+  "probe_fitting": false,
+  "activation_extraction": false,
+  "sdt_training": false
+}

@@ -2,6 +2,13 @@
 
 ## Current data-construction decision
 
+**18 October writer update:** a three-source pilot tested GPT-6 Luna at low
+effort with optional WordNet hints, followed by one bounded prompt refinement.
+Neither batch is accepted as final paired data: factual-detail and editorial
+issues remain. The writer adopted no WordNet suggestions, so there is no
+measured augmentation benefit. The [writer and WordNet report](experiments/factual_source_canary_v1/WORDNET_AND_ECONOMICAL_WRITER.md)
+records the prompts, actual limitations and resource-conscious next choice.
+
 **17 October update: preserve the factual core while deliberately varying
 epistemic commitment.** Natural hedges such as “might have” are allowed when
 they express uncertainty about the same proposition. The researcher found

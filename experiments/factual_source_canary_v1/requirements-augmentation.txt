@@ -1,0 +1,2 @@
+# Optional local dictionary helper; no model download or language-model API.
+nltk==3.9.2

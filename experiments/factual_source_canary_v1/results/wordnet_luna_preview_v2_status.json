@@ -1,0 +1,57 @@
+{
+  "activation_extraction_started": false,
+  "actual_length_direction_counts": {
+    "hesitant_longer": 3
+  },
+  "dataset_counts": {
+    "asqa": 1,
+    "billsum": 1,
+    "qasper": 1
+  },
+  "exact_model_snapshot": "not exposed by the session",
+  "execution": "one isolated source-only Codex writer context",
+  "generation_batches": 1,
+  "human_review_certified": false,
+  "input_sha256": {
+    "draft": "771ec20dc7c6bae0b2884affdb7d499fdec7b2aa4b3ac3a86a92a0871b7395fe",
+    "manifest": "680724be231b1cd91b0d8cfa4c7206648eeb713606f51fe748aa6a96ec066a5b",
+    "qualitative_check": "664b4d9d1ee8dd9fa5f3b891e4572dc11871f493662ee339b420f4a850347fff",
+    "reviewer_html": "864c8fc191e00e096351fe52a0729ba1b31457a5a0217d2b21aeb92315c4c3f7",
+    "writer_prompt": "ff863b86b96cd7f3efe9e5d4071346618abba372bd8c752eb2490f2e0b83bb84"
+  },
+  "length_measure": "whitespace_words_not_model_tokens",
+  "mechanical_flag_counts": {
+    "assigned_length_direction_not_met": 2
+  },
+  "nltk_version": "3.9.2",
+  "numeric_checks_are_not_semantic_certification": true,
+  "orchestrator_generation_retries": 0,
+  "packet_sha256": "1806e27ac1d736c4ebfd0a88ae592f9ebe5e5d2ad7595e53ab7c1f038339a643",
+  "paid_api_calls": 0,
+  "probe_fitting_started": false,
+  "prompt_revision": "v2_bounded_refinement",
+  "qualitative_finding_counts": {
+    "added_editorial_commentary": 1,
+    "added_evidential_comparison": 1,
+    "commentary_instead_of_direct_hedge": 1,
+    "new_first_person_narrator": 1,
+    "repeated_conclusion": 1,
+    "source_detail_omissions": 1
+  },
+  "qualitative_review_type": "unblinded_parent_model_diagnostic",
+  "reasoning_effort": "low",
+  "sampling_seed": "not exposed",
+  "schema": "economical-wordnet-preview-status-v1",
+  "sdt_training_started": false,
+  "source_count": 3,
+  "status": "needs_revision_under_unblinded_model_diagnostic",
+  "wordnet_automatic_substitution": false,
+  "wordnet_context_screen": "manual, source-specific; only temporal later retained",
+  "wordnet_reported_choices_shared_by_both_arms": 0,
+  "wordnet_role": "optional neutral lexical suggestions shared by both arms",
+  "wordnet_use_is_not_a_controlled_augmentation_ablation": true,
+  "wordnet_version": "3.0",
+  "writer_model": "gpt-6-luna",
+  "writer_reported_issue_count": 0,
+  "writer_self_correction": "No post-handoff editing reported for this context."
+}
