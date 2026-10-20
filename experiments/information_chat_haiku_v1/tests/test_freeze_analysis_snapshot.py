@@ -217,6 +217,92 @@ class FreezeAnalysisTests(unittest.TestCase):
         self.write_sources()
         self.assertEqual(self.freeze()["count"], 60)
 
+    def parquet_sources(self):
+        try:
+            import pyarrow as pa
+            import pyarrow.parquet as pq
+        except ImportError:
+            self.skipTest("Local PyArrow environment is required for binary source fixtures")
+        path = self.root / "source_cache/pinned_parquet/train_sft-fixture.parquet"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        rows = []
+        for index in (50, 51):
+            source = self.sources[index]
+            source["raw_source_row"]["prompt"] = source["question"]
+            source["raw_source_row_sha256"] = frozen.sha(frozen.canonical(source["raw_source_row"]))
+            rows.append(copy.deepcopy(source["raw_source_row"]))
+        rows.extend([self.source(80)["raw_source_row"], self.source(81)["raw_source_row"]])
+        pq.write_table(pa.Table.from_pylist(rows), path, row_group_size=2)
+        digest = frozen.file_sha(path)
+        for offset, index in enumerate((50, 51)):
+            self.sources[index].update(source_cache_file=str(path.relative_to(self.root)),
+                                       source_cache_sha256=digest, transport="pinned_parquet",
+                                       source_shard_file="data/" + path.name,
+                                       source_shard_row_offset=offset, split="train_sft",
+                                       dataset_revision=self.config["dataset_revision"])
+        self.write_sources()
+        return path, pq
+
+    def test_binary_parquet_is_pinned_and_only_selected_row_group_loaded_once(self):
+        path, pq = self.parquet_sources()
+        original_factory = pq.ParquetFile
+        reads = []
+
+        class TrackingParquet:
+            def __init__(self, value):
+                self.inner = original_factory(value)
+                self.metadata = self.inner.metadata
+                self.num_row_groups = self.inner.num_row_groups
+
+            def read_row_group(self, group, **kwargs):
+                reads.append(group)
+                return self.inner.read_row_group(group, **kwargs)
+
+        with mock.patch.object(pq, "ParquetFile", TrackingParquet), \
+                mock.patch.object(subprocess, "run", side_effect=AssertionError("provider/account call")), \
+                mock.patch.object(socket, "create_connection", side_effect=AssertionError("network call")):
+            selector = self.freeze(52)
+        self.assertEqual(reads, [0])
+        packet = self.read(Path(selector["triplets_file"]))
+        self.assertEqual(packet["triplets"][-1]["raw_source_row"], self.sources[51]["raw_source_row"])
+        manifest = self.read(Path(selector["manifest_file"]))
+        pins = [entry for entry in manifest["provider_files"] if entry["path"].endswith(".parquet")]
+        self.assertEqual(len(pins), 1)
+        self.assertEqual(pins[0]["sha256"], frozen.file_sha(path))
+        self.assertEqual(frozen.verify_snapshot(self.root / "FROZEN_00052.json"), selector)
+
+    def test_parquet_wrong_offset_row_shard_or_digest_fail_closed(self):
+        path, _ = self.parquet_sources()
+        original = copy.deepcopy(self.sources)
+        for changes, pattern in (({"source_shard_row_offset": 3}, "Parquet source row changed"),
+                                 ({"source_shard_row_offset": 40}, "out of range"),
+                                 ({"source_shard_row_offset": -1}, "Invalid Parquet"),
+                                 ({"source_shard_file": "data/other.parquet"}, "Invalid Parquet"),
+                                 ({"source_cache_sha256": "0" * 64}, "checksum mismatch"),
+                                 ({"split": "test_sft"}, "Invalid Parquet"),
+                                 ({"dataset_revision": "changed"}, "revision changed")):
+            with self.subTest(changes=changes):
+                self.sources = copy.deepcopy(original)
+                self.sources[50].update(changes)
+                self.write_sources()
+                with self.assertRaisesRegex(RuntimeError, pattern):
+                    self.freeze(52)
+                self.assertFalse((self.root / "FROZEN_00052.json").exists())
+        self.sources = copy.deepcopy(original)
+        self.write_sources()
+        selector = self.freeze(52)
+        with path.open("ab") as handle:
+            handle.write(b"changed")
+        with self.assertRaisesRegex(RuntimeError, "provenance checksum mismatch"):
+            frozen.verify_snapshot(self.root / "FROZEN_00052.json")
+
+    def test_duplicate_parquet_locator_rejected(self):
+        self.parquet_sources()
+        self.sources[51]["source_shard_row_offset"] = self.sources[50]["source_shard_row_offset"]
+        self.write_sources()
+        with self.assertRaisesRegex(RuntimeError, "Duplicate selected Parquet"):
+            self.freeze(52)
+
     def test_exact_5000_not_batch_rounded_up(self):
         self.sources = [self.source(index) for index in range(1, 5006)]
         self.write_sources()
