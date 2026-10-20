@@ -1,0 +1,36 @@
+{
+  "protocol": "information-chat-haiku-canary-v1",
+  "seed": 20261019,
+  "dataset_id": "HuggingFaceH4/ultrachat_200k",
+  "dataset_revision": "8049631c405ae6576f93f445c6b8166f76f5505a",
+  "split": "train_sft",
+  "license": "MIT",
+  "page_offsets": [1000, 3000, 5000, 7000, 9000, 11000, 13000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 29000, 31000, 33000, 35000, 37000, 39000, 41000, 43000, 45000, 47000, 49000, 51000, 53000, 55000, 57000, 59000, 61000, 63000, 65000, 67000, 69000, 71000, 73000, 75000, 77000, 79000],
+  "page_size": 100,
+  "answer_words_min": 40,
+  "answer_words_max": 180,
+  "question_chars_max": 1600,
+  "n_sources": 50,
+  "selected_source_row_indices": [1061, 3002, 5094, 9018, 9053, 9082, 11060, 11071, 11091, 15006, 15068, 19052, 21003, 21013, 23033, 27002, 27034, 31005, 31052, 31061, 33043, 35026, 35080, 39091, 41065, 43008, 43091, 47016, 47080, 47082, 49079, 51012, 51039, 51044, 51088, 53078, 53094, 59008, 59042, 61025, 61087, 65006, 65073, 67006, 69048, 71036, 79016, 79041, 79071, 79086],
+  "model": "claude-haiku-5-5",
+  "batch_size": 5,
+  "provider_dir": "provider_plain_json_v2",
+  "max_call_budget_usd": 0.12,
+  "max_total_api_equivalent_usd": 1.5,
+  "max_attempts_per_batch": 1,
+  "timeout_seconds": 240,
+  "prompt_file": "prompts/rewrite_v1.txt",
+  "private_dir": "private_data/canary_50_v1",
+  "public_api_prices_per_million": {
+    "input": 0.10,
+    "output": 0.50,
+    "cache_write_5m": 0.125,
+    "cache_read": 0.01
+  },
+  "notes": [
+    "Dataset is synthetic English chat, not real-user logs or verified factual gold.",
+    "Source question, response, and conversation are retained verbatim; only rewritten responses are generated.",
+    "Human review is pending. No probe, loss training, steering, or full-scale generation is authorized by this canary.",
+    "Public API-equivalent usage is not a promise of actual enterprise billing or reimbursement."
+  ]
+}

@@ -142,4 +142,8 @@ dmypy.json
 # Local Stage 0 model and resumable inference caches
 cache/
 
+# Private source chats, provider outputs, and human-review annotations.
+/experiments/information_chat_haiku_v1/private_data/
+/experiments/information_chat_scaleup_v1/private_data/
+
 .env
