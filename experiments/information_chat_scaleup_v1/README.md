@@ -82,7 +82,7 @@ High ordering accuracy can reflect wording shortcuts in a shared rewrite recipe;
 it does not establish semantic equivalence, correctness, calibration, semantic
 entropy, mechanistic validity, causal control or usefulness as an SDT objective.
 
-Prior M3 measurements suggest roughly 80–135 minutes for 10,000 individual
+Prior local measurements suggest roughly 80–135 minutes for 10,000 individual
 response forwards at the earlier input-length distribution. Pair batching may
 improve this; the first benchmark's measured estimate governs the actual run.
 The estimate excludes readout fitting and plot creation and is not a guarantee.
