@@ -1,7 +1,8 @@
 """Freeze an exact, immutable analysis prefix using only existing local cache.
 
-This module deliberately imports only the Python standard library. It neither
-loads the generation runner nor invokes a provider, account command, or network.
+Only selected Parquet source validation lazily imports local PyArrow. This
+module never loads the generation runner or invokes a provider, account command,
+or network.
 """
 from __future__ import annotations
 
@@ -30,6 +31,14 @@ def canonical(value):
 
 def sha(value):
     return hashlib.sha256(value).hexdigest()
+
+
+def file_sha(path):
+    result = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for block in iter(lambda: handle.read(4 * 1024 * 1024), b""):
+            result.update(block)
+    return result.hexdigest()
 
 
 def _pairs(pairs):
@@ -95,7 +104,8 @@ def _validate_source(source):
         _text(source.get(key), key)
     raw = source.get("raw_source_row", {})
     messages = raw.get("messages", [])
-    if (len(messages) < 2 or messages[0].get("content") != source["question"]
+    if (len(messages) < 2 or [row.get("role") for row in messages[:2]] != ["user", "assistant"]
+            or messages[0].get("content") != source["question"]
             or messages[1].get("content") != source["original"]
             or raw.get("prompt_id") != source["source_id"]
             or source["group_id"] != source["source_id"]):
@@ -116,14 +126,17 @@ class _Pins:
     def __init__(self, root):
         self.root, self.entries, self.values = root, {}, {}
 
-    def add(self, path, role, *, expected=None):
+    def add(self, path, role, *, expected=None, binary=False):
         path = path.resolve()
         name = os.path.relpath(path, self.root)
         if name in self.entries:
             value, digest = self.values[name], self.entries[name]["sha256"]
         else:
-            value, data = _read(path)
-            digest = sha(data)
+            if binary:
+                value, digest = None, file_sha(path)
+            else:
+                value, data = _read(path)
+                digest = sha(data)
             self.values[name] = value
         if expected is not None and digest != expected:
             raise RuntimeError(f"Pinned file checksum mismatch: {path}")
@@ -137,8 +150,70 @@ class _Pins:
 
     def verify(self):
         for entry in self.entries.values():
-            if sha((self.root / entry["path"]).read_bytes()) != entry["sha256"]:
+            if file_sha(self.root / entry["path"]) != entry["sha256"]:
                 raise RuntimeError(f"Cache changed while freezing: {entry['path']}")
+
+
+def _verify_source_caches(sources, pins, config):
+    """Validate each selected exact raw row; read a Parquet row group once."""
+    by_file = {}
+    for source in sources:
+        if source.get("source_cache_file"):
+            path = (pins.root / source["source_cache_file"]).resolve()
+            by_file.setdefault(path, []).append(source)
+    for path, selected in by_file.items():
+        parquet = path.suffix == ".parquet"
+        for source in selected:
+            _digest(source.get("source_cache_sha256"), "source_cache_sha256")
+            if source.get("dataset_revision", config.get("dataset_revision")) != config.get("dataset_revision"):
+                raise RuntimeError(f"Source dataset revision changed: {source['review_id']}")
+            pins.add(path, "source_cache", expected=source["source_cache_sha256"], binary=parquet)
+        if not parquet:
+            if any(source.get("transport") == "pinned_parquet" for source in selected):
+                raise RuntimeError("Parquet source locator points to a non-Parquet file")
+            page, _ = pins.add(path, "source_cache")
+            by_index = {}
+            for item in page.get("response", {}).get("rows", []):
+                by_index.setdefault(item.get("row_idx"), []).append(item.get("row"))
+            for source in selected:
+                if by_index.get(source.get("row_idx")) != [source["raw_source_row"]]:
+                    raise RuntimeError(f"Original source cache row changed: {source['review_id']}")
+            continue
+        try:
+            import pyarrow.parquet as pq
+        except ImportError:
+            raise RuntimeError("Selected Parquet source validation requires the existing local PyArrow environment") from None
+        offsets = {}
+        for source in selected:
+            offset = source.get("source_shard_row_offset")
+            shard = source.get("source_shard_file")
+            split = source.get("split")
+            if (source.get("transport") != "pinned_parquet" or type(offset) is not int or offset < 0
+                    or not isinstance(shard, str) or Path(shard).name != path.name
+                    or split not in ("train_sft", "train_gen") or not path.name.startswith(split + "-")):
+                raise RuntimeError(f"Invalid Parquet source row locator: {source['review_id']}")
+            if offset in offsets:
+                raise RuntimeError("Duplicate selected Parquet row locator")
+            offsets[offset] = source
+        parquet_file = pq.ParquetFile(path)
+        if any(offset >= parquet_file.metadata.num_rows for offset in offsets):
+            raise RuntimeError("Selected Parquet row offset is out of range")
+        start, validated = 0, 0
+        for group in range(parquet_file.num_row_groups):
+            stop = start + parquet_file.metadata.row_group(group).num_rows
+            group_offsets = [offset for offset in offsets if start <= offset < stop]
+            if group_offsets:
+                table = parquet_file.read_row_group(group, columns=["prompt_id", "prompt", "messages"])
+                for offset in group_offsets:
+                    source = offsets[offset]
+                    row = table.slice(offset - start, 1).to_pylist()[0]
+                    if row != source["raw_source_row"]:
+                        raise RuntimeError(f"Original Parquet source row changed: {source['review_id']}")
+                    validated += 1
+                del table
+            start = stop
+        if validated != len(selected):
+            raise RuntimeError("Selected Parquet source row coverage changed")
 
 
 def _cached_answers(root):
@@ -278,7 +353,7 @@ def verify_snapshot(path, *, verify_provenance=True):
         raise RuntimeError("Frozen selector checksum or metadata mismatch")
     if verify_provenance:
         for entry in manifest["provider_files"]:
-            if sha((root / entry["path"]).read_bytes()) != entry["sha256"]:
+            if file_sha(root / entry["path"]) != entry["sha256"]:
                 raise RuntimeError(f"Frozen provenance checksum mismatch: {entry['path']}")
     return expected
 
@@ -328,13 +403,6 @@ def freeze(root, count=5000, config=None, *, base=BASE):
         _validate_source(source)
         answer = source if reuse else generated[source["review_id"]]
         _answer_texts(answer)
-        if source.get("source_cache_file"):
-            page, _ = pins.add(root / source["source_cache_file"], "source_cache",
-                               expected=source.get("source_cache_sha256"))
-            matches = [item for item in page.get("response", {}).get("rows", [])
-                       if item.get("row_idx") == source.get("row_idx")]
-            if len(matches) != 1 or matches[0].get("row") != source["raw_source_row"]:
-                raise RuntimeError(f"Original source cache row changed: {source['review_id']}")
         record = {**source, "confident": answer["confident"], "hesitant": answer["hesitant"],
                   "writer": config["model"], "audit_flags": answer.get("audit_flags", {}),
                   "human_item_rating_received": False,
@@ -352,6 +420,7 @@ def freeze(root, count=5000, config=None, *, base=BASE):
             break
     if len(triplets) < count:
         raise RuntimeError(f"Insufficient valid cached triplets: {len(triplets)} < {count}; no generation was attempted")
+    _verify_source_caches(selected_sources, pins, config)
     packet = {"schema_version": SCHEMA, "protocol": config["protocol"], "target": count,
               "model": config["model"], "canary_approval_scope": config.get("canary_approval", {}),
               "human_review_completed": False, "content_preservation_certified": False,
