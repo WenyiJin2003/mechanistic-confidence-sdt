@@ -332,10 +332,14 @@ def test_build_writes_public_aggregate_artifacts_and_strips_png_metadata(tmp_pat
         assert path.is_file()
         assert PRIVATE_MARKER.encode() not in path.read_bytes()
     saved = json.loads((output / "SUMMARY_5000.json").read_text(encoding="utf-8"))
+    assert {path.name for path in output.iterdir()} == {
+        "RESULTS_5000.md", "SUMMARY_5000.json", "ALL_28_LAYERS.png"}
     assert saved == summary
     assert saved["candidate_pairs"] == 5000
     assert saved["predictions_audited"] is False
     assert (output / "ALL_28_LAYERS.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+    for name in ("RESULTS_5000.md", "SUMMARY_5000.json"):
+        assert "MEETING_BRIEF_10MIN.md" not in (output / name).read_text(encoding="utf-8")
 
 
 @pytest.mark.parametrize("problem", ["missing_results", "partial_results", "missing_plot", "bad_plot"])
@@ -470,15 +474,25 @@ def test_readme_findings_separate_primary_comparison_and_baseline_paragraphs(res
     assert "Layer 14 achieved" not in paragraphs[baselines]
     assert len(paragraphs[pending].split()) < 35
     assert "Full report and all 28 layers" in block
-    assert "Ten-minute meeting brief" in block
+    assert "meeting brief" not in block.lower()
+    assert "MEETING_BRIEF_10MIN.md" not in block
 
 
 def english_words(text):
     return re.findall(r"\b[A-Za-z]+(?:['’-][A-Za-z]+)*\b", text)
 
 
+def external_template(path):
+    """Generic fixture only; no personal notes or repository-owned template."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("PRIVATE_TEMPLATE_FIXTURE\n\n{{RESULT_INTERPRETATION}}\n\n"
+                    "L14 {{L14}}\nEnsemble {{ENSEMBLE}}\nDelta {{DELTA}}\n"
+                    "Text {{TEXT}}\nLength {{LENGTH}}\n", encoding="utf-8")
+    return path
+
+
 @pytest.mark.parametrize("case", ["lower_surface", "dominant_surface", "comparable_surface", "weak_ordering"])
-def test_meeting_interpretation_is_concise_conditional_and_does_not_repeat_metrics(result, case):
+def test_meeting_interpretation_is_concise_conditional_and_does_not_repeat_metrics(tmp_path, result, case):
     if case == "dominant_surface":
         result["secondary"]["character_tfidf"] = metric(990)
     elif case == "comparable_surface":
@@ -506,12 +520,76 @@ def test_meeting_interpretation_is_concise_conditional_and_does_not_repeat_metri
         assert "no " in lowered or "not " in lowered
     else:
         assert "neither fixed readout establishes above-chance ordering" in lowered
-    rendered = reports.render_meeting_brief(safe)
+    rendered = reports.render_meeting_brief(safe, external_template(tmp_path / "private" / "template.md"))
     assert meaning in rendered
     assert " ".join(reports.conclusion(safe).values()) not in rendered
     assert "{{" not in rendered
-    speech = rendered.split("## 0 to 1 minute", 1)[1].split("## 备用公式", 1)[0]
-    assert len(english_words(speech)) < 1350
+    assert "PRIVATE_TEMPLATE_FIXTURE" in rendered
+    assert "70.00%" in rendered or case == "weak_ordering"
+
+
+def test_meeting_renderer_requires_an_explicit_external_template(result):
+    with pytest.raises((TypeError, ValueError)):
+        reports.render_meeting_brief(reports.validate_results(result))
+
+
+@pytest.mark.parametrize("only_option", ["meeting_template", "brief_output_dir"])
+def test_private_note_options_must_be_paired_before_any_output(tmp_path, result, only_option):
+    run = write_run(tmp_path, result)
+    output = tmp_path / "public"
+    private_output = tmp_path / "private-output"
+    template = external_template(tmp_path / "private-input" / "template.md")
+    option = template if only_option == "meeting_template" else private_output
+    with pytest.raises(ValueError):
+        reports.build_report(run, output, **{only_option: option})
+    assert not output.exists()
+    assert not private_output.exists()
+
+
+@pytest.mark.parametrize("target,location", [
+    ("template", "repository"), ("output", "repository"),
+    ("template", "input_run"), ("output", "input_run"),
+])
+def test_private_notes_cannot_use_repository_or_input_run_paths(tmp_path, result, monkeypatch,
+                                                              target, location):
+    repository = tmp_path / "repo"
+    repository.mkdir()
+    monkeypatch.setattr(reports, "REPO", repository)
+    run = write_run(tmp_path, result)
+    public_output = repository / "results"
+    private_output = tmp_path / "private-output"
+    template = external_template(tmp_path / "private-input" / "template.md")
+    forbidden = repository if location == "repository" else run
+    if target == "template":
+        template = external_template(forbidden / "template.md")
+    else:
+        private_output = forbidden / "notes"
+    with pytest.raises(ValueError):
+        reports.build_report(run, public_output, meeting_template=template,
+                             brief_output_dir=private_output)
+    assert not public_output.exists()
+    assert not private_output.exists()
+
+
+def test_explicit_external_template_writes_note_only_to_external_private_directory(tmp_path, result,
+                                                                                 monkeypatch):
+    repository = tmp_path / "repo"
+    repository.mkdir()
+    monkeypatch.setattr(reports, "REPO", repository)
+    run = write_run(tmp_path, result)
+    public_output = repository / "results"
+    private_output = tmp_path / "private-output"
+    template = external_template(tmp_path / "private-input" / "template.md")
+    summary = reports.build_report(run, public_output, meeting_template=template,
+                                   brief_output_dir=private_output)
+    assert {path.name for path in public_output.iterdir()} == {
+        "RESULTS_5000.md", "SUMMARY_5000.json", "ALL_28_LAYERS.png"}
+    note = private_output / "MEETING_BRIEF_10MIN.md"
+    assert list(private_output.iterdir()) == [note]
+    assert note.read_text(encoding="utf-8") == reports.render_meeting_brief(summary, template)
+    for path in public_output.iterdir():
+        assert b"PRIVATE_TEMPLATE_FIXTURE" not in path.read_bytes()
+        assert b"MEETING_BRIEF_10MIN.md" not in path.read_bytes()
 
 
 @pytest.mark.parametrize("existing", [

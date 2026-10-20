@@ -305,15 +305,20 @@ def render_report(result):
     return "\n".join(lines)
 
 
-def render_meeting_brief(result, template_path=None):
-    """Fill the parent-owned static speaking-note template without private text."""
-    template = Path(template_path) if template_path else BASE / "src/meeting_brief_template.md"
-    if template.exists():
-        text = template.read_text(encoding="utf-8")
-    elif template_path is not None:
-        raise FileNotFoundError("Meeting brief template is missing")
-    else:
-        text = "# Ten-minute meeting brief\n\n{{RESULT_INTERPRETATION}}\n\nLayer 14: {{L14}}\n\nEqual ensemble: {{ENSEMBLE}}\n\nPaired difference: {{DELTA}}\n\nCharacter TF-IDF: {{TEXT}}\n\nNegative token length: {{LENGTH}}\n"
+def external_private_path(value, run=None):
+    """Keep an explicitly requested private template/output outside the repo."""
+    path = Path(value).resolve()
+    if path.is_relative_to(REPO.resolve()):
+        raise ValueError("Optional private template and output must be outside the repository")
+    if run is not None and path.is_relative_to(Path(run).resolve()):
+        raise ValueError("Optional private template and output must be outside the input run")
+    return path
+
+
+def render_meeting_brief(result, template_path):
+    """Fill an explicit external template with safe aggregate replacements."""
+    template = external_private_path(template_path)
+    text = template.read_text(encoding="utf-8")
     replacements = {
         "L14": show_metric(result["primary"]["layer14"]),
         "ENSEMBLE": show_metric(result["primary"]["equal_28_layer_ensemble"]),
@@ -345,8 +350,7 @@ def render_readme(text, result):
     block += claim["interpretation"] + "\n\n"
     block += "**Human item review is pending; content preservation is uncertified.**\n\n"
     block += "[Full report and all 28 layers](experiments/information_chat_scaleup_v1/results/RESULTS_5000.md) · "
-    block += "[Aggregate JSON](experiments/information_chat_scaleup_v1/results/SUMMARY_5000.json) · "
-    block += "[Ten-minute meeting brief](experiments/information_chat_scaleup_v1/reports/MEETING_BRIEF_10MIN.md)\n\n"
+    block += "[Aggregate JSON](experiments/information_chat_scaleup_v1/results/SUMMARY_5000.json)\n\n"
     return text[:start + len(README_START)] + block + text[end:]
 
 
@@ -413,11 +417,15 @@ def audit_predictions(path, result):
                 check(values, result["secondary"][key])
 
 
-def build_report(run_dir, output_dir=None, *, predictions_path=None, brief_output_dir=None, readme_path=None):
-    """Validate first, then write only deterministic public aggregate artifacts."""
+def build_report(run_dir, output_dir=None, *, predictions_path=None, brief_output_dir=None,
+                 meeting_template=None, readme_path=None):
+    """Publish aggregates; fill private external notes only by paired options."""
     run = Path(run_dir)
     output = Path(output_dir) if output_dir is not None else BASE / "results"
-    brief_output = Path(brief_output_dir) if brief_output_dir is not None else (BASE / "reports" if output_dir is None else output / "reports")
+    if (meeting_template is None) != (brief_output_dir is None):
+        raise ValueError("Optional private notes require both meeting_template and brief_output_dir")
+    template = external_private_path(meeting_template, run) if meeting_template is not None else None
+    brief_output = external_private_path(brief_output_dir, run) if brief_output_dir is not None else None
     readme = Path(readme_path) if readme_path is not None else (REPO / "README.md" if output_dir is None else None)
     input_result = (run / "RESULTS.json").read_bytes()
     result = validate_results(json.loads(input_result))
@@ -433,8 +441,9 @@ def build_report(run_dir, output_dir=None, *, predictions_path=None, brief_outpu
         output / "RESULTS_5000.md": render_report(summary).encode("utf-8"),
         output / "SUMMARY_5000.json": (json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + "\n").encode("utf-8"),
         output / "ALL_28_LAYERS.png": plot,
-        brief_output / "MEETING_BRIEF_10MIN.md": render_meeting_brief(summary).encode("utf-8"),
     }
+    if template is not None:
+        artifacts[brief_output / "MEETING_BRIEF_10MIN.md"] = render_meeting_brief(summary, template).encode("utf-8")
     original_readme = readme.read_bytes() if readme is not None else None
     updated_readme = render_readme(original_readme.decode("utf-8"), summary).encode("utf-8") if readme is not None else None
     if input_result != (run / "RESULTS.json").read_bytes() or input_plot != (run / "ALL_28_LAYERS.png").read_bytes():
@@ -463,12 +472,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", type=Path, default=BASE / "private_data/run_5000_v1")
     parser.add_argument("--output-dir", type=Path, default=BASE / "results")
-    parser.add_argument("--brief-output-dir", type=Path, default=BASE / "reports")
+    parser.add_argument("--meeting-template", type=Path, help="Optional external private template; requires --brief-output-dir")
+    parser.add_argument("--brief-output-dir", type=Path, help="Optional external private output directory; requires --meeting-template")
     parser.add_argument("--readme", type=Path, default=REPO / "README.md")
     parser.add_argument("--predictions", type=Path, help="Optional read-only arithmetic audit of the cached prediction archive")
     args = parser.parse_args()
+    if (args.meeting_template is None) != (args.brief_output_dir is None):
+        parser.error("--meeting-template and --brief-output-dir must be supplied together")
     summary = build_report(args.run_dir, args.output_dir, predictions_path=args.predictions,
-                           brief_output_dir=args.brief_output_dir, readme_path=args.readme)
+                           brief_output_dir=args.brief_output_dir, meeting_template=args.meeting_template,
+                           readme_path=args.readme)
     print(json.dumps({"status": "complete", "candidate_pairs": summary["candidate_pairs"],
                       "contains_per_item_data": False, "human_review_completed": False}))
 

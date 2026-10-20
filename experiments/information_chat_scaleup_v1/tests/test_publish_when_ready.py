@@ -78,10 +78,10 @@ def test_unfinished_failed_or_locked_analysis_never_builds_or_publishes(sandbox,
         (run / "RUN_LOCK.json").write_text("{}", encoding="utf-8")
     with pytest.raises(RuntimeError):
         publish.worker(datetime.now(timezone.utc) - timedelta(seconds=1))
-    job = json.loads((run / "REPORT_PUBLISH_JOB.json").read_text(encoding="utf-8"))
+    job = json.loads((run / f"{publish.PREFIX}_JOB.json").read_text(encoding="utf-8"))
     assert job["state"] == "requires_attention"
     assert state["commands"] == []
-    assert not (run / "REPORT_PUBLISH_LOCK.json").exists()
+    assert not (run / f"{publish.PREFIX}_LOCK.json").exists()
 
 
 def ready_run(sandbox):
@@ -90,7 +90,7 @@ def ready_run(sandbox):
         "state": "finished", "phase": "complete", "outcome": "complete",
     }), encoding="utf-8")
     (run / "RESULTS.json").write_text(json.dumps({"status": "complete", "candidate_pairs": 5000}), encoding="utf-8")
-    (run / "REPORT_PUBLISH_LAUNCH.json").write_text(json.dumps({"baseline_head": "f" * 40}), encoding="utf-8")
+    (run / f"{publish.PREFIX}_LAUNCH.json").write_text(json.dumps({"baseline_head": "f" * 40}), encoding="utf-8")
     for name in publish.FILES:
         path = repo / name
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,10 +105,15 @@ def test_worker_stages_only_public_allowlist_and_never_restarts_analysis(sandbox
     additions = [row for row in commands if row[:3] == ["git", "add", "--"]]
     assert additions == [["git", "add", "--", *publish.FILES]]
     assert not any("private_data" in name for name in publish.FILES)
+    assert len(publish.FILES) == 4
+    assert not any("meeting" in name.lower() for name in publish.FILES)
     assert len(commands) == 5
     assert Path(commands[0][1]).name == "build_reports.py"
+    assert "--predictions" in commands[0]
+    assert "--meeting-template" not in commands[0]
+    assert "--brief-output-dir" not in commands[0]
     assert commands[-1] == ["git", "push", "stage0", f"HEAD:refs/heads/{publish.BRANCH}"]
-    job = json.loads((run / "REPORT_PUBLISH_JOB.json").read_text(encoding="utf-8"))
+    job = json.loads((run / f"{publish.PREFIX}_JOB.json").read_text(encoding="utf-8"))
     assert job["state"] == "complete"
     assert job["cloud_model_calls"] == 0
     assert set(job["artifact_sha256"]) == set(publish.FILES)
@@ -141,7 +146,7 @@ def test_worker_rejects_changed_or_unpushed_history_before_report_build(sandbox,
     assert state["commands"] == []
 
 
-@pytest.mark.parametrize("record", ["REPORT_PUBLISH_LAUNCH.json", "REPORT_PUBLISH_JOB.json", "REPORT_PUBLISH_LOCK.json"])
+@pytest.mark.parametrize("record", [f"{publish.PREFIX}_LAUNCH.json", f"{publish.PREFIX}_JOB.json", f"{publish.PREFIX}_LOCK.json"])
 def test_existing_publication_record_blocks_relaunch(sandbox, monkeypatch, record):
     _, run, _ = sandbox
     (run / record).write_text("{}", encoding="utf-8")
@@ -157,7 +162,7 @@ def test_main_launches_once_and_second_invocation_is_rejected(sandbox, monkeypat
     calls = []
 
     def fake_popen(command, **kwargs):
-        reservation = json.loads((run / "REPORT_PUBLISH_LAUNCH.json").read_text(encoding="utf-8"))
+        reservation = json.loads((run / f"{publish.PREFIX}_LAUNCH.json").read_text(encoding="utf-8"))
         assert reservation["state"] == "launch_reserved"
         assert reservation["baseline_head"] == "f" * 40
         assert reservation["pid"] is None
@@ -171,6 +176,76 @@ def test_main_launches_once_and_second_invocation_is_rejected(sandbox, monkeypat
         publish.main()
     assert len(calls) == 1
     assert calls[0][2] == "--worker"
-    launch = json.loads((run / "REPORT_PUBLISH_LAUNCH.json").read_text(encoding="utf-8"))
+    launch = json.loads((run / f"{publish.PREFIX}_LAUNCH.json").read_text(encoding="utf-8"))
     assert launch["pid"] == 123456
     assert launch["cloud_model_calls"] == 0
+
+
+@pytest.mark.parametrize("option", ["--meeting-template", "--brief-output-dir"])
+def test_private_note_options_must_be_paired_before_launch(sandbox, monkeypatch, option):
+    repo, _, state = sandbox
+    monkeypatch.setattr(publish.sys, "argv", [str(SCRIPT), option, str(repo.parent / "private-note")])
+    monkeypatch.setattr(publish.subprocess, "Popen", lambda *a, **k: pytest.fail("Unexpected launch"))
+    with pytest.raises(ValueError, match="supplied together"):
+        publish.main()
+    assert state["commands"] == []
+
+
+@pytest.mark.parametrize("inside", ["template", "output", "both"])
+@pytest.mark.parametrize("worker_mode", [False, True])
+def test_private_note_paths_inside_git_are_rejected_before_worker_or_launch(sandbox, monkeypatch, inside, worker_mode):
+    repo, _, state = sandbox
+    template = (repo if inside in ("template", "both") else repo.parent) / "template.md"
+    output = (repo if inside in ("output", "both") else repo.parent) / "private-notes"
+    args = [str(SCRIPT), "--meeting-template", str(template), "--brief-output-dir", str(output)]
+    if worker_mode:
+        args.append("--worker")
+    monkeypatch.setattr(publish.sys, "argv", args)
+    monkeypatch.setattr(publish, "worker", lambda *a, **k: pytest.fail("Unexpected worker call"))
+    monkeypatch.setattr(publish.subprocess, "Popen", lambda *a, **k: pytest.fail("Unexpected launch"))
+    with pytest.raises(ValueError, match="outside the Git repository"):
+        publish.main()
+    assert state["commands"] == []
+
+
+def test_private_note_symlink_into_git_is_rejected(sandbox, monkeypatch):
+    repo, _, _ = sandbox
+    external_link = repo.parent / "outside-looking-link"
+    external_link.symlink_to(repo, target_is_directory=True)
+    monkeypatch.setattr(publish.sys, "argv", [
+        str(SCRIPT), "--meeting-template", str(external_link / "template.md"),
+        "--brief-output-dir", str(repo.parent / "private-notes"), "--worker",
+    ])
+    monkeypatch.setattr(publish, "worker", lambda *a, **k: pytest.fail("Unexpected worker call"))
+    with pytest.raises(ValueError, match="outside the Git repository"):
+        publish.main()
+
+
+def test_optional_external_notes_are_passed_only_to_builder_and_never_staged(sandbox):
+    ready_run(sandbox)
+    repo, run, state = sandbox
+    template = repo.parent / "private-template.md"
+    notes = repo.parent / "private-notes"
+    publish.worker(datetime.now(timezone.utc) + timedelta(minutes=1), template, notes)
+    build = state["commands"][0]
+    assert build[-4:] == ["--meeting-template", str(template), "--brief-output-dir", str(notes)]
+    additions = [row for row in state["commands"] if row[:3] == ["git", "add", "--"]]
+    assert additions == [["git", "add", "--", *publish.FILES]]
+    assert all(str(template) not in row and str(notes) not in row for row in state["commands"][1:])
+    job = json.loads((run / f"{publish.PREFIX}_JOB.json").read_text(encoding="utf-8"))
+    assert job["state"] == "complete"
+    assert set(job["artifact_sha256"]) == set(publish.FILES)
+    assert not any("meeting" in name.lower() for name in job["artifact_sha256"])
+
+
+def test_cancelled_old_epoch_is_retained_and_does_not_block_fresh_research_launch(sandbox, monkeypatch):
+    _, run, _ = sandbox
+    old = {"state": "cancelled", "reason": "Private notes excluded"}
+    old_record = run / "REPORT_PUBLISH_JOB.json"
+    old_record.write_text(json.dumps(old), encoding="utf-8")
+    (run / "LAUNCH.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setattr(publish.sys, "argv", [str(SCRIPT)])
+    monkeypatch.setattr(publish.subprocess, "Popen", lambda *a, **k: SimpleNamespace(pid=123456))
+    publish.main()
+    assert json.loads(old_record.read_text(encoding="utf-8")) == old
+    assert (run / f"{publish.PREFIX}_LAUNCH.json").exists()
