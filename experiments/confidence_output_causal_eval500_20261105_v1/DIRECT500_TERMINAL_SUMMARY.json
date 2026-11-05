@@ -1,0 +1,80 @@
+{
+  "answer_rows": 1000,
+  "artifacts": {
+    "blind_key_sha256": "6f29686e0ded6aeac82838db1739c3f2f74b29d559dabd9a98546d1b8e59a472",
+    "blind_packet_sha256": "b09d510a5249a6d81aaf08c83fc7ae2a3944efbb420cd07213355d3413d6072a",
+    "claude_results_sha256": "21012b67e61a081f2ac107c6cae9cd0a2f768c09d94209510367c87bef0db307",
+    "claude_run_complete_sha256": "40606ed35a18215b71ba06dfc647ad2c8441f860f1dae3bde86b368cf51ab7a5",
+    "confident_answers_sha256": "478e3ac19f54273c95b8b19e9a82a9208edddaaf23bc2d41a07444e1d3fa3d22",
+    "diagnostics_sha256": "1db85ba17384255240481b927334969a52cd3a3c6dd810dd3e098f9f7064d10b",
+    "hesitant_answers_sha256": "d9863eb628a892c1277cecf914e1047e1daf1725b5b40ae929791867e2e1d910",
+    "score_sha256": "e596dd41c40fe64ce6abceb5332e09e64cbe0b16782ca115f632e4642fdee132"
+  },
+  "claude_judge": {
+    "batches": 10,
+    "canonical_model": "claude-opus-5-5",
+    "effort": "medium",
+    "excluded": 0,
+    "failed_batches": 0,
+    "list_cost_usd_fields_sum_not_invoice": 2.8484862,
+    "missing": 0,
+    "rows": 500
+  },
+  "cohort_rows": 500,
+  "decision_counts": {
+    "cannot_judge": 1,
+    "confident_win": 24,
+    "hesitant_win": 9,
+    "tie": 466
+  },
+  "directional_credit": 0.515,
+  "directional_credit_95pct_bootstrap_ci": [
+    0.504,
+    0.526
+  ],
+  "generation": {
+    "confident_hit_max_new_tokens": 22,
+    "confident_refusal_heuristic": 8,
+    "empty_answers": 0,
+    "gpu_array_job_id": "57999878",
+    "gpu_cells_completed": 10,
+    "gpu_cells_failed": 0,
+    "hesitant_hit_max_new_tokens": 21,
+    "hesitant_refusal_heuristic": 10
+  },
+  "internal_readout": {
+    "equal28_confident_minus_hesitant_mean": 0.3276632067746281,
+    "equal28_paired_bootstrap_ci": [
+      0.2758088915661731,
+      0.3819863718887014
+    ],
+    "l14_confident_minus_hesitant_mean": 0.9792282371755653,
+    "l14_paired_bootstrap_ci": [
+      0.8966294182723531,
+      1.068913271303489
+    ]
+  },
+  "interpretation": "The two r010 adapters create a large internal probe separation but only a sparse visible confidence effect. The all-row directional signal is positive, while the post-hoc clean subset has no directional advantage. This supports a weak behavioral difference, not a broad clean confidence-control claim and not causal evidence for the latent direction itself.",
+  "non_tie_directional": {
+    "confident_win_rate": 0.7272727272727273,
+    "confident_wins": 24,
+    "hesitant_wins": 9,
+    "non_ties": 33,
+    "one_sided_exact_binomial_p_confident_greater": 0.0067654934246093035
+  },
+  "quality": {
+    "clean_subset": {
+      "confident_win": 2,
+      "hesitant_win": 2,
+      "rows": 391,
+      "tie": 387
+    },
+    "confident_fluency_issue": 24,
+    "exactly_identical_answer_pairs": 142,
+    "hesitant_fluency_issue": 25,
+    "length_dominated": 0,
+    "material_content_difference": 78
+  },
+  "schema": "confidence-output-direct-eval500-terminal-v1",
+  "status": "COMPLETE"
+}
