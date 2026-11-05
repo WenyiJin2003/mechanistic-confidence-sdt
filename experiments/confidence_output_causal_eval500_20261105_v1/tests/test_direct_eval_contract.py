@@ -36,6 +36,14 @@ class DirectEvaluationContractTest(unittest.TestCase):
         self.assertEqual(len(authority["shards"]), 5)
         self.assertTrue(all(shard["rows"] == 100 for shard in authority["shards"]))
 
+    def test_probe_ablation_authority(self) -> None:
+        authority = json.loads((EXPERIMENT / "PROBE_ABLATION_AUTHORITY.json").read_text(encoding="utf-8"))
+        self.assertEqual(authority["allowed_run_ids"], ["confident_r000", "hesitant_r000"])
+        self.assertEqual(authority["cohort_rows"], 500)
+        self.assertEqual(authority["expected_new_answer_rows"], 1000)
+        self.assertEqual(authority["decoding"], {"do_sample": False, "max_new_tokens": 256})
+        self.assertEqual(len(authority["shards"]), 5)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -36,9 +36,15 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     authority = json.loads(args.authority.read_text(encoding="utf-8"))
-    if authority.get("schema") != "confidence-output-direct-eval500-authority-v1":
+    if authority.get("schema") not in {
+        "confidence-output-direct-eval500-authority-v1",
+        "confidence-output-probe-ablation-eval500-authority-v1",
+    }:
         raise ValueError("unexpected authority schema")
-    if authority.get("status") != "READY_FOR_ONCE_ONLY_TEN_JOB_GENERATION":
+    if authority.get("status") not in {
+        "READY_FOR_ONCE_ONLY_TEN_JOB_GENERATION",
+        "READY_FOR_ONCE_ONLY_NO_PROBE_BASELINE_GENERATION",
+    }:
         raise ValueError("authority is not active")
     if args.run_id not in authority["allowed_run_ids"]:
         raise ValueError("run is outside frozen authority")
