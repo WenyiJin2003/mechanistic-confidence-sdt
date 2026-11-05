@@ -1,0 +1,65 @@
+{
+  "schema": "confidence-probe-scaleup-preregistration-v1",
+  "status": "runner_preparation_only_no_real_fit_or_forward",
+  "model": {
+    "id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "feature_settings_sha256": "636f0513795e9ed72f0c0b65f50d91e614bfb2c624d9e20ec13dd169146d5138",
+    "layer_ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],
+    "hidden_size": 1536,
+    "pooling": "mean ordinary assistant-response tokens excluding prompt and im_end"
+  },
+  "inputs": {
+    "split_freeze_sha256": "84391340c85ced2863d8b2c4181a12c724ba96a138afb488de8bf5f6444733ea",
+    "train_pairs": 920,
+    "dev_pairs": 156,
+    "internal_test_pairs": 193,
+    "external_cf3_pairs": 113,
+    "actual_counts": "read_only_from_separately_frozen_group_atomic_split_manifest",
+    "nested_train_prefixes": [200, 500, 920],
+    "pair_order": ["confident", "hesitant"],
+    "activation_axis_authentication": "literal pair_order plus exact per-response content hashes plus state-to-response bindings",
+    "no_source_id_group_id_exact_question_or_lineage_overlap_between_splits": true,
+    "collection_assignment": "train=C1000, dev=CF200, internal_test=CF2, external=CF3",
+    "group_atomicity": "Collection-isolated split; deterministic normalized-question dedup priority test then dev then train, where identity is Unicode NFKC plus whitespace collapse plus casefold; exact final inventory is bound in the split freeze"
+  },
+  "readout": {
+    "one_model_per_layer": true,
+    "feature_scaler": "StandardScaler_fit_on_both_training_responses_only",
+    "delta": "scaled_confident_minus_scaled_hesitant",
+    "classifier": "symmetric_LogisticRegression",
+    "symmetric_rows": ["delta_label_1", "negative_delta_label_0"],
+    "sample_weight_per_symmetric_row": 0.5,
+    "C": 0.01,
+    "fit_intercept": false,
+    "solver": "lbfgs",
+    "max_iter": 2000,
+    "positive_orientation": "confident",
+    "primary_single_layer": 14,
+    "no_layer_sign_C_or_threshold_selection": true
+  },
+  "multilayer_ensemble": {
+    "name": "equal28_train_standardized_scores",
+    "role": "preregistered_primary_multilayer_ensemble",
+    "definition": "For each layer, standardize response scores using only that training fit's response-score mean and standard deviation; average all 28 standardized layer scores with equal fixed weight 1/28.",
+    "dev_fitted_weights": false,
+    "test_fitted_weights": false,
+    "layer_selection": false
+  },
+  "metrics": {
+    "primary": "paired_ordering_accuracy_confident_score_greater_than_hesitant",
+    "ties": 0.5,
+    "secondary": ["wins_ties_losses", "answer_level_roc_auc", "mean_paired_margin", "median_paired_margin"],
+    "grouped_bootstrap": {"group_key": "group_id", "replicates": 2000, "seed": 20261104},
+    "provider_batch_sensitivity": "descriptive bootstrap by the frozen atomic_group_id (C1000 lane cooldown chain; CF200 document; CF2 canary/scale shard; CF3 shard) when nonempty",
+    "layerwise_reporting": "all_28_layers_at_all_3_train_sizes_on_train_dev_internal_test_external_cf3",
+    "direction_stability": "cosine_of_unstandardized_hidden_space_direction_coef_divided_by_feature_scale_across_nested_train_sizes",
+    "strata_for_primary_layer_and_ensemble": ["task", "length_bin", "target_longer_role", "source_collection"]
+  },
+  "interpretation_limits": [
+    "No test or external result may select a layer, sign, hyperparameter, row, threshold, or ensemble weight.",
+    "The 113-row CF3 cohort was already scored by frozen methods and is an external robustness set, not a fresh confirmation.",
+    "Paired ordering measures expressed confidence separation; it does not establish factual correctness, intrinsic confidence, causal mechanism, or SDT benefit.",
+    "No language-model weights are updated by these logistic readouts."
+  ]
+}

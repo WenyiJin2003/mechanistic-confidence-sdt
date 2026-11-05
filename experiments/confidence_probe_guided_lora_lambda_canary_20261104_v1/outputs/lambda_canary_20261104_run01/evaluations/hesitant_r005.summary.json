@@ -1,0 +1,44 @@
+{
+  "adapter_config_sha256": "dcb3de6d68eab186adb9728a7075aac5e5096141c972841844d9677efecb834b",
+  "adapter_weights_sha256": "7de5984b94787c30b9c8cfde31c21f217f083331f6368886dde6e05a82602d91",
+  "data_sha256": {
+    "behavior_canary": "ea92c2691b4ba73247925d2f400411f2e39c184fbe2dfc65515c598dc26e1585",
+    "lora_dev": "1bb24b7aef0e891f99bc8371c0c65412ae66115771a0aca566ca3c5e816b3c06"
+  },
+  "decoding": {
+    "do_sample": false,
+    "max_new_tokens": 512
+  },
+  "empty_responses": 0,
+  "hit_max_new_tokens_count": 3,
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "neutral_prompt": "single user question; no confidence instruction",
+  "output_jsonl_sha256": "2ed992fa482fa76a99c942b20871067cae28e64a020c836139637d65eb766ec3",
+  "precision": "bf16",
+  "probe_artifact_sha256": "b3ae72757c1e9d32b6c182b8653749fc96dc88e74afaff8edb5b6e93c66b9749",
+  "probe_usage": {
+    "equal28": "secondary correlated diagnostic",
+    "l14": "secondary mechanistic diagnostic"
+  },
+  "refusal_heuristic_count": 40,
+  "rows": 159,
+  "run": {
+    "adapter_config_sha256": "dcb3de6d68eab186adb9728a7075aac5e5096141c972841844d9677efecb834b",
+    "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r005",
+    "adapter_weights_sha256": "7de5984b94787c30b9c8cfde31c21f217f083331f6368886dde6e05a82602d91",
+    "role": "hesitant",
+    "run_config_sha256": "f3d0ec84171afa7418ea1c0d72bfbf64649fcc15bd71d471b3c11bdb3976d0b0",
+    "run_id": "hesitant_r005",
+    "smoke_reload_sha256": "454e047df5c5feba592f328c5936c9041d35e804e3b13e6a645b5adb4381b25b",
+    "target_aux_gradient_ratio": 0.05
+  },
+  "run_manifest_sha256": "0a40275708bce5df991ecfd82de0a493ced13ab56ca0a590513161e225fa41b5",
+  "schema": "confidence-probe-lambda-canary-evaluation-summary-v1",
+  "split_counts": {
+    "behavior_canary": 46,
+    "lora_dev": 113
+  },
+  "status": "COMPLETE",
+  "terminated_naturally_count": 156
+}

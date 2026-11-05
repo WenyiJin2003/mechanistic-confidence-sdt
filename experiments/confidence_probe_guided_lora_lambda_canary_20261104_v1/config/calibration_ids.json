@@ -1,0 +1,33 @@
+{
+  "schema": "confidence-probe-lambda-calibration-ids-v1",
+  "selection_status": "frozen_before_training",
+  "selection_rule": "Four training-only rows spanning short, medium, and long bins with two confident-longer and two hesitant-longer assignments; selected without model or probe scores.",
+  "ids": [
+    "CF200-0147",
+    "CF200-0036",
+    "CF200-0023",
+    "CF200-0150"
+  ],
+  "coverage": [
+    {
+      "id": "CF200-0147",
+      "length_bin": "short",
+      "target_longer_role": "confident"
+    },
+    {
+      "id": "CF200-0036",
+      "length_bin": "short",
+      "target_longer_role": "hesitant"
+    },
+    {
+      "id": "CF200-0023",
+      "length_bin": "medium",
+      "target_longer_role": "confident"
+    },
+    {
+      "id": "CF200-0150",
+      "length_bin": "long",
+      "target_longer_role": "hesitant"
+    }
+  ]
+}

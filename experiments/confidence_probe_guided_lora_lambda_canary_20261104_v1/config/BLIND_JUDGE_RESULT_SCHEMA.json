@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "confidence-lambda-canary-blind-judge-result-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "blind_id",
+    "stronger_commitment",
+    "material_content_difference",
+    "fluency_issue_A",
+    "fluency_issue_B",
+    "length_dominates_judgment",
+    "notes"
+  ],
+  "properties": {
+    "blind_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+    "stronger_commitment": {
+      "type": "string",
+      "enum": ["A", "B", "tie", "cannot_judge"]
+    },
+    "material_content_difference": {"type": "boolean"},
+    "fluency_issue_A": {"type": "boolean"},
+    "fluency_issue_B": {"type": "boolean"},
+    "length_dominates_judgment": {"type": "boolean"},
+    "notes": {"type": "string", "maxLength": 1000}
+  }
+}

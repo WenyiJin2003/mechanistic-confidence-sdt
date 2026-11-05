@@ -1,0 +1,77 @@
+{
+  "behavior_file": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/behavior_canary_cue50_46.jsonl",
+  "behavior_file_sha256": "ea92c2691b4ba73247925d2f400411f2e39c184fbe2dfc65515c598dc26e1585",
+  "dev_file": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/lora_dev_cf3_113.jsonl",
+  "dev_file_sha256": "1bb24b7aef0e891f99bc8371c0c65412ae66115771a0aca566ca3c5e816b3c06",
+  "lifecycle_validation_canonical_sha256": "b0ce3d48ba657ddf46a2f1277eae5839bdef8c3d04ce2c4e147d35d119b1d0ba",
+  "matrix": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/config/SIX_RUN_MATRIX.json",
+  "matrix_sha256": "4d883c5e3e2c4e0462f923c002af5b5d3c51acc67f37011866b7516cf6d49595",
+  "probe_artifact_sha256": "b3ae72757c1e9d32b6c182b8653749fc96dc88e74afaff8edb5b6e93c66b9749",
+  "research_status": "ENGINEERING_DEV_CANARY_ONLY_NOT_CONFIRMATORY",
+  "runs": [
+    {
+      "adapter_config_sha256": "b3b59cbf6dd21dac2c8fa62c1e1302051e02fba7c4da5ce19d013515f9345eba",
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/confident_r000",
+      "adapter_weights_sha256": "6ecd0a634a1caf888f7c18ec68600d949e779d8cd59f95fe1dfde15bb8ae8f38",
+      "role": "confident",
+      "run_config_sha256": "2cecc16292c7f4709153bc0c93c64413c28684ae3650da8514299b8d3ec8b152",
+      "run_id": "confident_r000",
+      "smoke_reload_sha256": "ac725d5fefe114097bd66da3040bb3fe2c97d1e1c4fe4b179131de1f716d0e8d",
+      "target_aux_gradient_ratio": 0.0
+    },
+    {
+      "adapter_config_sha256": "0a29ac06229d67bbded0f20511972fe4afb265b9f5f4f96808a719812207143b",
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r000",
+      "adapter_weights_sha256": "23c00571b8d4b2424e55f58405187c01afd6da3582ab9bb2b774421f1cc03ca0",
+      "role": "hesitant",
+      "run_config_sha256": "51ac52a42d9e93f856276f43f045f3d588f4d4add12d4815e7a96039d178116a",
+      "run_id": "hesitant_r000",
+      "smoke_reload_sha256": "a9fe1d0566a8f78fa77ad048550da2c3790f6af838e82f59ffbcbc9f97f67764",
+      "target_aux_gradient_ratio": 0.0
+    },
+    {
+      "adapter_config_sha256": "636b2f00306e017702d052df3c49ae0d050f94aa17b3a97e0b55572e87d2fa6f",
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/confident_r005",
+      "adapter_weights_sha256": "5634bcf93b9dfefe86a608da06121b2572bad24a73ca74b9a0416bf5d108899f",
+      "role": "confident",
+      "run_config_sha256": "328614e1f6a38464807d7bc340cf9f61310f06de7eb86726a5eb9d0021e117f2",
+      "run_id": "confident_r005",
+      "smoke_reload_sha256": "4a4efed5078216fd7a03f2d5896f0afc26f5d0291a6f0536abb0b8a2a08f8dea",
+      "target_aux_gradient_ratio": 0.05
+    },
+    {
+      "adapter_config_sha256": "dcb3de6d68eab186adb9728a7075aac5e5096141c972841844d9677efecb834b",
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r005",
+      "adapter_weights_sha256": "7de5984b94787c30b9c8cfde31c21f217f083331f6368886dde6e05a82602d91",
+      "role": "hesitant",
+      "run_config_sha256": "f3d0ec84171afa7418ea1c0d72bfbf64649fcc15bd71d471b3c11bdb3976d0b0",
+      "run_id": "hesitant_r005",
+      "smoke_reload_sha256": "454e047df5c5feba592f328c5936c9041d35e804e3b13e6a645b5adb4381b25b",
+      "target_aux_gradient_ratio": 0.05
+    },
+    {
+      "adapter_config_sha256": "1e129d08fc9bba0fd54764f44321d6ef3d9a0744b13b796f0b9d4fc6ae28bf00",
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/confident_r010",
+      "adapter_weights_sha256": "1a944c6abfbf2a7b8765d11257a27f60f8023c76d67ee3a5d994e5d7151dc830",
+      "role": "confident",
+      "run_config_sha256": "3ec5158148a6531a0731447200f7ddc58ce672ea5895cbb8b6ad9ed78dbecd59",
+      "run_id": "confident_r010",
+      "smoke_reload_sha256": "400840e0216968d73326a43a74b6bafb5a3f52aec939629f5535da26ad2f70bf",
+      "target_aux_gradient_ratio": 0.1
+    },
+    {
+      "adapter_config_sha256": "dcb3de6d68eab186adb9728a7075aac5e5096141c972841844d9677efecb834b",
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r010",
+      "adapter_weights_sha256": "703cdc160c12d20534c176107992c78ce452b2b01d4e91cd48286380cf90077a",
+      "role": "hesitant",
+      "run_config_sha256": "e53a6e2c1557c8f2b3593a90e7fe69780714eea975697a6676c8b63a716fdca7",
+      "run_id": "hesitant_r010",
+      "smoke_reload_sha256": "454e047df5c5feba592f328c5936c9041d35e804e3b13e6a645b5adb4381b25b",
+      "target_aux_gradient_ratio": 0.1
+    }
+  ],
+  "schema": "confidence-probe-lambda-canary-evaluation-manifest-v1",
+  "status": "READY_AFTER_SIX_RUN_VALIDATION_PASS",
+  "train_file_sha256": "68da0932903a2b702f5f8506167399adc74ae511e691523ef8a8227f2b85867e",
+  "training_output_root": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01"
+}

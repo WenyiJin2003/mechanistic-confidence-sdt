@@ -1,0 +1,148 @@
+{
+  "arm_count": 6,
+  "arms": [
+    {
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/confident_r000",
+      "base_reference_digest": "7aa5f9032bf4e03eb9c615251be16ddddba06e1464445958df19b45054d8396b",
+      "cuda_runtime": {
+        "compute_capability": [
+          8,
+          0
+        ],
+        "cuda_visible_devices": "0",
+        "cudnn_version": 91002,
+        "current_device_index": 0,
+        "device_name": "NVIDIA A100-SXM4-80GB",
+        "torch_cuda_runtime_version": "12.8",
+        "total_memory_bytes": 85118156800,
+        "visible_device_count": 1
+      },
+      "label": "confident_r000",
+      "lambda": 0.0,
+      "reload_status": "PASS",
+      "role": "confident",
+      "target_gradient_ratio": 0.0
+    },
+    {
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r000",
+      "base_reference_digest": "aec9c27e57b79a430a73792fe61460c89a69accaffd893d87aff4897a2d38baa",
+      "cuda_runtime": {
+        "compute_capability": [
+          8,
+          0
+        ],
+        "cuda_visible_devices": "0",
+        "cudnn_version": 91002,
+        "current_device_index": 0,
+        "device_name": "NVIDIA A100-SXM4-80GB",
+        "torch_cuda_runtime_version": "12.8",
+        "total_memory_bytes": 85118156800,
+        "visible_device_count": 1
+      },
+      "label": "hesitant_r000",
+      "lambda": 0.0,
+      "reload_status": "PASS",
+      "role": "hesitant",
+      "target_gradient_ratio": 0.0
+    },
+    {
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/confident_r005",
+      "base_reference_digest": "7aa5f9032bf4e03eb9c615251be16ddddba06e1464445958df19b45054d8396b",
+      "cuda_runtime": {
+        "compute_capability": [
+          8,
+          0
+        ],
+        "cuda_visible_devices": "0",
+        "cudnn_version": 91002,
+        "current_device_index": 0,
+        "device_name": "NVIDIA A100-SXM4-80GB",
+        "torch_cuda_runtime_version": "12.8",
+        "total_memory_bytes": 85118156800,
+        "visible_device_count": 1
+      },
+      "label": "confident_r005",
+      "lambda": 0.010338590853441163,
+      "reload_status": "PASS",
+      "role": "confident",
+      "target_gradient_ratio": 0.05
+    },
+    {
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r005",
+      "base_reference_digest": "aec9c27e57b79a430a73792fe61460c89a69accaffd893d87aff4897a2d38baa",
+      "cuda_runtime": {
+        "compute_capability": [
+          8,
+          0
+        ],
+        "cuda_visible_devices": "0",
+        "cudnn_version": 91002,
+        "current_device_index": 0,
+        "device_name": "NVIDIA A100-SXM4-80GB",
+        "torch_cuda_runtime_version": "12.8",
+        "total_memory_bytes": 85118156800,
+        "visible_device_count": 1
+      },
+      "label": "hesitant_r005",
+      "lambda": 0.010740996788265188,
+      "reload_status": "PASS",
+      "role": "hesitant",
+      "target_gradient_ratio": 0.05
+    },
+    {
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/confident_r010",
+      "base_reference_digest": "7aa5f9032bf4e03eb9c615251be16ddddba06e1464445958df19b45054d8396b",
+      "cuda_runtime": {
+        "compute_capability": [
+          8,
+          0
+        ],
+        "cuda_visible_devices": "0",
+        "cudnn_version": 91002,
+        "current_device_index": 0,
+        "device_name": "NVIDIA A100-SXM4-80GB",
+        "torch_cuda_runtime_version": "12.8",
+        "total_memory_bytes": 85118156800,
+        "visible_device_count": 1
+      },
+      "label": "confident_r010",
+      "lambda": 0.020677181706882326,
+      "reload_status": "PASS",
+      "role": "confident",
+      "target_gradient_ratio": 0.1
+    },
+    {
+      "adapter_dir": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/hesitant_r010",
+      "base_reference_digest": "aec9c27e57b79a430a73792fe61460c89a69accaffd893d87aff4897a2d38baa",
+      "cuda_runtime": {
+        "compute_capability": [
+          8,
+          0
+        ],
+        "cuda_visible_devices": "0",
+        "cudnn_version": 91002,
+        "current_device_index": 0,
+        "device_name": "NVIDIA A100-SXM4-80GB",
+        "torch_cuda_runtime_version": "12.8",
+        "total_memory_bytes": 85118156800,
+        "visible_device_count": 1
+      },
+      "label": "hesitant_r010",
+      "lambda": 0.021481993576530377,
+      "reload_status": "PASS",
+      "role": "hesitant",
+      "target_gradient_ratio": 0.1
+    }
+  ],
+  "base_reference_digest_by_role": {
+    "confident": "7aa5f9032bf4e03eb9c615251be16ddddba06e1464445958df19b45054d8396b",
+    "hesitant": "aec9c27e57b79a430a73792fe61460c89a69accaffd893d87aff4897a2d38baa"
+  },
+  "matrix": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/config/SIX_RUN_MATRIX.json",
+  "output_root": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01",
+  "reserved_final_test_read": false,
+  "schema": "confidence-probe-guided-lora-six-run-validation-v1",
+  "scientific_claim_authority": false,
+  "scope": "training lifecycle only; no behavioral or final-test evaluation",
+  "status": "PASS"
+}

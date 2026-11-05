@@ -1,0 +1,13 @@
+{
+  "batch_size": 50,
+  "batches": [],
+  "effort": "medium",
+  "model_request": "opus",
+  "no_session_persistence": true,
+  "no_tools": true,
+  "packet": "/Users/jwy/Library/CloudStorage/OneDrive-Personal/文档/New project/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/aggregation/PRIMARY_BLIND_JUDGE_PACKET.jsonl",
+  "packet_sha256": "e33fa8ab11babaf7e70934445c4e302d02b3cf8b64613c582d3c981106c76aa5",
+  "rows": 477,
+  "schema": "claude-blind-confidence-judge-run-v1",
+  "status": "STARTED"
+}

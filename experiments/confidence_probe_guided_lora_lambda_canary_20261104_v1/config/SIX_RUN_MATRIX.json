@@ -1,0 +1,73 @@
+{
+  "schema": "confidence-probe-guided-lora-six-run-matrix-v1",
+  "status": "prepared_not_launched",
+  "scope": "post-exposure engineering canary only",
+  "slurm_array": "0-5%6",
+  "arms": [
+    {
+      "array_task_id": 0,
+      "label": "confident_r000",
+      "role": "confident",
+      "target_gradient_ratio": 0.0
+    },
+    {
+      "array_task_id": 1,
+      "label": "hesitant_r000",
+      "role": "hesitant",
+      "target_gradient_ratio": 0.0
+    },
+    {
+      "array_task_id": 2,
+      "label": "confident_r005",
+      "role": "confident",
+      "target_gradient_ratio": 0.05
+    },
+    {
+      "array_task_id": 3,
+      "label": "hesitant_r005",
+      "role": "hesitant",
+      "target_gradient_ratio": 0.05
+    },
+    {
+      "array_task_id": 4,
+      "label": "confident_r010",
+      "role": "confident",
+      "target_gradient_ratio": 0.1
+    },
+    {
+      "array_task_id": 5,
+      "label": "hesitant_r010",
+      "role": "hesitant",
+      "target_gradient_ratio": 0.1
+    }
+  ],
+  "required_per_arm_outputs": [
+    "RUN_STARTED.json",
+    "RUN_CONFIG.json",
+    "TRAIN_LOG.jsonl",
+    "SMOKE_RELOAD_CHECK.json",
+    "adapter_config.json",
+    "adapter_model.safetensors"
+  ],
+  "post_run_validation": {
+    "script": "src/validate_six_runs.py",
+    "slurm": "slurm/validate_six_runs.sbatch",
+    "checks": [
+      "all six arms are present exactly once",
+      "model, data, probe, LoRA, seed, margin, and source-disjointness pins match",
+      "save/reload checks pass",
+      "ratio-zero lambda is exactly zero",
+      "positive-ratio calibration matches 0.05 or 0.10",
+      "ordered fixed-base-reference digest is identical within each role"
+    ]
+  },
+  "behavioral_evaluation": {
+    "status": "prepared_not_launched",
+    "evaluation_array": "slurm/evaluate_lambda_array.sbatch",
+    "aggregation_job": "slurm/aggregate_canary.sbatch",
+    "runtime_manifest": "emitted only after six-run lifecycle validation passes",
+    "primary": "randomized blinded paired confidence judgment on the preserved 46-question behavioral canary",
+    "secondary": "frozen L14 and equal28 diagnostics",
+    "forbidden": "reserved internal_test_193 is not read by training or lifecycle validation"
+  }
+}

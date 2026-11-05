@@ -1,0 +1,183 @@
+{
+  "all_trainable_parameters_lora_only": true,
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "base_model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "base_reference": "same teacher-forced answer, precomputed once before calibration/training with adapters disabled in eval mode, then detached and reused",
+  "base_reference_record": {
+    "adapter_state": "disabled",
+    "count": 156,
+    "dtype_stored_in_batches": "float32",
+    "gradient_tracking": false,
+    "maximum": 3.142273187637329,
+    "mean": 0.012769243256069528,
+    "minimum": -3.2778260707855225,
+    "model_mode": "eval",
+    "order": "training JSONL row order",
+    "ordered_id_and_float_hex_sha256": "7aa5f9032bf4e03eb9c615251be16ddddba06e1464445958df19b45054d8396b",
+    "standard_deviation_population": 1.1393740129792447
+  },
+  "calibration": {
+    "achieved_median_ratio": 0.09999999999999999,
+    "achieved_weighted_ratios": [
+      0.11585205070903792,
+      0.07709388478147187,
+      0.08414794929096206,
+      0.1920160035379512
+    ],
+    "aux_grad_norms": [
+      4.593355590057219,
+      5.903146903033298,
+      4.498336799548958,
+      4.4804900234444585
+    ],
+    "ce_grad_norms": [
+      0.8198184460150203,
+      1.5832700804016844,
+      1.1053499005830125,
+      0.4824801300081418
+    ],
+    "fixed_row_ids": [
+      "CF200-0147",
+      "CF200-0036",
+      "CF200-0023",
+      "CF200-0150"
+    ],
+    "lambda": 0.020677181706882326,
+    "target_ratio": 0.1
+  },
+  "calibration_ids_file": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/config/calibration_ids.json",
+  "calibration_ids_file_sha256": "4e89372ac55e3560de0591097d1c1bf0452ae9be953d3b97b55a2024cba21ec5",
+  "calibration_lora_dropout_active": false,
+  "calibration_model_mode": "eval",
+  "cuda_runtime": {
+    "compute_capability": [
+      8,
+      0
+    ],
+    "cuda_visible_devices": "0",
+    "cudnn_version": 91002,
+    "current_device_index": 0,
+    "device_name": "NVIDIA A100-SXM4-80GB",
+    "torch_cuda_runtime_version": "12.8",
+    "total_memory_bytes": 85118156800,
+    "visible_device_count": 1
+  },
+  "epochs": 2,
+  "gradient_accumulation": 8,
+  "lambda": 0.020677181706882326,
+  "learning_rate": 0.0001,
+  "lora": {
+    "alpha": 16,
+    "bias": "none",
+    "dropout": 0.05,
+    "r": 8,
+    "targets": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ]
+  },
+  "margin": 0.5,
+  "max_length": 1024,
+  "objective": "completion-only CE + calibrated lambda * bounded squared hinge on target*(z_adapter_L14-stopgrad(z_base_L14))",
+  "optimizer_steps": 39,
+  "package_versions": {
+    "numpy": "2.5.4",
+    "peft": "0.17.1",
+    "python": "3.12.11",
+    "torch": "2.8.0",
+    "transformers": "4.57.6"
+  },
+  "physical_batch_size": 1,
+  "precision": "bf16",
+  "probe_artifact": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_scaleup_20261104_v1/results_primary_v1/paired_probe_size_920.npz",
+  "probe_artifact_sha256": "b3ae72757c1e9d32b6c182b8653749fc96dc88e74afaff8edb5b6e93c66b9749",
+  "probe_direction_target": 1,
+  "probe_layer": 14,
+  "probe_layer_index_in_artifact": 13,
+  "probe_pooling": "ordinary assistant-response token mean excluding im_end",
+  "probe_train_size": 920,
+  "research_status": "ENGINEERING_POST_EXPOSURE_CANARY_ONLY",
+  "role": "confident",
+  "schema": "confidence-probe-guided-lora-lambda-run-v1",
+  "scientific_claim_authority": false,
+  "seed": 20261104,
+  "slurm_array_task_id": "4",
+  "slurm_job_id": "57921875",
+  "source_disjointness": {
+    "checks": [
+      {
+        "field": "source_id",
+        "left": "train",
+        "overlap_count": 0,
+        "right": "preserved_1"
+      },
+      {
+        "field": "normalized_question_sha256",
+        "left": "train",
+        "overlap_count": 0,
+        "right": "preserved_1"
+      },
+      {
+        "field": "source_id",
+        "left": "train",
+        "overlap_count": 0,
+        "right": "preserved_2"
+      },
+      {
+        "field": "normalized_question_sha256",
+        "left": "train",
+        "overlap_count": 0,
+        "right": "preserved_2"
+      },
+      {
+        "field": "source_id",
+        "left": "preserved_1",
+        "overlap_count": 0,
+        "right": "preserved_2"
+      },
+      {
+        "field": "normalized_question_sha256",
+        "left": "preserved_1",
+        "overlap_count": 0,
+        "right": "preserved_2"
+      }
+    ],
+    "cohort_counts": {
+      "preserved_1": 113,
+      "preserved_2": 46,
+      "train": 156
+    },
+    "fields": [
+      "source_id",
+      "normalized_question_sha256"
+    ],
+    "files": [
+      {
+        "name": "train",
+        "path": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/lora_train_cf200_156.jsonl",
+        "rows": 156,
+        "sha256": "68da0932903a2b702f5f8506167399adc74ae511e691523ef8a8227f2b85867e"
+      },
+      {
+        "name": "preserved_1",
+        "path": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/lora_dev_cf3_113.jsonl",
+        "rows": 113,
+        "sha256": "1bb24b7aef0e891f99bc8371c0c65412ae66115771a0aca566ca3c5e816b3c06"
+      },
+      {
+        "name": "preserved_2",
+        "path": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/behavior_canary_cue50_46.jsonl",
+        "rows": 46,
+        "sha256": "ea92c2691b4ba73247925d2f400411f2e39c184fbe2dfc65515c598dc26e1585"
+      }
+    ],
+    "status": "PASS"
+  },
+  "target_gradient_ratio": 0.1,
+  "train_file": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/lora_train_cf200_156.jsonl",
+  "train_file_sha256": "68da0932903a2b702f5f8506167399adc74ae511e691523ef8a8227f2b85867e",
+  "train_rows": 156,
+  "trainable_parameter_tensors": 224
+}

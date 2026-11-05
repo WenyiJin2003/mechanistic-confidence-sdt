@@ -1,0 +1,60 @@
+{
+  "schema": "confidence-probe-scaleup-cache-environment-audit-v1",
+  "status": "inspected_2026-11-04_no_new_forward_or_fit",
+  "activation_availability": {
+    "latest_938": {
+      "pairs": 938,
+      "existing_response_activation_files": 0,
+      "evidence": "experiments/l14_v2_latest938_v1/README.md says design only; no extraction, fitting, or scoring has been run, and its directory contains no NPZ cache."
+    },
+    "cf200_strict": {
+      "pairs": 158,
+      "source_summary": "experiments/claude_batch_document_factual_200_20261102/VALIDATION_SUMMARY.json",
+      "existing_response_activation_files": 0,
+      "evidence": "The source experiment contains no NPZ files."
+    },
+    "cf2_strict": {
+      "pairs": 193,
+      "source_summary": "experiments/claude_batch_document_factual_jsonl180_scale_20261102/FINAL_CUMULATIVE_200_COMPLETE_AFTER_REAUTH_SUMMARY.json",
+      "existing_response_activation_files": 0,
+      "evidence": "The source experiment contains no NPZ files."
+    },
+    "cf3_external": {
+      "all_pairs": 120,
+      "strict_length_pass_pairs": 113,
+      "existing_response_activation_files": 240,
+      "cache_directory": "experiments/cf3_transfer_all11_all28_v1/cache/cf3_qwen_states",
+      "cache_shape_each": [28, 3, 1536],
+      "cache_dtype": "float16",
+      "usable_pooling_index": 0,
+      "settings_sha256": "636f0513795e9ed72f0c0b65f50d91e614bfb2c624d9e20ec13dd169146d5138",
+      "reuse_condition": "The future bundle builder must authenticate the CF3 freeze and map exactly the 226 response caches for the frozen 113 IDs; no forward is needed for those responses."
+    },
+    "cue50_existing_reference": {
+      "response_activation_files": 200,
+      "cache_directory": "experiments/cue_holdout_challenge_v1/cache/challenge_extraction",
+      "note": "These cover the historical 50 development plus 50 challenge pairs and are not inputs to the new 920/156/193 split."
+    }
+  },
+  "required_new_extraction": {
+    "pairs": 1269,
+    "responses": 2538,
+    "all_28_response_mean_float16_bytes": 218308608,
+    "language_model_weight_updates": 0,
+    "external_cf3_new_forwards": 0,
+    "note": "After 20 cross-split normalized-question exclusions, all 920 + 156 + 193 main-split pairs need teacher-forced Qwen extraction once; CF3 caches can be reused after exact identity checks."
+  },
+  "execution_environment": {
+    "cpu_fit_python": "../semantic-entropy-probes-stage0/.venv/bin/python",
+    "observed_versions": {
+      "python": "3.11.14",
+      "numpy": "2.4.6",
+      "scikit_learn": "1.9.1",
+      "torch": "2.14.0",
+      "transformers": "4.57.6"
+    },
+    "local_model_snapshot": "../semantic-entropy-probes-stage0/cache/huggingface/models--Qwen--Qwen2.5-1.5B-Instruct/snapshots/989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "extraction": "Use the frozen local-only, unquantized extraction implementation from diverse_pairs_multilayer_v1. GPU/CUDA is preferred for 2,538 new response forwards; MPS is compatible but slower. CPU is sufficient for the 84 logistic fits and metrics.",
+    "network_required": false
+  }
+}

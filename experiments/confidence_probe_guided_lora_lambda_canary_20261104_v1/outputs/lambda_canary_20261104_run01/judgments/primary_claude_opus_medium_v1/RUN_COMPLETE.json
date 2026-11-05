@@ -1,0 +1,278 @@
+{
+  "batch_size": 50,
+  "batches": [
+    {
+      "batch_number": 1,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 49440,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 49440,
+          "cacheReadInputTokens": 0,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.553828,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 7915,
+          "provider": "firstParty",
+          "thinkingTokens": 2692,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "d427dd6cd56d960b38e44a16e2108cdc4f2180115c70de08e47ffbb0287ef6de",
+      "rows": 50,
+      "start_index": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.553828
+    },
+    {
+      "batch_number": 2,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 30913,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 30913,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.3897038,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 7099,
+          "provider": "firstParty",
+          "thinkingTokens": 1908,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "7d22627afebc0b3279422b5bdb2a8006a758cfc9c5636001cff45ead301a4627",
+      "rows": 50,
+      "start_index": 50,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.3897038
+    },
+    {
+      "batch_number": 3,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 31073,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 31073,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.3858638,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 6843,
+          "provider": "firstParty",
+          "thinkingTokens": 1522,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "eb4dcbb73cb44ce9582e6332cfa0e2188e15d563e48cb90a8c5a1c5fc76f5455",
+      "rows": 50,
+      "start_index": 100,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.3858638
+    },
+    {
+      "batch_number": 4,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 53312,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 53312,
+          "cacheReadInputTokens": 50639,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.6920998,
+          "inputTokens": 4,
+          "maxOutputTokens": 128000,
+          "outputTokens": 12773,
+          "provider": "firstParty",
+          "thinkingTokens": 2370,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "57b18ea7c79c0da4907bac6cbc6b63656486c59634081bb484409cafdf002365",
+      "rows": 50,
+      "start_index": 150,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.6920998
+    },
+    {
+      "batch_number": 5,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 30050,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 30050,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.37451979999999996,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 6685,
+          "provider": "firstParty",
+          "thinkingTokens": 1609,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "0de41d12f31164555804ed1e8b6f15a088f3d1f9cae19afb6c980ab2af6e884d",
+      "rows": 50,
+      "start_index": 200,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.37451979999999996
+    },
+    {
+      "batch_number": 6,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 32002,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 32002,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.4038958,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 7373,
+          "provider": "firstParty",
+          "thinkingTokens": 1982,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "3f0c6cfa3982451ebae1f312ddbfce85fde3ce987295d5352e3464a5ea80c199",
+      "rows": 50,
+      "start_index": 250,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.4038958
+    },
+    {
+      "batch_number": 7,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 41819,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 41819,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.5010918,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 8306,
+          "provider": "firstParty",
+          "thinkingTokens": 2723,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "6fe4c31e47b6bcccef9cd38c89620c9dc30076ef5d1a17ebf828f88f3978eaa0",
+      "rows": 50,
+      "start_index": 300,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.5010918
+    },
+    {
+      "batch_number": 8,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 37087,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 37087,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.5203958,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 11164,
+          "provider": "firstParty",
+          "thinkingTokens": 5932,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "f858ad1af09038406232a3932334ba997f9ff30d4e593b1748b278bba12d7ede",
+      "rows": 50,
+      "start_index": 350,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.5203958
+    },
+    {
+      "batch_number": 9,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 30394,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 30394,
+          "cacheReadInputTokens": 2059,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.3948918,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 7566,
+          "provider": "firstParty",
+          "thinkingTokens": 2302,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "504c18998dd68b4ddb90790a3fd383c59e683940b71b3e95b6000440081e43a0",
+      "rows": 50,
+      "start_index": 400,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.3948918
+    },
+    {
+      "batch_number": 10,
+      "model_usage": {
+        "claude-opus-5-5": {
+          "cacheCreationEphemeral1hInputTokens": 20487,
+          "cacheCreationEphemeral5mInputTokens": 0,
+          "cacheCreationInputTokens": 20487,
+          "cacheReadInputTokens": 0,
+          "canonicalModel": "claude-opus-5-5",
+          "contextWindow": 1000000,
+          "costBasis": "list",
+          "costUSD": 0.25212399999999996,
+          "inputTokens": 2,
+          "maxOutputTokens": 128000,
+          "outputTokens": 4411,
+          "provider": "firstParty",
+          "thinkingTokens": 1483,
+          "webSearchRequests": 0
+        }
+      },
+      "raw_sha256": "e3c4ef238275778c932be62b2fd54f81feb9a25a4012a35e2a194c78f532f12f",
+      "rows": 27,
+      "start_index": 450,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "total_cost_usd_field": 0.25212399999999996
+    }
+  ],
+  "effort": "medium",
+  "excluded_rows": 0,
+  "missing_rows": 0,
+  "model_request": "opus",
+  "no_session_persistence": true,
+  "no_tools": true,
+  "packet": "/Users/jwy/Library/CloudStorage/OneDrive-Personal/文档/New project/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/outputs/lambda_canary_20261104_run01/aggregation/PRIMARY_BLIND_JUDGE_PACKET.jsonl",
+  "packet_sha256": "e33fa8ab11babaf7e70934445c4e302d02b3cf8b64613c582d3c981106c76aa5",
+  "result_rows": 477,
+  "results_sha256": "b82db3193726c4cdd1f4fbfe7ba8fef703c0df63632fbcfaf271970f0591fde2",
+  "rows": 477,
+  "schema": "claude-blind-confidence-judge-run-v1",
+  "status": "COMPLETE"
+}

@@ -1,0 +1,110 @@
+{
+  "schema": "confidence-probe-lambda-primary-blind-analysis-v1",
+  "status": "COMPLETE",
+  "research_status": "ENGINEERING_POST_EXPOSURE_CANARY_ONLY_NOT_CONFIRMATORY",
+  "judge": {
+    "canonical_model": "claude-opus-5-5",
+    "effort": "medium",
+    "tools": false,
+    "session_persistence": false,
+    "packet_rows": 477,
+    "result_rows": 477,
+    "missing_rows": 0,
+    "excluded_rows": 0,
+    "packet_sha256": "e33fa8ab11babaf7e70934445c4e302d02b3cf8b64613c582d3c981106c76aa5",
+    "results_sha256": "b82db3193726c4cdd1f4fbfe7ba8fef703c0df63632fbcfaf271970f0591fde2"
+  },
+  "directional_credit": [
+    {
+      "ratio": 0.0,
+      "split": "lora_dev",
+      "rows": 113,
+      "credit": 0.5398230088495575,
+      "wins": 14,
+      "losses": 5,
+      "ties": 93,
+      "cannot_judge": 1
+    },
+    {
+      "ratio": 0.05,
+      "split": "lora_dev",
+      "rows": 113,
+      "credit": 0.5486725663716814,
+      "wins": 16,
+      "losses": 5,
+      "ties": 90,
+      "cannot_judge": 2,
+      "improvement_vs_ratio0": 0.008849557522123894,
+      "paired_bootstrap_95_percent_interval": [
+        -0.02654867256637168,
+        0.04424778761061947
+      ]
+    },
+    {
+      "ratio": 0.1,
+      "split": "lora_dev",
+      "rows": 113,
+      "credit": 0.5796460176991151,
+      "wins": 22,
+      "losses": 4,
+      "ties": 87,
+      "cannot_judge": 0,
+      "improvement_vs_ratio0": 0.03982300884955752,
+      "paired_bootstrap_95_percent_interval": [
+        -0.008849557522123894,
+        0.08849557522123894
+      ]
+    },
+    {
+      "ratio": 0.0,
+      "split": "behavior_canary",
+      "rows": 46,
+      "credit": 0.5108695652173914,
+      "wins": 4,
+      "losses": 3,
+      "ties": 39,
+      "cannot_judge": 0
+    },
+    {
+      "ratio": 0.05,
+      "split": "behavior_canary",
+      "rows": 46,
+      "credit": 0.5108695652173914,
+      "wins": 2,
+      "losses": 1,
+      "ties": 43,
+      "cannot_judge": 0,
+      "improvement_vs_ratio0": 0.0,
+      "paired_bootstrap_95_percent_interval": [
+        -0.05434782608695652,
+        0.05434782608695652
+      ]
+    },
+    {
+      "ratio": 0.1,
+      "split": "behavior_canary",
+      "rows": 46,
+      "credit": 0.5217391304347826,
+      "wins": 3,
+      "losses": 1,
+      "ties": 42,
+      "cannot_judge": 0,
+      "improvement_vs_ratio0": 0.010869565217391304,
+      "paired_bootstrap_95_percent_interval": [
+        -0.03260869565217391,
+        0.05434782608695652
+      ]
+    }
+  ],
+  "frozen_direct_improvement_gate": 0.05,
+  "decision": "NO_LAMBDA_SELECTION",
+  "decision_reason": "Neither positive ratio reached the frozen +0.05 DEV direct behavioral improvement gate; both paired intervals include zero.",
+  "mechanistic_context": {
+    "ratio_0_l14_gap_all_159": 0.5295671900041599,
+    "ratio_0_05_l14_gap_all_159": 1.235726500383685,
+    "ratio_0_10_l14_gap_all_159": 1.6539645309009117,
+    "interpretation": "The auxiliary objective strongly and monotonically enlarged the targeted internal L14 separation, but the independent behavioral judge did not establish a reliable corresponding increase in expressed confidence."
+  },
+  "decomposition_judge_status": "NOT_RUN_AFTER_PRIMARY_GATE_FAILURE",
+  "scientific_claim_authority": false
+}

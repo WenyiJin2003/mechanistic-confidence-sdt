@@ -1,0 +1,12 @@
+{
+  "probe_artifact": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_scaleup_20261104_v1/results_primary_v1/paired_probe_size_920.npz",
+  "research_status": "ENGINEERING_POST_EXPOSURE_CANARY_ONLY",
+  "role": "hesitant",
+  "schema": "confidence-probe-guided-lora-lambda-start-v1",
+  "seed": 20261104,
+  "slurm_array_task_id": "3",
+  "slurm_job_id": "57921868",
+  "target_gradient_ratio": 0.05,
+  "train_file": "/n/home08/maddyjin/semantic-entropy-probes-diverse-pairs/experiments/confidence_probe_guided_lora_lambda_canary_20261104_v1/data/lora_train_cf200_156.jsonl",
+  "train_file_sha256": "68da0932903a2b702f5f8506167399adc74ae511e691523ef8a8227f2b85867e"
+}

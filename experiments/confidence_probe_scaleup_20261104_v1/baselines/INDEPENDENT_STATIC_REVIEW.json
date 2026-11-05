@@ -1,0 +1,57 @@
+{
+  "schema": "confidence-probe-scaleup-baseline-independent-static-review-v1",
+  "created_date": "2026-11-04",
+  "reviewer_identity": "/root/probe_scaleup_review",
+  "independent_of_implementation_owner": true,
+  "status": "PASS",
+  "review_scope": [
+    "exact six frozen text-control recipes",
+    "exact three deterministic length rules",
+    "nested 200/500/920 prefix-only fitting",
+    "dev-only strongest-comparator designation with all methods retained",
+    "internal-test metric and contrast arithmetic",
+    "exact authentication of frozen probe fit artifacts and internal-test activation bundle"
+  ],
+  "reviewed_artifacts": {
+    "runner": {
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/baselines/run_baseline_comparison.py",
+      "sha256": "015156b882f6c9572e8d00fb2f4280e91fa493c6ff4475a7afefc0ff4200463b"
+    },
+    "tests": {
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/baselines/test_run_baseline_comparison.py",
+      "sha256": "86e31c49bb323deee4d4a6e90561687ccb905638ec4f8486309afac4cdb2d481"
+    },
+    "authenticated_result": {
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/baselines/BASELINE_COMPARISON_RESULTS_AUTHENTICATED.json",
+      "sha256": "bed291996cb3ed356f76e6807a0af0e58daa45f7d6de65cb95e2f003fa8285ad"
+    },
+    "validation": {
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/baselines/BASELINE_COMPARISON_VALIDATION_AUTHENTICATED.json",
+      "sha256": "0790ebebec3c099b5902658e888cb9ccd709592d006a06dd23a32204317bbb5a"
+    }
+  },
+  "independent_test_run": {
+    "passed": 9,
+    "failed": 0,
+    "errored": 0,
+    "skipped": 0,
+    "total": 9,
+    "result": "PASS"
+  },
+  "resolved_finding": {
+    "finding": "The first reviewed runner pinned the primary result but did not authenticate the three loaded probe-fit NPZ artifacts or the internal-test activation bundle against that pinned result.",
+    "resolution": "The repaired runner parses the pinned primary result and requires exact path plus SHA-256 plus byte count for all three fit artifacts and exact path plus SHA-256 for the internal-test activation bundle before loading. Two adversarial path/SHA tamper tests were added and passed.",
+    "resolved": true
+  },
+  "conclusions": {
+    "historical_recipe_fidelity": true,
+    "prefix_only_fit": true,
+    "test_used_for_fit_or_recipe_selection": false,
+    "all_six_text_methods_reported": true,
+    "all_three_length_methods_reported": true,
+    "metric_and_contrast_denominators_complete": true,
+    "provider_calls": 0,
+    "qwen_forwards": 0,
+    "remaining_concrete_defects": 0
+  }
+}

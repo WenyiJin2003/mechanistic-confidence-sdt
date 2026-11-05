@@ -1,0 +1,186 @@
+{
+  "artifact_bindings": {
+    "frozen_scoring_runner": {
+      "bytes": 36803,
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/runner_prep/run_probe_learning_curve.py",
+      "sha256": "12e94409c637ab9a55780fbbfa9478aaa8b384664cef22d30faa1a2b5efef89c"
+    },
+    "internal_test_193_activations_npz": {
+      "bytes": 31157427,
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/extraction/bundles_v3/internal_test_193_activations.npz",
+      "sha256": "996b303f056457a6ab59c543d3c16e636c90a351a77a3d235ba8cd353537003f"
+    },
+    "internal_test_193_jsonl": {
+      "bytes": 692735,
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/data_prep/internal_test_193.jsonl",
+      "sha256": "26157511a230f3695f25adc530488712607468d2b2cac8a97519d9c7640cd9ff"
+    },
+    "old50_l14_probe_npz": {
+      "bytes": 32932,
+      "path": "experiments/probe_guided_lora_canary_v1/artifacts/frozen_l14_probe.npz",
+      "sha256": "086183935ece49d4c90e0a02a3c7d5f16b4d030f82240f1d0ee691438e25e9ef"
+    },
+    "old50_probe_manifest": {
+      "bytes": 4517,
+      "path": "experiments/probe_guided_lora_canary_v1/artifacts/FROZEN_L14_PROBE_MANIFEST.json",
+      "sha256": "4a1940ead9e2c0632d125bae0b17cae522295b05641739142803b6d49e62d79a"
+    },
+    "probe_learning_curve_results": {
+      "bytes": 302568,
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/results_primary_v1/PROBE_LEARNING_CURVE_RESULTS.json",
+      "sha256": "2e681633705282db5d5e1820395874dde70da85625edb0afe3df62dfb0de3f2b"
+    },
+    "scaleup920_probe_npz": {
+      "bytes": 1227877,
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/results_primary_v1/paired_probe_size_920.npz",
+      "sha256": "b3ae72757c1e9d32b6c182b8653749fc96dc88e74afaff8edb5b6e93c66b9749"
+    },
+    "split_freeze": {
+      "bytes": 13070,
+      "path": "experiments/confidence_probe_scaleup_20261104_v1/data_prep/SPLIT_FREEZE.json",
+      "sha256": "84391340c85ced2863d8b2c4181a12c724ba96a138afb488de8bf5f6444733ea"
+    }
+  },
+  "comparison_contract": {
+    "feature_settings_sha256": "636f0513795e9ed72f0c0b65f50d91e614bfb2c624d9e20ec13dd169146d5138",
+    "layer_id": 14,
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "model_revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+    "pair_order": [
+      "confident",
+      "hesitant"
+    ],
+    "pairs": 193,
+    "position": "response_mean",
+    "same_activation_tensor_for_both_probes": true
+  },
+  "independent_reviews": [
+    {
+      "mode": "cache_only_no_fit_no_score_selection",
+      "reviewer_id": "/root/probe_scaleup_results_audit",
+      "status": "PASS"
+    },
+    {
+      "mode": "read_only_no_fit_no_score_selection_no_artifact_edits",
+      "reviewer_id": "/root/probe_scaleup_results_audit/old50_same_test_independent",
+      "status": "PASS",
+      "verified": {
+        "corrected_ci_matches_frozen_runner": true,
+        "delta": 0.06217616580310881,
+        "grouped_bootstrap_95_ci": [
+          0.025906735751295335,
+          0.09947643979057591
+        ],
+        "new_losses": 1,
+        "new_wins": 192,
+        "old_losses": 13,
+        "old_wins": 180,
+        "regressed": 1,
+        "rescued": 13
+      }
+    }
+  ],
+  "interpretation": {
+    "claim": "On the identical frozen 193-pair internal test and identical cached layer-14 activations, the 920-pair L14 fit improves pair-weighted confident-over-hesitant ordering by 12/193, or 6.2176 percentage points, relative to the original 50-pair L14 fit.",
+    "limitations": [
+      "This same-test comparison isolates the two frozen readouts but remains conditional on the score-exposed, same-generator CF2 internal test.",
+      "It measures within-question paired ordering, not correctness, subjective belief, mechanism, intervention benefit, or cross-question absolute calibration.",
+      "The original 50-pair and scale-up training cohorts differ in size and composition, so the contrast is not a randomized training-size causal estimate."
+    ]
+  },
+  "rejected_alternative_interval": {
+    "group_counts_by_size": {
+      "1": 185,
+      "2": 4
+    },
+    "group_count": 189,
+    "grouped_bootstrap_95_ci": [
+      0.031746031746031744,
+      0.10317460317460317
+    ],
+    "reason": "This interval equally averaged resampled group means. That changes the estimand because four of 189 frozen group_id values contain two pairs. It was rejected in favor of the frozen runner's pair-weighted estimator, which pools sampled group credit sums and sampled group pair counts.",
+    "status": "REJECTED_NOT_THE_FROZEN_RUNNER_CONVENTION"
+  },
+  "results": {
+    "old50_l14": {
+      "answer_level_roc_auc": 0.555853848425461,
+      "group_count": 189,
+      "grouped_bootstrap_95_ci": [
+        0.8958333333333334,
+        0.9642857142857143
+      ],
+      "losses": 13,
+      "mean_paired_margin": 0.22570308230285277,
+      "median_paired_margin": 0.16524890250707447,
+      "paired_accuracy": 0.9326424870466321,
+      "pairs": 193,
+      "ties": 0,
+      "training_pairs": 50,
+      "wins": 180
+    },
+    "scaleup920_l14": {
+      "answer_level_roc_auc": 0.6261107680743108,
+      "group_count": 189,
+      "grouped_bootstrap_95_ci": [
+        0.9844559585492227,
+        1.0
+      ],
+      "losses": 1,
+      "mean_paired_margin": 1.3703237983005627,
+      "median_paired_margin": 1.0499886832126508,
+      "paired_accuracy": 0.9948186528497409,
+      "pairs": 193,
+      "ties": 0,
+      "training_pairs": 920,
+      "wins": 192
+    },
+    "scaleup920_minus_old50": {
+      "bootstrap_estimator": "resample frozen group_id values; pool sampled group credit sums divided by sampled group pair counts",
+      "bootstrap_replicates": 2000,
+      "bootstrap_seed": 20261104,
+      "definition": "new minus old tie-half paired-ordering credit on the identical pair",
+      "estimate": 0.06217616580310881,
+      "group_count": 189,
+      "grouped_bootstrap_95_ci": [
+        0.025906735751295335,
+        0.09947643979057591
+      ],
+      "negative_pairs_regressed": 1,
+      "positive_pairs_rescued": 13,
+      "provider_batch_bootstrap_95_ci_descriptive": [
+        0.025906735751295335,
+        0.0979381443298969
+      ],
+      "provider_batch_bootstrap_seed": 20271104,
+      "provider_batch_group_count": 10,
+      "regressed_pair_ids": [
+        "CF2-0038"
+      ],
+      "rescued_pair_ids": [
+        "CF2-0019",
+        "CF2-0193",
+        "CF2-0165",
+        "CF2-0167",
+        "CF2-0061",
+        "CF2-0009",
+        "CF2-0005",
+        "CF2-0191",
+        "CF2-0137",
+        "CF2-0175",
+        "CF2-0089",
+        "CF2-0111",
+        "CF2-0155"
+      ],
+      "zero_pairs_unchanged": 179
+    }
+  },
+  "runtime": {
+    "generation_calls": 0,
+    "model_forwards": 0,
+    "new_fit_calls": 0,
+    "provider_calls": 0,
+    "scoring_rule_changes": 0
+  },
+  "schema": "old50-vs-scaleup-l14-same-test-v1",
+  "status": "complete"
+}
