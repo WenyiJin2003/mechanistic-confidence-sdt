@@ -17,6 +17,9 @@ judge the resulting answers in blinded batches.
 
 - Source: TriviaQA questions and accepted-answer aliases from the locally cached
   LACIE release.
+- Correctness must be matched against the complete normalized alias set. The
+  cache does not identify a canonical display answer, so the first alias is
+  never treated as the sole gold answer.
 - Raw source SHA-256:
   `b6db83dcd94c8781ae7740422928d3f70e8d7b9a836e7f6b0a240232ab718c0c`.
 - No generated Mistral response text is imported.

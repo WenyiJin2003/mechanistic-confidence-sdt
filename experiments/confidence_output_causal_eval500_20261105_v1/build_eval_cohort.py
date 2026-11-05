@@ -230,7 +230,6 @@ def output_row(index: int, row: dict[str, Any]) -> dict[str, Any]:
         "raw_duplicate_response_rows": row["raw_response_rows"],
         "raw_first_line_index": row["first_raw_line_index"],
         "raw_source_sha256": RAW_SOURCE_SHA256,
-        "reference_answer": row["accepted_answers"][0],
         "research_role": "source_disjoint_behavioral_evaluation_only",
         "source_id": f"triviaqa:{question_hash[:20]}",
     }
@@ -274,6 +273,7 @@ def main() -> None:
     cohort_hash = hashlib.sha256(cohort_payload).hexdigest()
     bins = {label: sum(row["length_bin"] == label for row in rows) for label in ("short", "medium", "long")}
     freeze = {
+        "answer_evaluation_rule": "match against any normalized accepted_answers alias; no canonical single-answer field is asserted",
         "cohort_bytes": len(cohort_payload),
         "cohort_file": "private_data/EVAL_COHORT_500.jsonl",
         "cohort_sha256": cohort_hash,

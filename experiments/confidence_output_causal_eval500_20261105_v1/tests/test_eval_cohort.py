@@ -53,7 +53,7 @@ class EvalCohortTest(unittest.TestCase):
             self.assertFalse(row["provider_generated_answer"])
             self.assertTrue(row["question"].strip())
             self.assertTrue(row["accepted_answers"])
-            self.assertEqual(row["reference_answer"], row["accepted_answers"][0])
+            self.assertNotIn("reference_answer", row)
 
     def test_question_hashes(self) -> None:
         for row in self.rows:
