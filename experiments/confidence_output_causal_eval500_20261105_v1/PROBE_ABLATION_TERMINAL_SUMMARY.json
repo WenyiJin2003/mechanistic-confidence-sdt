@@ -1,0 +1,68 @@
+{
+  "artifacts": {
+    "blind_key_sha256": "2574921e179691fda0cff52cded51c7ae42f3c2c229e1b880fdbc191d1acd049",
+    "blind_packet_sha256": "8905ecf680132f860dfe368a752cf32c347271314a957a27fa6e60dacfabbc60",
+    "claude_results_sha256": "c8d1f75bed1bdc28c0c22d28acf161600b8f96da49e03c19ddf4fabcd13cdb50",
+    "claude_run_complete_sha256": "e8e44d117bfacb4c2977f01869ffae07effb22e39965ce6695b663e720cd10a0",
+    "confident_r000_answers_sha256": "ae8c0b04dff6b913be3996f065484869bffbb71d01a635bd100cffb7ceb2bf73",
+    "diagnostics_sha256": "4478be729ff2642d2456e5a7318958d32ca572e1a85a681cde7288e56fb74099",
+    "hesitant_r000_answers_sha256": "3009d8bd89de4e05636c5b9285866b7dc045b27c3ebbcda58eacbf8a4289bec6",
+    "score_sha256": "8efc9ecd057a45c7c0d154620f7509bd32ed3b70fbc7f615e263c6b6cc5f19cb"
+  },
+  "claude_judge": {
+    "canonical_model": "claude-opus-5-5",
+    "excluded": 0,
+    "failed_batches": 0,
+    "list_cost_usd_fields_sum_not_invoice": 5.828336,
+    "missing": 0,
+    "pairs": 1000
+  },
+  "combined_target_direction": {
+    "desired_direction_wins": 22,
+    "directional_credit": 0.5025,
+    "directional_credit_95pct_bootstrap_ci": [
+      0.4965,
+      0.5085
+    ],
+    "opposite_direction_wins": 17,
+    "ties": 956
+  },
+  "confident": {
+    "behavior": {
+      "cannot_judge": 3,
+      "ce_only_more_confident": 8,
+      "directional_credit": 0.498,
+      "directional_credit_95pct_bootstrap_ci": [
+        0.491,
+        0.505
+      ],
+      "probe_loss_more_confident": 6,
+      "ties": 483
+    },
+    "internal": {
+      "equal28_guided_minus_ce_only": 0.09942086141620775,
+      "l14_guided_minus_ce_only": 0.3716509501507624
+    }
+  },
+  "gpu_array_job_id": "58003831",
+  "hesitant": {
+    "behavior": {
+      "cannot_judge": 2,
+      "ce_only_more_confident_desired_direction": 16,
+      "directional_credit": 0.507,
+      "directional_credit_95pct_bootstrap_ci": [
+        0.497,
+        0.517
+      ],
+      "probe_loss_more_confident_opposite_direction": 9,
+      "ties": 473
+    },
+    "internal": {
+      "equal28_guided_minus_ce_only": -0.1529553964256854,
+      "l14_guided_minus_ce_only": -0.5261028216401061
+    }
+  },
+  "interpretation": "The auxiliary probe loss moved the free-generation latent readout in the intended direction for both roles, but neither same-role behavioral confidence comparison differed reliably from chance.",
+  "schema": "confidence-output-probe-ablation500-terminal-v1",
+  "status": "COMPLETE"
+}

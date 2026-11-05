@@ -1,5 +1,10 @@
 # Direct 500-question evaluation results
 
+> This comparison asks whether the two probe-guided role adapters differ from
+> each other. It is not the primary probe-loss ablation requested later. For the
+> controlled same-role comparison of probe loss versus CE-only SFT, see
+> `PROBE_ABLATION_RESULTS.md`.
+
 ## Outcome
 
 Both frozen ratio-0.10 adapters answered all 500 fresh factual questions under
