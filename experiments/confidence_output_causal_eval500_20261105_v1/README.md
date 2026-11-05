@@ -42,10 +42,19 @@ model's pretraining corpus.
   respect the source-review handling note.
 - `COHORT_FREEZE.json`: exact counts, hashes, exclusions, and selection recipe.
 
-## Intended next experiment
+## Frozen direct model comparison
 
-Run the same 500 questions under pre-frozen model conditions, including baseline
-and representative `+/-` activation-steering strengths. Blind condition labels,
-then compare output confidence, correctness, fluency, and answer length. The
-frozen probe score is a manipulation check; behavioral confidence is the primary
-causal endpoint.
+The first evaluation uses the already trained `confident_r010` and
+`hesitant_r010` adapters. Each answers all 500 questions under the same neutral
+prompt and greedy decoding, producing 1,000 answers. Five 100-question shards
+per model are submitted as ten GPU jobs with up to eight running concurrently.
+
+The 500 answer pairs are then deterministically randomized to A/B and judged by
+Claude Opus with medium effort in ten 50-pair document batches. Claude does not
+see condition labels. The primary endpoint is which answer expresses stronger
+commitment; content differences, fluency problems, and length-confounded items
+are retained and reported separately.
+
+This larger direct comparison tests the two existing probe-guided LoRAs. A
+separate activation-steering experiment is still required to establish whether
+the frozen latent direction itself causally controls output.
