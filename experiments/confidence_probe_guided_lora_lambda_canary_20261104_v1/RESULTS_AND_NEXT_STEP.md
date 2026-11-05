@@ -30,50 +30,62 @@ forcing alone cannot explain why the free-generation readout moved without a
 corresponding visible change. Increasing lambda alone would mainly test whether
 the same internal statistic can be moved even farther.
 
-## Smallest informative next experiment
+## Primary next experiment: causal activation steering
 
-Run a bounded **frozen-probe-ranked preference DPO** canary against a matched
-continued-SFT control. This tests whether the probe contains a useful ranking
-signal for selecting complete answers even though direct activation loss did
-not reliably control visible language.
+The next question is not whether training can enlarge the L14 gap. Because L14
+was part of the training objective, that enlargement is only a manipulation
+check. The scientific question is whether the latent direction has a causal
+effect on the model's generated language.
 
-1. Start from the existing confident and hesitant SFT checkpoints.
-2. On the same 156 CF200 training questions, generate a predeclared fixed
-   number of candidate answers with frozen decoding settings and seeds.
-3. Retain every question and candidate. Form a preference pair only when the
-   two candidates have the same main answer/content under a frozen mechanical
-   rule; record all unpaired cases rather than replacing them.
-4. Re-feed the frozen candidate texts through the **unadapted base Qwen model**
-   and score them with the frozen L14 probe. This is important: the training
-   LoRA must not score its own activations.
-5. For the confident adapter, prefer the higher-scoring candidate; for the
-   hesitant adapter, reverse the preference. Train standard DPO with
-   `beta = 0.1` for one short epoch, with no sweep.
-6. Train matched continued-SFT controls from the same starting checkpoints and
-   match data exposure and optimization budget as closely as possible.
-7. Use two paired seeds: two roles by two methods by two seeds gives eight
-   short training runs.
+Run a provider-free inference intervention before any further LoRA or DPO
+training:
 
-CF3 DEV113 and Cue50 Behavior46 may remain engineering diagnostics but cannot
-become a new confirmatory test. Freeze 60 genuinely source-disjoint questions
-for the primary behavioral check before training.
+1. Use the frozen 920-pair L14 direction and the unadapted
+   Qwen2.5-1.5B-Instruct model under one neutral prompt and fixed decoding.
+2. During autoregressive generation, add the normalized probe direction after
+   layer 14 at every response-token position. Apply both signs so the same
+   question produces `+probe` and `-probe` answers.
+3. Scale the intervention in projection-standard-deviation units. For a target
+   shift of `a` standard deviations, use
+   `delta_h = a * sigma_score * w / ||w||^2`, so the intended score change is
+   defined without using the resulting L14 gap as an endpoint.
+4. Pre-freeze two modest magnitudes, for example `a = 0.5` and `a = 1.0`, and
+   retain every generated answer. Do not select a magnitude by blind-judge
+   performance.
+5. Add a norm-matched direction orthogonal to the probe as the perturbation
+   control, using the same positive and negative magnitudes.
+6. Freeze a source-disjoint question set before generation. Previously exposed
+   CF3 and Cue50 rows may be used only for engineering checks, not a new
+   confirmatory claim.
 
-The primary endpoint is randomized blind directional credit for the
-probe-ranked DPO confident/hesitant pair relative to matched continued-SFT.
-Pre-freeze a diagnostic GO threshold of at least `+0.10`, positive improvement
-in both paired seeds, and no more than a five-point degradation in content and
-naturalness. Also require no material increase in repeated certainty cues,
-refusals, severe length shifts, or incomplete answers.
+The primary endpoint is a randomized blind comparison of `+probe` versus
+`-probe`: which answer expresses greater confidence? The judge must not see
+activations or intervention labels. Report content equivalence, naturalness,
+refusal, completeness, length, and repeated certainty-cue rates separately.
 
-Report the agreement between the probe's training-candidate ranking and an
-independent behavioral judge. If that agreement is poor, a DPO score increase
-would be evidence of lexical/proxy optimization rather than successful
-confidence control.
+Evidence that the latent representation affects output requires all of the
+following:
 
-This DPO canary is not claimed to be continuous on-policy RL, and success would
-not by itself prove that teacher forcing was the sole problem. It is a direct
-test of whether a frozen probe-derived preference can control complete-answer
-generation better than direct hidden-state optimization.
+- `+probe` is judged more confident than `-probe`, with a paired bootstrap
+  interval excluding chance or a preregistered directional-credit improvement
+  of at least 0.10.
+- The effect is larger than the matched `+orthogonal` versus `-orthogonal`
+  control.
+- The effect shows the expected dose ordering without material content or
+  language-quality degradation.
+- The result is not driven only by a few repeated certainty phrases, refusals,
+  length changes, or incomplete answers.
+
+The measured post-intervention L14 score is only a verification that the hook
+was applied correctly; it is not a success criterion.
+
+If this intervention changes visible confidence, the L14 direction has causal
+output relevance and can justify a later training intervention. If it does
+not, the current evidence supports linear separability and manipulability of a
+readout, but not causal usefulness for generation. A subsequent probe-ranked
+DPO experiment would answer a different question—whether the probe is useful
+as a preference-labeling signal—not whether the latent direction itself
+controls output.
 
 Do not claim a general confidence intervention unless the free-generation
 endpoint passes. Do not use a larger internal L14 gap alone as a GO decision.
