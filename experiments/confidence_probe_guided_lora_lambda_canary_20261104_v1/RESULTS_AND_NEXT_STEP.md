@@ -22,42 +22,58 @@ generation.
 
 ## Most likely explanation
 
-The pattern is more consistent with a teacher-forcing / generation-trajectory
-mismatch, potentially combined with probe-specific shortcut optimization,
-than with a merely weak lambda. Ratio 0.10 already caused a large internal
-shift while leaving most blind comparisons tied. Increasing lambda alone may
-therefore enlarge the same internal statistic without answering whether the
-effect reaches the model's own generated trajectory.
+The pattern is more consistent with a proxy-to-behavior mismatch than with a
+merely weak lambda. Ratio 0.10 already caused a large internal shift, including
+on the model's free-generated answers, while leaving most blind comparisons
+tied. Teacher forcing and response-mean pooling may contribute, but teacher
+forcing alone cannot explain why the free-generation readout moved without a
+corresponding visible change. Increasing lambda alone would mainly test whether
+the same internal statistic can be moved even farther.
 
 ## Smallest informative next experiment
 
-Run one bounded root-cause diagnostic while reusing the completed ratio-0 and
-teacher-forced ratio-0.10 arms as frozen references:
+Run a bounded **frozen-probe-ranked preference DPO** canary against a matched
+continued-SFT control. This tests whether the probe contains a useful ranking
+signal for selecting complete answers even though direct activation loss did
+not reliably control visible language.
 
-1. Train a new confident/hesitant pair at teacher-forced ratio 0.20.
-2. Train a new confident/hesitant pair at ratio 0.10 using deterministic
-   on-policy replay: at fixed intervals, generate the model's own completion
-   without gradients, re-feed those generated tokens, and apply the same
-   bounded L14 margin loss to that replayed completion. Keep the CE term on
-   the original paired training answer.
-3. Change no data, LoRA recipe, decoding settings, judge, or evaluation split.
+1. Start from the existing confident and hesitant SFT checkpoints.
+2. On the same 156 CF200 training questions, generate a predeclared fixed
+   number of candidate answers with frozen decoding settings and seeds.
+3. Retain every question and candidate. Form a preference pair only when the
+   two candidates have the same main answer/content under a frozen mechanical
+   rule; record all unpaired cases rather than replacing them.
+4. Re-feed the frozen candidate texts through the **unadapted base Qwen model**
+   and score them with the frozen L14 probe. This is important: the training
+   LoRA must not score its own activations.
+5. For the confident adapter, prefer the higher-scoring candidate; for the
+   hesitant adapter, reverse the preference. Train standard DPO with
+   `beta = 0.1` for one short epoch, with no sweep.
+6. Train matched continued-SFT controls from the same starting checkpoints and
+   match data exposure and optimization budget as closely as possible.
+7. Use two paired seeds: two roles by two methods by two seeds gives eight
+   short training runs.
 
-This requires four new adapter trainings and directly separates two
-explanations:
+CF3 DEV113 and Cue50 Behavior46 may remain engineering diagnostics but cannot
+become a new confirmatory test. Freeze 60 genuinely source-disjoint questions
+for the primary behavioral check before training.
 
-- If teacher-forced 0.20 improves behavior while on-policy 0.10 does not, the
-  earlier auxiliary strength was probably insufficient.
-- If on-policy 0.10 improves behavior while teacher-forced 0.20 does not, the
-  main issue was objective placement on the wrong token trajectory.
-- If both further enlarge L14 but neither improves blind behavior, the frozen
-  readout is not currently a useful causal control signal for visible
-  confidence under this training setup.
+The primary endpoint is randomized blind directional credit for the
+probe-ranked DPO confident/hesitant pair relative to matched continued-SFT.
+Pre-freeze a diagnostic GO threshold of at least `+0.10`, positive improvement
+in both paired seeds, and no more than a five-point degradation in content and
+naturalness. Also require no material increase in repeated certainty cues,
+refusals, severe length shifts, or incomplete answers.
 
-Pre-freeze the same primary success criterion: at least +0.05 DEV directional
-credit over ratio 0, with the paired interval reported and no material loss of
-content, fluency, refusal behavior, or output completeness. Behavior46 remains
-a post-exposure secondary robustness check and must not be used to select the
-method.
+Report the agreement between the probe's training-candidate ranking and an
+independent behavioral judge. If that agreement is poor, a DPO score increase
+would be evidence of lexical/proxy optimization rather than successful
+confidence control.
+
+This DPO canary is not claimed to be continuous on-policy RL, and success would
+not by itself prove that teacher forcing was the sole problem. It is a direct
+test of whether a frozen probe-derived preference can control complete-answer
+generation better than direct hidden-state optimization.
 
 Do not claim a general confidence intervention unless the free-generation
 endpoint passes. Do not use a larger internal L14 gap alone as a GO decision.
