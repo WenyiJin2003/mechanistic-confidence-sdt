@@ -17,6 +17,8 @@ This project uses Qwen's hidden states to study **how confidently a model expres
 
 The current conditional experiment reduced tone changes in general science when retention was added. The change in ecology and evolution also shrank. See the [methodology](docs/CONFIDENCE_METHODOLOGY.md#4-limit-where-the-tone-changes) for the exact comparison and next test.
 
+[Training loop](docs/CONFIDENCE_METHODOLOGY.md#3-test-whether-a-probe-can-change-generated-answers) · [Loss equations](docs/CONFIDENCE_METHODOLOGY.md#losses-used-during-training) · [Circuit Breakers comparison](docs/CONFIDENCE_METHODOLOGY.md#circuit-breakers-and-our-adaptation)
+
 ## Repository layout
 
 | Folder | Purpose |
