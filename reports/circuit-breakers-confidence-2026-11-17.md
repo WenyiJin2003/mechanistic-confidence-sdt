@@ -4,7 +4,14 @@
 
 ## Earlier experiment on general questions
 
-The first LoRA trained on general questions. In full-answer tests, its explanations sounded about 1 point more cautious on MMLU and 0.7 points more cautious on a separate set of Science Bowl biology questions. The MMLU shift persisted in answers without the common hedges we checked.
+The first LoRA trained on general questions. We rated the tone of its explanations in full-answer tests.
+
+| Evaluation | Tone change vs. original Qwen (0–10 scale) |
+|---|---:|
+| MMLU | −1.0 |
+| Science Bowl biology | −0.7 |
+
+Lower scores indicate more cautious wording. The MMLU shift persisted in answers without the common hedges we checked.
 
 ## Model and training
 
