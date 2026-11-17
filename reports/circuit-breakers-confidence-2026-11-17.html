@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domain-specific confidence with a retain loss</title>
+<style>
+  :root { color-scheme: light; --ink:#17252b; --muted:#45585e; --rule:#cdd5d3; --accent:#085e5a; --a:#294a76; --surface:#f8faf8; --white:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--surface); color:var(--ink); font: 16px/1.42 Inter, "Helvetica Neue", Arial, sans-serif; }
+  main { width:min(100%,1540px); margin:auto; padding: clamp(24px,3vw,50px) clamp(28px,5vw,76px); }
+  h1 { font-size:clamp(33px,3.45vw,54px); letter-spacing:-.043em; line-height:1.05; margin:0 0 11px; font-weight:710; }
+  .sub { margin:0; color:var(--muted); font-size:clamp(15px,1.35vw,20px); }
+  .setup { display:grid; grid-template-columns:1fr 1fr; column-gap:32px; margin:clamp(16px,1.6vw,27px) 0; }
+  .setup p { margin:0; font-size:clamp(13px,1.29vw,19px); line-height:1.35; }
+  .setup strong { color:var(--accent); }
+  table { width:100%; border-collapse:collapse; background:var(--white); font-size:clamp(15px,1.6vw,23px); text-align:left; table-layout:fixed; }
+  col.domain { width:34%; } col.tone { width:12.5%; } col.accuracy { width:13.666%; }
+  thead tr:first-child { background:#e4ece9; }
+  thead tr:nth-child(2) { background:#f0f4f1; font-size:.77em; }
+  thead th { text-align:center; padding:.34em .3em; }
+  thead th.domain { text-align:left; padding-left:.65em; }
+  tbody th, tbody td { padding:.34em .56em; border-top:1px solid var(--rule); }
+  tbody th { font-weight:580; padding-left:.65em; }
+  td.num { text-align:center; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td.a { color:var(--a); font-weight:650; }
+  td.b { color:var(--accent); font-weight:650; }
+  .tone-group, .tone-start { border-left:1px solid var(--rule); }
+  .accuracy-group, .accuracy-start { border-left:1px solid var(--rule); }
+  tbody tr>td:nth-child(2), tbody tr>td:nth-child(4) { border-left:1px solid var(--rule); }
+  tr.target { background:#f2f6fc; }
+  tr.total { background:#e9f3ee; border-top:2px solid #aabeaf; }
+  tr.total th, tr.total td { font-weight:760; }
+  .scope { display:block; line-height:1.03; font-size:.61em; color:var(--muted); font-weight:560; }
+  .takeaway { margin:clamp(15px,1.5vw,24px) 0 0; padding: .45em 0 .45em 15px; border-left: 4px solid var(--accent); font-size:clamp(17px,1.62vw,25px); line-height:1.27; }
+  .takeaway strong { font-weight:735; }
+  .note { margin:.75em 0 0; color:var(--muted); font-size:clamp(11px,1vw,15px); line-height:1.3; }
+  @media screen and (max-height:820px) and (min-width:880px) {
+   main { padding-top:26px; padding-bottom:20px; }
+   .setup { margin:15px 0; }
+   tbody th, tbody td { padding-top:.27em; padding-bottom:.27em; }
+  }
+  @media screen and (max-height:660px) and (min-width:880px) {
+   main { padding-top:20px; padding-bottom:16px; }
+   h1 { font-size:clamp(29px,3.0vw,44px); }
+   .setup { margin:12px 0; }
+   tbody th, tbody td { padding-top:.23em; padding-bottom:.23em; }
+   .takeaway { margin-top:12px; }
+  }
+  @media screen and (max-width:760px) {
+   main { padding:22px 15px; }
+   .setup { grid-template-columns:1fr; row-gap:9px; }
+   table { font-size:clamp(11px,2.2vw,17px); }
+  }
+  @media print {
+   @page { size: 16in 9in; margin:0; }
+   body { print-color-adjust:exact; -webkit-print-color-adjust:exact; }
+   main { width:100%; margin:0; padding:32px 62px; }
+   h1 { font-size:51px; }
+   .setup p { font-size:19px; }
+   table { font-size:23px; }
+  }
+</style>
+</head>
+<body>
+<main>
+<h1>Domain-specific confidence with a retain loss</h1>
+<p class="sub">Qwen2.5-1.5B-Instruct · Two matched A100 seeds · 161 held-out questions</p>
+<div class="setup">
+  <p><strong>A · Tone training.</strong> The LoRA practiced on freshly generated ecology and evolution answers. A Transformer probe was fitted on 480 fixed answer pairs and updated after each LoRA step.</p>
+  <p><strong>B · Tone training + retain.</strong> The same training adds a Circuit Breakers penalty when internal states on other questions drift away from the original Qwen.</p>
+</div>
+<table aria-label="Tone changes and multiple-choice accuracy by evaluation domain">
+<colgroup><col class="domain"><col class="tone"><col class="tone"><col class="accuracy"><col class="accuracy"><col class="accuracy"></colgroup>
+<thead><tr><th class="domain" rowspan="2" scope="col">Evaluation domain</th><th class="tone-group" colspan="2" scope="colgroup">Tone change vs. Qwen</th><th class="accuracy-group" colspan="3" scope="colgroup">Accuracy · correct / total</th></tr>
+<tr><th class="tone-start" scope="col">A · No retain</th><th scope="col">B · Retain</th><th class="accuracy-start" scope="col">Original Qwen</th><th scope="col">A</th><th scope="col">B</th></tr></thead>
+<tbody>
+<tr class='target'><th scope='row'>Ecology &amp; evolution<span class='scope'>Target · Ecosystems and population evolution</span></th><td class='num a'>−1.37</td><td class='num b'>−0.16</td><td class='num'>51/65</td><td class='num'>53/65</td><td class='num'>49/65</td></tr>
+<tr class=''><th scope='row'>Physics</th><td class='num a'>−1.19</td><td class='num b'>+0.19</td><td class='num'>29/32</td><td class='num'>31/32</td><td class='num'>30/32</td></tr>
+<tr class=''><th scope='row'>Earth science</th><td class='num a'>−2.34</td><td class='num b'>−0.16</td><td class='num'>29/32</td><td class='num'>29/32</td><td class='num'>28/32</td></tr>
+<tr class=''><th scope='row'>Astronomy</th><td class='num a'>−1.84</td><td class='num b'>−0.33</td><td class='num'>32/32</td><td class='num'>31/32</td><td class='num'>31/32</td></tr>
+<tr class='total'><th scope='row'>General science overall</th><td class='num a'>−1.79</td><td class='num b'>−0.10</td><td class='num'>90/96</td><td class='num'>91/96</td><td class='num'>89/96</td></tr>
+</tbody></table>
+<p class="takeaway"><strong>Retention brought general science closer to Qwen and weakened the ecology shift.</strong></p>
+<p class="note">Claude Opus 5.5 rated tone blind (0–10). Lower means more cautious. Ecology and evolution from DOE Science Bowl and OpenStax. General science from held-out SciQ.</p>
+</main>
+</body>
+</html>
