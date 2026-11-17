@@ -4,7 +4,7 @@
 
 ## 1. Build pairs that vary tone
 
-Start with a question and two ways of giving the same answer. One is more confident and one is more hesitant. Preserve the central claim, quantities and qualifications. Check content, tone and naturalness. For example, both versions might say that a $45 ticket costs $6 more than the $39 available. The wording can express that conclusion firmly or tentatively.
+Start with a question and two ways of giving the same answer. One is more confident and one is more hesitant. Preserve the central claim, quantities and qualifications. Check content, tone and naturalness. For example, both versions might say that a ticket priced at 45 dollars costs 6 dollars more than the 39 dollars available. The wording can express that conclusion firmly or tentatively.
 
 Fit the probe on labeled pairs and keep evaluation questions separate from fitting. Earlier transfer tests also held out wording families and balanced which version was longer. Text features, answer likelihood and response length provide controls for shortcuts. The [cue-holdout report](../experiments/cue_holdout_challenge_v1/RESULTS.md) documents that earlier test.
 
@@ -23,7 +23,7 @@ For a normalized answer-token state $v$, the two token-local probes score it as 
 ```math
 \begin{aligned}
 f_{\rm linear}(v)&=w^\top v+b,\\
-f_{\rm MLP}(v)&=w_2^\top\operatorname{ReLU}(W_1v+b_1)+b_2.
+f_{\rm MLP}(v)&=w_2^\top\mathrm{ReLU}(W_1v+b_1)+b_2.
 \end{aligned}
 ```
 
@@ -47,6 +47,53 @@ flowchart TD
     U -->|Next round| P
     U -->|Next round| G
 ```
+
+### Algorithm pseudocode
+
+This is the 480-pair Transformer training loop used for the general-question adapter and both conditional arms. In the conditional experiment, the training questions are about ecology and evolution, and the tone direction is hesitant in both arms.
+
+```text
+Qwen = frozen original model
+LoRA = initialized adapter on Qwen
+probe, probe_optimizer, scale = fit_initial_probe(Qwen, labeled_pairs_480)
+direction = +1 for confident or -1 for hesitant
+
+for round in 1..30:
+    questions = sample_16(rollout_training_questions)
+    anchors = sample_16(neutral_anchors)
+
+    # 1. Generate fresh answers. Qwen, LoRA and probe weights stay fixed.
+    fresh = generate_without_grad(Qwen + LoRA, questions)
+
+    # 2. Compute the losses. The two scores use the same frozen probe.
+    # Fresh answer tokens are fixed; gradients flow through their new forward pass.
+    current = mean_token_probe_scores(probe, Qwen + LoRA, questions, fresh, scale)
+    reference = no_grad(mean_token_probe_scores(
+        probe, Qwen, questions, cached_Qwen_answers[questions], scale))
+    tone_loss = mean(relu(0.5 - direction * (current - reference)))
+    loss = tone_loss + 16 * forward_KL(Qwen, Qwen + LoRA, anchors)
+
+    if arm is B and round > 3:
+        retain_batch = sample_16(non_target_question_and_Qwen_answer_pairs)
+        retain_loss = layer21_state_distance(Qwen, Qwen + LoRA, retain_batch)
+        loss += retain_weight(round) * retain_loss
+
+    # 3. Update LoRA only. Base Qwen and the probe stay frozen.
+    lora_optimizer_step(loss)
+
+    # 4. Freeze Qwen and the updated LoRA; update only the probe.
+    states = encode_without_grad(Qwen + LoRA, labeled_pairs_480, hidden_state=21)
+    refit_probe(probe, probe_optimizer, states, original_labels, scale, steps=2000)
+    freeze(probe)  # Carry its new weights into the next round.
+```
+
+### How the probe is refitted
+
+1. Feed the same 480 labeled pairs (960 fixed answers) through **Qwen with the newly updated LoRA**. Save the states at ordinary answer tokens. For the Transformer, each scoring window includes the current position and up to 15 earlier answer positions from the same answer.
+2. Keep the supplied labels. Each confident answer's tokens have label **+1**, and each hesitant answer's tokens have label **−1**. The freshly generated answers are used for the LoRA step above.
+3. Continue from the existing probe weights and AdamW optimizer state. Take **2,000 probe-only steps** per round, each on a batch of **32 sampled answer-token positions**. Use the token-level hinge loss below and the original activation scale. The Qwen and LoRA weights stay fixed throughout the refit.
+
+Both conditional arms **A and B** refit the probe. B differs at the LoRA update, where it adds retain loss from round 4. In the earlier frozen-probe controls, the adapter took its LoRA step each round and the probe kept its initial weights.
 
 ### Losses used during training
 
