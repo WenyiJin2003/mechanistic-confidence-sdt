@@ -1,5 +1,46 @@
 # Mechanistic Confidence for Synthetic Fact Learning
 
+This project uses Qwen's hidden states to study **how confidently a model expresses an answer** and then tests whether that signal can guide changes in generated wording. We report tone and answer correctness separately.
+
+## Start here
+
+- **[Current methodology](docs/CONFIDENCE_METHODOLOGY.md)** explains the paired training data, Linear, MLP and Transformer probes, the LoRA training loop, and the Circuit Breakers–inspired retain loss.
+- **[Latest results](reports/circuit-breakers-confidence-2026-11-17.md)** covers the general-question LoRA and the ecology versus general-science comparison.
+- **[Research archive](#earlier-experiments)** keeps the earlier results and preregistrations in context.
+
+## Workflow at a glance
+
+1. **Build answer pairs.** Keep the claim fixed and vary how firmly it is worded.
+2. **Fit a probe.** Read Qwen's hidden states and learn to rank the confident version above the hesitant one.
+3. **Update a LoRA.** Score fresh answers with the probe, update the adapter toward the intended tone, then refit the probe on the original labeled pairs.
+4. **Test scope.** Evaluate the finished model on new questions. Compare an adapter trained on ecology and evolution with and without a retain penalty on other topics.
+
+The current conditional experiment reduced tone changes in general science when retention was added. The change in ecology and evolution also shrank. See the [methodology](docs/CONFIDENCE_METHODOLOGY.md#4-limit-where-the-tone-changes) for the exact comparison and next test.
+
+## Repository layout
+
+| Folder | Purpose |
+|---|---|
+| [datasets/](datasets/README.md) | Readable questions, answers and CSV downloads |
+| [data/](data/README.md) | Exact machine-readable source inputs and data audits |
+| [reports/](reports/README.md) | Research findings and interpretation |
+| [code/](code/README.md) | Code map and entry points for reproducing each experiment |
+| [docs/](docs/README.md) | [Current method](docs/CONFIDENCE_METHODOLOGY.md), execution instructions and provenance |
+| [results/](results/README.md) | Saved numerical outputs, states, readouts and manifests |
+| [plots/](plots/) | Research figures |
+| [configs/](configs/) | Experiment settings |
+
+The code map points to `stage0/`, `confidence_pilot/` and `scripts/`. Their paths
+are retained so existing commands and cached-artifact checks remain valid.
+The two root preregistrations retain their original content and published paths.
+
+## Earlier experiments
+
+The status and decisions below describe the earlier snapshots.
+
+<details>
+<summary>Stage 0, paired certainty, evidence support and cue-holdout studies</summary>
+
 ## Current finding
 
 **The independent cue-holdout challenge passed. A layer-14 linear readout trained
@@ -290,22 +331,7 @@ the current decision. The supplementary
 [correctness and geometry audit](reports/CONFIDENCE_CORRECTNESS_AUDIT.md)
 reuses data from Steps 3 and 4.
 
-## Repository layout
-
-| Folder | Purpose |
-|---|---|
-| [datasets/](datasets/README.md) | Readable questions, answers and CSV downloads |
-| [data/](data/README.md) | Exact machine-readable source inputs and data audits |
-| [reports/](reports/README.md) | Research findings and interpretation |
-| [code/](code/README.md) | Code map and entry points for reproducing each experiment |
-| [docs/](docs/README.md) | Methods, execution instructions and provenance |
-| [results/](results/README.md) | Saved numerical outputs, states, readouts and manifests |
-| [plots/](plots/) | Research figures |
-| [configs/](configs/) | Experiment settings |
-
-The code map points to `stage0/`, `confidence_pilot/` and `scripts/`. Their paths
-are retained so existing commands and cached-artifact checks remain valid.
-The two root preregistrations retain their original content and published paths.
+</details>
 
 ## Sources
 
