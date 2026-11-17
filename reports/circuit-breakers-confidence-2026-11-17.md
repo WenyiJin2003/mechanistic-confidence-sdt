@@ -2,6 +2,10 @@
 
 **Retention reduced out-of-domain changes in wording and weakened the intended change in ecology and evolution.** On general science, the mean change moved from **−1.79** to **−0.10** on the 0–10 tone scale. On ecology and evolution, it moved from **−1.37** to **−0.16**.
 
+## Earlier experiment on general questions
+
+The first LoRA trained on general questions. In full-answer tests, its explanations sounded about 1 point more cautious on MMLU and 0.7 points more cautious on a separate set of Science Bowl biology questions. The MMLU shift persisted in answers without the common hedges we checked.
+
 ## Model and training
 
 - **Original Qwen** is Qwen2.5-1.5B-Instruct without an adapter.
